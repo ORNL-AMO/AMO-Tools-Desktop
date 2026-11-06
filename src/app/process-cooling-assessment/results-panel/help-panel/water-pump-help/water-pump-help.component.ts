@@ -1,5 +1,7 @@
-import { Component, inject, WritableSignal } from '@angular/core';
+import { Component, computed, inject, Signal, WritableSignal } from '@angular/core';
 import { ProcessCoolingUiService } from '../../../services/process-cooling-ui.service';
+import { Settings } from '../../../../shared/models/settings';
+import { ProcessCoolingAssessmentService } from '../../../services/process-cooling-assessment.service';
 
 @Component({
   selector: 'app-water-pump-help',
@@ -10,5 +12,7 @@ import { ProcessCoolingUiService } from '../../../services/process-cooling-ui.se
 export class WaterPumpHelpComponent {
   private processCoolingService = inject(ProcessCoolingUiService);
   focusedField: WritableSignal<string> = this.processCoolingService.focusedFieldSignal;
+  private readonly settings: Signal<Settings> = inject(ProcessCoolingAssessmentService).settingsSignal;
+  readonly isMetric: Signal<boolean> = computed(() => this.settings()?.unitsOfMeasure === 'Metric');
 
 }

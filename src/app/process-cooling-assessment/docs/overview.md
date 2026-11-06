@@ -106,6 +106,6 @@ If you update `days` values without also calling `getHoursOnMonToSun()` and stor
 
 ## Unit Conversion Timing
 
-Unit conversion only runs once per assessment — when `initAssessmentSettings()` first creates assessment-level settings. If the parent directory uses Metric, the assessment data gets converted from Imperial to Metric at that point. After that, the saved data remains in whatever units were applied, and the `Settings.unitsOfMeasure` drives how validators and display labels are applied.
+Saved data is converted in place in two cases: when `initAssessmentSettings()` first creates assessment-level settings under a Metric directory (Imperial defaults → Metric), and when the user changes units in System Basics and chooses "Update Data". Otherwise the saved data stays in the settings units, and `Settings.unitsOfMeasure` drives validators and display labels.
 
-The `existingDataUnits` field on `ProcessCoolingAssessment` (`'Imperial'` on all defaults) records the units the data was originally created in. This field is relevant if you're writing migration or conversion logic — read it before assuming the stored data is in any particular unit system.
+The `existingDataUnits` field on `ProcessCoolingAssessment` records the units the stored data is currently in. If it differs from the settings, the data has not been updated yet — read it before assuming the stored data is in any particular unit system. The Suite boundary conversion (Imperial in, Metric results out) is separate; see [data-model.md](data-model.md#units-of-measure).

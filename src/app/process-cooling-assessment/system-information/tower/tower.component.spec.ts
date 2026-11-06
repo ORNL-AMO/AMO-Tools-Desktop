@@ -149,7 +149,7 @@ describe('TowerComponent', () => {
   describe('observeTowerSizeChange', () => {
     it('applies validators returned by the form service when towerSizeMetric changes to a known metric', () => {
       component.towerSizeMetric.setValue(TowerSizeMetric.Tons);
-      expect(formServiceSpy.getTowerSizeValidators).toHaveBeenCalledWith(TowerSizeMetric.Tons);
+      expect(formServiceSpy.getTowerSizeValidators).toHaveBeenCalledWith(TowerSizeMetric.Tons, MOCK_SETTINGS);
       expect(component.towerSize.hasValidator(Validators.required)).toBeTrue();
     });
 

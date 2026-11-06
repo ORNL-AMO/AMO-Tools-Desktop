@@ -5,7 +5,8 @@ import { TowerResults, ProcessCoolingResults } from '../../shared/models/process
 import { ModificationNameCell, ReportTableRow } from '../../shared/report-builder/models/report-ui-models';
 import { ProcessCoolingResultsService } from './process-cooling-results.service';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
-import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
+import { getProcessCoolingUnitLabel, PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
+import { roundVal } from '../../shared/helperFunctions';
 import { ConvertValue } from '../../shared/convert-units/ConvertValue';
 
 @Injectable({ providedIn: 'root' })
@@ -16,8 +17,12 @@ export class TowerSummaryService {
 
     private readonly defaultpipeFormat = '1.0-0';
     private readonly defaultclassName: 'default' | 'emphasis' = 'default';
-    private readonly defaultEnergyUnit = this.settingsSignal().unitsOfMeasure ? PROCESS_COOLING_UNITS.energy.labelHTML.imperial : PROCESS_COOLING_UNITS.energy.labelHTML.metric;
-    private readonly temperatureUnit = this.settingsSignal().unitsOfMeasure ? PROCESS_COOLING_UNITS.temperature.labelHTML.imperial : PROCESS_COOLING_UNITS.temperature.labelHTML.metric;
+    private get defaultEnergyUnit(): string {
+        return getProcessCoolingUnitLabel('energy', this.settingsSignal().unitsOfMeasure);
+    }
+    private get temperatureUnit(): string {
+        return getProcessCoolingUnitLabel('temperature', this.settingsSignal().unitsOfMeasure);
+    }
         
     readonly towerSummaryUI$ = combineLatest([
         this.resultsService.baselineResults$,
@@ -159,10 +164,10 @@ export class TowerSummaryService {
 
         if (this.settingsSignal().unitsOfMeasure === 'Metric') {     
             binTemps = binTemps.map(bin => {
-                return bin.map(temp => new ConvertValue(temp, 
+                return bin.map(temp => roundVal(new ConvertValue(temp, 
                     PROCESS_COOLING_UNITS.temperature.imperial, 
                     PROCESS_COOLING_UNITS.temperature.metric
-                ).convertedValue);
+                ).convertedValue, 1));
             });
         }
         return binTemps;

@@ -196,7 +196,7 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings): ProcessC
             airCooledSystemInput: {
               outdoorAirTemp: 54,
               airCoolingSource: 0,
-              indoorTemp: 95,
+              indoorTemp: 75,
               followingTempDifferential: 0
             },
             waterCooledSystemInput: {

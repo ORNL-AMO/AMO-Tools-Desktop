@@ -1,10 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, Signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChillerInventoryItem } from '../../../shared/models/process-cooling-assessment';
 import { ChillerInventoryBaseComponent } from './chiller-inventory-base.component';
 import { ModalDialogService } from '../../../shared/modal-dialog.service';
 import { ConfirmActionComponent } from '../../../shared/confirm-action/confirm-action.component';
 import { FilterChillerInventoryParams } from '../../pipes/filter-chiller-inventory.pipe';
+import { getProcessCoolingUnitLabel } from '../../constants/process-cooling-units';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-inventory-table',
@@ -15,6 +17,9 @@ import { FilterChillerInventoryParams } from '../../pipes/filter-chiller-invento
 export class InventoryTableComponent extends ChillerInventoryBaseComponent {
   private modalDialogService: ModalDialogService = inject(ModalDialogService);
   filterInventoryParams: FilterChillerInventoryParams = null;
+  private readonly settings: Signal<Settings> = this.processCoolingService.settingsSignal.asReadonly();
+  readonly fullLoadEfficiencyLabel: Signal<string> = computed(() => getProcessCoolingUnitLabel('fullLoadEfficiency', this.settings()?.unitsOfMeasure));
+  readonly capacityLabel: Signal<string> = computed(() => getProcessCoolingUnitLabel('capacity', this.settings()?.unitsOfMeasure));
 
   override ngOnInit(): void {
     super.ngOnInit();

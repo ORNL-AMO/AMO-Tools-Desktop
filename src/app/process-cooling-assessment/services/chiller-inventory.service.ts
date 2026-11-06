@@ -2,6 +2,8 @@ import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
 import { FormArray, FormControl, FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject, map, Observable } from 'rxjs';
+import { convertChillerEfficiency, getProcessCoolingUnitLabel } from '../constants/process-cooling-units';
+import { roundVal } from '../../shared/helperFunctions';
 
 @Injectable({
   providedIn: 'root'
@@ -85,15 +87,20 @@ export class ChillerInventoryService {
     this.updateKwPerTonValidators(form, chiller.isCustomChiller);
   }
 
-  getFullLoadEfficiencyWarning(value: number): string | null {
+  getFullLoadEfficiencyWarning(value: number, unitsOfMeasure: string): string | null {
     if (value === null || value === undefined) {
       return null;
     }
-    if (value > 1.5) {
-      return 'Full Load Efficiency is usually less than 1.5 kW/ton';
+    const isMetric: boolean = unitsOfMeasure === 'Metric';
+    const unit: string = getProcessCoolingUnitLabel('fullLoadEfficiency', unitsOfMeasure);
+    // * thresholds defined in kW/ton
+    const max: number = isMetric ? roundVal(convertChillerEfficiency(1.5, true), 3) : 1.5;
+    const min: number = isMetric ? roundVal(convertChillerEfficiency(0.4, true), 3) : 0.4;
+    if (value > max) {
+      return `Full Load Efficiency is usually less than ${max} ${unit}`;
     }
-    if (value < 0.4) {
-      return 'Full Load Efficiency must be greater than or equal to 0.4 kW/ton';
+    if (value < min) {
+      return `Full Load Efficiency must be greater than or equal to ${min} ${unit}`;
     }
     return null;
   }

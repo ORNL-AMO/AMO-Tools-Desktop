@@ -3,6 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { PlotlyService } from 'angular-plotly.js';
 import { ProcessCoolingResultsService } from '../../../services/process-cooling-results.service';
 import { ProcessCoolingChartsService } from '../../../services/process-cooling-charts.service';
+import { ProcessCoolingAssessmentService } from '../../../services/process-cooling-assessment.service';
 import { ProcessCoolingChillerOutput } from '../../../../shared/models/process-cooling-assessment';
 
 @Component({
@@ -15,6 +16,7 @@ export class ChillerProfileChartComponent {
   private plotlyService = inject(PlotlyService);
   private processCoolingResultsService = inject(ProcessCoolingResultsService);
   private chartsService = inject(ProcessCoolingChartsService);
+  private settingsSignal = inject(ProcessCoolingAssessmentService).settingsSignal;
 
   chartRef = viewChild<ElementRef<HTMLDivElement>>('chillerProfileChart');
   selectedChillerId = input<string | null | undefined>();
@@ -39,7 +41,7 @@ export class ChillerProfileChartComponent {
       }
 
       const showFactoredProfile = this.context() === 'inventory' && this.showFactored();
-      const { traces, layout, config } = this.chartsService.buildChillerProfileChart(filteredChillers, showFactoredProfile);
+      const { traces, layout, config } = this.chartsService.buildChillerProfileChart(filteredChillers, this.settingsSignal().unitsOfMeasure, showFactoredProfile);
       this.plotlyService.newPlot(nativeElement, traces, layout, config);
     });
   }

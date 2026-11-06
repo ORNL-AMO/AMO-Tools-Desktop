@@ -38,7 +38,8 @@ export class ProcessCoolingUiService {
   showModificationListModalSignal: WritableSignal<boolean> = signal<boolean>(false);
   showAddModificationModalSignal: WritableSignal<boolean> = signal<boolean>(false);
   showExportModalSignal: WritableSignal<boolean> = signal<boolean>(false);
-  
+  showUpdateUnitsModalSignal: WritableSignal<boolean> = signal<boolean>(false);
+
   executiveSummaryViewSignal: WritableSignal<SummaryView> = signal<SummaryView>('baseline-panel');
   profileViewSignal: WritableSignal<ProfileView> = signal<ProfileView>('baseline');
 

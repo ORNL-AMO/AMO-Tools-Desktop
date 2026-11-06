@@ -1,15 +1,15 @@
-import { Component, inject, output, Signal, WritableSignal } from '@angular/core';
+import { Component, computed, inject, Signal, WritableSignal } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
 import { firstValueFrom, Observable } from 'rxjs';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { SettingsService } from '../../settings/settings.service';
-import { copyObject } from '../../shared/helperFunctions';
 import { ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
 import { ConvertProcessCoolingService } from '../services/convert-process-cooling.service';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
 import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
+import { WEATHER_CONTEXT } from '../../shared/modules/weather-data/weather-context.token';
 
 @Component({
   selector: 'app-system-basics',
@@ -22,33 +22,22 @@ export class SystemBasicsComponent {
   private processCoolingAssessmentService: ProcessCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
   private processCoolingUIService: ProcessCoolingUiService = inject(ProcessCoolingUiService);
   private convertProcessCoolingService: ConvertProcessCoolingService = inject(ConvertProcessCoolingService);
+  private processCoolingWeatherContextService = inject(WEATHER_CONTEXT);
   private settingsDbService: SettingsDbService = inject(SettingsDbService);
 
   readonly assessment$: Observable<Assessment> = this.processCoolingAssessmentService.assessment$;
   readonly settings: WritableSignal<Settings> = this.processCoolingAssessmentService.settingsSignal;
   readonly processCooling: Signal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
+  readonly showUpdateDataReminder: Signal<boolean> = computed(() => {
+    const existingDataUnits: string = this.processCooling()?.existingDataUnits;
+    return Boolean(existingDataUnits) && existingDataUnits !== this.settings()?.unitsOfMeasure;
+  });
 
-  openUpdateUnitsModal = output<Settings>();
   settingsForm!: UntypedFormGroup;
-  oldSettings!: Settings;
-  showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
-  showUpdateUnitsModal: boolean = false;
 
   ngOnInit() {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings());
-    this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
-
-    if (this.processCooling() && this.processCooling().existingDataUnits != this.oldSettings.unitsOfMeasure) {
-      this.oldSettings = this.getExistingDataSettings(this.processCooling());
-      this.showUpdateDataReminder = true;
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.showUpdateDataReminder && this.oldSettings) {
-      this.openUpdateUnitsModal.emit(this.oldSettings);
-    }
   }
 
   async saveSettings() {
@@ -58,11 +47,16 @@ export class SystemBasicsComponent {
     let assessmentId = currentSettings.assessmentId;
 
     let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
-    if (newSettings.unitsOfMeasure != this.oldSettings.unitsOfMeasure) {
-      let processCooling: ProcessCoolingAssessment = this.processCooling();
-      processCooling.existingDataUnits = this.oldSettings.unitsOfMeasure as string;
-      this.processCoolingAssessmentService.setProcessCooling(processCooling);
-      this.showUpdateDataReminder = true;
+    if (newSettings.unitsOfMeasure != currentSettings.unitsOfMeasure) {
+      // * existingDataUnits keeps the units of the data until it is updated, so changing units back clears the reminder
+      const existingDataUnits: string = this.processCooling().existingDataUnits ?? currentSettings.unitsOfMeasure;
+      if (existingDataUnits !== this.processCooling().existingDataUnits) {
+        this.processCoolingAssessmentService.setProcessCooling({ ...this.processCooling(), existingDataUnits });
+      }
+      if (newSettings.unitsOfMeasure != existingDataUnits) {
+        this.processCoolingUIService.showUpdateUnitsModalSignal.set(true);
+      }
+      this.convertWeatherData(currentSettings, newSettings);
     }
 
     if (this.showSuccessMessage === true) {
@@ -75,19 +69,23 @@ export class SystemBasicsComponent {
     let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
     this.processCoolingAssessmentService.setSettings(newSettings);
+    this.processCoolingWeatherContextService.settings = newSettings;
   }
 
-  updateData(showSuccess?: boolean) {
-    if (showSuccess) {
-      this.initSuccessMessage();
-    }
-    let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
-    let processCooling: ProcessCoolingAssessment = this.processCooling();
-    processCooling = this.convertProcessCoolingService.convertProcessCooling(processCooling, this.oldSettings, newSettings);
-    this.showUpdateDataReminder = false;
-    processCooling.existingDataUnits = newSettings.unitsOfMeasure as string;
-    this.processCoolingAssessmentService.setProcessCooling(processCooling);
-    this.oldSettings = newSettings;
+  updateData() {
+    this.initSuccessMessage();
+    this.processCoolingAssessmentService.updateDataUnits(this.settings());
+  }
+
+  /**
+   * Weather data comes from a station or file, so it always follows the settings units, independent of "Update Data"
+   */
+  convertWeatherData(currentSettings: Settings, newSettings: Settings) {
+    const weatherData = this.processCoolingWeatherContextService.getWeatherData();
+    if (!weatherData?.weatherDataPoints) return;
+    const convertedWeatherData = this.convertProcessCoolingService.convertWeatherData(weatherData, currentSettings, newSettings);
+    this.processCoolingWeatherContextService.setWeatherData(convertedWeatherData);
+    this.processCoolingAssessmentService.setProcessCooling({ ...this.processCooling(), weatherData: convertedWeatherData });
   }
 
   focusField(str: string) {
@@ -99,13 +97,6 @@ export class SystemBasicsComponent {
     this.processCoolingAssessmentService.updateProcessCoolingProperty('systemBasics', { ...processCooling.systemBasics, notes });
   }
 
-  getExistingDataSettings(processCooling: ProcessCoolingAssessment): Settings {
-    let existingSettingsForm: UntypedFormGroup = copyObject(this.settingsForm);
-    existingSettingsForm.patchValue({ unitsOfMeasure: processCooling.existingDataUnits });
-    let existingSettings = this.settingsService.setUnits(existingSettingsForm);
-    return this.settingsService.getSettingsFromForm(existingSettings);
-  }
-
   initSuccessMessage() {
     this.showSuccessMessage = true;
     setTimeout(() => {
@@ -115,27 +106,5 @@ export class SystemBasicsComponent {
 
   dismissSuccessMessage() {
     this.showSuccessMessage = false;
-  }
-
-    initUpdateUnitsModal(oldSettings: Settings) {
-    this.oldSettings = oldSettings;
-    this.showUpdateUnitsModal = true;
-    // this.cd.detectChanges();
-  }
-
-  closeUpdateUnitsModal(updated?: boolean) {
-    if (updated) {
-      // not sure we need below
-      // this.compressedAirAssessmentService.mainTab.next('baseline');
-      // this.compressedAirAssessmentService.setupTab.next('system-basics');
-    }
-    this.showUpdateUnitsModal = false;
-    // this.cd.detectChanges();
-  }
-    selectUpdateAction(shouldUpdateData: boolean) {
-    if (shouldUpdateData == true) {
-      this.updateData();
-    }
-    this.closeUpdateUnitsModal(shouldUpdateData);
   }
 }

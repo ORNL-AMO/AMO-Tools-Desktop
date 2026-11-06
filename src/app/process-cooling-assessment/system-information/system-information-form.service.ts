@@ -1,11 +1,12 @@
 // (TowerForm and methods moved into class below)
 import { inject, Injectable } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, FormControl, ValidatorFn } from '@angular/forms';
-import { Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, CondenserCoolingMethod, SystemInformation, AirCoolingSource, TowerSizeMetric, FanType, FanSpeedType } from '../../shared/models/process-cooling-assessment';
+import { CoolingWaterPumpType, Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, CondenserCoolingMethod, SystemInformation, AirCoolingSource, TowerSizeMetric, FanType, FanSpeedType } from '../../shared/models/process-cooling-assessment';
 import { PROCESS_COOLING_VALIDATION } from '../constants/process-cooling-validation-rules';
 import { ConvertValue } from '../../shared/convert-units/ConvertValue';
 import { Settings } from '../../shared/models/settings';
-import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
+import { AppUnits, convertFlowRatePerTon, PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
+import { roundVal } from '../../shared/helperFunctions';
 import { getTowerTypeDependentValues } from '../constants/process-cooling-constants';
 
 
@@ -90,20 +91,15 @@ export class SystemInformationFormService {
     };
   }
 
-  getPumpInputForm(pumpInput: PumpInput, settings: Settings): FormGroup<PumpInputForm> {
-    let flowRateMin = PROCESS_COOLING_VALIDATION.flowRate.min;
-    let flowRateMax = PROCESS_COOLING_VALIDATION.flowRate.max;
+  getPumpInputForm(pumpInput: PumpInput, pumpType: CoolingWaterPumpType, settings: Settings): FormGroup<PumpInputForm> {
+    const flowRateRule = pumpType === 'condenserWaterPumpInput'
+      ? PROCESS_COOLING_VALIDATION.condenserWaterPumpFlowRate
+      : PROCESS_COOLING_VALIDATION.chilledWaterPumpFlowRate;
+    let flowRateMin = flowRateRule.min;
+    let flowRateMax = flowRateRule.max;
     if (settings.unitsOfMeasure === 'Metric') {
-      flowRateMin = new ConvertValue(
-        PROCESS_COOLING_VALIDATION.flowRate.min,
-        PROCESS_COOLING_UNITS.volumeFlowRate.imperial,
-        PROCESS_COOLING_UNITS.volumeFlowRate.metric
-      ).convertedValue;
-      flowRateMax = new ConvertValue(
-        PROCESS_COOLING_VALIDATION.flowRate.max,
-        PROCESS_COOLING_UNITS.volumeFlowRate.imperial,
-        PROCESS_COOLING_UNITS.volumeFlowRate.metric
-      ).convertedValue;
+      flowRateMin = roundVal(convertFlowRatePerTon(flowRateMin, true), 4);
+      flowRateMax = roundVal(convertFlowRatePerTon(flowRateMax, true), 4);
     }
     return this.formBuilder.group({
       variableFlow: [pumpInput.variableFlow, [
@@ -120,7 +116,7 @@ export class SystemInformationFormService {
         Validators.max(PROCESS_COOLING_VALIDATION.efficiency.max)
       ]],
       isMotorSizeKnown: [pumpInput.isMotorSizeKnown ?? true],
-      motorSize: [pumpInput.motorSize, this.getMotorSizeValidators(pumpInput.isMotorSizeKnown ?? true)],
+      motorSize: [pumpInput.motorSize, this.getMotorSizeValidators(pumpInput.isMotorSizeKnown ?? true, settings)],
       motorEfficiency: [pumpInput.motorEfficiency, [
         Validators.required,
         Validators.min(PROCESS_COOLING_VALIDATION.motorEfficiency.min),
@@ -137,14 +133,14 @@ export class SystemInformationFormService {
     };
   }
 
-  getMotorSizeValidators(isMotorSizeKnown: boolean): ValidatorFn[] {
+  getMotorSizeValidators(isMotorSizeKnown: boolean, settings: Settings): ValidatorFn[] {
     if (!isMotorSizeKnown) {
       return [];
     }
     return [
       Validators.required,
-      Validators.min(PROCESS_COOLING_VALIDATION.motorSize.min),
-      Validators.max(PROCESS_COOLING_VALIDATION.motorSize.max)
+      Validators.min(this.convertLimit(PROCESS_COOLING_VALIDATION.motorSize.min, PROCESS_COOLING_UNITS.motorPower, settings)),
+      Validators.max(this.convertLimit(PROCESS_COOLING_VALIDATION.motorSize.max, PROCESS_COOLING_UNITS.motorPower, settings))
     ];
   }
 
@@ -211,13 +207,13 @@ getWaterCooledFollowingTempDifferentialValidators(settings: Settings): Validator
     if (settings.unitsOfMeasure === 'Metric') {
       tempDiffMin = new ConvertValue(
         tempDiffMin,
-        PROCESS_COOLING_UNITS.temperature.imperial,
-        PROCESS_COOLING_UNITS.temperature.metric
+        PROCESS_COOLING_UNITS.temperatureDifference.imperial,
+        PROCESS_COOLING_UNITS.temperatureDifference.metric
       ).convertedValue;
       tempDiffMax = new ConvertValue(
         tempDiffMax,
-        PROCESS_COOLING_UNITS.temperature.imperial,
-        PROCESS_COOLING_UNITS.temperature.metric
+        PROCESS_COOLING_UNITS.temperatureDifference.imperial,
+        PROCESS_COOLING_UNITS.temperatureDifference.metric
       ).convertedValue;
     }
 
@@ -288,7 +284,7 @@ getWaterCooledFollowingTempDifferentialValidators(settings: Settings): Validator
   }
 
   public getTowerForm(input: TowerInput, settings: Settings): FormGroup<TowerForm> {
-    let towerSizeValidators: ValidatorFn[] = this.getTowerSizeValidators(input.towerSizeMetric);
+    let towerSizeValidators: ValidatorFn[] = this.getTowerSizeValidators(input.towerSizeMetric, settings);
 
     let hexApproachTempValidators: ValidatorFn[] = [];
     if (input.isHEXRequired) {
@@ -324,13 +320,13 @@ getWaterCooledFollowingTempDifferentialValidators(settings: Settings): Validator
     if (settings.unitsOfMeasure === 'Metric') {
       hexApproachTempMin = new ConvertValue(
         PROCESS_COOLING_VALIDATION.HEXApproachTemp.min,
-        PROCESS_COOLING_UNITS.temperature.imperial,
-        PROCESS_COOLING_UNITS.temperature.metric
+        PROCESS_COOLING_UNITS.temperatureDifference.imperial,
+        PROCESS_COOLING_UNITS.temperatureDifference.metric
       ).convertedValue;
       hexApproachTempMax = new ConvertValue(
         PROCESS_COOLING_VALIDATION.HEXApproachTemp.max,
-        PROCESS_COOLING_UNITS.temperature.imperial,
-        PROCESS_COOLING_UNITS.temperature.metric
+        PROCESS_COOLING_UNITS.temperatureDifference.imperial,
+        PROCESS_COOLING_UNITS.temperatureDifference.metric
       ).convertedValue;
     }
 
@@ -342,22 +338,32 @@ getWaterCooledFollowingTempDifferentialValidators(settings: Settings): Validator
     return hexApproachTempValidators;
   }
 
-  getTowerSizeValidators(towerSizeMetric: number): ValidatorFn[] {
+  getTowerSizeValidators(towerSizeMetric: number, settings: Settings): ValidatorFn[] {
     let validators: ValidatorFn[] = [];
     if (towerSizeMetric === TowerSizeMetric.Tons) {
       validators = [
         Validators.required,
-        Validators.min(PROCESS_COOLING_VALIDATION.towerSizeTons.min),
-        Validators.max(PROCESS_COOLING_VALIDATION.towerSizeTons.max)
+        Validators.min(this.convertLimit(PROCESS_COOLING_VALIDATION.towerSizeTons.min, PROCESS_COOLING_UNITS.towerSizeTons, settings)),
+        Validators.max(this.convertLimit(PROCESS_COOLING_VALIDATION.towerSizeTons.max, PROCESS_COOLING_UNITS.towerSizeTons, settings))
       ];
     } else if (towerSizeMetric === TowerSizeMetric.HP) {
       validators = [
         Validators.required,
-        Validators.min(PROCESS_COOLING_VALIDATION.towerSizeHP.min),
-        Validators.max(PROCESS_COOLING_VALIDATION.towerSizeHP.max)
+        Validators.min(this.convertLimit(PROCESS_COOLING_VALIDATION.towerSizeHP.min, PROCESS_COOLING_UNITS.towerSizeHP, settings)),
+        Validators.max(this.convertLimit(PROCESS_COOLING_VALIDATION.towerSizeHP.max, PROCESS_COOLING_UNITS.towerSizeHP, settings))
       ];
     }
     return validators;
+  }
+
+  /**
+   * Validation limits are defined in Imperial
+   */
+  private convertLimit(imperialLimit: number, units: AppUnits, settings: Settings): number {
+    if (settings.unitsOfMeasure !== 'Metric') {
+      return imperialLimit;
+    }
+    return roundVal(new ConvertValue(imperialLimit, units.imperial, units.metric).convertedValue, 2);
   }
 
   public getTowerInput(formValue: Partial<TowerInput>, currentInput: TowerInput): TowerInput {
@@ -382,8 +388,8 @@ getWaterCooledFollowingTempDifferentialValidators(settings: Settings): Validator
   }
 
   public isPumpValid(systemInformation: SystemInformation, settings: Settings): boolean {
-    const pumpCondenserForm = this.getPumpInputForm(systemInformation.condenserWaterPumpInput, settings);
-    const pumpChilledForm = this.getPumpInputForm(systemInformation.chilledWaterPumpInput, settings);
+    const pumpCondenserForm = this.getPumpInputForm(systemInformation.condenserWaterPumpInput, 'condenserWaterPumpInput', settings);
+    const pumpChilledForm = this.getPumpInputForm(systemInformation.chilledWaterPumpInput, 'chilledWaterPumpInput', settings);
     return pumpCondenserForm.valid && pumpChilledForm.valid;
   }
 

@@ -1,11 +1,11 @@
-import { Component, signal, effect, ElementRef, ViewChild, inject, WritableSignal, DestroyRef } from '@angular/core';
+import { Component, computed, signal, effect, ElementRef, ViewChild, inject, WritableSignal, DestroyRef, Signal } from '@angular/core';
 import { ProcessCoolingResultsService } from '../../services/process-cooling-results.service';
 import { LOAD_LABELS } from '../../constants/process-cooling-constants';
 import { ProfileView, SystemProfileService, SystemProfileUI } from '../../services/system-profile.service';
 import { ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
 import { take, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { PROCESS_COOLING_UNITS } from '../../constants/process-cooling-units';
+import { getProcessCoolingUnitLabel } from '../../constants/process-cooling-units';
 import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -26,9 +26,10 @@ export class SystemProfileComponent {
   
   LOAD_LABELS = LOAD_LABELS;
 
-  PROCESS_COOLING_UNITS = PROCESS_COOLING_UNITS;
-
-  settingsSignal = this.processCoolingAssessmentService.settingsSignal;
+  private readonly settingsSignal = this.processCoolingAssessmentService.settingsSignal;
+  readonly efficiencyLabel: Signal<string> = computed(() => getProcessCoolingUnitLabel('efficiency', this.settingsSignal()?.unitsOfMeasure));
+  readonly chillerPowerLabel: Signal<string> = computed(() => getProcessCoolingUnitLabel('chillerPower', this.settingsSignal()?.unitsOfMeasure));
+  readonly energyLabel: Signal<string> = computed(() => getProcessCoolingUnitLabel('energy', this.settingsSignal()?.unitsOfMeasure));
 
   selectedResultsId = signal<string>(undefined);
   systemProfileUI$: Observable<SystemProfileUI>;

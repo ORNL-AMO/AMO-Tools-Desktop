@@ -29,10 +29,15 @@ export const PROCESS_COOLING_VALIDATION: ProcessCoolingValidation = {
 
   // PumpInputForm
   variableFlow: {},
-  flowRate: {
+  chilledWaterPumpFlowRate: {
     required: true,
     min: 1.6,
     max: 3.0
+  },
+  condenserWaterPumpFlowRate: {
+    required: true,
+    min: 2.0,
+    max: 4.0
   },
   efficiency: {
     required: true,

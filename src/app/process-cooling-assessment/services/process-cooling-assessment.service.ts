@@ -11,6 +11,7 @@ import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { WEATHER_CONTEXT, WeatherContextData } from '../../shared/modules/weather-data/weather-context.token';
 import { SystemInformationFormService } from '../system-information/system-information-form.service';
 import { ChillerInventoryService } from './chiller-inventory.service';
+import { copyObject } from '../../shared/helperFunctions';
 
 @Injectable()
 export class ProcessCoolingAssessmentService {
@@ -120,6 +121,11 @@ export class ProcessCoolingAssessmentService {
    */
   addNewChillerToAssessment(): ChillerInventoryItem {
     let newChiller: ChillerInventoryItem = getDefaultInventoryItem();
+    const settings: Settings = this.settingsSignal();
+    if (settings?.unitsOfMeasure === 'Metric') {
+      // * defaults are Imperial
+      newChiller = this.convertProcessCoolingService.convertChillerInventoryItem(newChiller, { ...settings, unitsOfMeasure: 'Imperial' }, settings);
+    }
     let updatedProcessCooling = { ...this.processCooling.getValue() };
     updatedProcessCooling.inventory.push(newChiller);
     this.setProcessCooling(updatedProcessCooling);
@@ -163,6 +169,23 @@ export class ProcessCoolingAssessmentService {
     this.setProcessCooling(updatedProcessCooling);
   }
 
+  updateDataUnits(newSettings: Settings) {
+    const { weatherData, ...data } = this.processCooling.getValue();
+    if (!data.existingDataUnits || data.existingDataUnits === newSettings.unitsOfMeasure) {
+      return;
+    }
+    const existingDataSettings: Settings = { ...newSettings, unitsOfMeasure: data.existingDataUnits };
+    let processCooling: ProcessCoolingAssessment = { ...copyObject(data), weatherData };
+    processCooling = this.convertProcessCoolingService.convertProcessCooling(processCooling, existingDataSettings, newSettings);
+    processCooling.existingDataUnits = newSettings.unitsOfMeasure;
+    this.setProcessCooling(processCooling);
+    const selectedChillerId: string = this.inventoryService.selectedChillerValue?.itemId;
+    const selectedChiller: ChillerInventoryItem = processCooling.inventory.find(chiller => chiller.itemId === selectedChillerId);
+    if (selectedChiller) {
+      this.inventoryService.setSelectedChiller(selectedChiller);
+    }
+  }
+
   // * logic used in every top level assessment component
   // todo move to assessments.service, return the new settings, if changed then handle assessment conversion in component
     /**
@@ -189,10 +212,17 @@ export class ProcessCoolingAssessmentService {
       this.settingsDbService.setAll(updatedSettings);
       settings = this.settingsDbService.getByAssessmentId(assessment, true);
 
-      if (settings.unitsOfMeasure == 'Metric') {
+      if (settings.unitsOfMeasure == 'Metric' && assessment.processCooling.existingDataUnits !== 'Metric') {
         let oldSettings: Settings = JSON.parse(JSON.stringify(settings));
         oldSettings.unitsOfMeasure = 'Imperial';
-        assessment.processCooling = this.convertProcessCoolingService.convertProcessCooling(assessment.processCooling, oldSettings, settings);
+        let processCooling: ProcessCoolingAssessment = this.convertProcessCoolingService.convertProcessCooling(copyObject(assessment.processCooling), oldSettings, settings);
+        processCooling.weatherData = this.convertProcessCoolingService.convertWeatherData(processCooling.weatherData, oldSettings, settings);
+        // * default fuelCost comes from settings, which is already in settings units
+        if (settings.fuelCost) {
+          processCooling.systemInformation.operations.fuelCost = settings.fuelCost;
+        }
+        processCooling.existingDataUnits = settings.unitsOfMeasure;
+        this.setProcessCooling(processCooling);
       }
 
       this.setSettings(settings);

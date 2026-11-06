@@ -72,7 +72,7 @@ export class TowerComponent {
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(
       (towerSizeMetric) => {
-        this.towerSize.setValidators(this.systemInformationFormService.getTowerSizeValidators(towerSizeMetric));
+        this.towerSize.setValidators(this.systemInformationFormService.getTowerSizeValidators(towerSizeMetric, this.settings()));
         this.towerSize.updateValueAndValidity({ emitEvent: false });
       });
   }
