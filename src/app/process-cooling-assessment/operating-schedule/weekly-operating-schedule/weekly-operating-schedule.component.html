@@ -7,7 +7,7 @@
     </p>
     <hr class="my-1 hr-spacer">
 </div>
-<div class="form-group mb-2 pl-3">
+<div class="form-group ly-field mb-2 pl-3">
 	<label class="font-weight-bold mb-1">
 		<input type="checkbox" [formControl]="useSameSchedule" (change)="onUseSameScheduleChange()" class="mr-2 use-same-schedule-checkbox" />
 		Use the same schedule for all days
@@ -18,10 +18,10 @@
 		<div class="d-flex flex-column w-100">
 			@for (dayLabel of DAY_LABELS; track $index; let dayIndex = $index) {
 			<div [formGroup]="getDayGroup(dayIndex)"
-					 class="d-flex align-items-center w-100 mb-2 position-relative"
+					 class="day-row w-100 mb-2 position-relative"
 					 [class.schedule-disabled]="useSameSchedule.value && dayIndex !== 0">
-				<label class="mb-0 mr-2 flex-shrink-0 day-label">{{ dayLabel }}</label>
-				<div class="btn-group btn-group-toggle mr-3" ngbRadioGroup name="scheduleType{{dayIndex}}" [value]="getScheduleType(dayIndex)" (change)="onScheduleTypeChange($event.target.value, dayIndex)">
+				<label class="mb-0 flex-shrink-0 day-label">{{ dayLabel }}</label>
+				<div class="btn-group btn-group-toggle day-type" ngbRadioGroup name="scheduleType{{dayIndex}}" [value]="getScheduleType(dayIndex)" (change)="onScheduleTypeChange($event.target.value, dayIndex)">
 					<label class="btn btn-outline-secondary mb-0" [class.active]="getScheduleType(dayIndex) === 'off'" [class.bg-danger]="getScheduleType(dayIndex) === 'off'">
 						<input type="radio" [checked]="getScheduleType(dayIndex) === 'off'" value="off"> Off
 					</label>

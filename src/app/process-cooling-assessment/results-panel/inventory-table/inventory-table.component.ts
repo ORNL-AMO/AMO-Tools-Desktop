@@ -42,7 +42,7 @@ export class InventoryTableComponent extends ChillerInventoryBaseComponent {
     this.modalDialogService.openModal(
       ConfirmActionComponent,
       {
-        width: '600px',
+        width: 'min(600px, 95vw)',
         data: {
           modalTitle: 'Delete Chiller Inventory Item',
           confirmMessage: `Are you sure you want to delete '${item.name}'?`,

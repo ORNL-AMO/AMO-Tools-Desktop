@@ -13,14 +13,13 @@ export class ProcessCoolingAssessmentComponent {
   private readonly analyticsService = inject(AnalyticsService);
 
   showWelcomeScreen: boolean = false;
-  smallScreenTab: string = 'form';
   showUpdateUnitsModal: boolean = false;
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-process-cooling-assessment', undefined);
   }
 
-  next() {
+  continue() {
     this.processCoolingUiService.continue();
   }
 

@@ -5,7 +5,7 @@
   <br>
 </div>
 <form class="pl-3 pr-3" [formGroup]="form" #formElement>
-  <div class="form-group">
+  <div class="form-group ly-field">
     <label for="{{controlIds.isConstantCondenserWaterTemp}}">Is Condenser Water Temp Constant</label>
     <select class="form-control" id="{{controlIds.isConstantCondenserWaterTemp}}"
       formControlName="isConstantCondenserWaterTemp" (focus)="focusField('isConstantCondenserWaterTemp')">
@@ -14,7 +14,7 @@
     </select>
   </div>
   @if (isConstantCondenserWaterTemp.value === true) {
-  <div class="form-group">
+  <div class="form-group ly-field">
     <label for="{{controlIds.condenserWaterTemp}}">Condenser Water Temperature</label>
     <div class="input-group">
       <input name="condenserWaterTemp" type="number" step="any" class="form-control"
@@ -27,7 +27,7 @@
                 [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-form-control-errors>
   </div>
   } @else {
-  <div class="form-group">
+  <div class="form-group ly-field">
     <label for="{{controlIds.followingTempDifferential}}">Following Temperature Differential</label>
     <div class="input-group">
       <input name="followingTempDifferential" type="number" step="any" class="form-control"

@@ -1,0 +1,18 @@
+@if (hasAside()) {
+  <div class="ly-workspace__switcher" role="tablist">
+    <button type="button" role="tab" class="ly-workspace__switch" [id]="id + '-main-tab'"
+      [attr.aria-controls]="id + '-main'" [attr.aria-selected]="visiblePanel() === 'main'"
+      (click)="showPanel('main')">{{ mainLabel() }}</button>
+    <button type="button" role="tab" class="ly-workspace__switch" [id]="id + '-aside-tab'"
+      [attr.aria-controls]="id + '-aside'" [attr.aria-selected]="visiblePanel() === 'aside'"
+      (click)="showPanel('aside')">{{ asideLabel() }}</button>
+  </div>
+}
+<div class="ly-workspace__main ly-panel" [class.ly-panel--raised]="raisedMain()" role="tabpanel" [id]="id + '-main'" [attr.aria-labelledby]="hasAside() ? id + '-main-tab' : null">
+  <ng-content select="[lyMain]"></ng-content>
+</div>
+@if (hasAside()) {
+  <div class="ly-workspace__aside ly-panel" role="tabpanel" [id]="id + '-aside'" [attr.aria-labelledby]="id + '-aside-tab'">
+    <ng-content select="[lyAside]"></ng-content>
+  </div>
+}

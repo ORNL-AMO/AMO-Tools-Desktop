@@ -1,0 +1,371 @@
+/*
+  Layout platform (ly-*)
+
+  Shared, assessment-agnostic layout primitives. New and upgraded views build
+  their structure from these classes; component stylesheets only style content.
+
+  Rules:
+  - CSS owns layout. No JS height math, resize listeners or [ngStyle] heights
+    for structure. Charts may read their width to pick font and marker sizes.
+  - Media queries are for shell-level structure only (the medium tier switch).
+    Content inside a panel responds to the panel width via container queries.
+  - Do not combine Bootstrap layout classes (row, col-*, d-*-flex) with ly-*
+    elements, and do not restyle legacy class names here.
+  - This sheet is loaded after Bootstrap and the legacy sheets and is not in a
+    cascade layer. Layers are planned for the Bootstrap upgrade.
+
+  Breakpoint tiers (custom properties cannot be used in media queries):
+  - compact: max-width 575px  (phones)
+  - medium:  max-width 1024px (tablets, narrow windows; matches existing app breakpoint)
+  - wide:    above 1024px
+*/
+
+/* ---------- Tokens ---------- */
+:root {
+  --ly-space-1: 0.25rem;
+  --ly-space-2: 0.5rem;
+  --ly-space-3: 1rem;
+  --ly-space-4: 1.5rem;
+  --ly-space-5: 2rem;
+
+  --ly-radius: 0.25rem;
+  --ly-border-color: #dee2e6;
+  --ly-panel-bg: transparent;
+  --ly-surface: #fff;
+  --ly-muted-bg: #e9ecef;
+  --ly-text: #212529;
+
+  --ly-z-sticky: 10;
+
+  --ly-accent: var(--measur-brand);
+}
+
+/* ---------- Theme ---------- */
+/* Apply one theme class at the assessment root; primitives read --ly-accent. */
+.ly-theme-process-cooling {
+  --ly-accent: var(--process-cooling-assessment);
+}
+
+.ly-theme-water {
+  --ly-accent: var(--water-assessment);
+}
+
+.ly-theme-compressed-air {
+  --ly-accent: var(--compressed-air);
+}
+
+/* ---------- Shell ---------- */
+/* Full-viewport frame: fixed rows (banner, nav, footer) around one content region. */
+.ly-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.ly-shell > * {
+  flex: 0 0 auto;
+}
+
+.ly-shell > .ly-shell__content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* Routed component hosts sit beside their router-outlet and must pass the
+   height chain through. Add this class to the host of a routed component that
+   sits between the shell and a workspace. Do not use it inside a panel; panel
+   content keeps its natural height so the panel can scroll. */
+.ly-fill {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* ---------- Workspace ---------- */
+/* Main + aside split. Rendered by app-layout-workspace, which owns the switcher. */
+.ly-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-areas: "main aside";
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+.ly-workspace--weighted {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+}
+
+.ly-workspace--solo {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "main";
+}
+
+.ly-workspace__main {
+  grid-area: main;
+}
+
+.ly-workspace__aside {
+  grid-area: aside;
+}
+
+.ly-workspace__switcher {
+  display: none;
+}
+
+.ly-workspace__switch {
+  flex: 1 1 0;
+  padding: var(--ly-space-2) var(--ly-space-3);
+  border: none;
+  border-radius: var(--ly-radius);
+  background: transparent;
+  color: var(--ly-text);
+  cursor: pointer;
+  transition: background-color 0.1s ease-in-out;
+}
+
+.ly-workspace__switch[aria-selected="true"] {
+  background: var(--ly-surface);
+  box-shadow: inset 0 -2px 0 var(--ly-accent);
+}
+
+.ly-workspace__switch:focus-visible {
+  outline: 2px solid var(--ly-accent);
+  outline-offset: 1px;
+}
+
+@media screen and (max-width: 1024px) {
+  .ly-workspace:not(.ly-workspace--solo) {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-areas: "switcher" "panel";
+  }
+
+  .ly-workspace__switcher {
+    display: flex;
+    grid-area: switcher;
+    gap: var(--ly-space-1);
+    padding: var(--ly-space-1);
+    background: var(--ly-muted-bg);
+  }
+
+  .ly-workspace:not(.ly-workspace--solo) > .ly-workspace__main,
+  .ly-workspace:not(.ly-workspace--solo) > .ly-workspace__aside {
+    grid-area: panel;
+  }
+
+  .ly-workspace[data-active-panel="main"] > .ly-workspace__aside,
+  .ly-workspace[data-active-panel="aside"] > .ly-workspace__main {
+    display: none;
+  }
+}
+
+/* ---------- Panel ---------- */
+/* One scrolling region. It is the container that content queries respond to. */
+.ly-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  background: var(--ly-panel-bg);
+  container: ly-panel / inline-size;
+}
+
+/* scrollbar sizes match the legacy .scroll-item rule (two-panel.css) */
+.ly-panel::-webkit-scrollbar {
+  width: 0.5em;
+  height: 0.5rem;
+}
+
+.ly-panel::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.ly-panel::-webkit-scrollbar-thumb {
+  background-color: var(--ly-accent);
+}
+
+.ly-panel::-webkit-scrollbar-thumb:hover {
+  cursor: pointer;
+}
+
+/* Raised surface: white panel lifted above its neighbour with a soft shadow. */
+.ly-panel--raised {
+  background: var(--ly-surface);
+  box-shadow: 0 0 69px -1px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+.ly-panel__header {
+  position: sticky;
+  top: 0;
+  z-index: var(--ly-z-sticky);
+  background: var(--ly-surface);
+}
+
+/* ---------- Stack ---------- */
+.ly-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ly-stack-gap, var(--ly-space-3));
+  min-width: 0;
+}
+
+/* ---------- Field row ---------- */
+/* Label beside input in wide panels, label above input in narrow panels.
+   The wide layout reproduces the legacy `.tab-content .form-group` float rows
+   exactly (same rules, same specificity), because where error and warning lines
+   wrap depends on their length in that layout and a grid cannot match it.
+   Only applies inside a layout panel. */
+.ly-panel .ly-field::after {
+  display: table;
+  content: "";
+  clear: both;
+}
+
+.ly-panel .ly-field .form-control,
+.ly-panel .ly-field label,
+.ly-panel .ly-field .form-check {
+  float: left;
+}
+
+.ly-panel .ly-field .form-check label {
+  float: none;
+}
+
+.ly-panel .ly-field label {
+  width: 50%;
+}
+
+.ly-panel .ly-field .form-control {
+  width: 50%;
+}
+
+@container ly-panel (max-width: 30rem) {
+  .ly-panel .ly-field .form-control,
+  .ly-panel .ly-field label,
+  .ly-panel .ly-field .form-check {
+    float: none;
+  }
+
+  .ly-panel .ly-field label,
+  .ly-panel .ly-field .form-control {
+    width: 100%;
+  }
+
+  /* inputs with a unit box: grow beside the unit (Bootstrap input-group sizing) */
+  .ly-panel .ly-field .input-group > .form-control {
+    width: 1%;
+  }
+}
+
+/* ---------- Cluster ---------- */
+/* Inline groups (buttons, toggles, selects) that wrap instead of overflowing. */
+.ly-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ly-cluster-gap, var(--ly-space-2));
+  min-width: 0;
+}
+
+.ly-cluster > * {
+  min-width: 0;
+}
+
+/* ---------- Card grid ---------- */
+/* Fits as many columns as --ly-card-min allows; collapses to one in narrow panels. */
+.ly-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--ly-card-min, 18rem)), 1fr));
+  gap: var(--ly-cards-gap, var(--ly-space-3));
+  min-width: 0;
+}
+
+/* ---------- Data table ---------- */
+/* Wrap wide tables; only the wrapper scrolls sideways, never the page. */
+.ly-table {
+  max-width: 100%;
+  overflow-x: auto;
+  contain: inline-size;
+}
+
+.ly-table--sticky-first th:first-child,
+.ly-table--sticky-first td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--ly-surface);
+}
+
+/* ---------- Media ---------- */
+/* Maps and charts. Plotly and billboard redraw on window resize events;
+   app-layout-workspace fires one when it switches panels. */
+.ly-media {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: var(--ly-media-ratio, 16 / 9);
+}
+
+.ly-media--fill {
+  aspect-ratio: auto;
+  flex: 1 1 auto;
+  min-height: var(--ly-media-min-height, 300px);
+}
+
+/* ---------- Step nav ---------- */
+/* Tabs on wide screens, the existing prev/next pager at the medium tier.
+   Put these classes on wrappers around the tab and pager markup so legacy tab
+   classes cannot override the display toggle. Mark each step link in the pager
+   with ly-stepnav__step (and .active on the current one): at the compact tier
+   only the current step shows between the arrows. */
+.ly-stepnav__pager {
+  display: none;
+}
+
+@media screen and (max-width: 1024px) {
+  .ly-stepnav__tabs {
+    display: none;
+  }
+
+  .ly-stepnav__pager {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .ly-stepnav__pager .ly-stepnav__step:not(.active) {
+    display: none;
+  }
+}
+
+/* ---------- Tier visibility ---------- */
+/* Shell chrome that only exists on wide screens (e.g. the Back/Next footer the
+   pager replaces). Use instead of Bootstrap d-none d-lg-* so tiers line up. */
+@media screen and (max-width: 1024px) {
+  .ly-wide-only {
+    display: none;
+  }
+}
+
+/* ---------- Print ---------- */
+@media print {
+  .ly-panel {
+    overflow: visible;
+  }
+
+  .ly-workspace__switcher {
+    display: none;
+  }
+}

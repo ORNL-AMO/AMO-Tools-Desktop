@@ -40,6 +40,7 @@ import { SystemInformationFormService } from './system-information/system-inform
 import { AlertBadgeComponent } from '../shared/alert-badge/alert-badge.component';
 import { FormControlErrorsComponent } from '../shared/form-control-errors.component';
 import { InputUnitComponent } from '../shared/input-unit.component';
+import { LayoutWorkspaceComponent } from '../shared/layout-workspace/layout-workspace.component';
 import { OperationsComponent } from './system-information/operations/operations.component';
 import { ProcessCoolingAssessmentResolver } from './routing/process-cooling-assessment-resolver.resolver';
 import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
@@ -338,6 +339,7 @@ const ROUTES: Route[] = [
     FormControlErrorsComponent,
     InputUnitComponent,
     AlertInfoContainerComponent,
+    LayoutWorkspaceComponent,
     PercentGraphModule,
     ReportTableCellPipe,
     ReportBuilderModule
