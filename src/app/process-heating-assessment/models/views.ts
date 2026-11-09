@@ -146,8 +146,9 @@ export const HEAT_BALANCE_VIEW_LINKS: ViewLink[] = [
   { view: LossView.HEAT_SYSTEM_EFFICIENCY, label: 'Heat System Efficiency' },
 ];
 
-/** Loss types whose form takes a `scenario` input; each loss step adds its own once built. */
+/** Heat Balance views whose form takes a `scenario` input; each loss step adds its own once built. */
 export const EXPERT_VIEW_LOSS_VIEWS: ReadonlySet<ProcessHeatingView> = new Set<LossView>([
+  LossView.OPERATIONS,
   LossView.CHARGE_MATERIAL,
   LossView.WALL_LOSSES,
   LossView.EXTENDED_SURFACE,
