@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ImportExportOpportunities, TreasureHunt, TreasureHuntOpportunity } from '../../shared/models/treasure-hunt';
+import { AssessmentOpportunity, ImportExportOpportunities, OpportunitySheet, TreasureHunt, TreasureHuntOpportunity } from '../../shared/models/treasure-hunt';
+import { OPPORTUNITY_EXPORT_SECTIONS, OpportunityCounts, OpportunityExportSection } from './opportunity-export-sections';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,14 @@ export class ExportOpportunitiesService {
 
   constructor() { }
 
+  setImportExportData(treasureHunt: TreasureHunt, includeUnselected: boolean = false): ImportExportOpportunities {
+    const exportOpportunities: ImportExportOpportunities = { origin: 'AMO-TOOLS-DESKTOP-OPPORTUNITIES' };
+    OPPORTUNITY_EXPORT_SECTIONS.forEach(section => {
+      // * each key holds a different opportunity array type, so TypeScript can't narrow the assignment per section
+      exportOpportunities[section.key] = this.getSelectedOpportunitiesGeneric<TreasureHuntOpportunity>(treasureHunt[section.key], includeUnselected) as any;
+    });
+    return exportOpportunities;
+  }
 
     setImportExportData(treasureHunt: TreasureHunt, includeUnselected: boolean = false) {
       const exportOpportunities: ImportExportOpportunities = {
@@ -54,6 +63,8 @@ export class ExportOpportunitiesService {
         }
         return opportunities.filter((opportunity) => opportunity.selected);
       }
-      return undefined;
+      return opportunities.filter((opportunity) => opportunity.selected);
     }
+    return undefined;
+  }
 }

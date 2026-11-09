@@ -1,20 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
-import { TreasureHunt, ImportExportOpportunities, TreasureHuntOpportunity, OpportunitySheet, AssessmentOpportunity } from '../../../shared/models/treasure-hunt';
-import * as _ from 'lodash';
+import { TreasureHunt, ImportExportOpportunities } from '../../../shared/models/treasure-hunt';
 import { ImportExportService } from '../../../shared/import-export/import-export.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
 import { TreasureChestMenuService } from '../treasure-chest-menu/treasure-chest-menu.service';
-import { EmailMeasurDataService } from '../../../shared/email-measur-data/email-measur-data.service';
 import { ExportOpportunitiesService } from '../export-opportunities.service';
-
-interface ExportPreviewSection {
-  label: string;
-  key: Exclude<keyof ImportExportOpportunities, 'origin'>;
-  fallbackName: string;
-  usesItemName?: boolean;
-}
+import { OpportunityCounts } from '../opportunity-export-sections';
 
 @Component({
     selector: 'app-export-opportunities',
@@ -27,7 +19,7 @@ export class ExportOpportunitiesComponent implements OnInit {
 
   treasureHunt: TreasureHunt;
   treasureHuntSub: Subscription;
-  exportName: string = 'Opportunites Data';
+  exportName: string = 'Opportunities Data';
   includeUnselected: boolean = false;
   previewSections: Array<ExportPreviewSection> = [
     { label: 'Lighting Replacements', key: 'lightingReplacements', fallbackName: 'Lighting Replacement' },
@@ -65,13 +57,14 @@ export class ExportOpportunitiesComponent implements OnInit {
   constructor(private importExportService: ImportExportService, 
     private treasureHuntService: TreasureHuntService,
     private treasureChestMenuService: TreasureChestMenuService,
-    private emailMeasurDataService: EmailMeasurDataService,
     private exportOpportunitiesService: ExportOpportunitiesService
   ) { }
 
   ngOnInit() {
     this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
       this.treasureHunt = val;
+      this.opportunityCounts = this.exportOpportunitiesService.getOpportunityCounts(val);
+      this.hasUnselectedOpportunities = this.exportOpportunitiesService.hasUnselectedOpportunities(val);
     });
   }
 
@@ -95,24 +88,13 @@ export class ExportOpportunitiesComponent implements OnInit {
     this.treasureChestMenuService.showExportModal.next(false);
   }
 
-  getOpportunityName(section: ExportPreviewSection, opportunity: TreasureHuntOpportunity, index: number): string {
-    const name: string = section.usesItemName ? (opportunity as OpportunitySheet | AssessmentOpportunity).name : opportunity.opportunitySheet?.name;
-    return name || `${section.fallbackName} #${index + 1}`;
-  }
-
   exportData() {
     const exportOpportunities: ImportExportOpportunities = this.exportOpportunitiesService.setImportExportData(this.treasureHunt, this.includeUnselected);
     this.importExportService.downloadOpportunities(exportOpportunities, this.exportName);
     this.hideExportModal();
   }
 
-  showEmailMeasurDataModal() {
-    this.emailMeasurDataService.measurItemAttachment = {
-      itemType: 'opportunities',
-      itemName: '',
-      itemData: ''
-    }
-    this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
-    this.hideExportModal();
+  get includedOpportunityCount(): number {
+    return this.exportOpportunitiesService.getIncludedOpportunityCount(this.opportunityCounts, this.includeUnselected);
   }
 }

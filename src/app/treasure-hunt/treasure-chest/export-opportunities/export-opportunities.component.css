@@ -10,18 +10,8 @@
     font-size: small;
 }
 
-.modal-body label{
-    text-decoration: underline;
-    font-weight: bold;
-}
-
 .btn{
     padding: 6px;
-}
-
-.not-exported{
-    opacity: 0.5;
-    text-decoration: line-through;
 }
 
 .export-footer .form-group label,
@@ -37,10 +27,10 @@
     min-width: 0;
 }
 
-.export-footer .form-group .export-switch{
-    flex: 0 0 52px;
-    width: 52px;
-    height: 26px;
+.export-footer input[type="checkbox"]{
+    width: 19.5px;
+    height: 19.5px;
+    flex-shrink: 0;
 }
 
 @media (max-width: 575.98px){

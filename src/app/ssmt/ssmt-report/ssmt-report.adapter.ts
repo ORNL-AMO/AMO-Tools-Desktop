@@ -506,6 +506,7 @@ export class SsmtReportAdapter implements ReportDataAdapter {
       ['Blowdown Rate (%)', fmt(baseline.inputData.boilerInput.blowdownRate), ...modBundles.map(m => fmt(m.inputData.boilerInput.blowdownRate))],
       [`Steam Temperature (${tempUnit})`, fmt(baseline.inputData.boilerInput.steamTemperature), ...modBundles.map(m => fmt(m.inputData.boilerInput.steamTemperature))],
       ['Is Blowdown Flashed?', yesNo(baseline.inputData.boilerInput.blowdownFlashed), ...modBundles.map(m => yesNo(m.inputData.boilerInput.blowdownFlashed))],
+      ['Send Blowdown Flash Steam to Deaerator?', yesNo(baseline.inputData.boilerInput.sendBlowdownToDeaerator), ...modBundles.map(m => yesNo(m.inputData.boilerInput.sendBlowdownToDeaerator))],
       ['Preheat Make-up Water?', yesNo(baseline.inputData.boilerInput.preheatMakeupWater), ...modBundles.map(m => yesNo(m.inputData.boilerInput.preheatMakeupWater))],
       [`Approach Temperature (${tempUnit})`, fmt(baseline.inputData.boilerInput.approachTemperature), ...modBundles.map(m => fmt(m.inputData.boilerInput.approachTemperature))],
       ['Deaerator Vent Rate (%)', fmt(baseline.inputData.boilerInput.deaeratorVentRate), ...modBundles.map(m => fmt(m.inputData.boilerInput.deaeratorVentRate))],
