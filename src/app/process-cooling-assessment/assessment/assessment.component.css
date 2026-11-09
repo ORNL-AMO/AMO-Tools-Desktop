@@ -1,10 +1,10 @@
 .assessment-header {
     justify-content: space-between;
-    padding: var(--ly-space-2) var(--ly-space-3);
+    padding: var(--layout-space-2) var(--layout-space-3);
 }
 
 /* lets the tab list's h-100 fill the row height, as it did as a direct flex child */
-.assessment-header > .ly-stepnav__tabs {
+.assessment-header > .layout-stepnav__tabs {
     align-self: stretch;
 }
 
@@ -24,7 +24,7 @@
         flex: 1 1 auto;
     }
 
-    .assessment-header .ly-stepnav__pager {
+    .assessment-header .layout-stepnav__pager {
         flex: 1 1 100%;
         order: 1;
     }

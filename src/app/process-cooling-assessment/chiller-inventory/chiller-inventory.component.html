@@ -9,19 +9,19 @@
         <form [formGroup]="form">
             <!-- <a class="click-link small pull-right" (click)="openChillerModal()">Set Data From Existing Chiller</a> -->
 
-            <div class="form-group ly-field" [class.invalid]="form.controls.name.invalid">
+            <div class="form-group layout-field" [class.invalid]="form.controls.name.invalid">
                 <label for="{{controlIds.name}}">Chiller Name</label>
                 <input type="text" class="form-control" name="name" formControlName="name"
                     (focus)="focusField('chiller-name')" />
                 <app-form-control-errors [control]="form.controls.name"></app-form-control-errors>
             </div>
-            <div class="form-group ly-field">
+            <div class="form-group layout-field">
                 <label for="{{controlIds.description}}">Description</label>
                 <textarea class="form-control" type="text" id="description" formControlName="description"
                     (focus)="focusField('chiller-description')"></textarea>
             </div>
             <hr>
-            <div class="form-group ly-field">
+            <div class="form-group layout-field">
                 <label for="{{controlIds.chillerType}}">Chiller Type</label>
                 <select class="form-control" id="{{controlIds.chillerType}}" formControlName="chillerType"
                     (focus)="focusField('chillerType')">
@@ -30,7 +30,7 @@
                     }
                 </select>
             </div>
-            <div class="form-group ly-field">
+            <div class="form-group layout-field">
                 <label for="{{controlIds.isFullLoadEfficiencyKnown}}">Is Full Load Efficiency Known?</label>
                 <select class="form-control" id="{{controlIds.isFullLoadEfficiencyKnown}}" formControlName="isFullLoadEfficiencyKnown"
                     (focus)="focusField('isFullLoadEfficiencyKnown')">
@@ -39,7 +39,7 @@
                 </select>
             </div>
             @if (form.controls.isFullLoadEfficiencyKnown.value) {
-            <div class="form-group ly-field">
+            <div class="form-group layout-field">
                 <label for="{{controlIds.fullLoadEfficiency}}">Full Load Efficiency</label>
                 <div class="input-group">
 
@@ -57,7 +57,7 @@
             </div>
             }
             <!-- * 8117 refrigerant change hidden intentionally  -->
-            <!-- <div class="form-group ly-field">
+            <!-- <div class="form-group layout-field">
                 <label for="{{controlIds.refrigerantType}}">Refrigerant Type</label>
                 <select class="form-control" id="{{controlIds.refrigerantType}}" formControlName="refrigerantType"
                     (focus)="focusField('refrigerantType')">
@@ -66,7 +66,7 @@
                     }
                 </select>
             </div> -->
-            <div class="form-group ly-field">
+            <div class="form-group layout-field">
                 <label for="{{controlIds.capacity}}">Capacity</label>
                 <div class="input-group">
                     <input type="number" class="form-control" id="{{controlIds.capacity}}" formControlName="capacity"
@@ -76,7 +76,7 @@
             </div>
             <app-form-control-errors [control]="form.controls.capacity"></app-form-control-errors>
             </div>
-            <div class="form-group ly-field">
+            <div class="form-group layout-field">
                 <label for="{{controlIds.age}}">Age</label>
                 <div class="input-group">
                     <input type="number" class="form-control" id="{{controlIds.age}}" formControlName="age"
@@ -101,7 +101,7 @@
                 </div>
             <ng-container formArrayName="chillerCurvePoints">
                 @for (point of form.controls.chillerCurvePoints.controls; track $index) {
-                <div [formGroupName]="$index" class="form-group ly-field">
+                <div [formGroupName]="$index" class="form-group layout-field">
                     <label>{{ point.controls.loadPercent.value }}% Load</label>
                     <div class="input-group">
                         <input type="number" class="form-control" formControlName="kWPerTon"

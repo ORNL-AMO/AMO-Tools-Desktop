@@ -16,7 +16,7 @@
 <form [formGroup]="form" class="p-0">
     <div class="row no-gutters mt-3">
         <div class="col-6 pr-2">
-            <div class="form-group ly-field">
+            <div class="form-group layout-field">
                 <label for="baselineTowerType">
                     Current Tower Type
                 </label>
@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="col-6 pl-2">
-            <div class="form-group ly-field">
+            <div class="form-group layout-field">
                 <label for="modificationTowerType">
                     Proposed Tower Type
                 </label>
@@ -40,7 +40,7 @@
             </div>
 
                 @if (towerType.value === TowerType.VariableSpeed) {
-                <div class="form-group ly-field">
+                <div class="form-group layout-field">
                     <label for="modificationNumberOfFans">Number of Fans</label>
                     <select class="form-control" id="modificationNumberOfFans" formControlName="numberOfFans"
                         (focus)="focusField('numberOfFans')">

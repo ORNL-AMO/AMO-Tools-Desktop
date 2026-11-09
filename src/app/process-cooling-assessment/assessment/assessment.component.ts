@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
   standalone: false,
   templateUrl: './assessment.component.html',
   styleUrl: './assessment.component.css',
-  host: { class: 'ly-fill' }
+  host: { class: 'layout-fill' }
 })
 export class AssessmentComponent {
   private readonly processCoolingUiService = inject(ProcessCoolingUiService);

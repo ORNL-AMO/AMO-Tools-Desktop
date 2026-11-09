@@ -70,10 +70,10 @@ select:hover {
 }
 
 /* Narrow panels: day label, schedule type and hours each take their own line. */
-@container ly-panel (max-width: 44rem) {
+@container layout-panel (max-width: 44rem) {
   .day-row {
     flex-wrap: wrap;
-    row-gap: var(--ly-space-1);
+    row-gap: var(--layout-space-1);
   }
 
   .day-label,

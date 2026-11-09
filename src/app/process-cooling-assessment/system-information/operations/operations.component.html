@@ -1,6 +1,6 @@
 <div>
     <form class="px-3" [formGroup]="form">
-        <div class="form-group ly-field">
+        <div class="form-group layout-field">
             <label for="electricityCost">Electricity Cost</label>
             <div class="input-group">
                 <input name="electricityCost" type="number" step="0.01" class="form-control" id="electricityCost"
@@ -11,7 +11,7 @@
                 [defaultUnit]="'$/kWh'"></app-form-control-errors>
         </div>
 
-        <div class="form-group ly-field">
+        <div class="form-group layout-field">
             <label for="fuelCost">Fuel Cost</label>
             <div class="input-group">
                 <input name="fuelCost" type="number" step="0.01" class="form-control" id="fuelCost"
@@ -30,7 +30,7 @@
     </div>
     <form [formGroup]="form">
 
-        <div class="form-group ly-field">
+        <div class="form-group layout-field">
             <label for="{{controlIds.chilledWaterSupplyTemp}}">Chilled Water Supply Temperature</label>
             <div class="input-group">
                 <input name="chilledWaterSupplyTemp" type="number" step="any" class="form-control"
@@ -43,7 +43,7 @@
                 [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-form-control-errors>
         </div>
 
-        <div class="form-group ly-field">
+        <div class="form-group layout-field">
             <label for="{{controlIds.condenserCoolingMethod}}">Condenser Cooling Method</label>
             <select class="form-control" id="{{controlIds.condenserCoolingMethod}}"
                 formControlName="condenserCoolingMethod" (focus)="focusField('condenserCoolingMethod')">

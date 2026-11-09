@@ -25,9 +25,9 @@ form {
     padding-top: 0;
 }
 
-/* Narrow layout panels (ly-panel container): stack the side-by-side halves.
+/* Narrow layout panels (layout-panel container): stack the side-by-side halves.
    No effect where the module is hosted outside a layout panel. */
-@container ly-panel (max-width: 48rem) {
+@container layout-panel (max-width: 48rem) {
     .weather-split > .col-6 {
         flex: 0 0 100%;
         max-width: 100%;

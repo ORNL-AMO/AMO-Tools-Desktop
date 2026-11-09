@@ -1,6 +1,6 @@
 @let selectedModification = selectedModification$ | async;
-<div class="ly-cluster assessment-header">
-    <div class="ly-stepnav__tabs">
+<div class="layout-cluster assessment-header">
+    <div class="layout-stepnav__tabs">
         <ul class="h-100 tabs subtabs progress-tabs process-cooling-assessment p-2">
             @for (link of ASSESSMENT_VIEW_LINKS; track $index) {
             <li routerLinkActive="active" [routerLink]="[link.view]">
@@ -26,7 +26,7 @@
     </div>
     }
 
-    <div class="ly-stepnav__pager">
+    <div class="layout-stepnav__pager">
         <ul class="pagination justify-content-between tabs subtabs progress-tabs flex-fill process-cooling-assessment">
             <li class="page-item" [class.disabled]="assessmentView() == ROUTE_TOKENS.exploreOpportunities">
                 <a class="nav-link small" (click)="back()"
@@ -34,7 +34,7 @@
                     <span class="fa fa-chevron-left"></span></a>
             </li>
             @for (link of ASSESSMENT_VIEW_LINKS; track $index) {
-            <li class="ly-stepnav__step" routerLinkActive="active" [routerLink]="[link.view]">
+            <li class="layout-stepnav__step" routerLinkActive="active" [routerLink]="[link.view]">
                 <a class="nav-link small" [routerLink]="[link.view]">
                     {{link.label}}
                 </a>

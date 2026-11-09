@@ -7,7 +7,7 @@ import { SETUP_VIEW_LINKS } from '../models/views';
   selector: 'app-baseline',
   standalone: false,
   templateUrl: './baseline.component.html',
-  host: { class: 'ly-fill' }
+  host: { class: 'layout-fill' }
 })
 export class BaselineComponent {
   private readonly processCoolingUiService = inject(ProcessCoolingUiService);

@@ -1,6 +1,6 @@
 <form [formGroup]="settingsForm">
 
-  <div class="form-group ly-field">
+  <div class="form-group layout-field">
     <label for="currency">Currency</label>
     <div class="input-group">
       <select class="form-control" formControlName="currency" id="currency" (change)="save()">
@@ -9,7 +9,7 @@
     </div>
   </div>
 
-  <div class="form-group ly-field">
+  <div class="form-group layout-field">
     <label>Units of Measure</label>
     <div class="input-group">
       <div class="d-flex flex-column">
@@ -33,7 +33,7 @@
   </div>
 
   @if (showOperationalImpacts()) {
-  <div class="form-group ly-field my-2">
+  <div class="form-group layout-field my-2">
     <label>Emissions Result Unit</label>
     <div class="input-group">
       <div class="d-flex flex-column">
@@ -52,7 +52,7 @@
   </div>
   }
 
-  <div class="form-group ly-field" *ngIf="!inPsat && !inTreasureHunt">
+  <div class="form-group layout-field" *ngIf="!inPsat && !inTreasureHunt">
     <label for="energyResultUnit">Energy Result Unit</label>
     <div class="input-group">
       <select class="form-control" formControlName="energyResultUnit" id="energyResultUnit" (change)="save()">
@@ -62,7 +62,7 @@
       </select>
     </div>
   </div>
-  <div class="form-group ly-field" *ngIf="generalSettings">
+  <div class="form-group layout-field" *ngIf="generalSettings">
     <label>Default Panel Tab</label>
     <div class="input-group">
       <div class="d-flex flex-column">
@@ -82,7 +82,7 @@
   <div *ngIf="!inPsat && !inPhast">
     <label class="group-label">Energy Costs for Operation
     </label>
-    <div class="form-group ly-field">
+    <div class="form-group layout-field">
       <label for="fuelCost">Fuel</label>
       <div class="input-group">
         <input name="fuelCost" type="number" step="any" class="form-control" id="fuelCost" formControlName="fuelCost"
@@ -92,7 +92,7 @@
         <span class="units input-group-addon" *ngIf="settingsForm.controls.unitsOfMeasure.value == 'Metric'">$/GJ</span>
       </div>
     </div>
-    <div class="form-group ly-field">
+    <div class="form-group layout-field">
       <label for="steamCost">Steam (as utility)</label>
       <div class="input-group">
         <input name="steamCost" type="number" step="any" class="form-control" id="steamCost" formControlName="steamCost"
@@ -103,7 +103,7 @@
           *ngIf="settingsForm.controls.unitsOfMeasure.value == 'Metric'">$/tonne</span>
       </div>
     </div>
-    <div class="form-group ly-field">
+    <div class="form-group layout-field">
       <label for="electricityCost">Electricity</label>
       <div class="input-group">
         <input name="electricityCost" type="number" step="any" class="form-control" id="electricityCost"
@@ -113,7 +113,7 @@
     </div>
   </div>
 
-  <div class="form-group ly-field" *ngIf="inInventory">
+  <div class="form-group layout-field" *ngIf="inInventory">
     <label for="electricityCost">Electricity Cost</label>
     <div class="input-group">
       <input name="electricityCost" type="number" step="0.01" class="form-control" id="electricityCost"

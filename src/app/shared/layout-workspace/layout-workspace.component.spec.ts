@@ -26,7 +26,7 @@ describe('LayoutWorkspaceComponent', () => {
   }
 
   function switches(): HTMLButtonElement[] {
-    return Array.from(host.querySelectorAll('.ly-workspace__switch'));
+    return Array.from(host.querySelectorAll('.layout-workspace__switch'));
   }
 
   beforeEach(async () => {
@@ -40,18 +40,18 @@ describe('LayoutWorkspaceComponent', () => {
   });
 
   it('projects main and aside content into their panels', () => {
-    expect(host.querySelector('.ly-workspace__main .test-main')).toBeTruthy();
-    expect(host.querySelector('.ly-workspace__aside .test-aside')).toBeTruthy();
+    expect(host.querySelector('.layout-workspace__main .test-main')).toBeTruthy();
+    expect(host.querySelector('.layout-workspace__aside .test-aside')).toBeTruthy();
   });
 
   it('applies the workspace and variant classes to the host', () => {
-    expect(workspace().classList).toContain('ly-workspace');
-    expect(workspace().classList).toContain('ly-workspace--even');
+    expect(workspace().classList).toContain('layout-workspace');
+    expect(workspace().classList).toContain('layout-workspace--even');
 
     fixture.componentInstance.variant.set('weighted');
     fixture.detectChanges();
-    expect(workspace().classList).toContain('ly-workspace--weighted');
-    expect(workspace().classList).not.toContain('ly-workspace--even');
+    expect(workspace().classList).toContain('layout-workspace--weighted');
+    expect(workspace().classList).not.toContain('layout-workspace--even');
   });
 
   it('starts on the main panel and switches to the aside', () => {
@@ -80,12 +80,12 @@ describe('LayoutWorkspaceComponent', () => {
   });
 
   it('raises the main panel only when asked', () => {
-    const main = () => host.querySelector('.ly-workspace__main');
-    expect(main().classList).not.toContain('ly-panel--raised');
+    const main = () => host.querySelector('.layout-workspace__main');
+    expect(main().classList).not.toContain('layout-panel--raised');
 
     fixture.componentInstance.raisedMain.set(true);
     fixture.detectChanges();
-    expect(main().classList).toContain('ly-panel--raised');
+    expect(main().classList).toContain('layout-panel--raised');
   });
 
   it('renders no switcher or aside for the solo variant and always shows main', () => {
@@ -94,7 +94,7 @@ describe('LayoutWorkspaceComponent', () => {
     fixture.detectChanges();
 
     expect(switches().length).toBe(0);
-    expect(host.querySelector('.ly-workspace__aside')).toBeNull();
+    expect(host.querySelector('.layout-workspace__aside')).toBeNull();
     expect(workspace().getAttribute('data-active-panel')).toBe('main');
   });
 });

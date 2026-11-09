@@ -18,10 +18,10 @@ let nextWorkspaceId = 0;
   templateUrl: './layout-workspace.component.html',
   standalone: true,
   host: {
-    'class': 'ly-workspace',
-    '[class.ly-workspace--even]': "variant() === 'even'",
-    '[class.ly-workspace--weighted]': "variant() === 'weighted'",
-    '[class.ly-workspace--solo]': "variant() === 'solo'",
+    'class': 'layout-workspace',
+    '[class.layout-workspace--even]': "variant() === 'even'",
+    '[class.layout-workspace--weighted]': "variant() === 'weighted'",
+    '[class.layout-workspace--solo]': "variant() === 'solo'",
     '[attr.data-active-panel]': 'visiblePanel()',
   },
 })
@@ -31,7 +31,7 @@ export class LayoutWorkspaceComponent {
   asideLabel = input<string>('Details');
   raisedMain = input<boolean>(false);
 
-  readonly id = `ly-workspace-${nextWorkspaceId++}`;
+  readonly id = `layout-workspace-${nextWorkspaceId++}`;
   private activePanel = signal<WorkspacePanel>('main');
 
   hasAside = computed(() => this.variant() !== 'solo');
