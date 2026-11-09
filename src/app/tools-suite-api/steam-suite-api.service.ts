@@ -376,7 +376,8 @@ export class SteamSuiteApiService {
       inputData.boilerInput.steamTemperature,
       inputData.boilerInput.deaeratorVentRate,
       inputData.boilerInput.deaeratorPressure,
-      inputData.boilerInput.approachTemperature
+      inputData.boilerInput.approachTemperature,
+      inputData.boilerInput.sendBlowdownToDeaerator ?? false
     );
 
 

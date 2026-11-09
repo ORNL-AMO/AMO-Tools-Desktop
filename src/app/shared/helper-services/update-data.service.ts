@@ -572,6 +572,9 @@ export class UpdateDataService {
                 }
                 ssmt.boilerInput.saturatedPressure = defaultSaturatedPressure;
             }
+            if (ssmt.boilerInput.sendBlowdownToDeaerator === undefined) {
+                ssmt.boilerInput.sendBlowdownToDeaerator = false;
+            }
         }
         return ssmt;
     }
