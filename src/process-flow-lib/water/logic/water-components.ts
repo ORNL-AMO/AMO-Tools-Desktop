@@ -1,7 +1,7 @@
 import { CustomNodeStyleMap } from "../constants";
 import { Connection, Edge, MarkerType, Node } from "@xyflow/react";
 import { DiagramSettings, getDefaultFlowConfidence, getDefaultFlowTotalTouched, Handles, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from "../types/diagram";
-import { ConnectedFlowType, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, IntakeSource, WasteWaterTreatment, WaterProcessComponent, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from "../types/water-components";
+import { HeatEnergy, MotorEnergy, ConnectedFlowType, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, IntakeSource, WasteWaterTreatment, WaterProcessComponent, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from "../types/water-components";
 import { getNewIdString } from "./utils";
 import { NodeGraphIndex } from "../../graph";
 
@@ -223,8 +223,12 @@ export const ComponentManageDataTabs: Record<WaterProcessComponentType, ManageDa
       index: 0
     },
     {
-        label: 'Customize',
+        label: 'Energy',
         index: 1
+      },
+    {
+        label: 'Customize',
+        index: 2
       }
   ],
   "water-discharge": [
@@ -233,8 +237,12 @@ export const ComponentManageDataTabs: Record<WaterProcessComponentType, ManageDa
       index: 0
     },
     {
-        label: 'Customize',
+        label: 'Energy',
         index: 1
+      },
+    {
+        label: 'Customize',
+        index: 2
       }
   ],
   "water-using-system":
@@ -248,8 +256,12 @@ export const ComponentManageDataTabs: Record<WaterProcessComponentType, ManageDa
         index: 1
       },
       {
-        label: 'Customize',
+        label: 'Energy',
         index: 2
+      },
+      {
+        label: 'Customize',
+        index: 3
       }
     ],
   "summing-node": defaultTabs,
@@ -294,14 +306,14 @@ export const getNewProcessComponent = (processComponentType: WaterProcessCompone
   if (newProcessComponent.processComponentType === 'water-intake' || newProcessComponent.processComponentType === 'water-discharge') {
     newProcessComponent.sourceType = 0;
     newProcessComponent.annualUse = 0;
-    newProcessComponent.addedMotorEnergy = [];
   }
 
   if (newProcessComponent.processComponentType === 'water-using-system') {
     newProcessComponent.systemType = 0;
     newProcessComponent.inSystemTreatment = [];
-    newProcessComponent.addedMotorEnergy = [];
   }
+
+  newProcessComponent = withNodeEnergyDefaults(newProcessComponent);
 
   if (newProcessComponent.processComponentType === 'water-treatment' || newProcessComponent.processComponentType === 'waste-water-treatment') {
     newProcessComponent.treatmentType = 0;
@@ -421,7 +433,7 @@ export const getWaterUsingSystem = (processFlowPart?: WaterProcessComponent): Wa
       incomingTemp: undefined,
       outgoingTemp: undefined,
       heaterEfficiency: undefined,
-      heatingFuelType: 0,
+      heatingFuelType: 1,
       wasteWaterDischarge: undefined
     },
     systemFlowTotals: {
@@ -675,4 +687,43 @@ export const getComponentTypeLabel = (processComponentType: ProcessFlowNodeType)
   return componentTypeLabels[processComponentType] || processComponentType;
 }
 
+export const getDefaultHeatEnergy = (): HeatEnergy => {
+  return {
+    incomingTemp: undefined,
+    outgoingTemp: undefined,
+    heaterEfficiency: undefined,
+    heatingFuelType: 1,
+    wasteWaterDischarge: undefined,
+  }
+}
+
+export const withNodeEnergyDefaults = (nodeData: ProcessFlowPart): ProcessFlowPart => {
+  const nodeType = nodeData.processComponentType;
+  const hasEnergyTab = nodeType === 'water-intake' || nodeType === 'water-discharge' || nodeType === 'water-using-system';
+  const missingMotorEnergy = hasEnergyTab && !nodeData.addedMotorEnergy;
+  const missingHeatEnergy = nodeType === 'water-using-system' && !nodeData.heatEnergy;
+  if (!missingMotorEnergy && !missingHeatEnergy) {
+    return nodeData;
+  }
+  return {
+    ...nodeData,
+    ...(missingMotorEnergy && { addedMotorEnergy: [] }),
+    ...(missingHeatEnergy && { heatEnergy: getDefaultHeatEnergy() }),
+  };
+}
+
+export const getMaxHeatEnergyOutgoingTemp = (unitsOfMeasure: string): number => {
+  return unitsOfMeasure === 'Metric' ? 204.44 : 400;
+}
+
+export const getDefaultMotorEnergy = (lastIndex: number): MotorEnergy => {
+  return {
+    name: `Machine Energy ${lastIndex + 1}`,
+    numberUnits: 1,
+    hoursPerYear: 8760,
+    loadFactor: undefined,
+    ratedPower: undefined,
+    systemEfficiency: undefined,
+  };
+}
 

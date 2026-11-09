@@ -7,6 +7,8 @@ import { FieldMeasurementTableComponent } from './field-measurement-table/field-
 import { PercentLoadEstimationService } from './percent-load-estimation.service';
 import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { LoadFactorModalComponent } from './load-factor-modal/load-factor-modal.component';
 
 @NgModule({
   imports: [
@@ -14,15 +16,18 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     FormsModule,
     ReactiveFormsModule,
     PercentGraphModule,
-    SharedPipesModule
+    SharedPipesModule,
+    ModalModule
   ],
   declarations: [
     PercentLoadEstimationComponent,
     FieldMeasurementFormComponent,
-    FieldMeasurementTableComponent
+    FieldMeasurementTableComponent,
+    LoadFactorModalComponent
   ],
   exports: [
-    PercentLoadEstimationComponent
+    PercentLoadEstimationComponent,
+    LoadFactorModalComponent
   ],
   providers: [
     PercentLoadEstimationService

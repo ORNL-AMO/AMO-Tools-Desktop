@@ -221,6 +221,7 @@ export class CompareService {
         this.isCombustionEfficiencyDifferent(baseline, modification) ||
         this.isBlowdownRateDifferent(baseline, modification) ||
         this.isBlowdownFlashedDifferent(baseline, modification) ||
+        this.isSendBlowdownToDeaeratorDifferent(baseline, modification) ||
         this.isPreheatMakeupWaterDifferent(baseline, modification) ||
         this.isSteamTemperatureDifferent(baseline, modification) ||
         this.isDeaeratorVentRateDifferent(baseline, modification) ||
@@ -435,6 +436,21 @@ export class CompareService {
     }
   }
 
+  // sendBlowdownToDeaerator
+  isSendBlowdownToDeaeratorDifferent(baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      return (baseline.boilerInput.sendBlowdownToDeaerator ?? false)
+        !== (modification.boilerInput.sendBlowdownToDeaerator ?? false);
+    } else {
+      return false;
+    }
+  }
 
   //HEADER
   checkHeaderDifferent(baseline?: SSMT, modification?: SSMT): boolean {

@@ -1,7 +1,7 @@
 import { Node, Edge } from "@xyflow/react";
 import { FlowMetric } from "../constants";
 import { CustomEdgeData, DiagramCalculatedData, NodeFlowData, ProcessFlowPart } from "../types/diagram";
-import { KnownLoss } from "../types/water-components";
+import { HeatEnergy, KnownLoss, MotorEnergy } from "../types/water-components";
 
 
 export function getNewIdString() {
@@ -56,6 +56,110 @@ const convertFlowValue = (value: number, newUnits: string, convertValueFn?: Conv
 
 const isValidNumber = (num: number): boolean => {
   return !isNaN(num) && num !== null && num !== undefined;
+}
+
+/**
+ * Round converted inputs the same way the water assessment does (ConvertUnitsService.roundVal). Empty values are left as is.
+ */
+const roundConvertedValue = (value: number, decimalPrecision?: number): number => {
+  if (!isValidNumber(value) || decimalPrecision === undefined || decimalPrecision === null) {
+    return value;
+  }
+  return Number((Math.round(value * 100) / 100).toFixed(decimalPrecision));
+}
+
+const defaultConvertTemperatureValue = (value: number, newUnits: string): number => {
+  if (newUnits === 'Metric') {
+    // * F -> C
+    return (value - 32) * 5 / 9;
+  } else if (newUnits === 'Imperial') {
+    // * C -> F
+    return value * 9 / 5 + 32;
+  }
+  return value;
+}
+
+const convertTemperatureValue = (value: number, newUnits: string, convertValueFn?: ConvertValueFn) => {
+  if (!isValidNumber(value)) {
+    return value;
+  }
+  if (!convertValueFn) {
+    return defaultConvertTemperatureValue(value, newUnits);
+  }
+  if (newUnits === 'Metric') {
+    return convertValueFn(value, 'F', 'C');
+  } else if (newUnits === 'Imperial') {
+    return convertValueFn(value, 'C', 'F');
+  }
+  return value;
+}
+
+const defaultConvertPowerValue = (value: number, newUnits: string): number => {
+  if (newUnits === 'Metric') {
+    // * hp -> kW
+    return value * 0.7457;
+  } else if (newUnits === 'Imperial') {
+    // * kW -> hp
+    return value / 0.7457;
+  }
+  return value;
+}
+
+const convertPowerValue = (value: number, newUnits: string, convertValueFn?: ConvertValueFn) => {
+  if (!isValidNumber(value)) {
+    return value;
+  }
+  if (!convertValueFn) {
+    return defaultConvertPowerValue(value, newUnits);
+  }
+  if (newUnits === 'Metric') {
+    return convertValueFn(value, 'hp', 'kW');
+  } else if (newUnits === 'Imperial') {
+    return convertValueFn(value, 'kW', 'hp');
+  }
+  return value;
+}
+
+const convertHeatEnergy = (heatEnergy: HeatEnergy, newUnits: string, convertValueFn?: ConvertValueFn, decimalPrecision?: number): HeatEnergy => {
+  if (!heatEnergy) {
+    return heatEnergy;
+  }
+  return {
+    ...heatEnergy,
+    incomingTemp: roundConvertedValue(convertTemperatureValue(heatEnergy.incomingTemp, newUnits, convertValueFn), decimalPrecision),
+    outgoingTemp: roundConvertedValue(convertTemperatureValue(heatEnergy.outgoingTemp, newUnits, convertValueFn), decimalPrecision),
+  };
+}
+
+const convertMotorEnergy = (motorEnergy: MotorEnergy[], newUnits: string, convertValueFn?: ConvertValueFn, decimalPrecision?: number): MotorEnergy[] => {
+  if (!motorEnergy) {
+    return motorEnergy;
+  }
+  return motorEnergy.map((motor: MotorEnergy) => ({
+    ...motor,
+    ratedPower: roundConvertedValue(convertPowerValue(motor.ratedPower, newUnits, convertValueFn), decimalPrecision),
+  }));
+}
+
+/**
+ * Convert node energy inputs (heat energy temperatures, turbomachinery rated power) to newUnits.
+ * Only for the diagram's own units change - assessment unit changes convert these on the assessment, and the sync rebuilds diagram nodes from it.
+ * @param decimalPrecision when set, converted values are rounded to it (matches water assessment conversion)
+ */
+export const convertNodeEnergyData = (nodes: Node[], newUnits: string, convertValueFn?: ConvertValueFn, decimalPrecision?: number): Node[] => {
+  return nodes.map((nd: Node<ProcessFlowPart>) => {
+    if (!nd.data.heatEnergy && !nd.data.addedMotorEnergy) {
+      return nd;
+    }
+    return {
+      ...nd,
+      data: {
+        ...nd.data,
+        heatEnergy: convertHeatEnergy(nd.data.heatEnergy, newUnits, convertValueFn, decimalPrecision),
+        addedMotorEnergy: convertMotorEnergy(nd.data.addedMotorEnergy, newUnits, convertValueFn, decimalPrecision),
+      }
+    };
+  });
 }
 
 

@@ -12,8 +12,8 @@ import {
   applyEstimatedFlowResultsReducer,
   edgesChangeFromPropagationReducer,
 } from './flowCalculationReducers';
-import { WaterProcessComponentType, DiagramMetaData, ProcessFlowPart, DiagramSettings, UserDiagramOptions, DiagramCalculatedData, ParentContainerDimensions, DiagramFlowErrors, getDefaultUserDiagramOptions, getDefaultColorPalette, FlowDiagramData, CustomEdgeData, checkDiagramNodeErrors, getContrastTextColor, WaterTreatment, NodeFlowProperty, FlowConfidence, Handles, getEdgeFromConnection, ConvertValueFn, convertFlowDiagramData, WaterSystemResults, getConnectionFromEdgeId, migrateFlowDiagramFieldNames, migrateInapplicableNodeTotals, getDefaultFlowConfidence, ProcessFlowNodeType, getEdgeDescription, DEFAULT_EDGE_STROKE_COLOR, getDefaultSettings } from 'process-flow-lib';
 import { createNewNode, ensureFlowTotalTouched, getNodeTargetEdges, mirrorSingleEdgeConfidenceToTotal, getNodeSourceEdges, formatDataForMEASUR } from './FlowUtils';
+import { checkDiagramNodeErrors, convertFlowDiagramData, convertNodeEnergyData, ConvertValueFn, CustomEdgeData, DEFAULT_EDGE_STROKE_COLOR, DiagramCalculatedData, DiagramFlowErrors, DiagramMetaData, DiagramSettings, FlowConfidence, FlowDiagramData, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultFlowConfidence, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection, Handles, migrateFlowDiagramFieldNames, migrateInapplicableNodeTotals, NodeFlowProperty, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, withNodeEnergyDefaults } from 'process-flow-lib';
 
 import packageJson from '../../../package.json';
 const CURRENT_DIAGRAM_VERSION: string = packageJson.version;
@@ -113,10 +113,15 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
     if (node.position) {
       return node;
     }
+  }).map((node: Node<ProcessFlowPart>) => {
+    const data = withNodeEnergyDefaults(node.data);
+    return data === node.data ? node : { ...node, data };
   });
   state.edges = diagramData.edges.map((edge: Edge<CustomEdgeData>) => edge);
   state.diagramOptions = diagramData.userDiagramOptions ? { ...diagramData.userDiagramOptions } : getDefaultUserDiagramOptions();
-  state.settings = diagramData.settings ? { ...diagramData.settings } : getDefaultSettings();
+  const defaultSettings = getDefaultSettings();
+  state.settings = { ...defaultSettings, ...diagramData.settings };
+  state.settings.fuelCost = state.settings.fuelCost ?? defaultSettings.fuelCost;
   state.calculatedData = diagramData.calculatedData ? { ...diagramData.calculatedData } : { nodes: {} };
   const diagramFlowErrors = checkDiagramNodeErrors(state.nodes, state.edges, state.settings);
   state.diagramFlowErrors = diagramFlowErrors;
@@ -194,7 +199,8 @@ const setNodeNameReducer = (state: DiagramState, action: PayloadAction<string>) 
 }
 
 const nodeDataPropertyChangeReducer = <K extends keyof ProcessFlowPart, T extends keyof WaterTreatment>(state: DiagramState, action: PayloadAction<NodeDataPayload<K> | NodeTreatmentDataPayload<T>>) => {
-  const updateNode: Node<ProcessFlowPart> = state.nodes.find((n: Node<ProcessFlowPart>) => n.data.diagramNodeId === state.selectedDataId) as Node<ProcessFlowPart>;
+  const targetNodeId = (action.payload as NodeDataPayload<K>).nodeId ?? state.selectedDataId;
+  const updateNode: Node<ProcessFlowPart> = state.nodes.find((n: Node<ProcessFlowPart>) => n.data.diagramNodeId === targetNodeId) as Node<ProcessFlowPart>;
   const { optionsProp, updatedValue } = action.payload;
   if (updateNode && optionsProp in updateNode.data) {
     updateNode.data[optionsProp] = updatedValue;
@@ -377,6 +383,7 @@ const unitsOfMeasureChangeReducer = (state: DiagramState, action: PayloadAction<
   const { newUnits, convertValueFn } = action.payload;
   const convertedDiagramData = { nodes: state.nodes as Node[], edges: state.edges as Edge[], calculatedData: state.calculatedData };
   convertFlowDiagramData(convertedDiagramData, newUnits, convertValueFn);
+  convertedDiagramData.nodes = convertNodeEnergyData(convertedDiagramData.nodes, newUnits, convertValueFn, state.settings.flowDecimalPrecision);
 
   state.settings.unitsOfMeasure = newUnits;
   state.nodes = convertedDiagramData.nodes;
@@ -612,7 +619,8 @@ export const RECOMPUTES_DIAGRAM_ERRORS: Record<DiagramActionType, boolean> = {
 };
 
 export interface UserOptionsPayload<K extends keyof UserDiagramOptions> { optionsProp: K, updatedValue: UserDiagramOptions[K], updateDependencies?: OptionsDependentState[] };
-export interface NodeDataPayload<K extends keyof ProcessFlowPart> { optionsProp: K, updatedValue: ProcessFlowPart[K] };
+// * nodeId (diagramNodeId) targets a specific node - defaults to the selected node. Set it for writes that can land after selection changes (debounced input)
+export interface NodeDataPayload<K extends keyof ProcessFlowPart> { optionsProp: K, updatedValue: ProcessFlowPart[K], nodeId?: string };
 export interface NodeTreatmentDataPayload<K extends keyof WaterTreatment> { optionsProp: K, updatedValue: WaterTreatment[K] };
 
 /**

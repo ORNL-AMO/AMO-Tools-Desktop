@@ -14,3 +14,4 @@ export * from './water/logic/flow-totals';
 export * from './water/logic/flow-propagation';
 
 export * from './graph';
+export * from './diagram-calculators';

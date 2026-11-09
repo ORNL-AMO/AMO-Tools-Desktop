@@ -1,0 +1,17 @@
+<div [ngClass]="compact ? 'compact' : 'row no-gutters'">
+    @for (section of sections; track section.key) {
+        @if (treasureHunt?.[section.key]?.length > 0) {
+            <div [ngClass]="compact ? 'compact-section px-2' : 'col-6 p-2'">
+                <label>{{section.label}}</label>
+                <ul>
+                    @for (opportunity of treasureHunt[section.key]; track $index) {
+                        <li [class.not-exported]="!opportunity.selected && !includeUnselected"
+                            [attr.title]="opportunity.selected || includeUnselected ? null : 'Not selected for export'">
+                            {{getOpportunityName(section, opportunity, $index)}}
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+    }
+</div>
