@@ -8,6 +8,7 @@ import { FlueGasService } from './flue-gas.service';
 import { getAvailableHeatWarning } from './flue-gas-warnings';
 import { ProcessHeatingResultsService } from '../../../services/process-heating-results.service';
 import { calculateSystemEfficiencyResults } from '../heat-system-efficiency/heat-system-efficiency.component';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 @Component({
   selector: 'app-flue-gas',
@@ -23,6 +24,7 @@ export class FlueGasComponent {
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   private readonly resultsService = inject(ProcessHeatingResultsService);
   protected readonly service = inject(FlueGasService);
+  private readonly uiService = inject(ProcessHeatingUiService);
 
   readonly FlueGasType = FlueGasType;
 
@@ -54,5 +56,9 @@ export class FlueGasComponent {
 
   constructor() {
     reinitOnScenarioChange(this.scenario, scenario => this.service.initialize(scenario));
+  }
+
+  focusField(field: string): void {
+    this.uiService.focusedFieldSignal.set(field);
   }
 }

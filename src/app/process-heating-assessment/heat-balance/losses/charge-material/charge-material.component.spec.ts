@@ -9,6 +9,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { SolidMaterialFormService } from './solid-form/solid-material-form.service';
 import { LiquidMaterialFormService } from './liquid-form/liquid-material-form.service';
 import { GasMaterialFormService } from './gas-form/gas-material-form.service';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -65,6 +66,7 @@ describe('ChargeMaterialComponent', () => {
       declarations: [ChargeMaterialComponent],
       imports: [DecimalPipe],
       providers: [
+        { provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } },
         { provide: ProcessHeatingAssessmentService, useValue: assessmentServiceSpy },
         SolidMaterialFormService,
         LiquidMaterialFormService,

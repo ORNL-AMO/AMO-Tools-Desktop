@@ -6,6 +6,7 @@ import { SharedPipesModule } from '../../../../shared/shared-pipes/shared-pipes.
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../../services/process-heating-results.service';
 import { Settings } from '../../../../shared/models/settings';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -40,6 +41,7 @@ describe('HeatSystemEfficiencyComponent', () => {
       declarations: [HeatSystemEfficiencyComponent],
       imports: [ReactiveFormsModule, SharedPipesModule],
       providers: [
+        { provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } },
         { provide: ProcessHeatingAssessmentService, useValue: assessmentServiceSpy },
         { provide: ProcessHeatingResultsService, useValue: resultsServiceSpy },
       ],

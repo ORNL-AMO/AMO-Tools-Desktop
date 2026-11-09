@@ -2,15 +2,16 @@
   <form [formGroup]="form">
 
     <div class="form-group">
-      <label for="hoursPerYear">Operating Hours</label>
-      <div class="input-group">
+      <label for="hoursPerYear_{{ scenario() }}">Operating Hours</label>
+      <div class="input-group" [class.indicate-different]="differingFields().has('hoursPerYear')">
         <span class="input-group-addon units">
           <a class="click-link" (click)="openOperatingHoursModal()">
             <span class="fa fa-calculator"></span>
           </a>
         </span>
-        <input name="hoursPerYear" type="number" step="10" class="form-control" id="hoursPerYear"
-          formControlName="hoursPerYear">
+        <input name="hoursPerYear" type="number" step="10" class="form-control" id="hoursPerYear_{{ scenario() }}"
+          formControlName="hoursPerYear"
+          (focus)="setFocusedField('operatingHours')">
         <span class="input-group-addon units">hrs/yr</span>
       </div>
       <app-form-control-errors [control]="hoursPerYear" [settings]="settings()"
@@ -19,10 +20,11 @@
 
     @if (heatingSystemConfiguration() === HC.FUEL_FIRED) {
       <div class="form-group">
-        <label for="fuelCost">Fuel Cost</label>
-        <div class="input-group">
-          <input name="fuelCost" type="number" step="0.1" class="form-control" id="fuelCost"
-            formControlName="fuelCost">
+        <label for="fuelCost_{{ scenario() }}">Fuel Cost</label>
+        <div class="input-group" [class.indicate-different]="differingFields().has('fuelCost')">
+          <input name="fuelCost" type="number" step="0.1" class="form-control" id="fuelCost_{{ scenario() }}"
+            formControlName="fuelCost"
+            (focus)="setFocusedField('operatingCosts')">
           @if (settings().unitsOfMeasure === 'Imperial') {
             <span class="input-group-addon units">$/MMBtu</span>
           } @else {
@@ -39,10 +41,11 @@
 
     @if (heatingSystemConfiguration() === HC.ELECTROTECHNOLOGY_EAF) {
       <div class="form-group">
-        <label for="fuelCost">Natural Gas Cost</label>
-        <div class="input-group">
-          <input name="fuelCost" type="number" step="0.1" class="form-control" id="fuelCost"
-            formControlName="fuelCost">
+        <label for="fuelCost_{{ scenario() }}">Natural Gas Cost</label>
+        <div class="input-group" [class.indicate-different]="differingFields().has('fuelCost')">
+          <input name="fuelCost" type="number" step="0.1" class="form-control" id="fuelCost_{{ scenario() }}"
+            formControlName="fuelCost"
+            (focus)="setFocusedField('operatingCosts')">
           @if (settings().unitsOfMeasure === 'Imperial') {
             <span class="input-group-addon units">$/MMBtu</span>
           } @else {
@@ -54,10 +57,11 @@
       </div>
 
       <div class="form-group">
-        <label for="coalCarbonCost">Coal Carbon Cost</label>
-        <div class="input-group">
-          <input name="coalCarbonCost" type="number" step="0.01" class="form-control" id="coalCarbonCost"
-            formControlName="coalCarbonCost">
+        <label for="coalCarbonCost_{{ scenario() }}">Coal Carbon Cost</label>
+        <div class="input-group" [class.indicate-different]="differingFields().has('coalCarbonCost')">
+          <input name="coalCarbonCost" type="number" step="0.01" class="form-control" id="coalCarbonCost_{{ scenario() }}"
+            formControlName="coalCarbonCost"
+            (focus)="setFocusedField('operatingCosts')">
           @if (settings().unitsOfMeasure === 'Imperial') {
             <span class="input-group-addon units">$/lb</span>
           } @else {
@@ -69,10 +73,11 @@
       </div>
 
       <div class="form-group">
-        <label for="electrodeCost">Electrode Cost</label>
-        <div class="input-group">
-          <input name="electrodeCost" type="number" step="0.1" class="form-control" id="electrodeCost"
-            formControlName="electrodeCost">
+        <label for="electrodeCost_{{ scenario() }}">Electrode Cost</label>
+        <div class="input-group" [class.indicate-different]="differingFields().has('electrodeCost')">
+          <input name="electrodeCost" type="number" step="0.1" class="form-control" id="electrodeCost_{{ scenario() }}"
+            formControlName="electrodeCost"
+            (focus)="setFocusedField('operatingCosts')">
           @if (settings().unitsOfMeasure === 'Imperial') {
             <span class="input-group-addon units">$/lb</span>
           } @else {
@@ -84,10 +89,11 @@
       </div>
 
       <div class="form-group">
-        <label for="otherFuelCost">Other Fuel Cost</label>
-        <div class="input-group">
-          <input name="otherFuelCost" type="number" step="0.1" class="form-control" id="otherFuelCost"
-            formControlName="otherFuelCost">
+        <label for="otherFuelCost_{{ scenario() }}">Other Fuel Cost</label>
+        <div class="input-group" [class.indicate-different]="differingFields().has('otherFuelCost')">
+          <input name="otherFuelCost" type="number" step="0.1" class="form-control" id="otherFuelCost_{{ scenario() }}"
+            formControlName="otherFuelCost"
+            (focus)="setFocusedField('operatingCosts')">
           @if (settings().unitsOfMeasure === 'Imperial') {
             <span class="input-group-addon units">$/MMBtu</span>
           } @else {
@@ -101,10 +107,11 @@
 
     @if (heatingSystemConfiguration() === HC.STEAM) {
       <div class="form-group">
-        <label for="steamCost">Steam Cost</label>
-        <div class="input-group">
-          <input name="steamCost" type="number" step="0.1" class="form-control" id="steamCost"
-            formControlName="steamCost">
+        <label for="steamCost_{{ scenario() }}">Steam Cost</label>
+        <div class="input-group" [class.indicate-different]="differingFields().has('steamCost')">
+          <input name="steamCost" type="number" step="0.1" class="form-control" id="steamCost_{{ scenario() }}"
+            formControlName="steamCost"
+            (focus)="setFocusedField('operatingCosts')">
           @if (settings().unitsOfMeasure === 'Imperial') {
             <span class="input-group-addon units">$/MMBtu</span>
           } @else {
@@ -123,10 +130,11 @@
          heatingSystemConfiguration() === HC.ELECTROTECHNOLOGY_EAF ||
          heatingSystemConfiguration() === HC.CUSTOM_ELECTROTECHNOLOGY) {
       <div class="form-group">
-        <label for="electricityCost">Electricity Cost</label>
-        <div class="input-group">
-          <input name="electricityCost" type="number" step="0.01" class="form-control" id="electricityCost"
-            formControlName="electricityCost">
+        <label for="electricityCost_{{ scenario() }}">Electricity Cost</label>
+        <div class="input-group" [class.indicate-different]="differingFields().has('electricityCost')">
+          <input name="electricityCost" type="number" step="0.01" class="form-control" id="electricityCost_{{ scenario() }}"
+            formControlName="electricityCost"
+            (focus)="setFocusedField('operatingCosts')">
           <span class="input-group-addon units">$/kWh</span>
         </div>
         <app-form-control-errors [control]="electricityCost" [settings]="settings()"
@@ -139,13 +147,26 @@
 
   </form>
 
-  @if (co2SavingsData) {
+  @if (!isBaseline()) {
+    <div class="form-group">
+      <label for="implementationCost_{{ scenario() }}">Implementation Cost</label>
+      <div class="input-group">
+        <input name="implementationCost" type="number" step="any" min="0" class="form-control" id="implementationCost_{{ scenario() }}"
+          [formControl]="implementationCost"
+          (focus)="setFocusedField('implementationCost')">
+        <span class="input-group-addon units">$</span>
+      </div>
+    </div>
+  }
+
+  @if (co2SavingsData(); as co2SavingsData) {
     <app-co2-savings-phast
       [co2SavingsData]="co2SavingsData"
       [settings]="settings()"
-      [isBaseline]="true"
+      [isBaseline]="isBaseline()"
       [isFormDisabled]="false"
-      (emitUpdateCo2SavingsData)="updateCo2SavingsData($event)">
+      (emitUpdateCo2SavingsData)="updateCo2SavingsData($event)"
+      (emitCurrentField)="setFocusedField($event)">
     </app-co2-savings-phast>
   }
 

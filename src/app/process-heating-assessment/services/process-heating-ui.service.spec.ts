@@ -1,6 +1,6 @@
 import { signal, WritableSignal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { WallLoss } from '../../shared/models/phast/losses/wallLoss';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
@@ -404,5 +404,52 @@ describe('ProcessHeatingUiService loss counts', () => {
   it('counts the entries of the given modification', () => {
     expect(service.lossCount(LossView.WALL_LOSSES, 'mod-1')).toBe(3);
     expect(service.lossCount(LossView.HEAT_SYSTEM_EFFICIENCY, 'mod-1')).toBe(0);
+  });
+});
+
+describe('ProcessHeatingUiService focused field', () => {
+  let service: ProcessHeatingUiService;
+  let events: Subject<unknown>;
+  let root: { params: object; data: object; firstChild: null };
+
+  function navigate(data: object): void {
+    root.data = data;
+    events.next(new NavigationEnd(1, '/', '/'));
+  }
+
+  beforeEach(() => {
+    events = new Subject();
+    root = { params: {}, data: { childView: ROUTE_TOKENS.heatBalance, lossSubView: ROUTE_TOKENS.operations }, firstChild: null };
+    TestBed.configureTestingModule({
+      providers: [
+        ProcessHeatingUiService,
+        { provide: Router, useValue: { events, routerState: { snapshot: { root } } } },
+        { provide: ProcessHeatingAssessmentService, useValue: { heatingEquipmentConfiguration: signal(HeatingEquipmentConfiguration.FUEL_FIRED) } },
+        { provide: STEPPED_ROUTES, useValue: [] },
+        { provide: ProcessHeatingValidityService, useValue: VALID_BASELINE },
+      ],
+    });
+    service = TestBed.inject(ProcessHeatingUiService);
+  });
+
+  it('keeps the focused field while the view is unchanged', () => {
+    service.focusedFieldSignal.set('operatingHours');
+    navigate({ childView: ROUTE_TOKENS.heatBalance, lossSubView: ROUTE_TOKENS.operations });
+
+    expect(service.focusedFieldSignal()).toBe('operatingHours');
+  });
+
+  it('resets the focused field when the loss sub-view changes', () => {
+    service.focusedFieldSignal.set('operatingHours');
+    navigate({ childView: ROUTE_TOKENS.heatBalance, lossSubView: ROUTE_TOKENS.wallLosses });
+
+    expect(service.focusedFieldSignal()).toBe('default');
+  });
+
+  it('resets the focused field when the child view changes', () => {
+    service.focusedFieldSignal.set('implementationCost');
+    navigate({ childView: ROUTE_TOKENS.assessmentSettings });
+
+    expect(service.focusedFieldSignal()).toBe('default');
   });
 });

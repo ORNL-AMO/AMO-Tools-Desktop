@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { of, Subject } from 'rxjs';
 import { FixtureFormComponent } from './fixture-form.component';
 import { FixtureFormService } from './fixture-form.service';
@@ -10,6 +10,7 @@ import { ModalDialogService } from '../../../../shared/modal-dialog.service';
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss';
 import { Settings } from '../../../../shared/models/settings';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -56,6 +57,7 @@ describe('FixtureFormComponent', () => {
       imports: [ReactiveFormsModule],
       declarations: [FixtureFormComponent],
       providers: [
+        { provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } },
         FixtureFormService,
         { provide: SolidLoadMaterialDbService, useValue: dbServiceSpy },
         { provide: ModalDialogService, useValue: modalDialogServiceSpy },

@@ -101,6 +101,15 @@ describe('ExpertViewComponent', () => {
     expect(query('.tabs li.active')[0].textContent.trim()).toBe('Wall Losses');
   });
 
+  it('shows Operations in both panels with baseline and the modification id', () => {
+    uiService.selectExpertViewTab(LossView.OPERATIONS);
+    fixture.detectChanges();
+
+    const panels = query('app-process-heating-operations') as (HTMLElement & { scenario: string })[];
+    expect(query('app-charge-material').length).toBe(0);
+    expect(panels.map(panel => panel.scenario)).toEqual(['baseline', 'mod-1']);
+  });
+
   it('switches both panels to Auxiliary Power with baseline and the modification id', () => {
     query('.tabs li')[3].click();
     fixture.detectChanges();

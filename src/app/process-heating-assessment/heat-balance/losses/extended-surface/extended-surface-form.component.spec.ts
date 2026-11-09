@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ExtendedSurface } from '../../../models/extended-surface';
@@ -6,6 +6,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { ExtendedSurfaceFormComponent } from './extended-surface-form.component';
 import { ExtendedSurfaceFormService } from './extended-surface-form.service';
 import { ExtendedSurfaceItem } from './extended-surface.service';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -27,7 +28,7 @@ describe('ExtendedSurfaceFormComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [ExtendedSurfaceFormComponent],
-      providers: [ExtendedSurfaceFormService],
+      providers: [{ provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } }, ExtendedSurfaceFormService],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

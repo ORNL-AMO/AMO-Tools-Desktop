@@ -8,6 +8,7 @@ import { GasLeakageForm, GasLeakageFormService } from './gas-leakage-form.servic
 import { GasLeakageItem } from './gas-leakage.service';
 import { LeakageLoss } from '../../../../shared/models/phast/losses/leakageLoss';
 import { LossFieldDifferences } from '../loss-compare.util';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 @Component({
   selector: 'app-gas-leakage-form',
@@ -22,6 +23,7 @@ export class GasLeakageFormComponent implements OnInit {
 
   private readonly formService = inject(GasLeakageFormService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly uiService = inject(ProcessHeatingUiService);
 
   readonly form = computed(() => this.item().form as GasLeakageForm);
   readonly controlIds = computed(() => generateFormControlIds(this.form().controls));
@@ -31,5 +33,9 @@ export class GasLeakageFormComponent implements OnInit {
     this.form().valueChanges
       .pipe(startWith(null), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.warnings.set(getGasLeakageWarnings(this.formService.buildGasLeakageLoss(this.form()))));
+  }
+
+  focusField(field: string): void {
+    this.uiService.focusedFieldSignal.set(field);
   }
 }

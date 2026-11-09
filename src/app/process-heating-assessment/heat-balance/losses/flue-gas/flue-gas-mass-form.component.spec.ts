@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { ComponentFixture, fakeAsync, flushMicrotasks, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -9,6 +9,7 @@ import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials'
 import { Settings } from '../../../../shared/models/settings';
 import { FLUE_GAS_FUEL_ANALYSIS, FlueGasFormService, FlueGasMassForm } from './flue-gas-form.service';
 import { FlueGasMassFormComponent } from './flue-gas-mass-form.component';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial' } as Settings;
 
@@ -37,6 +38,7 @@ describe('FlueGasMassFormComponent', () => {
       imports: [ReactiveFormsModule],
       declarations: [FlueGasMassFormComponent],
       providers: [
+        { provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } },
         FlueGasFormService,
         ConvertUnitsService,
         { provide: SolidLiquidMaterialDbService, useValue: dbServiceSpy },

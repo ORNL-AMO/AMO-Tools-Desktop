@@ -10,6 +10,7 @@ import { FlueGasAvailableHeatResult } from './flue-gas-calculation.service';
 import { FlueGasComponent } from './flue-gas.component';
 import { FlueGasForm, FlueGasType } from './flue-gas-form.service';
 import { FlueGasService } from './flue-gas.service';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 @Component({ selector: 'app-flue-gas-volume-form', template: '<ng-content></ng-content>', standalone: false })
@@ -44,6 +45,7 @@ describe('FlueGasComponent', () => {
       imports: [FormsModule, SharedPipesModule],
       declarations: [FlueGasComponent, FlueGasVolumeFormStubComponent, FlueGasMassFormStubComponent],
       providers: [
+        { provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } },
         { provide: ProcessHeatingAssessmentService, useValue: { settingsSignal: signal(MOCK_SETTINGS), scenarioPhastSignal: () => phast() } },
         { provide: ProcessHeatingResultsService, useValue: resultsServiceSpy },
       ],

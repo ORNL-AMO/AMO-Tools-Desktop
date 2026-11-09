@@ -12,6 +12,7 @@ import { UnitConversion } from '../../../../models/unit-conversion';
 import { CHARGE_MATERIAL_UNITS } from '../charge-material-units';
 import { ChargeMaterial, GasChargeMaterial } from '../../../../../shared/models/phast/losses/chargeMaterial';
 import { LossFieldDifferences, nestedDifferences } from '../../loss-compare.util';
+import { ProcessHeatingUiService } from '../../../../services/process-heating-ui.service';
 
 @Component({
   selector: 'app-charge-material-gas-form',
@@ -28,6 +29,7 @@ export class ChargeMaterialGasFormComponent implements OnInit {
   protected readonly gasDifferences = computed(() => nestedDifferences<GasChargeMaterial>(this.differingFields(), 'gasChargeMaterial'));
   private readonly formService = inject(GasMaterialFormService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly uiService = inject(ProcessHeatingUiService);
 
   readonly UNITS = CHARGE_MATERIAL_UNITS;
   readonly materialSelector = new MaterialSelector<GasLoadChargeMaterial, GasMaterialForm>({
@@ -62,5 +64,9 @@ export class ChargeMaterialGasFormComponent implements OnInit {
 
   differs(formValue: number, dbValue: number | undefined, unit: UnitConversion): boolean {
     return formValueDiffersFromMaterial(formValue, dbValue, unit, this.settings());
+  }
+
+  focusField(field: string): void {
+    this.uiService.focusedFieldSignal.set(field);
   }
 }

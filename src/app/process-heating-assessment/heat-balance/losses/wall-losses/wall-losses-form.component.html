@@ -4,7 +4,7 @@
       <label class="small" for="{{controlIds().avgSurfaceTemp}}">Average Surface Temperature</label>
       <div class="input-group" [class.invalid]="form().controls.avgSurfaceTemp.invalid" [class.indicate-different]="differingFields()?.has('surfaceTemperature')">
         <input type="number" step="10" class="form-control"
-          id="{{controlIds().avgSurfaceTemp}}" formControlName="avgSurfaceTemp" onfocus="this.select();">
+          id="{{controlIds().avgSurfaceTemp}}" formControlName="avgSurfaceTemp" (focus)="focusField('avgSurfaceTemp')" onfocus="this.select();">
         <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
       </div>
       @if (form().controls.avgSurfaceTemp.invalid && !form().controls.avgSurfaceTemp.pristine) {
@@ -23,7 +23,7 @@
       <label class="small" for="{{controlIds().ambientTemp}}">Ambient Temperature</label>
       <div class="input-group" [class.invalid]="form().controls.ambientTemp.invalid" [class.indicate-different]="differingFields()?.has('ambientTemperature')">
         <input type="number" step="10" class="form-control"
-          id="{{controlIds().ambientTemp}}" formControlName="ambientTemp" onfocus="this.select();">
+          id="{{controlIds().ambientTemp}}" formControlName="ambientTemp" (focus)="focusField('ambientTemp')" onfocus="this.select();">
         <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
       </div>
       <app-form-control-errors [control]="form().controls.ambientTemp" [settings]="settings()">
@@ -34,7 +34,7 @@
       <label class="small" for="{{controlIds().windVelocity}}">Wind Velocity</label>
       <div class="input-group" [class.invalid]="form().controls.windVelocity.invalid" [class.indicate-different]="differingFields()?.has('windVelocity')">
         <input type="number" step="1" min="0" class="form-control"
-          id="{{controlIds().windVelocity}}" formControlName="windVelocity" onfocus="this.select();">
+          id="{{controlIds().windVelocity}}" formControlName="windVelocity" (focus)="focusField('windVelocity')" onfocus="this.select();">
         <app-input-unit [settings]="settings()" imperialUnit="mph" metricUnit="km/hr"></app-input-unit>
       </div>
       <app-form-control-errors [control]="form().controls.windVelocity" [settings]="settings()"
@@ -44,7 +44,7 @@
 
     <div class="form-group">
       <label class="small" for="{{controlIds().surfaceShape}}">Surface Shape / Orientation</label>
-      <select class="form-control" id="{{controlIds().surfaceShape}}" formControlName="surfaceShape"
+      <select class="form-control" id="{{controlIds().surfaceShape}}" formControlName="surfaceShape" (focus)="focusField('surfaceShape')"
         [class.invalid]="form().controls.surfaceShape.invalid" [class.indicate-different]="differingFields()?.has('surfaceShape')"
         (change)="setConditionFactor()">
         <option [ngValue]="null" disabled>Select a surface…</option>
@@ -64,7 +64,7 @@
     <div class="form-group">
       <label class="small" for="{{controlIds().surfaceEmissivity}}">Surface Emissivity</label>
       <input type="number" step="0.1" min="0" max="1" class="form-control"
-        id="{{controlIds().surfaceEmissivity}}" formControlName="surfaceEmissivity" onfocus="this.select();"
+        id="{{controlIds().surfaceEmissivity}}" formControlName="surfaceEmissivity" (focus)="focusField('surfaceEmissivity')" onfocus="this.select();"
         [class.invalid]="form().controls.surfaceEmissivity.invalid" [class.indicate-different]="differingFields()?.has('surfaceEmissivity')">
       <app-form-control-errors [control]="form().controls.surfaceEmissivity" [settings]="settings()">
       </app-form-control-errors>
@@ -74,7 +74,7 @@
       <label class="small" for="{{controlIds().surfaceArea}}">Total Outside Surface Area</label>
       <div class="input-group" [class.invalid]="form().controls.surfaceArea.invalid" [class.indicate-different]="differingFields()?.has('surfaceArea')">
         <input type="number" step="10" min="0" class="form-control"
-          id="{{controlIds().surfaceArea}}" formControlName="surfaceArea" onfocus="this.select();">
+          id="{{controlIds().surfaceArea}}" formControlName="surfaceArea" (focus)="focusField('surfaceArea')" onfocus="this.select();">
         <app-input-unit [settings]="settings()" imperialUnit="ft&sup2;" metricUnit="m&sup2;"></app-input-unit>
       </div>
       <app-form-control-errors [control]="form().controls.surfaceArea" [settings]="settings()"
@@ -85,7 +85,7 @@
     <div class="form-group">
       <label class="small" for="{{controlIds().correctionFactor}}">Correction Factor</label>
       <input type="number" step="0.1" class="form-control"
-        id="{{controlIds().correctionFactor}}" formControlName="correctionFactor" onfocus="this.select();"
+        id="{{controlIds().correctionFactor}}" formControlName="correctionFactor" (focus)="focusField('correctionFactor')" onfocus="this.select();"
         [class.invalid]="form().controls.correctionFactor.invalid" [class.indicate-different]="differingFields()?.has('correctionFactor')">
       <app-form-control-errors [control]="form().controls.correctionFactor" [settings]="settings()">
       </app-form-control-errors>

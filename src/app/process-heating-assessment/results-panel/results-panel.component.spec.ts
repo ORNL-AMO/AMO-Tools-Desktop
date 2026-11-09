@@ -1,10 +1,13 @@
-import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { LossView } from '../models/views';
 import { ProcessHeatingUiService } from '../services/process-heating-ui.service';
 import { ResultsPanelComponent } from './results-panel.component';
 
 describe('ResultsPanelComponent tabs', () => {
   let fixture: ComponentFixture<ResultsPanelComponent>;
+  let childView: WritableSignal<string>;
+  let selectedExpertViewTab: WritableSignal<string | undefined>;
 
   const tab = (label: string): HTMLElement =>
     Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('.panel-tab-item a')).find(link => link.textContent.trim() === label);
@@ -14,14 +17,16 @@ describe('ResultsPanelComponent tabs', () => {
   };
 
   beforeEach(() => {
+    childView = signal('explore-opportunities');
+    selectedExpertViewTab = signal(undefined);
     TestBed.configureTestingModule({
       declarations: [ResultsPanelComponent],
       providers: [{
         provide: ProcessHeatingUiService,
         useValue: {
           mainView: signal('assessment'),
-          childView: signal('explore-opportunities'),
-          selectedExpertViewTab: signal(undefined),
+          childView,
+          selectedExpertViewTab,
           exploreNotesKey: signal(undefined),
         },
       }],
@@ -47,5 +52,12 @@ describe('ResultsPanelComponent tabs', () => {
     keydown(tab('Help'), ' ');
     expect(tab('Help').getAttribute('aria-pressed')).toBe('true');
     expect(tab('Notes').getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('edits Operations notes when Operations is selected in Expert View', () => {
+    childView.set('expert-view');
+    selectedExpertViewTab.set(LossView.OPERATIONS);
+
+    expect(fixture.componentInstance.notesKey()).toBe('operationsNotes');
   });
 });

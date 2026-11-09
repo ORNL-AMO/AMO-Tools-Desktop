@@ -60,6 +60,14 @@ export class ExploreOpportunitiesComponent {
     this.modificationService.renameModification(modification.id, name);
   }
 
+  setImplementationCost(modification: ProcessHeatingModification, cost: number): void {
+    this.assessmentService.updateModificationProperty(modification.id, 'implementationCost', Number.isNaN(cost) ? undefined : cost);
+  }
+
+  setFocusedField(field: string): void {
+    this.uiService.focusedFieldSignal.set(field);
+  }
+
   addModification(): void {
     const hasExistingModifications = this.modificationService.modifications().length > 0;
     this.modalDialogService.openModal(AddModificationComponent, {

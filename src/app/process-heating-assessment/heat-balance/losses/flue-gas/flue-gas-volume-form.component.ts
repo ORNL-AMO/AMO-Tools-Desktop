@@ -10,6 +10,7 @@ import { adaptFlueGasMaterialDb } from './flue-gas-material-db.adapter';
 import { FLUE_GAS_COMPONENTS, FlueGasVolumeForm } from './flue-gas-form.service';
 import { FlueGas, FlueGasWarnings, FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
 import { LossFieldDifferences, nestedDifferences } from '../loss-compare.util';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 @Component({
   selector: 'app-flue-gas-volume-form',
@@ -25,6 +26,7 @@ export class FlueGasVolumeFormComponent implements OnInit {
   readonly warnings = input<FlueGasWarnings | null>(null);
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly uiService = inject(ProcessHeatingUiService);
 
   protected readonly volumeDifferences = computed(() => nestedDifferences<FlueGasByVolume>(this.differingFields(), 'flueGasByVolume'));
 
@@ -57,5 +59,9 @@ export class FlueGasVolumeFormComponent implements OnInit {
         this.materialSelector.applyMaterial(material);
       }
     });
+  }
+
+  focusField(field: string): void {
+    this.uiService.focusedFieldSignal.set(field);
   }
 }

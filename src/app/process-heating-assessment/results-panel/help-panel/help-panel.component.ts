@@ -19,4 +19,5 @@ export class HelpPanelComponent {
   readonly childView: Signal<string> = this.uiService.childView;
   readonly lossSubView: Signal<string> = this.uiService.lossSubView;
   readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
+  readonly focusedField: Signal<string> = this.uiService.focusedFieldSignal;
 }

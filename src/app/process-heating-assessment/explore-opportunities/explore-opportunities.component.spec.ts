@@ -1,8 +1,9 @@
 import { Component, NO_ERRORS_SCHEMA, signal, Type, WritableSignal } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { Losses } from '../models/phast';
+import { ProcessHeatingModification } from '../models/modification';
 import { HeatingEquipmentConfiguration } from '../models/views';
 import { ModificationService } from '../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
@@ -189,3 +190,79 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
       .toEqual(['app-second-stub-opportunity', 'app-first-stub-opportunity']);
   });
 });
+
+describe('ExploreOpportunitiesComponent modification header and implementation costs', () => {
+  let assessmentService: { heatingEquipmentConfiguration: WritableSignal<HeatingEquipmentConfiguration>; lossSignal: () => unknown[]; updateModificationProperty: jasmine.Spy };
+  let focusedFieldSignal: WritableSignal<string>;
+
+  function render(selectedModification: ProcessHeatingModification | undefined) {
+    TestBed.configureTestingModule({
+      declarations: [ExploreOpportunitiesComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        { provide: ModalDialogService, useValue: {} },
+        { provide: ProcessHeatingUiService, useValue: { focusedFieldSignal, setExploreNotesKey: () => {} } },
+        { provide: ModificationService, useValue: { selectedModification: signal(selectedModification), modifications: signal([]) } },
+        { provide: ProcessHeatingAssessmentService, useValue: assessmentService },
+      ],
+    });
+    const fixture = TestBed.createComponent(ExploreOpportunitiesComponent);
+    fixture.detectChanges();
+    return fixture;
+  }
+
+  function costInput(fixture: ComponentFixture<ExploreOpportunitiesComponent>): HTMLInputElement {
+    return fixture.debugElement.query(By.css('#implementationCost')).nativeElement;
+  }
+
+  beforeEach(() => {
+    focusedFieldSignal = signal('default');
+    assessmentService = {
+      heatingEquipmentConfiguration: signal(HeatingEquipmentConfiguration.FUEL_FIRED),
+      lossSignal: () => [],
+      updateModificationProperty: jasmine.createSpy('updateModificationProperty'),
+    };
+  });
+
+  it('shows the energy efficiency measures header when a modification is selected', () => {
+    const fixture = render({ id: 'mod' } as ProcessHeatingModification);
+
+    expect(fixture.nativeElement.querySelector('.eem-title').textContent).toContain('Select Potential Energy Efficiency Measures');
+  });
+
+  it('hides the header and implementation costs without a selected modification', () => {
+    const fixture = render(undefined);
+
+    expect(fixture.nativeElement.querySelector('.eem-title')).toBeNull();
+    expect(fixture.debugElement.query(By.css('#implementationCost'))).toBeNull();
+  });
+
+  it('shows the saved implementation cost', () => {
+    const fixture = render({ id: 'mod', scenarioOverrides: { implementationCost: 2500 } } as ProcessHeatingModification);
+
+    expect(costInput(fixture).value).toBe('2500');
+  });
+
+  it('saves an entered implementation cost to the modification', () => {
+    const input = costInput(render({ id: 'mod' } as ProcessHeatingModification));
+    input.value = '1200';
+    input.dispatchEvent(new Event('change'));
+
+    expect(assessmentService.updateModificationProperty).toHaveBeenCalledWith('mod', 'implementationCost', 1200);
+  });
+
+  it('clears the implementation cost when the field is emptied', () => {
+    const input = costInput(render({ id: 'mod', scenarioOverrides: { implementationCost: 2500 } } as ProcessHeatingModification));
+    input.value = '';
+    input.dispatchEvent(new Event('change'));
+
+    expect(assessmentService.updateModificationProperty).toHaveBeenCalledWith('mod', 'implementationCost', undefined);
+  });
+
+  it('sets the focused field for help when implementation costs gains focus', () => {
+    costInput(render({ id: 'mod' } as ProcessHeatingModification)).dispatchEvent(new FocusEvent('focus'));
+
+    expect(focusedFieldSignal()).toBe('implementationCost');
+  });
+});
+

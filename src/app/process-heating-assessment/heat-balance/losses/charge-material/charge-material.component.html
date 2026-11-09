@@ -51,6 +51,7 @@
         />
         <select
           #typeSelect
+          (focus)="focusField('chargeMaterialType')"
           class="form-control form-control-sm charge-material-type-select mr-2"
           [class.indicate-different]="chargeMaterialService.differingFields(item.id)?.has('chargeMaterialType')"
           [value]="item.type"

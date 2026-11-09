@@ -9,6 +9,7 @@ import { AuxiliaryPowerForm, AuxiliaryPowerFormService } from './auxiliary-power
 import { AuxiliaryPowerItem } from './auxiliary-power.service';
 import { AuxiliaryPowerLoss } from '../../../../shared/models/phast/losses/auxiliaryPowerLoss';
 import { LossFieldDifferences } from '../loss-compare.util';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 @Component({
   selector: 'app-auxiliary-power-form',
@@ -23,6 +24,7 @@ export class AuxiliaryPowerFormComponent implements OnInit {
 
   private readonly formService = inject(AuxiliaryPowerFormService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly uiService = inject(ProcessHeatingUiService);
 
   readonly motorPhases = MOTOR_PHASES;
   readonly form = computed(() => this.item().form as AuxiliaryPowerForm);
@@ -33,5 +35,9 @@ export class AuxiliaryPowerFormComponent implements OnInit {
     this.form().valueChanges
       .pipe(startWith(null), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.warnings.set(getAuxiliaryPowerWarnings(this.formService.buildAuxiliaryPowerLoss(this.form()))));
+  }
+
+  focusField(field: string): void {
+    this.uiService.focusedFieldSignal.set(field);
   }
 }

@@ -14,7 +14,7 @@
     <label for="materialId_{{ instanceId() }}">Name of Material
       <button type="button" class="btn btn-link p-0 d-block small" (click)="materialSelector.openAddMaterialModal()">Add New Gas Material</button>
     </label>
-    <select class="form-control" id="materialId_{{ instanceId() }}" formControlName="materialId" [class.indicate-different]="gasDifferences().has('materialId')"
+    <select class="form-control" id="materialId_{{ instanceId() }}" formControlName="materialId" (focus)="focusField('materialName')" [class.indicate-different]="gasDifferences().has('materialId')"
       (change)="materialSelector.onMaterialSelected(f.materialId.value)" [class.invalid]="f.materialId.invalid">
       @for (material of materialSelector.materialTypes(); track material.id) {
         <option [ngValue]="material.id">{{ material.substance }}</option>
@@ -26,7 +26,7 @@
   <div class="form-group">
     <label for="specificHeatOfGas_{{ instanceId() }}">Specific Heat of Gas</label>
     <div class="input-group" [class.invalid]="f.specificHeatOfGas.invalid" [class.indicate-different]="gasDifferences().has('specificHeatGas')" [class.indicate-different-db]="differs(f.specificHeatOfGas.value, materialSelector.selectedMaterial?.specificHeatVapor, UNITS.specificHeat)">
-      <input type="number" class="form-control" id="specificHeatOfGas_{{ instanceId() }}" formControlName="specificHeatOfGas">
+      <input type="number" class="form-control" id="specificHeatOfGas_{{ instanceId() }}" formControlName="specificHeatOfGas" (focus)="focusField('materialSpecificHeat')">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.specificHeatOfGas" [settings]="settings()"></app-form-control-errors>
@@ -35,7 +35,7 @@
   <div class="form-group">
     <label for="feedRate_{{ instanceId() }}">Charge Feed Rate</label>
     <div class="input-group" [class.invalid]="f.feedRate.invalid" [class.indicate-different]="gasDifferences().has('feedRate')">
-      <input type="number" class="form-control" id="feedRate_{{ instanceId() }}" formControlName="feedRate">
+      <input type="number" class="form-control" id="feedRate_{{ instanceId() }}" formControlName="feedRate" (focus)="focusField('feedRate')">
       <app-input-unit [settings]="settings()" [imperialUnit]="'lb/hr'" [metricUnit]="'kg/hr'"></app-input-unit>
     </div>
     @if (f.feedRate.invalid) {
@@ -49,7 +49,7 @@
   <div class="form-group">
     <label for="percentVaporInGasMixture_{{ instanceId() }}">Vapor in Gas Mixture</label>
     <div class="input-group" [class.invalid]="f.percentVaporInGasMixture.invalid" [class.indicate-different]="gasDifferences().has('percentVapor')">
-      <input type="number" class="form-control" id="percentVaporInGasMixture_{{ instanceId() }}" formControlName="percentVaporInGasMixture">
+      <input type="number" class="form-control" id="percentVaporInGasMixture_{{ instanceId() }}" formControlName="percentVaporInGasMixture" (focus)="focusField('vaporInGas')">
       <app-input-unit [defaultUnit]="'%'"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.percentVaporInGasMixture" [settings]="settings()"></app-form-control-errors>
@@ -58,7 +58,7 @@
   <div class="form-group">
     <label for="initialTemperature_{{ instanceId() }}">Charge Inlet Temperature</label>
     <div class="input-group" [class.invalid]="f.initialTemperature.invalid" [class.indicate-different]="gasDifferences().has('initialTemperature')">
-      <input type="number" class="form-control" id="initialTemperature_{{ instanceId() }}" formControlName="initialTemperature">
+      <input type="number" class="form-control" id="initialTemperature_{{ instanceId() }}" formControlName="initialTemperature" (focus)="focusField('initialTemperature')">
       <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
     </div>
     @if (f.initialTemperature.invalid) {
@@ -74,7 +74,7 @@
   <div class="form-group">
     <label for="chargeMaterialDischargeTemperature_{{ instanceId() }}">Charge Outlet Temperature</label>
     <div class="input-group" [class.invalid]="f.chargeMaterialDischargeTemperature.invalid" [class.indicate-different]="gasDifferences().has('dischargeTemperature')">
-      <input type="number" class="form-control" id="chargeMaterialDischargeTemperature_{{ instanceId() }}" formControlName="chargeMaterialDischargeTemperature">
+      <input type="number" class="form-control" id="chargeMaterialDischargeTemperature_{{ instanceId() }}" formControlName="chargeMaterialDischargeTemperature" (focus)="focusField('dischargeTemperature')">
       <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.chargeMaterialDischargeTemperature" [settings]="settings()"></app-form-control-errors>
@@ -83,7 +83,7 @@
   <div class="form-group">
     <label for="specificHeatOfVapor_{{ instanceId() }}">Specific Heat of Vapor</label>
     <div class="input-group" [class.invalid]="f.specificHeatOfVapor.invalid" [class.indicate-different]="gasDifferences().has('specificHeatVapor')">
-      <input type="number" class="form-control" id="specificHeatOfVapor_{{ instanceId() }}" formControlName="specificHeatOfVapor">
+      <input type="number" class="form-control" id="specificHeatOfVapor_{{ instanceId() }}" formControlName="specificHeatOfVapor" (focus)="focusField('specificHeatOfVapor')">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.specificHeatOfVapor" [settings]="settings()"></app-form-control-errors>
@@ -92,7 +92,7 @@
   <div class="form-group">
     <label for="percentChargeReacted_{{ instanceId() }}">Charge Reacted</label>
     <div class="input-group" [class.invalid]="f.percentChargeReacted.invalid" [class.indicate-different]="gasDifferences().has('percentReacted')">
-      <input type="number" class="form-control" id="percentChargeReacted_{{ instanceId() }}" formControlName="percentChargeReacted">
+      <input type="number" class="form-control" id="percentChargeReacted_{{ instanceId() }}" formControlName="percentChargeReacted" (focus)="focusField('gasReacted')">
       <app-input-unit [defaultUnit]="'%'"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.percentChargeReacted" [settings]="settings()"></app-form-control-errors>
@@ -101,7 +101,7 @@
   <div class="form-group">
     <label for="heatOfReaction_{{ instanceId() }}">Heat of Reaction</label>
     <div class="input-group" [class.invalid]="f.heatOfReaction.invalid" [class.indicate-different]="gasDifferences().has('reactionHeat')">
-      <input type="number" class="form-control" id="heatOfReaction_{{ instanceId() }}" formControlName="heatOfReaction">
+      <input type="number" class="form-control" id="heatOfReaction_{{ instanceId() }}" formControlName="heatOfReaction" (focus)="focusField('heatOfReaction')">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/lb'" [metricUnit]="'kJ/kg'"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.heatOfReaction" [settings]="settings()"></app-form-control-errors>
@@ -110,7 +110,7 @@
 
   <div class="form-group">
     <label for="endothermicOrExothermic_{{ instanceId() }}">Type of Reaction</label>
-    <select class="form-control" id="endothermicOrExothermic_{{ instanceId() }}" formControlName="endothermicOrExothermic" [class.indicate-different]="gasDifferences().has('thermicReactionType')" [class.invalid]="f.endothermicOrExothermic.invalid">
+    <select class="form-control" id="endothermicOrExothermic_{{ instanceId() }}" formControlName="endothermicOrExothermic" (focus)="focusField('endothermicOrExothermic')" [class.indicate-different]="gasDifferences().has('thermicReactionType')" [class.invalid]="f.endothermicOrExothermic.invalid">
       <option [ngValue]="0">Endothermic</option>
       <option [ngValue]="1">Exothermic</option>
     </select>
@@ -119,7 +119,7 @@
   <div class="form-group">
     <label for="additionalHeatRequired_{{ instanceId() }}">Additional Heat Required</label>
     <div class="input-group" [class.invalid]="f.additionalHeatRequired.invalid" [class.indicate-different]="gasDifferences().has('additionalHeat')">
-      <input type="number" class="form-control" id="additionalHeatRequired_{{ instanceId() }}" formControlName="additionalHeatRequired">
+      <input type="number" class="form-control" id="additionalHeatRequired_{{ instanceId() }}" formControlName="additionalHeatRequired" (focus)="focusField('additionalHeatRequired')">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/hr'" [metricUnit]="'kJ/hr'"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.additionalHeatRequired" [settings]="settings()"></app-form-control-errors>

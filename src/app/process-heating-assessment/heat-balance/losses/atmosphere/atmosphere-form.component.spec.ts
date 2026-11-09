@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { of, Subject } from 'rxjs';
 import { AtmosphereFormComponent } from './atmosphere-form.component';
 import { AtmosphereFormService } from './atmosphere-form.service';
@@ -10,6 +10,7 @@ import { ModalDialogService } from '../../../../shared/modal-dialog.service';
 import { AtmosphereSpecificHeat } from '../../../../shared/models/materials';
 import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
 import { Settings } from '../../../../shared/models/settings';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -56,6 +57,7 @@ describe('AtmosphereFormComponent', () => {
       imports: [ReactiveFormsModule],
       declarations: [AtmosphereFormComponent],
       providers: [
+        { provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } },
         AtmosphereFormService,
         { provide: AtmosphereDbService, useValue: dbServiceSpy },
         { provide: ModalDialogService, useValue: modalDialogServiceSpy },

@@ -7,6 +7,7 @@ import { FlueGasMoistureDialogComponent, FlueGasMoistureDialogData } from './flu
 import { Settings } from '../../../../shared/models/settings';
 import { FlueGasForm, OXYGEN_CALCULATION_METHODS, OxygenCalculationMethod } from './flue-gas-form.service';
 import { FlueGasByMass, FlueGasByVolume, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 /** Operating-condition fields shared by the By Volume and By Mass flue gas forms. */
 @Component({
@@ -25,6 +26,7 @@ export class FlueGasConditionsFieldsComponent {
   private readonly modalDialogService = inject(ModalDialogService);
   private readonly injector = inject(Injector);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly uiService = inject(ProcessHeatingUiService);
 
   readonly OxygenCalculationMethod = OxygenCalculationMethod;
   readonly calculationMethods = OXYGEN_CALCULATION_METHODS;
@@ -44,5 +46,9 @@ export class FlueGasConditionsFieldsComponent {
         this.form().patchValue({ moistureInAirCombustion: roundVal(moisture, 2) });
       }
     });
+  }
+
+  focusField(field: string): void {
+    this.uiService.focusedFieldSignal.set(field);
   }
 }

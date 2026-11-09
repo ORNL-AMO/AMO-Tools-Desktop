@@ -3,7 +3,7 @@
 <ng-template #fuelTypeSelect>
   <div class="form-group">
     <label for="flueGasType_{{ panelPrefix }}">Type of fuel</label>
-    <select class="form-control" id="flueGasType_{{ panelPrefix }}" [class.indicate-different]="service.differingFields()?.has('flueGasType')" [ngModel]="service.flueGasType()" (ngModelChange)="service.switchType($event)">
+    <select class="form-control" id="flueGasType_{{ panelPrefix }}" (focus)="focusField('measurementType')" [class.indicate-different]="service.differingFields()?.has('flueGasType')" [ngModel]="service.flueGasType()" (ngModelChange)="service.switchType($event)">
       <option [value]="FlueGasType.ByVolume">Gas</option>
       <option [value]="FlueGasType.ByMass">Solid/Liquid</option>
     </select>

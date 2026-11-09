@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { of, Subject } from 'rxjs';
 import { ChargeMaterialLiquidFormComponent } from './charge-material-liquid-form.component';
 import { LiquidMaterialFormService } from './liquid-material-form.service';
@@ -8,6 +8,7 @@ import { LiquidLoadMaterialDbService } from '../../../../../indexedDb/liquid-loa
 import { ModalDialogService } from '../../../../../shared/modal-dialog.service';
 import { LiquidLoadChargeMaterial } from '../../../../../shared/models/materials';
 import { Settings } from '../../../../../shared/models/settings';
+import { ProcessHeatingUiService } from '../../../../services/process-heating-ui.service';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -57,6 +58,7 @@ describe('ChargeMaterialLiquidFormComponent', () => {
       imports: [ReactiveFormsModule],
       declarations: [ChargeMaterialLiquidFormComponent],
       providers: [
+        { provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } },
         LiquidMaterialFormService,
         { provide: LiquidLoadMaterialDbService, useValue: dbServiceSpy },
         { provide: ModalDialogService, useValue: modalDialogServiceSpy },

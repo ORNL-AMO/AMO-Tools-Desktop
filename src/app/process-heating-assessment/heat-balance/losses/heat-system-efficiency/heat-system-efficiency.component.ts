@@ -6,6 +6,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingResultsService } from '../../../services/process-heating-results.service';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { reinitOnScenarioChange } from '../reinit-on-scenario-change';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 /**
  * @param totalInput total heat input, in the settings' energy result unit
@@ -32,6 +33,7 @@ export class HeatSystemEfficiencyComponent {
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   private readonly resultsService = inject(ProcessHeatingResultsService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly uiService = inject(ProcessHeatingUiService);
 
   readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
   readonly form = new FormGroup({
@@ -81,5 +83,9 @@ export class HeatSystemEfficiencyComponent {
     } else {
       this.assessmentService.updateModificationProperty(scenario, 'systemEfficiency', efficiency);
     }
+  }
+
+  focusField(field: string): void {
+    this.uiService.focusedFieldSignal.set(field);
   }
 }

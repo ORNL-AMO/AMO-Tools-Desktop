@@ -5,6 +5,7 @@ import { EnergyInputForm, EnergyInputFormService } from './energy-input-form.ser
 import { EnergyInputItem } from './energy-input.service';
 import { EnergyInputEAF } from '../../../../shared/models/phast/losses/energyInputEAF';
 import { LossFieldDifferences } from '../loss-compare.util';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 @Component({
   selector: 'app-energy-input-form',
@@ -18,6 +19,7 @@ export class EnergyInputFormComponent {
   readonly differingFields = input<LossFieldDifferences<EnergyInputEAF>>();
 
   private readonly formService = inject(EnergyInputFormService);
+  private readonly uiService = inject(ProcessHeatingUiService);
 
   readonly form = computed(() => this.item().form as EnergyInputForm);
   readonly controlIds = computed(() => generateFormControlIds(this.form().controls));
@@ -32,5 +34,9 @@ export class EnergyInputFormComponent {
     if (flowRate != null) {
       this.form().controls.naturalGasHeatInput.setValue(this.formService.calculateHeatInputFromFlowRate(flowRate, this.settings()));
     }
+  }
+
+  focusField(field: string): void {
+    this.uiService.focusedFieldSignal.set(field);
   }
 }

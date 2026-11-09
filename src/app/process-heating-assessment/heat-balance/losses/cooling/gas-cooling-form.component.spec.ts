@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { CoolingFormService, GasCoolingForm } from './cooling-form.service';
 import { GasCoolingFormComponent } from './gas-cooling-form.component';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 const SETTINGS = { unitsOfMeasure: 'Imperial' } as Settings;
 
@@ -15,7 +16,7 @@ describe('GasCoolingFormComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [GasCoolingFormComponent],
-      providers: [CoolingFormService],
+      providers: [{ provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } }, CoolingFormService],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

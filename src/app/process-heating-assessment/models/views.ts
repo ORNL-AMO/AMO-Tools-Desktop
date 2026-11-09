@@ -67,8 +67,9 @@ export type LossView = typeof LossView[keyof typeof LossView];
 
 export type ProcessHeatingView = MainView | BaselineView | AssessmentView | ReportView | CalculatorsView | LossView;
 
-/** Notes field edited from the results panel while each heat balance step is selected in Expert View. Operations has no Expert View step. */
+/** Notes field edited from the results panel while each heat balance step is selected in Expert View. */
 export const LOSS_VIEW_NOTES_KEY: Partial<Record<ProcessHeatingView, keyof Notes>> = {
+  [LossView.OPERATIONS]: 'operationsNotes',
   [LossView.CHARGE_MATERIAL]: 'chargeNotes',
   [LossView.WALL_LOSSES]: 'wallNotes',
   [LossView.EXTENDED_SURFACE]: 'extendedNotes',
@@ -146,8 +147,9 @@ export const HEAT_BALANCE_VIEW_LINKS: ViewLink[] = [
   { view: LossView.HEAT_SYSTEM_EFFICIENCY, label: 'Heat System Efficiency' },
 ];
 
-/** Loss types whose form takes a `scenario` input; each loss step adds its own once built. */
+/** Heat Balance views whose form takes a `scenario` input; each loss step adds its own once built. */
 export const EXPERT_VIEW_LOSS_VIEWS: ReadonlySet<ProcessHeatingView> = new Set<LossView>([
+  LossView.OPERATIONS,
   LossView.CHARGE_MATERIAL,
   LossView.WALL_LOSSES,
   LossView.EXTENDED_SURFACE,

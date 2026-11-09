@@ -2,7 +2,7 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="{{controlIds().motorPhase}}">Motor Current Phase(s)</label>
-      <select class="form-control" id="{{controlIds().motorPhase}}" formControlName="motorPhase"
+      <select class="form-control" id="{{controlIds().motorPhase}}" formControlName="motorPhase" (focus)="focusField('motorPhase')"
         [class.invalid]="form().controls.motorPhase.invalid" [class.indicate-different]="differingFields()?.has('motorPhase')">
         @for (phase of motorPhases; track phase) {
           <option [ngValue]="phase">{{phase}}</option>
@@ -14,7 +14,7 @@
       <label class="small" for="{{controlIds().supplyVoltage}}">Supply Voltage</label>
       <div class="input-group" [class.invalid]="form().controls.supplyVoltage.invalid" [class.indicate-different]="differingFields()?.has('supplyVoltage')">
         <input type="number" step="10" class="form-control"
-          id="{{controlIds().supplyVoltage}}" formControlName="supplyVoltage" onfocus="this.select();">
+          id="{{controlIds().supplyVoltage}}" formControlName="supplyVoltage" (focus)="focusField('supplyVoltage')" onfocus="this.select();">
         <span class="input-group-addon units">V</span>
       </div>
       <app-form-control-errors [control]="form().controls.supplyVoltage" [settings]="settings()">
@@ -28,7 +28,7 @@
       <label class="small" for="{{controlIds().avgCurrent}}">Average Current</label>
       <div class="input-group" [class.invalid]="form().controls.avgCurrent.invalid" [class.indicate-different]="differingFields()?.has('avgCurrent')">
         <input type="number" step="10" class="form-control"
-          id="{{controlIds().avgCurrent}}" formControlName="avgCurrent" onfocus="this.select();">
+          id="{{controlIds().avgCurrent}}" formControlName="avgCurrent" (focus)="focusField('avgCurrent')" onfocus="this.select();">
         <span class="input-group-addon units">A</span>
       </div>
       <app-form-control-errors [control]="form().controls.avgCurrent" [settings]="settings()">
@@ -38,7 +38,7 @@
     <div class="form-group">
       <label class="small" for="{{controlIds().powerFactor}}">Power Factor</label>
       <input type="number" step="0.1" class="form-control"
-        id="{{controlIds().powerFactor}}" formControlName="powerFactor" onfocus="this.select();"
+        id="{{controlIds().powerFactor}}" formControlName="powerFactor" (focus)="focusField('powerFactor')" onfocus="this.select();"
         [class.invalid]="form().controls.powerFactor.invalid" [class.indicate-different]="differingFields()?.has('powerFactor')">
       <app-form-control-errors [control]="form().controls.powerFactor" [settings]="settings()">
       </app-form-control-errors>
@@ -48,7 +48,7 @@
       <label class="small" for="{{controlIds().operatingTime}}">Operating Time</label>
       <div class="input-group" [class.invalid]="form().controls.operatingTime.invalid" [class.indicate-different]="differingFields()?.has('operatingTime')">
         <input type="number" step="any" class="form-control"
-          id="{{controlIds().operatingTime}}" formControlName="operatingTime" onfocus="this.select();">
+          id="{{controlIds().operatingTime}}" formControlName="operatingTime" (focus)="focusField('operatingTime')" onfocus="this.select();">
         <span class="input-group-addon units">%</span>
       </div>
       <app-form-control-errors [control]="form().controls.operatingTime" [settings]="settings()">

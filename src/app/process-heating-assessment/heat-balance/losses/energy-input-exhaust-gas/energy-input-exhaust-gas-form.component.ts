@@ -9,6 +9,7 @@ import { EnergyInputExhaustGasForm } from './energy-input-exhaust-gas-form.servi
 import { EnergyInputExhaustGasItem } from './energy-input-exhaust-gas.service';
 import { EnergyInputExhaustGasLoss } from '../../../../shared/models/phast/losses/energyInputExhaustGasLosses';
 import { LossFieldDifferences } from '../loss-compare.util';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 @Component({
   selector: 'app-energy-input-exhaust-gas-form',
@@ -20,6 +21,7 @@ export class EnergyInputExhaustGasFormComponent {
   private readonly modalDialogService = inject(ModalDialogService);
   private readonly injector = inject(Injector);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly uiService = inject(ProcessHeatingUiService);
 
   readonly item = input.required<EnergyInputExhaustGasItem>();
   readonly settings = input.required<Settings>();
@@ -38,5 +40,9 @@ export class EnergyInputExhaustGasFormComponent {
         this.form().patchValue({ availableHeat: roundVal(availableHeat, 1) });
       }
     });
+  }
+
+  focusField(field: string): void {
+    this.uiService.focusedFieldSignal.set(field);
   }
 }

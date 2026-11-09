@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Slag } from '../../../../shared/models/phast/losses/slag';
@@ -6,6 +6,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { SlagFormComponent } from './slag-form.component';
 import { SlagFormService } from './slag-form.service';
 import { SlagItem } from './slag.service';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -30,7 +31,7 @@ describe('SlagFormComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [SlagFormComponent],
-      providers: [SlagFormService],
+      providers: [{ provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } }, SlagFormService],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

@@ -30,6 +30,7 @@ describe('HelpPanelComponent', () => {
   let fixture: ComponentFixture<HelpPanelComponent>;
   let childView: WritableSignal<string>;
   let lossSubView: WritableSignal<string>;
+  let focusedFieldSignal: WritableSignal<string>;
 
   function render(view: string, subView = ''): HTMLElement {
     childView.set(view);
@@ -41,10 +42,11 @@ describe('HelpPanelComponent', () => {
   beforeEach(() => {
     childView = signal('');
     lossSubView = signal('');
+    focusedFieldSignal = signal('default');
     TestBed.configureTestingModule({
       declarations: [HelpPanelComponent],
       providers: [
-        { provide: ProcessHeatingUiService, useValue: { childView, lossSubView } },
+        { provide: ProcessHeatingUiService, useValue: { childView, lossSubView, focusedFieldSignal } },
         { provide: ProcessHeatingAssessmentService, useValue: { settingsSignal: signal<Partial<Settings>>({}) } },
       ],
       schemas: [NO_ERRORS_SCHEMA],
@@ -75,7 +77,21 @@ describe('HelpPanelComponent', () => {
       expect(render(ROUTE_TOKENS.exploreOpportunities).textContent).toContain('Explore Opportunities Help');
     });
 
-    [ROUTE_TOKENS.assessmentSettings, ROUTE_TOKENS.expertView, ''].forEach((view) => {
+    it('shows Assessment Settings help', () => {
+      expect(render(ROUTE_TOKENS.assessmentSettings).textContent).toContain('Assessment Settings');
+    });
+
+    it('shows implementation cost help on Explore Opportunities only while that field is focused', () => {
+      const element = render(ROUTE_TOKENS.exploreOpportunities);
+      expect(element.querySelector('[data-testid="implementation-cost-help"]')).toBeNull();
+
+      focusedFieldSignal.set('implementationCost');
+      fixture.detectChanges();
+
+      expect(element.querySelector('[data-testid="implementation-cost-help"]')).not.toBeNull();
+    });
+
+    [ROUTE_TOKENS.expertView, ''].forEach((view) => {
       it(`shows the fallback for "${view}"`, () => {
         expect(render(view).querySelector('[data-testid="no-help"]')).not.toBeNull();
       });
@@ -83,6 +99,13 @@ describe('HelpPanelComponent', () => {
   });
 
   describe('reactivity', () => {
+    it('passes the focused field to the loss help component', () => {
+      focusedFieldSignal.set('operatingHours');
+      const element = render(ROUTE_TOKENS.heatBalance, ROUTE_TOKENS.operations);
+
+      expect((element.querySelector('app-operations-help') as HTMLElement & { currentField: string }).currentField).toBe('operatingHours');
+    });
+
     it('swaps content when the loss sub-view changes', () => {
       const element = render(ROUTE_TOKENS.heatBalance, ROUTE_TOKENS.slag);
       expect(element.querySelector('app-slag-help')).not.toBeNull();
