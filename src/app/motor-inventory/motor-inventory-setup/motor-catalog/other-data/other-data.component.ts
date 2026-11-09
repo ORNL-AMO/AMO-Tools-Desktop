@@ -6,6 +6,7 @@ import { MotorCatalogService } from '../motor-catalog.service';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 import { OtherDataService } from './other-data.service';
 import { driveConstants } from '../../../../psat/psatConstants';
+import { getMotorSupplyType, MotorSupplyType } from '../motor-supply';
 
 @Component({
     selector: 'app-other-data',
@@ -20,6 +21,7 @@ export class OtherDataComponent implements OnInit {
   displayOptions: OtherOptions;
   displayForm: boolean = true;
   driveTypes: Array<{ value: number, display: string }>;
+  motorSupply: MotorSupplyType;
   constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
     private otherDataService: OtherDataService) { }
 
@@ -31,6 +33,7 @@ export class OtherDataComponent implements OnInit {
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
       if (selectedMotor) {
         this.motorForm = this.otherDataService.getFormFromOtherData(selectedMotor.otherData);
+        this.motorSupply = getMotorSupplyType(selectedMotor);
       }
     });
     this.displayOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions.otherOptions;

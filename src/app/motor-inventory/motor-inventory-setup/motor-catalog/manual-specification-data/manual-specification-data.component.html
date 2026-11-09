@@ -5,7 +5,7 @@
 </label>
 <form *ngIf="displayForm" class="p-1" [formGroup]="motorForm">
     <!--sychronous speed: synchronousSpeed-->
-    <div class="form-group">
+    <div class="form-group" *ngIf="motorSupply != 'dc'">
         <label for="synchronousSpeed">Synchronous Speed</label>
         <select class="form-control" (focus)="focusField('synchronousSpeed')" (change)="save()"
             formControlName="synchronousSpeed" id="synchronousSpeed">
@@ -91,18 +91,8 @@
         </span>
     </div>
 
-    <!-- currentType -->
-    <div class="form-group" *ngIf="displayOptions.currentType">
-        <label for="currentType">Current Type</label>
-        <select class="form-control" (focus)="focusField('currentType')" (change)="save()" formControlName="currentType"
-            id="currentType">
-            <option [ngValue]="'AC'">AC</option>
-            <option [ngValue]="'DC'">DC</option>
-        </select>
-    </div>
-
     <!-- poles -->
-    <div class="form-group" *ngIf="displayOptions.poles">
+    <div class="form-group" *ngIf="displayOptions.poles && motorSupply != 'dc'">
         <label for="poles">Poles</label>
         <select class="form-control" (focus)="focusField('poles')" (change)="save()" formControlName="poles" id="poles">
             <option *ngFor="let option of polesOptions" [ngValue]="option">{{option}}</option>

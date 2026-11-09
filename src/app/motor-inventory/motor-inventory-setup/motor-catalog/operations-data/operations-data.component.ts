@@ -10,6 +10,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { PercentLoadEstimationService } from '../../../../calculator/motors/percent-load-estimation/percent-load-estimation.service';
+import { getMotorSupplyType, MotorSupplyType } from '../motor-supply';
 
 @Component({
     selector: 'app-operations-data',
@@ -40,6 +41,7 @@ export class OperationsDataComponent implements OnInit {
   disableEstimateCurrent: boolean;
   disableEstimateLoadFactor: boolean;
   disableEstimateEfficiency: boolean;
+  motorSupply: MotorSupplyType;
   constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
     private operationsDataService: OperationsDataService, private psatService: PsatService, private percentLoadEstimationService: PercentLoadEstimationService) { }
 
@@ -47,6 +49,7 @@ export class OperationsDataComponent implements OnInit {
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
       if (selectedMotor) {
         this.motorForm = this.operationsDataService.getFormFromOperationData(selectedMotor.operationData);
+        this.motorSupply = getMotorSupplyType(selectedMotor);
       }
     });
     let allDisplayOptions: MotorPropertyDisplayOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions;
@@ -54,6 +57,10 @@ export class OperationsDataComponent implements OnInit {
     this.disableEstimateCurrent = !(allDisplayOptions.nameplateDataOptions.fullLoadSpeed && allDisplayOptions.nameplateDataOptions.ratedVoltage && allDisplayOptions.nameplateDataOptions.fullLoadAmps && allDisplayOptions.operationDataOptions.averageLoadFactor);
     this.disableEstimateLoadFactor = !(allDisplayOptions.nameplateDataOptions.ratedVoltage && allDisplayOptions.operationDataOptions.averageLoadFactor && allDisplayOptions.operationDataOptions.efficiencyAtAverageLoad && allDisplayOptions.operationDataOptions.currentAtLoad);
     this.disableEstimateEfficiency = !(allDisplayOptions.operationDataOptions.averageLoadFactor && allDisplayOptions.nameplateDataOptions.fullLoadSpeed);
+  }
+
+  get disableThreePhaseEstimates(): boolean {
+    return this.motorSupply != 'threePhase';
   }
 
   ngOnDestroy() {
@@ -89,6 +96,9 @@ export class OperationsDataComponent implements OnInit {
 
 
   calculateEfficiency() {
+    if (this.disableThreePhaseEstimates) {
+      return;
+    }
     let loadFactorPercent: number = this.motorForm.controls.averageLoadFactor.value;
     let efficiency: number = this.motorCatalogService.estimateEfficiency(loadFactorPercent, true);
     this.motorForm.controls.efficiencyAtAverageLoad.patchValue(efficiency);
@@ -96,7 +106,7 @@ export class OperationsDataComponent implements OnInit {
   }
 
   calculateCurrent() {
-    if (!this.disableEstimateCurrent) {
+    if (!this.disableEstimateCurrent && !this.disableThreePhaseEstimates) {
       let loadFactorPercent: number = this.motorForm.controls.averageLoadFactor.value;
       let estimatedCurrentAtLoad = this.motorCatalogService.estimateCurrent(loadFactorPercent);
       this.motorForm.controls.currentAtLoad.patchValue(estimatedCurrentAtLoad);
@@ -104,7 +114,7 @@ export class OperationsDataComponent implements OnInit {
   }
 
   calculatePowerFactor() {
-    if (!this.disableEstimateLoadFactor) {
+    if (!this.disableEstimateLoadFactor && !this.disableThreePhaseEstimates) {
       let settings: Settings = this.motorInventoryService.settings.getValue();
       let selectedMotorItem = this.motorCatalogService.getUpdatedSelectedMotorItem();
       let motorPower: number = selectedMotorItem.nameplateData.ratedMotorPower;
@@ -145,6 +155,9 @@ export class OperationsDataComponent implements OnInit {
   }
 
   showLoadFactorModal() {
+    if (this.disableThreePhaseEstimates) {
+      return;
+    }
     let selectedMotorItem = this.motorCatalogService.getUpdatedSelectedMotorItem();
     this.percentLoadEstimationService.fieldMeasurementInputs = {
       phase1Voltage: 0,

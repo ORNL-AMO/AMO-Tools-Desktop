@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MotorInventoryDepartment, MotorItem, MotorPropertyDisplayOptions } from '../../../motor-inventory';
 import { Settings } from '../../../../shared/models/settings';
+import { getMotorSupplyType, motorSupplyOptions } from '../../../motor-inventory-setup/motor-catalog/motor-supply';
 
 @Component({
     selector: 'app-motor-item-detail',
@@ -21,6 +22,10 @@ export class MotorItemDetailComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  get motorSupply(): string {
+    return motorSupplyOptions.find(option => option.value == getMotorSupplyType(this.motorItem)).display;
   }
 
 }

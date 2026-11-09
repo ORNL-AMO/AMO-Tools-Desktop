@@ -39,7 +39,6 @@ export class NameplateDataPropertiesComponent implements OnInit {
     this.nameplateDataOptions.serviceFactor = this.nameplateDataOptions.displayNameplateData;
     this.nameplateDataOptions.insulationClass = this.nameplateDataOptions.displayNameplateData;
     this.nameplateDataOptions.weight = this.nameplateDataOptions.displayNameplateData;
-    this.nameplateDataOptions.numberOfPhases = this.nameplateDataOptions.displayNameplateData;
     this.nameplateDataOptions.fullLoadSpeed = this.nameplateDataOptions.displayNameplateData;
     this.nameplateDataOptions.fullLoadAmps = this.nameplateDataOptions.displayNameplateData;
     this.save();
@@ -55,7 +54,6 @@ export class NameplateDataPropertiesComponent implements OnInit {
       this.nameplateDataOptions.serviceFactor ||
       this.nameplateDataOptions.insulationClass ||
       this.nameplateDataOptions.weight ||
-      this.nameplateDataOptions.numberOfPhases ||
       this.nameplateDataOptions.fullLoadSpeed ||
       this.nameplateDataOptions.fullLoadAmps
     );

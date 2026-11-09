@@ -273,13 +273,41 @@
         </table>
     </div>
 </div>
-<div class="my-2" *ngIf="focusedField == 'numberOfPhases'">
+<div class="my-2" *ngIf="focusedField == 'motorSupply'">
     <h6>
-        Number of Phases
+        Motor Supply
         <br>
         <small class="text-muted">
-            The electrical voltage wiring connected to the motor electrical panel.
-            <hr>Options are <u>1</u> or <u>3</u>.
+            The type of electrical supply the motor runs on. Options are <u>AC Three-Phase</u>,
+            <u>AC Single-Phase</u>, or <u>DC</u>. Motors added before this option existed are treated as AC
+            Three-Phase.
+            <hr>
+            Electrical input power for each type is:
+            <ul>
+                <li>AC Three-Phase: &radic;3 &times; V &times; I &times; PF</li>
+                <li>AC Single-Phase: V &times; I &times; PF</li>
+                <li>DC: V &times; I</li>
+            </ul>
+            Energy use in the inventory comes from rated power, load factor, operating hours, utilization factor and
+            efficiency, so it
+            is calculated the same way for all three types.
+            <br><br>
+            <b>Note:</b> The Estimate and Calculate options in the motor catalog are based on three-phase induction
+            motor data, so they are turned off for single-phase and DC motors. Use values from the nameplate or a
+            field measurement instead.
+            <br>
+            <b>Note:</b> For reference, minimum efficiencies for single-phase capacitor-start motors from 0.25 to 3 hp
+            are listed in 10 CFR 431.446 (DOE small electric motor standards). There is no federal efficiency standard
+            for DC motors.
+            <br>
+            <b>Note:</b> Connected pump and compressed air inventories assume a three-phase AC motor, so single-phase
+            and DC motors cannot be connected to them. A motor that is already connected has to be disconnected
+            before it can be changed to single-phase or DC.
+            <br>
+            <b>Note:</b> Line frequency, power factor, efficiency class, synchronous speed, poles and VFD do not apply
+            to DC motors and are hidden. Values entered before switching to DC are kept. The efficiency entered for a
+            DC motor should include the field circuit and the drive or controller if the energy for those is part of
+            what you want to track.
         </small>
     </h6>
 </div>

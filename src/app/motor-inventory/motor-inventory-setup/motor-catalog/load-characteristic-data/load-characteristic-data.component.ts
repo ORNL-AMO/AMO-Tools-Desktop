@@ -6,6 +6,7 @@ import { MotorCatalogService } from '../motor-catalog.service';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 import { LoadCharacteristicDataService } from './load-characteristic-data.service';
 import { PsatService } from '../../../../psat/psat.service';
+import { getMotorSupplyType, MotorSupplyType } from '../motor-supply';
 
 @Component({
     selector: 'app-load-characteristic-data',
@@ -20,6 +21,7 @@ export class LoadCharacteristicDataComponent implements OnInit {
   displayForm: boolean = true;
   selectedMotorItem: MotorItem;
   disableEstimateLoadEfficiency: boolean;
+  motorSupply: MotorSupplyType;
 
   constructor(private motorCatalogService: MotorCatalogService, 
     private psatService: PsatService,
@@ -30,12 +32,17 @@ export class LoadCharacteristicDataComponent implements OnInit {
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
       this.selectedMotorItem = selectedMotor;
       if (selectedMotor) {
+        this.motorSupply = getMotorSupplyType(selectedMotor);
         this.motorForm = this.loadCharacteristicsDataService.getFormFromLoadCharacteristicData(selectedMotor.loadCharacteristicData);
       }
     });
     let allDisplayOptions: MotorPropertyDisplayOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions;
     this.displayOptions = allDisplayOptions.loadCharactersticOptions;
     this.disableEstimateLoadEfficiency = !allDisplayOptions.nameplateDataOptions.fullLoadSpeed;
+  }
+
+  get disableThreePhaseEstimates(): boolean {
+    return this.motorSupply != 'threePhase';
   }
 
   ngOnDestroy() {
@@ -64,21 +71,21 @@ export class LoadCharacteristicDataComponent implements OnInit {
   // }
 
   calculateEfficiency75() {
-    if (!this.disableEstimateLoadEfficiency) {
+    if (!this.disableEstimateLoadEfficiency && !this.disableThreePhaseEstimates) {
       let efficiency: number = this.motorCatalogService.estimateEfficiency(75, true);
       this.motorForm.controls.efficiency75.patchValue(efficiency);
       this.save();
     }
   }
   calculateEfficiency50() {
-    if (!this.disableEstimateLoadEfficiency) {
+    if (!this.disableEstimateLoadEfficiency && !this.disableThreePhaseEstimates) {
       let efficiency: number = this.motorCatalogService.estimateEfficiency(50, true);
       this.motorForm.controls.efficiency50.patchValue(efficiency);
       this.save();
     }
   }
   calculateEfficiency25() {
-    if (!this.disableEstimateLoadEfficiency) {
+    if (!this.disableEstimateLoadEfficiency && !this.disableThreePhaseEstimates) {
       let efficiency: number = this.motorCatalogService.estimateEfficiency(25, true);
       this.motorForm.controls.efficiency25.patchValue(efficiency);
       this.save();
@@ -91,6 +98,9 @@ export class LoadCharacteristicDataComponent implements OnInit {
 
 
   calculateMotorPowerFactor25() {
+    if (this.disableThreePhaseEstimates) {
+      return;
+    }
     let powerFactorInput = this.getPowerFactorInput(25, this.motorForm.controls.efficiency25.value);
     let calculatedPowerFactor: number = this.psatService.motorPowerFactor(
       powerFactorInput.motorRatedPower,
@@ -105,6 +115,9 @@ export class LoadCharacteristicDataComponent implements OnInit {
   }
 
   calculateMotorPowerFactor50() {
+    if (this.disableThreePhaseEstimates) {
+      return;
+    }
     let powerFactorInput = this.getPowerFactorInput(50, this.motorForm.controls.efficiency50.value);
     let calculatedPowerFactor: number = this.psatService.motorPowerFactor(
       powerFactorInput.motorRatedPower,
@@ -119,6 +132,9 @@ export class LoadCharacteristicDataComponent implements OnInit {
   }
 
   calculateMotorPowerFactor75() {
+    if (this.disableThreePhaseEstimates) {
+      return;
+    }
     let powerFactorInput = this.getPowerFactorInput(75, this.motorForm.controls.efficiency75.value);
     let calculatedPowerFactor: number = this.psatService.motorPowerFactor(
       powerFactorInput.motorRatedPower,
@@ -133,6 +149,9 @@ export class LoadCharacteristicDataComponent implements OnInit {
   }
 
   calculateMotorPowerFactor100() {
+    if (this.disableThreePhaseEstimates) {
+      return;
+    }
     let powerFactorInput = this.getPowerFactorInput(100, this.selectedMotorItem.nameplateData.nominalEfficiency);
     let calculatedPowerFactor: number = this.psatService.motorPowerFactor(
       powerFactorInput.motorRatedPower,
