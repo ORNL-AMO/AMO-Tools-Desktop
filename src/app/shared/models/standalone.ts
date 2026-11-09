@@ -800,6 +800,7 @@ export interface FanAffinityLawsOutput {
   annualCostSavings: number;
   scenario?: FanAffinityLawsScenario;
   ratedFlow?: number;
+  baselineFlowVolume?: number;
   baselinePower?: number;
   newPower?: number;
   baselineFlowPercent?: number;

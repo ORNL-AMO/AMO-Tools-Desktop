@@ -30,13 +30,13 @@
     </tr>
     <tr *ngIf="showField('desiredFlow')">
       <td>Flow Volume</td>
-      <td class="text-center">{{fanAffinityLawResults?.ratedFlow | number:'1.1-1'}}
+      <td class="text-center">{{fanAffinityLawResults?.baselineFlowVolume | number:'1.0-2'}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> CFM</span>
         <span *ngIf="settings.unitsOfMeasure != 'Imperial'"> m<sup>3</sup>/s</span>
       </td>
       <td class="text-center">
         <span *ngIf="!modificationExists">&mdash;</span>
-        <span *ngIf="modificationExists">{{fanAffinityLawResults?.desiredFlowVolume | number:'1.0-0'}}</span>
+        <span *ngIf="modificationExists">{{fanAffinityLawResults?.desiredFlowVolume | number:'1.0-2'}}</span>
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> CFM</span>
         <span *ngIf="settings.unitsOfMeasure != 'Imperial'"> m<sup>3</sup>/s</span>
       </td>

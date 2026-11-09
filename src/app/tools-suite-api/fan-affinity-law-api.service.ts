@@ -31,8 +31,11 @@ export class FanAffinityLawApiService {
   private buildInstance(inputData: FanAffinityLawsInput): any {
     const desiredFlowRate: number = (inputData.flowMode === 1) ? inputData.desiredFlowVolume : inputData.desiredFlowPercent;
     // clamped defensively: the wasm constructor throws if flowPercentBaseline is outside 0-100,
-    // which actualFlow > ratedFlow would otherwise trigger
-    const flowPercentBaseline: number = Math.min(100, Math.max(0, (inputData.actualFlow / inputData.ratedFlow) * 100));
+    // which actualFlow > ratedFlow would otherwise trigger. On/Off always runs at full rated flow,
+    // so a stale hidden Actual Flow value is ignored.
+    const flowPercentBaseline: number = inputData.motorControlTypeCurrent === 0
+      ? 100
+      : Math.min(100, Math.max(0, (inputData.actualFlow / inputData.ratedFlow) * 100));
     const wasmInput = {
       electricityCost: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.electricalRate),
       driveEfficiency: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.efficiencyDrive),

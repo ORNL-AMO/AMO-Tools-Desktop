@@ -8,7 +8,7 @@
           <label class="small" for="motorControlTypeCurrent">Motor Control</label>
           <div class="input-group">
             <select class="form-control" name="motorControlTypeCurrent" id="motorControlTypeCurrent"
-              formControlName="motorControlTypeCurrent" (change)="onCurrentControlChange()"
+              formControlName="motorControlTypeCurrent" (change)="syncActualFlow()"
               (focus)="focusField('motorControlTypeCurrent')">
               <option *ngFor="let option of currentMotorControlOptions" [ngValue]="option.value">{{option.display}}</option>
             </select>
@@ -19,7 +19,7 @@
           <label class="small" for="ratedFlow">Rated Flow</label>
           <div class="input-group">
             <input class="form-control" type="number" name="ratedFlow" id="ratedFlow" formControlName="ratedFlow"
-              (input)="emitCalculate()" (focus)="focusField('ratedFlow')" onfocus="this.select();">
+              (input)="syncActualFlow()" (focus)="focusField('ratedFlow')" onfocus="this.select();">
             <span class="input-group-addon units">
               <span *ngIf="settings.unitsOfMeasure == 'Imperial'">CFM</span>
               <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/s</span>
@@ -48,6 +48,8 @@
             <span *ngIf="fanAffinityLawForm.controls.actualFlow.errors.required">Value required.</span>
             <span *ngIf="fanAffinityLawForm.controls.actualFlow.errors.greaterThan != null">Value must be greater than
               {{fanAffinityLawForm.controls.actualFlow.errors.greaterThan}}.</span>
+            <span *ngIf="fanAffinityLawForm.controls.actualFlow.errors.max">Actual Flow can't exceed Rated Flow
+              ({{fanAffinityLawForm.controls.actualFlow.errors.max.max | number:'1.0-2'}}).</span>
           </span>
         </div>
         <p class="small text-muted" *ngIf="fanAffinityLawForm.controls.motorControlTypeCurrent.value === 0">
@@ -85,6 +87,9 @@
               <option *ngFor="let option of newMotorControlOptions" [ngValue]="option.value">{{option.display}}</option>
             </select>
           </div>
+          <span class="alert-danger pull-right small" *ngIf="fanAffinityLawForm.controls.motorControlTypeNew.errors?.noAdjustment">
+            No adjustment to fan system configuration selected.
+          </span>
         </div>
 
         <ng-container *ngIf="fanAffinityLawForm.controls.motorControlTypeNew.value !== 3">
@@ -114,6 +119,9 @@
               <span *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.errors.required">Value required.</span>
               <span *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.errors.min">Value can't be less than
                 {{fanAffinityLawForm.controls.desiredFlowVolume.errors.min.min}}.</span>
+              <span *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.errors.max">
+                Flow Rate can't exceed the {{fanAffinityLawForm.controls.changeFanSize.value ? "new fan's " : ''}}rated flow
+                ({{fanAffinityLawForm.controls.desiredFlowVolume.errors.max.max | number:'1.0-2'}}).</span>
             </span>
           </div>
 
@@ -128,8 +136,9 @@
             <span class="alert-danger pull-right small"
               *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.invalid && !fanAffinityLawForm.controls.desiredFlowPercent.pristine">
               <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.required">Value required.</span>
-              <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.max">Value can't be greater than
-                {{fanAffinityLawForm.controls.desiredFlowPercent.errors.max.max}}.</span>
+              <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.max">
+                Flow Rate can't exceed the {{fanAffinityLawForm.controls.changeFanSize.value ? "new fan's " : ''}}rated flow
+                ({{fanAffinityLawForm.controls.desiredFlowPercent.errors.max.max | number:'1.0-1'}}%).</span>
               <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.min">Value can't be less than
                 {{fanAffinityLawForm.controls.desiredFlowPercent.errors.min.min}}.</span>
             </span>
@@ -157,10 +166,6 @@
           </span>
         </div>
 
-        <p class="small text-muted"
-          *ngIf="fanAffinityLawForm.controls.motorControlTypeNew.value === 3 && !fanAffinityLawForm.controls.changeFanSize.value">
-          With New Motor Control set to N/A and no fan size change, nothing is being modified &mdash; results will show no savings.
-        </p>
       </div>
     </ng-container>
 

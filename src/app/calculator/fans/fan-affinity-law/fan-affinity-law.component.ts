@@ -115,6 +115,7 @@ export class FanAffinityLawComponent implements OnInit {
 
   async getResults() {
     let inputs: FanAffinityLawsInput = this.fanAffinityLawService.getObjFromForm(this.fanAffinityLawForm);
+    this.fanAffinityLawService.setNoAdjustmentValidator(this.fanAffinityLawForm, this.modificationExists);
     if (this.fanAffinityLawForm.valid) {
       this.fanAffinityLawResults = this.fanAffinityLawService.getResults(inputs, this.settings, this.modificationExists);
     } else {
