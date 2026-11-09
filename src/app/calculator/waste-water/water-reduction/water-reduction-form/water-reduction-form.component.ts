@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Input, Output, SimpleChanges, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { WaterReductionData, WaterReductionResult } from '../../../../shared/models/standalone';
+import { WaterReductionCalculatorType, WaterReductionData, WaterReductionResult } from '../../../../shared/models/standalone';
 import { WaterReductionService } from '../water-reduction.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
@@ -21,7 +21,7 @@ export class WaterReductionFormComponent implements OnInit {
   @Input()
   isBaseline: boolean;
   @Input()
-  isWastewater: number;
+  calculatorType: WaterReductionCalculatorType;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<WaterReductionData>();
   @Output('emitRemoveEquipment')
@@ -46,10 +46,10 @@ export class WaterReductionFormComponent implements OnInit {
     { value: 2, name: 'Bucket Method' },
     { value: 3, name: 'Offsheet / Other Method' }
   ];
-  calculatorTypes: Array<{ value: number, name: string }> = [
-    { value: 0, name: 'Water' },
-    { value: 1, name: 'Wastewater' },
-    { value: 2, name: 'Both' }
+  calculatorTypes: Array<{ value: WaterReductionCalculatorType, name: string }> = [
+    { value: 'water', name: 'Water' },
+    { value: 'wastewater', name: 'Wastewater' },
+    { value: 'both', name: 'Both' }
   ];
 
   form: UntypedFormGroup;
@@ -74,8 +74,8 @@ export class WaterReductionFormComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.isWastewater && !changes.isWastewater.firstChange && this.form.controls.isWastewater.value != this.isWastewater) {
-      this.form.patchValue({ isWastewater: this.isWastewater });
+    if (changes.calculatorType && !changes.calculatorType.firstChange && this.form.controls.calculatorType.value != this.calculatorType) {
+      this.form.patchValue({ calculatorType: this.calculatorType });
       this.resetWaterCost();
       this.calculate();
     }
@@ -85,7 +85,7 @@ export class WaterReductionFormComponent implements OnInit {
       } else {
         this.form.enable();
         if (this.index != 0 || !this.isBaseline) {
-          this.form.controls.isWastewater.disable();
+          this.form.controls.calculatorType.disable();
         }
       }
     }
@@ -109,7 +109,7 @@ export class WaterReductionFormComponent implements OnInit {
   }
 
   resetWaterCost() {
-    let waterCost: number = this.waterReductionService.getDefaultWaterCostForForm(this.settings, this.form.controls.isWastewater.value);
+    let waterCost: number = this.waterReductionService.getDefaultWaterCostForForm(this.settings, this.form.controls.calculatorType.value);
     this.form.patchValue({ waterCost: waterCost });
   }
 

@@ -541,7 +541,15 @@ export interface WaterReductionData {
   volumeMeterMethodData: VolumeMeterMethodData,
   bucketMethodData: BucketMethodData,
   otherMethodData: WaterOtherMethodData,
-  isWastewater: number
+  calculatorType: WaterReductionCalculatorType
+};
+
+export type WaterReductionCalculatorType = 'water' | 'wastewater' | 'both';
+
+// saved data before calculatorType was introduced stored a boolean isWastewater
+export interface LegacyWaterReductionData extends Omit<WaterReductionData, 'calculatorType'> {
+  calculatorType?: WaterReductionCalculatorType,
+  isWastewater?: boolean
 };
 
 export interface VolumeMeterMethodData {

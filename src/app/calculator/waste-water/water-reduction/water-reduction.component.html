@@ -56,7 +56,7 @@
           <app-water-reduction-form [index]="i" [settings]="settings" [data]="data" [isBaseline]="true"
             (emitCalculate)="updateBaselineData($event, i)" (emitChangeField)="changeField($event)"
             (emitRemoveEquipment)="removeBaselineEquipment($event)" [selected]="baselineSelected"
-            [isWastewater]="baselineData[0].isWastewater">
+            [calculatorType]="baselineData[0].calculatorType">
           </app-water-reduction-form>
         </div>
         <div class="w-100 justify content-center btn-group btn-group-sm">
@@ -86,7 +86,7 @@
           <app-water-reduction-form [index]="i" [settings]="settings" [data]="data" [isBaseline]="false"
             (emitCalculate)="updateModificationData($event, i)" (emitChangeField)="changeField($event)"
             (emitRemoveEquipment)="removeModificationEquipment($event)" [selected]="!baselineSelected"
-            [isWastewater]="baselineData[0].isWastewater">
+            [calculatorType]="baselineData[0].calculatorType">
           </app-water-reduction-form>
         </div>
       </div>
@@ -124,12 +124,12 @@
           <!-- app results if results tab -->
           <app-water-reduction-results *ngIf="tabSelect === 'results'" [settings]="settings"
             [waterReductionResults]="waterReductionResults" [modificationExists]="modificationExists"
-            [isWastewater]="baselineData[0]?.isWastewater">
+            [calculatorType]="baselineData[0]?.calculatorType">
           </app-water-reduction-results>
 
           <!-- app help if help tab -->
           <app-water-reduction-help *ngIf="tabSelect === 'help'" [settings]="settings" [currentField]="currentField"
-            [isWastewater]="isWastewater">
+            [calculatorType]="calculatorType">
           </app-water-reduction-help>
         </div>
 

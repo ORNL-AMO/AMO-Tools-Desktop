@@ -4,6 +4,8 @@ import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { Assessment } from '../models/assessment';
 import { ProcessCoolingAssessment, TowerType } from '../models/process-cooling-assessment';
 import { environment } from '../../../environments/environment';
+import { LegacyWaterReductionData, WaterReductionData } from '../models/standalone';
+import { Treasure, WaterReductionTreasureHunt } from '../models/treasure-hunt';
 
 describe('UpdateDataService.updateProcessCooling', () => {
   let service: UpdateDataService;
@@ -150,5 +152,55 @@ describe('UpdateDataService.updateProcessCooling', () => {
   it('does not throw when processCooling is missing', () => {
     const assessment: Assessment = { name: 'no data', type: 'ProcessCooling', appVersion: '1.7.5' };
     expect(() => service.updateAssessmentVersion(assessment)).not.toThrow();
+  });
+});
+
+describe('UpdateDataService.updateWaterReductionTreasureHunt', () => {
+  let service: UpdateDataService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [UpdateDataService, ConvertUnitsService]
+    });
+    service = TestBed.inject(UpdateDataService);
+  });
+
+  function buildOpportunity(baseline: Array<Partial<LegacyWaterReductionData>>, modification: Array<Partial<LegacyWaterReductionData>> = []): WaterReductionTreasureHunt {
+    return {
+      baseline: baseline as Array<WaterReductionData>,
+      modification: modification as Array<WaterReductionData>,
+      opportunityType: Treasure.waterReduction
+    };
+  }
+
+  it('maps legacy isWastewater true to wastewater and false to water', () => {
+    const opportunity = buildOpportunity([{ isWastewater: true }], [{ isWastewater: false }]);
+    service.updateWaterReductionTreasureHunt(opportunity);
+    expect(opportunity.baseline[0].calculatorType).toBe('wastewater');
+    expect(opportunity.modification[0].calculatorType).toBe('water');
+  });
+
+  it('defaults to water when neither field is set', () => {
+    const opportunity = buildOpportunity([{}]);
+    service.updateWaterReductionTreasureHunt(opportunity);
+    expect(opportunity.baseline[0].calculatorType).toBe('water');
+  });
+
+  it('keeps an existing calculatorType and removes the legacy field', () => {
+    const opportunity = buildOpportunity([{ calculatorType: 'both', isWastewater: false }]);
+    service.updateWaterReductionTreasureHunt(opportunity);
+    expect(opportunity.baseline[0].calculatorType).toBe('both');
+    expect('isWastewater' in opportunity.baseline[0]).toBeFalse();
+  });
+
+  it('migrates water reductions when updating a treasure hunt assessment', () => {
+    const assessment = {
+      name: 'test treasure hunt',
+      type: 'TreasureHunt',
+      appVersion: '1.7.5',
+      treasureHunt: { waterReductions: [buildOpportunity([{ isWastewater: true }])] }
+    } as Assessment;
+    service.updateAssessmentVersion(assessment);
+    expect(assessment.treasureHunt.waterReductions[0].baseline[0].calculatorType).toBe('wastewater');
   });
 });

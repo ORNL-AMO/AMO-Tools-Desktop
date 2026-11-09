@@ -7,8 +7,8 @@
       <td class="bold text-center">Modification</td>
     </tr>
     <tr>
-      <td class="bold" *ngIf="isWastewater != 1">Water Use</td>
-      <td class="bold" *ngIf="isWastewater == 1">Wastewater Disposal</td>
+      <td class="bold" *ngIf="calculatorType != 'wastewater'">Water Use</td>
+      <td class="bold" *ngIf="calculatorType == 'wastewater'">Wastewater Disposal</td>
       <td class="text-center">{{waterReductionResults.baselineResults.waterUse | number:'1.0-0'}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal/yr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
@@ -22,8 +22,8 @@
       </td>
     </tr>
     <tr>
-      <td class="bold" *ngIf="isWastewater != 1">Water Cost</td>
-      <td class="bold" *ngIf="isWastewater == 1">Wastewater Cost</td>
+      <td class="bold" *ngIf="calculatorType != 'wastewater'">Water Cost</td>
+      <td class="bold" *ngIf="calculatorType == 'wastewater'">Wastewater Cost</td>
       <td class="text-center">
         {{waterReductionResults.baselineResults.waterCost | currency: 'USD': 'symbol': '1.0-0'}} /yr
       </td>
@@ -33,7 +33,7 @@
         </span>
       </td>
     </tr>
-    <ng-container *ngIf="isWastewater == 2">
+    <ng-container *ngIf="calculatorType == 'both'">
       <tr>
         <td class="bold">Wastewater Disposal</td>
         <td class="text-center">{{waterReductionResults.baselineResults.wastewaterDisposal | number:'1.0-0'}}
@@ -61,8 +61,8 @@
       </tr>
     </ng-container>
     <tr>
-      <td class="bold" *ngIf="isWastewater != 1">Annual Water Savings</td>
-      <td class="bold" *ngIf="isWastewater == 1">Annual Wastewater Savings</td>
+      <td class="bold" *ngIf="calculatorType != 'wastewater'">Annual Water Savings</td>
+      <td class="bold" *ngIf="calculatorType == 'wastewater'">Annual Wastewater Savings</td>
       <td class="text-center" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
@@ -73,9 +73,9 @@
       </td>
     </tr>
     <tr>
-      <td class="bold" *ngIf="isWastewater == 0">Cost Savings</td>
-      <td class="bold" *ngIf="isWastewater == 1">Wastewater Cost Savings</td>
-      <td class="bold" *ngIf="isWastewater == 2">Water Cost Savings</td>
+      <td class="bold" *ngIf="calculatorType == 'water'">Cost Savings</td>
+      <td class="bold" *ngIf="calculatorType == 'wastewater'">Wastewater Cost Savings</td>
+      <td class="bold" *ngIf="calculatorType == 'both'">Water Cost Savings</td>
       <td class="text-center" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
@@ -83,7 +83,7 @@
         </span>
       </td>
     </tr>
-    <ng-container *ngIf="isWastewater == 2">
+    <ng-container *ngIf="calculatorType == 'both'">
       <tr>
         <td class="bold">Annual Wastewater Savings</td>
         <td class="text-center" colspan="2">

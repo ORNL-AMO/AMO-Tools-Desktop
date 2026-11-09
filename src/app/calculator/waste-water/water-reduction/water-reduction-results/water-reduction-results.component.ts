@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges, ElementRef, ViewChild } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { WaterReductionResults } from '../../../../shared/models/standalone';
+import { WaterReductionCalculatorType, WaterReductionResults } from '../../../../shared/models/standalone';
 
 @Component({
     selector: 'app-water-reduction-results',
@@ -16,7 +16,7 @@ export class WaterReductionResultsComponent implements OnInit {
   @Input()
   modificationExists: boolean;
   @Input()
-  isWastewater: number;
+  calculatorType: WaterReductionCalculatorType;
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;

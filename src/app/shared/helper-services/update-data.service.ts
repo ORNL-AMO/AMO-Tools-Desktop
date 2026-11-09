@@ -3,10 +3,10 @@ import { Assessment } from '../models/assessment';
 import { Diagram } from '../models/diagram';
 import { FlowDiagramData, migrateFlowDiagramFieldNames, migrateInapplicableNodeTotals } from 'process-flow-lib';
 import { SSMT } from '../models/steam/ssmt';
-import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, PowerFactorCorrectionTreasureHunt, Treasure } from '../models/treasure-hunt';
+import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, PowerFactorCorrectionTreasureHunt, Treasure, WaterReductionTreasureHunt } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
-import { AirLeakSurveyData, CompressedAirPressureReductionData, CompressedAirReductionData, ElectricityReductionData, FacilityCompressorData } from '../models/standalone';
+import { AirLeakSurveyData, CompressedAirPressureReductionData, CompressedAirReductionData, ElectricityReductionData, FacilityCompressorData, LegacyWaterReductionData, WaterReductionData } from '../models/standalone';
 import { PSAT } from '../models/psat';
 import { PHAST } from '../models/phast/phast';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
@@ -631,6 +631,7 @@ export class UpdateDataService {
             }
             if (assessment.treasureHunt.waterReductions) {
                 assessment.treasureHunt.waterReductions.forEach(opportunity => {
+                    this.updateWaterReductionTreasureHunt(opportunity);
                     opportunity.opportunityType = Treasure.waterReduction;
                 });
             }
@@ -846,6 +847,20 @@ export class UpdateDataService {
             }
         }
         return heatCascadingTH;
+    }
+
+    updateWaterReductionTreasureHunt(waterReductionTH: WaterReductionTreasureHunt): WaterReductionTreasureHunt {
+        waterReductionTH.baseline?.forEach(reduction => this.updateWaterReductionCalculatorType(reduction));
+        waterReductionTH.modification?.forEach(reduction => this.updateWaterReductionCalculatorType(reduction));
+        return waterReductionTH;
+    }
+
+    updateWaterReductionCalculatorType(reduction: LegacyWaterReductionData): WaterReductionData {
+        if (reduction.calculatorType === undefined) {
+            reduction.calculatorType = reduction.isWastewater ? 'wastewater' : 'water';
+        }
+        delete reduction.isWastewater;
+        return reduction as WaterReductionData;
     }
 
     updateElectricityReductionTreasureHunt(electricityReductionTreasureHunt: ElectricityReductionTreasureHunt, settingTH: string): ElectricityReductionTreasureHunt {

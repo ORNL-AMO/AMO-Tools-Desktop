@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { WaterReductionData, VolumeMeterMethodData, MeteredFlowMethodData, BucketMethodData, WaterOtherMethodData, WaterReductionResult, WaterReductionInput, WaterReductionResults } from '../../../shared/models/standalone';
+import { WaterReductionData, WaterReductionCalculatorType, VolumeMeterMethodData, MeteredFlowMethodData, BucketMethodData, WaterOtherMethodData, WaterReductionResult, WaterReductionInput, WaterReductionResults } from '../../../shared/models/standalone';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { StandaloneService } from '../../standalone.service';
@@ -15,7 +15,7 @@ export class WaterReductionService {
   operatingHours: OperatingHours;
   constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
-  initObject(index: number, settings: Settings, isWastewater: number, operatingHours: OperatingHours): WaterReductionData {
+  initObject(index: number, settings: Settings, calculatorType: WaterReductionCalculatorType, operatingHours: OperatingHours): WaterReductionData {
     let defaultVolumeMeterMethodData: VolumeMeterMethodData = {
       finalMeterReading: 5842,
       initialMeterReading: 4235,
@@ -36,7 +36,7 @@ export class WaterReductionService {
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }
-    let waterCost: number = this.getDefaultWaterCost(settings, isWastewater);
+    let waterCost: number = this.getDefaultWaterCost(settings, calculatorType);
     let obj: WaterReductionData = {
       name: 'Equipment #' + (index + 1),
       hoursPerYear: hoursPerYear,
@@ -46,7 +46,7 @@ export class WaterReductionService {
       volumeMeterMethodData: defaultVolumeMeterMethodData,
       bucketMethodData: defaultBucketMethodData,
       otherMethodData: defaultOtherMethodData,
-      isWastewater: isWastewater
+      calculatorType: calculatorType
     };
     if (settings.unitsOfMeasure != 'Imperial') {
       obj = this.convertInitData(obj);
@@ -54,14 +54,14 @@ export class WaterReductionService {
     return obj;
   }
 
-  getDefaultWaterCost(settings: Settings, isWastewater: number): number {
+  getDefaultWaterCost(settings: Settings, calculatorType: WaterReductionCalculatorType): number {
     let waterCost: number = 0.005;
     if (settings) {
-      if ((isWastewater == 1) && settings.waterWasteCost) {
+      if (calculatorType == 'wastewater' && settings.waterWasteCost) {
         waterCost = settings.waterWasteCost;
       }
       // "Both" uses the water unit cost here; wastewater cost comes from settings in results
-      else if (isWastewater != 1 && settings.waterCost) {
+      else if (calculatorType != 'wastewater' && settings.waterCost) {
         waterCost = settings.waterCost;
       }
     }
@@ -69,8 +69,8 @@ export class WaterReductionService {
   }
 
   // default cost in the units the form displays (initObject converts via convertInitData)
-  getDefaultWaterCostForForm(settings: Settings, isWastewater: number): number {
-    let waterCost: number = this.getDefaultWaterCost(settings, isWastewater);
+  getDefaultWaterCostForForm(settings: Settings, calculatorType: WaterReductionCalculatorType): number {
+    let waterCost: number = this.getDefaultWaterCost(settings, calculatorType);
     if (settings.unitsOfMeasure != 'Imperial') {
       waterCost = this.convertInitWaterCost(waterCost);
     }
@@ -101,8 +101,7 @@ export class WaterReductionService {
     let form: UntypedFormGroup = this.formBuilder.group({
       name: [inputObj.name, [Validators.required]],
       hoursPerYear: [inputObj.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
-      // legacy data stored isWastewater as boolean; Number() maps false/true to 0/1
-      isWastewater: [{ value: Number(inputObj.isWastewater ?? 0), disabled: (index != 0 || !isBaseline) }],
+      calculatorType: [{ value: inputObj.calculatorType ?? 'water', disabled: (index != 0 || !isBaseline) }],
       waterCost: [inputObj.waterCost, [Validators.required, Validators.min(0)]],
       measurementMethod: [inputObj.measurementMethod],
 
@@ -172,7 +171,7 @@ export class WaterReductionService {
       meteredFlowMethodData: meteredFlowMethodData,
       bucketMethodData: bucketMethodData,
       otherMethodData: otherMethodData,
-      isWastewater: form.controls.isWastewater.value
+      calculatorType: form.controls.calculatorType.value
     };
     return obj;
   }
@@ -205,7 +204,7 @@ export class WaterReductionService {
       waterReductionResults.annualCostSavings = baselineResults.waterCost - modificationResults.waterCost;
     }
 
-    if (baseline[0]?.isWastewater == 2) {
+    if (baseline[0]?.calculatorType == 'both') {
       this.setWastewaterResults(baselineResults, settings);
       if (modificationResults !== baselineResults) {
         this.setWastewaterResults(modificationResults, settings);
@@ -269,7 +268,7 @@ export class WaterReductionService {
 
 
   getBaselineExample(settings: Settings, operatingHours: OperatingHours): WaterReductionData {
-    let baselineData: WaterReductionData = this.initObject(0, settings, 0, operatingHours);
+    let baselineData: WaterReductionData = this.initObject(0, settings, 'water', operatingHours);
     baselineData.measurementMethod = 2;
     baselineData.bucketMethodData.bucketFillTime = 20;
     baselineData.bucketMethodData.bucketVolume = 10;

@@ -50,9 +50,9 @@ export class WaterReductionTreasureHuntService {
       utilityType: 'Electricity',
     }
 
-    if (waterReduction.baseline[0].isWastewater == 1) {
+    if (waterReduction.baseline[0].calculatorType == 'wastewater') {
       treasureHuntOpportunityResults.utilityType = 'Waste Water';
-    } else if (waterReduction.baseline[0].isWastewater == 2) {
+    } else if (waterReduction.baseline[0].calculatorType == 'both') {
       treasureHuntOpportunityResults.utilityType = 'Mixed';
       treasureHuntOpportunityResults.costSavings = results.annualCostSavings + results.annualWastewaterCostSavings;
       treasureHuntOpportunityResults.baselineCost = results.baselineResults.waterCost + results.baselineResults.wastewaterCost;
@@ -95,7 +95,7 @@ export class WaterReductionTreasureHuntService {
       unitStr = 'kgal';
     }
     //electricity utility
-    if (reduction.baseline[0].isWastewater == 1) {
+    if (reduction.baseline[0].calculatorType == 'wastewater') {
       utilityCost = currentEnergyUsage.wasteWaterCosts;
     }
 
@@ -119,7 +119,7 @@ export class WaterReductionTreasureHuntService {
       modificationCost: opportunitySummary.modificationCost,
     }];
 
-    if (reduction.baseline[0].isWastewater == 2 && opportunitySummary.mixedIndividualResults) {
+    if (reduction.baseline[0].calculatorType == 'both' && opportunitySummary.mixedIndividualResults) {
       annualEnergySavings = new Array();
       utilityTypes = new Array();
       percentSavings = new Array();
