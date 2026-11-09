@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
@@ -7,6 +7,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { EnergyInputFormComponent } from './energy-input-form.component';
 import { EnergyInputFormService } from './energy-input-form.service';
 import { EnergyInputItem } from './energy-input.service';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -32,7 +33,7 @@ describe('EnergyInputFormComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [EnergyInputFormComponent],
-      providers: [EnergyInputFormService, ConvertUnitsService],
+      providers: [{ provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } }, EnergyInputFormService, ConvertUnitsService],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { of, Subject } from 'rxjs';
 import { ChargeMaterialSolidFormComponent } from './charge-material-solid-form.component';
 import { SolidMaterialFormService } from './solid-material-form.service';
@@ -8,6 +8,7 @@ import { SolidLoadMaterialDbService } from '../../../../../indexedDb/solid-load-
 import { ModalDialogService } from '../../../../../shared/modal-dialog.service';
 import { SolidLoadChargeMaterial } from '../../../../../shared/models/materials';
 import { Settings } from '../../../../../shared/models/settings';
+import { ProcessHeatingUiService } from '../../../../services/process-heating-ui.service';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -59,6 +60,7 @@ describe('ChargeMaterialSolidFormComponent', () => {
       imports: [ReactiveFormsModule],
       declarations: [ChargeMaterialSolidFormComponent],
       providers: [
+        { provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } },
         SolidMaterialFormService,
         { provide: SolidLoadMaterialDbService, useValue: dbServiceSpy },
         { provide: ModalDialogService, useValue: modalDialogServiceSpy },

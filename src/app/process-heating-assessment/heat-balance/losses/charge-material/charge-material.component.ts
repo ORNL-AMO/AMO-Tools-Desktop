@@ -8,6 +8,7 @@ import { ChargeMaterialResultsService } from './charge-material-results.service'
 import { GasMaterialFormService } from './gas-form/gas-material-form.service';
 import { LiquidMaterialFormService } from './liquid-form/liquid-material-form.service';
 import { SolidMaterialFormService } from './solid-form/solid-material-form.service';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 @Component({
   selector: 'app-charge-material',
@@ -28,6 +29,7 @@ export class ChargeMaterialComponent {
 
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   readonly chargeMaterialService = inject(ChargeMaterialService);
+  private readonly uiService = inject(ProcessHeatingUiService);
 
   readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
   readonly CMT = ChargeMaterialType;
@@ -63,5 +65,9 @@ export class ChargeMaterialComponent {
 
   toggleCollapse(item: ChargeMaterialItem): void {
     this.chargeMaterialService.toggleCollapse(item.id);
+  }
+
+  focusField(field: string): void {
+    this.uiService.focusedFieldSignal.set(field);
   }
 }

@@ -13,6 +13,7 @@ import { UnitConversion } from '../../../../models/unit-conversion';
 import { CHARGE_MATERIAL_UNITS } from '../charge-material-units';
 import { ChargeMaterial, LiquidChargeMaterial } from '../../../../../shared/models/phast/losses/chargeMaterial';
 import { LossFieldDifferences, nestedDifferences } from '../../loss-compare.util';
+import { ProcessHeatingUiService } from '../../../../services/process-heating-ui.service';
 
 @Component({
   selector: 'app-charge-material-liquid-form',
@@ -29,6 +30,7 @@ export class ChargeMaterialLiquidFormComponent implements OnInit {
   protected readonly liquidDifferences = computed(() => nestedDifferences<LiquidChargeMaterial>(this.differingFields(), 'liquidChargeMaterial'));
   private readonly formService = inject(LiquidMaterialFormService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly uiService = inject(ProcessHeatingUiService);
 
   readonly UNITS = CHARGE_MATERIAL_UNITS;
   readonly warnings = signal<LiquidMaterialWarnings>(EMPTY_WARNINGS);
@@ -75,5 +77,9 @@ export class ChargeMaterialLiquidFormComponent implements OnInit {
 
   differs(formValue: number, dbValue: number | undefined, unit: UnitConversion): boolean {
     return formValueDiffersFromMaterial(formValue, dbValue, unit, this.settings());
+  }
+
+  focusField(field: string): void {
+    this.uiService.focusedFieldSignal.set(field);
   }
 }

@@ -4,13 +4,13 @@
   <ng-content></ng-content>
   <div class="form-group">
     <label for="coolingMedium_{{ instanceId() }}">Name of Cooling Medium</label>
-    <input type="text" class="form-control" id="coolingMedium_{{ instanceId() }}" formControlName="coolingMedium" [class.indicate-different]="differingFields()?.has('coolingMedium')" onfocus="this.select();">
+    <input type="text" class="form-control" id="coolingMedium_{{ instanceId() }}" formControlName="coolingMedium" (focus)="focusField('coolingMedium')" [class.indicate-different]="differingFields()?.has('coolingMedium')" onfocus="this.select();">
   </div>
 
   <div class="form-group">
     <label for="specificHeat_{{ instanceId() }}">Average Specific Heat of Liquid</label>
     <div class="input-group" [class.invalid]="f.specificHeat.invalid" [class.indicate-different]="liquidDifferences().has('specificHeat')">
-      <input type="number" step="any" class="form-control" id="specificHeat_{{ instanceId() }}" formControlName="specificHeat" onfocus="this.select();">
+      <input type="number" step="any" class="form-control" id="specificHeat_{{ instanceId() }}" formControlName="specificHeat" (focus)="focusField('avgSpecificHeatLiquid')" onfocus="this.select();">
       <app-input-unit [settings]="settings()" imperialUnit="Btu/(lb-&#8457;)" metricUnit="kJ/(kg-&#8451;)"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.specificHeat" [settings]="settings()"></app-form-control-errors>
@@ -22,7 +22,7 @@
   <div class="form-group">
     <label for="density_{{ instanceId() }}">Density</label>
     <div class="input-group" [class.invalid]="f.density.invalid" [class.indicate-different]="liquidDifferences().has('density')">
-      <input type="number" step="any" class="form-control" id="density_{{ instanceId() }}" formControlName="density" onfocus="this.select();">
+      <input type="number" step="any" class="form-control" id="density_{{ instanceId() }}" formControlName="density" (focus)="focusField('density')" onfocus="this.select();">
       <app-input-unit [settings]="settings()" imperialUnit="lb/gal" metricUnit="kg/L"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.density" [settings]="settings()"></app-form-control-errors>
@@ -34,7 +34,7 @@
   <div class="form-group">
     <label for="flowRate_{{ instanceId() }}">Liquid Flow</label>
     <div class="input-group" [class.invalid]="f.flowRate.invalid" [class.indicate-different]="liquidDifferences().has('flowRate')">
-      <input type="number" step="any" class="form-control" id="flowRate_{{ instanceId() }}" formControlName="flowRate" onfocus="this.select();">
+      <input type="number" step="any" class="form-control" id="flowRate_{{ instanceId() }}" formControlName="flowRate" (focus)="focusField('liquidFlow')" onfocus="this.select();">
       <app-input-unit [settings]="settings()" imperialUnit="gal/min" metricUnit="L/min"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.flowRate" [settings]="settings()"></app-form-control-errors>
@@ -46,7 +46,7 @@
   <div class="form-group">
     <label for="inletTemp_{{ instanceId() }}">Inlet Temperature</label>
     <div class="input-group" [class.invalid]="f.inletTemp.invalid" [class.indicate-different]="liquidDifferences().has('initialTemperature')">
-      <input type="number" step="10" class="form-control" id="inletTemp_{{ instanceId() }}" formControlName="inletTemp" onfocus="this.select();">
+      <input type="number" step="10" class="form-control" id="inletTemp_{{ instanceId() }}" formControlName="inletTemp" (focus)="focusField('inletTemp')" onfocus="this.select();">
       <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.inletTemp" [settings]="settings()"></app-form-control-errors>
@@ -58,7 +58,7 @@
   <div class="form-group">
     <label for="outletTemp_{{ instanceId() }}">Outlet Temperature</label>
     <div class="input-group" [class.invalid]="f.outletTemp.invalid" [class.indicate-different]="liquidDifferences().has('outletTemperature')">
-      <input type="number" step="10" class="form-control" id="outletTemp_{{ instanceId() }}" formControlName="outletTemp" onfocus="this.select();">
+      <input type="number" step="10" class="form-control" id="outletTemp_{{ instanceId() }}" formControlName="outletTemp" (focus)="focusField('outletTemp')" onfocus="this.select();">
       <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.outletTemp" [settings]="settings()"></app-form-control-errors>
@@ -66,7 +66,7 @@
 
   <div class="form-group">
     <label for="correctionFactor_{{ instanceId() }}">Correction Factor</label>
-    <input type="number" step="any" class="form-control" id="correctionFactor_{{ instanceId() }}" formControlName="correctionFactor" onfocus="this.select();" [class.invalid]="f.correctionFactor.invalid" [class.indicate-different]="liquidDifferences().has('correctionFactor')">
+    <input type="number" step="any" class="form-control" id="correctionFactor_{{ instanceId() }}" formControlName="correctionFactor" (focus)="focusField('correctionFactor')" onfocus="this.select();" [class.invalid]="f.correctionFactor.invalid" [class.indicate-different]="liquidDifferences().has('correctionFactor')">
     <app-form-control-errors [control]="f.correctionFactor" [settings]="settings()"></app-form-control-errors>
   </div>
 </form>

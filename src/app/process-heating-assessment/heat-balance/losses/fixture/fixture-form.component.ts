@@ -11,6 +11,7 @@ import { FixtureItem } from './fixture.service';
 import { FixtureForm } from './fixture-form.service';
 import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss';
 import { LossFieldDifferences } from '../loss-compare.util';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 @Component({
   selector: 'app-fixture-form',
@@ -23,6 +24,7 @@ export class FixtureFormComponent implements OnInit {
   readonly settings = input.required<Settings>();
   readonly differingFields = input<LossFieldDifferences<FixtureLoss>>();
   readonly instanceId = input.required<string>();
+  private readonly uiService = inject(ProcessHeatingUiService);
 
   readonly form = computed(() => this.item().form as FixtureForm);
 
@@ -61,5 +63,9 @@ export class FixtureFormComponent implements OnInit {
 
   differs(formValue: number, dbValue: number | undefined): boolean {
     return formValueDiffersFromMaterial(formValue, dbValue, CHARGE_MATERIAL_UNITS.specificHeat, this.settings());
+  }
+
+  focusField(field: string): void {
+    this.uiService.focusedFieldSignal.set(field);
   }
 }

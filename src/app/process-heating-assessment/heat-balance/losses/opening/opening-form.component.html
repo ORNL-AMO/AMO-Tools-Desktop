@@ -2,7 +2,7 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="{{controlIds().openingType}}">Opening Shape</label>
-      <select class="form-control" id="{{controlIds().openingType}}" formControlName="openingType"
+      <select class="form-control" id="{{controlIds().openingType}}" formControlName="openingType" (focus)="focusField('openingType')"
         [class.invalid]="form().controls.openingType.invalid" [class.indicate-different]="differingFields()?.has('openingType')">
         <option value="Round">Round</option>
         <option value="Rectangular (or Square)">Rectangular (or Square)</option>
@@ -14,7 +14,7 @@
     <div class="form-group">
       <label class="small" for="{{controlIds().numberOfOpenings}}">Number of Openings</label>
       <input type="number" step="1" min="0" class="form-control"
-        id="{{controlIds().numberOfOpenings}}" formControlName="numberOfOpenings" onfocus="this.select();"
+        id="{{controlIds().numberOfOpenings}}" formControlName="numberOfOpenings" (focus)="focusField('numberOfOpenings')" onfocus="this.select();"
         [class.invalid]="form().controls.numberOfOpenings.invalid" [class.indicate-different]="differingFields()?.has('numberOfOpenings')">
       <app-form-control-errors [control]="form().controls.numberOfOpenings" [settings]="settings()">
       </app-form-control-errors>
@@ -24,7 +24,7 @@
       <label class="small" for="{{controlIds().thickness}}">Furnace Wall Thickness</label>
       <div class="input-group" [class.invalid]="form().controls.thickness.invalid" [class.indicate-different]="differingFields()?.has('thickness')">
         <input type="number" step="1" min="0" class="form-control"
-          id="{{controlIds().thickness}}" formControlName="thickness" onfocus="this.select();">
+          id="{{controlIds().thickness}}" formControlName="thickness" (focus)="focusField('wallThickness')" onfocus="this.select();">
         <app-input-unit [settings]="settings()" imperialUnit="in" metricUnit="mm"></app-input-unit>
       </div>
       <app-form-control-errors [control]="form().controls.thickness" [settings]="settings()">
@@ -37,7 +37,7 @@
       </label>
       <div class="input-group" [class.invalid]="form().controls.lengthOfOpening.invalid" [class.indicate-different]="differingFields()?.has('lengthOfOpening')">
         <input type="number" step="1" min="0" class="form-control"
-          id="{{controlIds().lengthOfOpening}}" formControlName="lengthOfOpening" onfocus="this.select();">
+          id="{{controlIds().lengthOfOpening}}" formControlName="lengthOfOpening" (focus)="focusField('lengthOfOpening')" onfocus="this.select();">
         <app-input-unit [settings]="settings()" imperialUnit="in" metricUnit="mm"></app-input-unit>
       </div>
       <app-form-control-errors [control]="form().controls.lengthOfOpening" [settings]="settings()">
@@ -49,7 +49,7 @@
         <label class="small" for="{{controlIds().heightOfOpening}}">Height of Opening</label>
         <div class="input-group" [class.invalid]="form().controls.heightOfOpening.invalid" [class.indicate-different]="differingFields()?.has('heightOfOpening')">
           <input type="number" step="1" min="0" class="form-control"
-            id="{{controlIds().heightOfOpening}}" formControlName="heightOfOpening" onfocus="this.select();">
+            id="{{controlIds().heightOfOpening}}" formControlName="heightOfOpening" (focus)="focusField('heightOfOpening')" onfocus="this.select();">
           <app-input-unit [settings]="settings()" imperialUnit="in" metricUnit="mm"></app-input-unit>
         </div>
         <app-form-control-errors [control]="form().controls.heightOfOpening" [settings]="settings()">
@@ -60,7 +60,7 @@
     <div class="form-group">
       <label class="small" for="{{controlIds().viewFactor}}">View Factor</label>
       <input type="number" step="0.01" min="0" class="form-control"
-        id="{{controlIds().viewFactor}}" formControlName="viewFactor" onfocus="this.select();"
+        id="{{controlIds().viewFactor}}" formControlName="viewFactor" (focus)="focusField('viewFactor')" onfocus="this.select();"
         [class.invalid]="form().controls.viewFactor.invalid" [class.indicate-different]="differingFields()?.has('viewFactor')">
       <app-form-control-errors [control]="form().controls.viewFactor" [settings]="settings()">
       </app-form-control-errors>
@@ -70,7 +70,7 @@
       <label class="small" for="{{controlIds().insideTemperature}}">Average Inside Temperature</label>
       <div class="input-group" [class.invalid]="form().controls.insideTemperature.invalid" [class.indicate-different]="differingFields()?.has('insideTemperature')">
         <input type="number" step="10" class="form-control"
-          id="{{controlIds().insideTemperature}}" formControlName="insideTemperature" onfocus="this.select();">
+          id="{{controlIds().insideTemperature}}" formControlName="insideTemperature" (focus)="focusField('insideTemp')" onfocus="this.select();">
         <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
       </div>
       <app-form-control-errors [control]="form().controls.insideTemperature" [settings]="settings()">
@@ -81,7 +81,7 @@
       <label class="small" for="{{controlIds().ambientTemperature}}">Ambient Temperature</label>
       <div class="input-group" [class.invalid]="form().controls.ambientTemperature.invalid" [class.indicate-different]="differingFields()?.has('ambientTemperature')">
         <input type="number" step="10" class="form-control"
-          id="{{controlIds().ambientTemperature}}" formControlName="ambientTemperature" onfocus="this.select();">
+          id="{{controlIds().ambientTemperature}}" formControlName="ambientTemperature" (focus)="focusField('ambientTemp')" onfocus="this.select();">
         <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
       </div>
       @if (form().controls.ambientTemperature.invalid && !form().controls.ambientTemperature.pristine) {
@@ -99,7 +99,7 @@
     <div class="form-group">
       <label class="small" for="{{controlIds().emissivity}}">Emissivity of the Source</label>
       <input type="number" step="0.1" min="0" max="1" class="form-control"
-        id="{{controlIds().emissivity}}" formControlName="emissivity" onfocus="this.select();"
+        id="{{controlIds().emissivity}}" formControlName="emissivity" (focus)="focusField('emissivity')" onfocus="this.select();"
         [class.invalid]="form().controls.emissivity.invalid" [class.indicate-different]="differingFields()?.has('emissivity')">
       <app-form-control-errors [control]="form().controls.emissivity" [settings]="settings()">
       </app-form-control-errors>
@@ -109,7 +109,7 @@
       <label class="small" for="{{controlIds().percentTimeOpen}}">Time Open</label>
       <div class="input-group" [class.invalid]="form().controls.percentTimeOpen.invalid" [class.indicate-different]="differingFields()?.has('percentTimeOpen')">
         <input type="number" step="1" min="0" max="100" class="form-control"
-          id="{{controlIds().percentTimeOpen}}" formControlName="percentTimeOpen" onfocus="this.select();">
+          id="{{controlIds().percentTimeOpen}}" formControlName="percentTimeOpen" (focus)="focusField('percentTimeOpen')" onfocus="this.select();">
         <app-input-unit [settings]="settings()" imperialUnit="%" metricUnit="%"></app-input-unit>
       </div>
       <app-form-control-errors [control]="form().controls.percentTimeOpen" [settings]="settings()">

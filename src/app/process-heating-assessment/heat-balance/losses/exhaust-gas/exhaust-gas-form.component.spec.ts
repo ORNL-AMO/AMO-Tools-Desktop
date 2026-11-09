@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ExhaustGasEAF } from '../../../../shared/models/phast/losses/exhaustGasEAF';
@@ -6,6 +6,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { ExhaustGasFormComponent } from './exhaust-gas-form.component';
 import { ExhaustGasFormService } from './exhaust-gas-form.service';
 import { ExhaustGasItem } from './exhaust-gas.service';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -30,7 +31,7 @@ describe('ExhaustGasFormComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [ExhaustGasFormComponent],
-      providers: [ExhaustGasFormService],
+      providers: [{ provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } }, ExhaustGasFormService],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { OtherLoss } from '../../../../shared/models/phast/losses/otherLoss';
@@ -6,6 +6,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { OtherFormComponent } from './other-form.component';
 import { OtherFormService } from './other-form.service';
 import { OtherItem } from './other.service';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -27,7 +28,7 @@ describe('OtherFormComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [OtherFormComponent],
-      providers: [OtherFormService],
+      providers: [{ provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } }, OtherFormService],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

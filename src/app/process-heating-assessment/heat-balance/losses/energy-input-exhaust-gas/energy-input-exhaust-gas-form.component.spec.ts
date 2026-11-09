@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -8,6 +8,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { EnergyInputExhaustGasFormComponent } from './energy-input-exhaust-gas-form.component';
 import { EnergyInputExhaustGasFormService, NEW_ENERGY_INPUT_EXHAUST_GAS_LOSS } from './energy-input-exhaust-gas-form.service';
 import { EnergyInputExhaustGasItem } from './energy-input-exhaust-gas.service';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 const IMPERIAL = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 const METRIC = { unitsOfMeasure: 'Metric', energyResultUnit: 'kJ' } as Settings;
@@ -26,7 +27,7 @@ describe('EnergyInputExhaustGasFormComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [EnergyInputExhaustGasFormComponent],
-      providers: [EnergyInputExhaustGasFormService, { provide: ModalDialogService, useValue: modalDialogServiceSpy }],
+      providers: [{ provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } }, EnergyInputExhaustGasFormService, { provide: ModalDialogService, useValue: modalDialogServiceSpy }],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

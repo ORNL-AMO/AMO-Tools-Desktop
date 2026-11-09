@@ -16,7 +16,7 @@
       <label for="materialId_{{ instanceId() }}">Fuel
         <button type="button" class="btn btn-link p-0 d-block small" (click)="materialSelector.openAddMaterialModal()">Add New Fuel</button>
       </label>
-      <select class="form-control" id="materialId_{{ instanceId() }}" formControlName="materialId" [class.indicate-different]="volumeDifferences().has('gasTypeId')"
+      <select class="form-control" id="materialId_{{ instanceId() }}" formControlName="materialId" (focus)="focusField('gasTypeId')" [class.indicate-different]="volumeDifferences().has('gasTypeId')"
         (change)="materialSelector.onMaterialSelected(f.materialId.value)" [class.invalid]="f.materialId.invalid">
         @for (material of materialSelector.materialTypes(); track material.id) {
           <option [ngValue]="material.id">{{ material.substance }}</option>

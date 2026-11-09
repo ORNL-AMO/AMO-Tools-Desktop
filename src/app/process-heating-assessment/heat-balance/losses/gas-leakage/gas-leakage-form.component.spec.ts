@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LeakageLoss } from '../../../../shared/models/phast/losses/leakageLoss';
@@ -6,6 +6,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { GasLeakageFormComponent } from './gas-leakage-form.component';
 import { GasLeakageFormService } from './gas-leakage-form.service';
 import { GasLeakageItem } from './gas-leakage.service';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -35,7 +36,7 @@ describe('GasLeakageFormComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [GasLeakageFormComponent],
-      providers: [GasLeakageFormService],
+      providers: [{ provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } }, GasLeakageFormService],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

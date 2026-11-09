@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -7,6 +7,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { Settings } from '../../../../shared/models/settings';
 import { FlueGasConditionsFieldsComponent } from './flue-gas-conditions-fields.component';
 import { FlueGasFormService, FlueGasVolumeForm, OxygenCalculationMethod } from './flue-gas-form.service';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial' } as Settings;
 
@@ -24,7 +25,7 @@ describe('FlueGasConditionsFieldsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [FlueGasConditionsFieldsComponent],
-      providers: [FlueGasFormService, ConvertUnitsService, { provide: ModalDialogService, useValue: modalDialogServiceSpy }],
+      providers: [{ provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } }, FlueGasFormService, ConvertUnitsService, { provide: ModalDialogService, useValue: modalDialogServiceSpy }],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
     formService = TestBed.inject(FlueGasFormService);

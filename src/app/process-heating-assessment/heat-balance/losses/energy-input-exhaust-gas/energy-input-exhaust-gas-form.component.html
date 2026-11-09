@@ -4,7 +4,7 @@
       <label class="small" for="{{controlIds().electricalHeaterEfficiency}}">Electrical Heater Efficiency</label>
       <div class="input-group" [class.invalid]="form().controls.electricalHeaterEfficiency.invalid" [class.indicate-different]="differingFields()?.has('electricalHeaterEfficiency')">
         <input type="number" step="any" class="form-control"
-          id="{{controlIds().electricalHeaterEfficiency}}" formControlName="electricalHeaterEfficiency" onfocus="this.select();">
+          id="{{controlIds().electricalHeaterEfficiency}}" formControlName="electricalHeaterEfficiency" (focus)="focusField('electricalHeaterEfficiency')" onfocus="this.select();">
         <span class="input-group-addon units">%</span>
       </div>
       <app-form-control-errors [control]="form().controls.electricalHeaterEfficiency" [settings]="settings()">
@@ -17,7 +17,7 @@
       <label class="small" for="{{controlIds().totalHeatInput}}">Total Additional Fuel Heat</label>
       <div class="input-group" [class.invalid]="form().controls.totalHeatInput.invalid" [class.indicate-different]="differingFields()?.has('totalHeatInput')">
         <input type="number" step="100" min="0" class="form-control"
-          id="{{controlIds().totalHeatInput}}" formControlName="totalHeatInput" onfocus="this.select();">
+          id="{{controlIds().totalHeatInput}}" formControlName="totalHeatInput" (focus)="focusField('totalHeatInput')" onfocus="this.select();">
         <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Metric' ? 'GJ/hr' : 'MMBtu/hr'}}</span>
       </div>
       <app-form-control-errors [control]="form().controls.totalHeatInput" [settings]="settings()">
@@ -30,7 +30,7 @@
         <button type="button" class="btn btn-link btn-sm p-0 d-block" (click)="openFlueGasModal()">Calculate</button>
         <div class="input-group" [class.invalid]="form().controls.availableHeat.invalid" [class.indicate-different]="differingFields()?.has('availableHeat')">
           <input type="number" step="any" min="0" class="form-control"
-            id="{{controlIds().availableHeat}}" formControlName="availableHeat" onfocus="this.select();">
+            id="{{controlIds().availableHeat}}" formControlName="availableHeat" (focus)="focusField('availableHeat')" onfocus="this.select();">
           <span class="input-group-addon units">%</span>
         </div>
         <app-form-control-errors [control]="form().controls.availableHeat" [settings]="settings()">

@@ -13,6 +13,7 @@ import { AddAtmosphereMaterialModalComponent } from './add-atmosphere-material-m
 import { ATMOSPHERE_UNITS } from './atmosphere-units';
 import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
 import { LossFieldDifferences } from '../loss-compare.util';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 @Component({
   selector: 'app-atmosphere-form',
@@ -28,6 +29,7 @@ export class AtmosphereFormComponent implements OnInit {
 
   private readonly formService = inject(AtmosphereFormService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly uiService = inject(ProcessHeatingUiService);
 
   readonly UNITS = ATMOSPHERE_UNITS;
   readonly form = computed(() => this.item().form as AtmosphereForm);
@@ -65,5 +67,9 @@ export class AtmosphereFormComponent implements OnInit {
 
   differs(formValue: number, dbValue: number | undefined): boolean {
     return formValueDiffersFromMaterial(formValue, dbValue, ATMOSPHERE_UNITS.specificHeat, this.settings());
+  }
+
+  focusField(field: string): void {
+    this.uiService.focusedFieldSignal.set(field);
   }
 }

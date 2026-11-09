@@ -6,6 +6,7 @@ import { WallLossForm, WallLossesFormService } from './wall-losses-form.service'
 import { WallLossItem, WallLossesService } from './wall-losses.service';
 import { WallLoss } from '../../../models/wall-loss';
 import { LossFieldDifferences } from '../loss-compare.util';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 @Component({
   selector: 'app-wall-losses-form',
@@ -21,6 +22,7 @@ export class WallLossesFormComponent implements OnInit {
   private readonly formService = inject(WallLossesFormService);
   private readonly wallLossesService = inject(WallLossesService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly uiService = inject(ProcessHeatingUiService);
 
   readonly surfaceOptions = computed(() => this.wallLossesService.surfaceOptions());
   readonly form = computed(() => this.item().form as WallLossForm);
@@ -39,5 +41,9 @@ export class WallLossesFormComponent implements OnInit {
       this.form().controls.conditionFactor.setValue(surface.conditionFactor, { emitEvent: false });
       this.wallLossesService.updateItem(this.item().id);
     }
+  }
+
+  focusField(field: string): void {
+    this.uiService.focusedFieldSignal.set(field);
   }
 }

@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuxiliaryPowerLoss } from '../../../../shared/models/phast/losses/auxiliaryPowerLoss';
@@ -6,6 +6,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { AuxiliaryPowerFormComponent } from './auxiliary-power-form.component';
 import { AuxiliaryPowerFormService } from './auxiliary-power-form.service';
 import { AuxiliaryPowerItem } from './auxiliary-power.service';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -30,7 +31,7 @@ describe('AuxiliaryPowerFormComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [AuxiliaryPowerFormComponent],
-      providers: [AuxiliaryPowerFormService],
+      providers: [{ provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } }, AuxiliaryPowerFormService],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

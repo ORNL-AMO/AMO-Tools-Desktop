@@ -6,6 +6,7 @@ import { GasCoolingForm } from './cooling-form.service';
 import { CoolingLossWarnings, getGasCoolingWarnings } from './cooling-warnings';
 import { CoolingLoss, GasCoolingLoss } from '../../../../shared/models/phast/losses/coolingLoss';
 import { LossFieldDifferences, nestedDifferences } from '../loss-compare.util';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 @Component({
   selector: 'app-gas-cooling-form',
@@ -20,6 +21,7 @@ export class GasCoolingFormComponent implements OnInit {
   readonly differingFields = input<LossFieldDifferences<CoolingLoss>>();
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly uiService = inject(ProcessHeatingUiService);
 
   protected readonly gasDifferences = computed(() => nestedDifferences<GasCoolingLoss>(this.differingFields(), 'gasCoolingLoss'));
 
@@ -36,5 +38,9 @@ export class GasCoolingFormComponent implements OnInit {
         outletTemperature: v.outletTemp ?? undefined,
       }));
     });
+  }
+
+  focusField(field: string): void {
+    this.uiService.focusedFieldSignal.set(field);
   }
 }

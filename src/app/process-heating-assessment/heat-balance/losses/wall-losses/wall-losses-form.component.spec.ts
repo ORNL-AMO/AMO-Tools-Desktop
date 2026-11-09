@@ -7,6 +7,7 @@ import { WallLossesFormComponent } from './wall-losses-form.component';
 import { WallLossesFormService } from './wall-losses-form.service';
 import { WallLossItem } from './wall-losses.service';
 import { WallLossesService } from './wall-losses.service';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -28,7 +29,7 @@ describe('WallLossesFormComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [WallLossesFormComponent],
-      providers: [WallLossesFormService, { provide: WallLossesService, useValue: { surfaceOptions: signal([]), updateItem: jasmine.createSpy('updateItem') } }],
+      providers: [{ provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } }, WallLossesFormService, { provide: WallLossesService, useValue: { surfaceOptions: signal([]), updateItem: jasmine.createSpy('updateItem') } }],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

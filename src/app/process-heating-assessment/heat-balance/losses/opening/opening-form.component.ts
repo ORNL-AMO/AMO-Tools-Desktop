@@ -6,6 +6,7 @@ import { OpeningForm, OpeningFormService } from './opening-form.service';
 import { OpeningItem } from './opening.service';
 import { OpeningLoss } from '../../../../shared/models/phast/losses/openingLoss';
 import { LossFieldDifferences } from '../loss-compare.util';
+import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
 @Component({
   selector: 'app-opening-form',
@@ -20,6 +21,7 @@ export class OpeningFormComponent implements OnInit {
 
   private readonly formService = inject(OpeningFormService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly uiService = inject(ProcessHeatingUiService);
 
   readonly form = computed(() => this.item().form as OpeningForm);
   readonly controlIds = computed(() => generateFormControlIds(this.form().controls));
@@ -33,5 +35,9 @@ export class OpeningFormComponent implements OnInit {
     this.form().controls.insideTemperature.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.formService.setAmbientTempValidator(this.form()));
+  }
+
+  focusField(field: string): void {
+    this.uiService.focusedFieldSignal.set(field);
   }
 }
