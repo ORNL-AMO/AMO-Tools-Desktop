@@ -21,3 +21,8 @@
 .assessment-panel-container.scroll-item {
   width: 33.3333%;
 }
+
+.even-split .assessment-panel-container.modification,
+.even-split .assessment-panel-container.scroll-item {
+  width: 50%;
+}

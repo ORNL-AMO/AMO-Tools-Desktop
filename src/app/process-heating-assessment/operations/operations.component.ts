@@ -72,6 +72,10 @@ export class OperationsComponent {
     });
   }
 
+  setFocusedField(field: string): void {
+    this.uiService.focusedFieldSignal.set(field);
+  }
+
   updateCo2SavingsData(co2SavingsData: PhastCo2SavingsData): void {
     this.assessmentService.updateProcessHeatingProperty('co2SavingsData', co2SavingsData);
   }

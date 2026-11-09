@@ -3,6 +3,7 @@ import { ASSESSMENT_VIEW_LINKS, ViewLink } from '../models/views';
 import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { ModificationService } from '../services/modification.service';
 import { ProcessHeatingUiService } from '../services/process-heating-ui.service';
+import { ROUTE_TOKENS } from '../constants/process-heating-routes';
 import { AssessmentScenario } from '../services/process-heating-assessment.service';
 import { getModificationName, ProcessHeatingModification } from '../models/modification';
 import { ModificationListData, openModificationListModal } from '../../shared/modification-list/modification-list.component';
@@ -25,6 +26,8 @@ export class AssessmentComponent {
 
   readonly selectedModification: Signal<ProcessHeatingModification | undefined> = this.modificationService.selectedModification;
   readonly resultsScenario: Signal<AssessmentScenario> = computed(() => this.selectedModification()?.id ?? 'baseline');
+
+  readonly isExploreOpportunities: Signal<boolean> = computed(() => this.uiService.childView() === ROUTE_TOKENS.exploreOpportunities);
 
   readonly canContinue: Signal<boolean> = this.uiService.canContinue;
   readonly canGoBack: Signal<boolean> = this.uiService.canGoBack;

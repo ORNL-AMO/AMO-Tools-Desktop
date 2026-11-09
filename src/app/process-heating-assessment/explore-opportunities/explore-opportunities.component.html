@@ -1,17 +1,39 @@
 <div class="panel-container p-3">
   @if (selectedModification(); as modification) {
-    <div class="form-group d-flex">
-      <label class="w-25 group-name" for="modificationName">Modification Name</label>
-      <input
-        name="modificationName"
-        id="modificationName"
-        type="text"
-        class="form-control w-75"
-        [value]="modificationName(modification)"
-        (change)="renameModification(modification, $any($event.target).value)"
-      />
+    <header class="eem-intro">
+      <h2 class="eem-title">Select Potential Energy Efficiency Measures</h2>
+      <p class="eem-description">Select potential energy efficiency measures (EEMs) to explore opportunities to increase efficiency and the effectiveness of your system.</p>
+    </header>
+    <div class="scenario-details">
+      <div class="scenario-field">
+        <label for="modificationName">Modification Name</label>
+        <input
+          name="modificationName"
+          id="modificationName"
+          type="text"
+          class="form-control"
+          [value]="modificationName(modification)"
+          (change)="renameModification(modification, $any($event.target).value)"
+        />
+      </div>
+      <div class="scenario-field align-end">
+        <label for="implementationCost">Implementation Costs</label>
+        <div class="cost-input">
+          <span class="cost-unit" aria-hidden="true">$</span>
+          <input
+            name="implementationCost"
+            id="implementationCost"
+            type="number"
+            step="any"
+            min="0"
+            class="form-control"
+            [value]="modification.scenarioOverrides?.implementationCost ?? null"
+            (change)="setImplementationCost(modification, $any($event.target).valueAsNumber)"
+            (focus)="setFocusedField('implementationCost')"
+          />
+        </div>
+      </div>
     </div>
-    <hr>
     @for (group of visibleOpportunityGroups(); track group.notesKey) {
       <div (focusin)="setNotesKey(group.notesKey)">
         @for (component of group.components; track component) {

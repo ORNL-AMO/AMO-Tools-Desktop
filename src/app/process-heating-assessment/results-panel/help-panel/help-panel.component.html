@@ -1,23 +1,23 @@
 <div class="help-panel">
   @if (childView() === ROUTE_TOKENS.heatBalance && lossSubView()) {
     @switch (lossSubView()) {
-      @case (ROUTE_TOKENS.operations) { <app-operations-help currentField=""></app-operations-help> }
-      @case (ROUTE_TOKENS.chargeMaterial) { <app-charge-material-help [settings]="settings()" currentField=""></app-charge-material-help> }
-      @case (ROUTE_TOKENS.wallLosses) { <app-wall-losses-help [settings]="settings()" currentField=""></app-wall-losses-help> }
-      @case (ROUTE_TOKENS.extendedSurface) { <app-extended-surface-losses-help [settings]="settings()" currentField=""></app-extended-surface-losses-help> }
-      @case (ROUTE_TOKENS.atmosphere) { <app-atmosphere-losses-help [settings]="settings()" currentField=""></app-atmosphere-losses-help> }
-      @case (ROUTE_TOKENS.fixture) { <app-fixture-losses-help [settings]="settings()" currentField=""></app-fixture-losses-help> }
-      @case (ROUTE_TOKENS.cooling) { <app-cooling-losses-help [settings]="settings()" currentField=""></app-cooling-losses-help> }
-      @case (ROUTE_TOKENS.opening) { <app-opening-losses-help [settings]="settings()" currentField=""></app-opening-losses-help> }
-      @case (ROUTE_TOKENS.other) { <app-other-losses-help currentField=""></app-other-losses-help> }
-      @case (ROUTE_TOKENS.flueGas) { <app-flue-gas-losses-help [settings]="settings()" currentField=""></app-flue-gas-losses-help> }
-      @case (ROUTE_TOKENS.gasLeakage) { <app-gas-leakage-losses-help [settings]="settings()" currentField=""></app-gas-leakage-losses-help> }
-      @case (ROUTE_TOKENS.auxiliaryPower) { <app-auxiliary-power-losses-help [settings]="settings()" currentField=""></app-auxiliary-power-losses-help> }
-      @case (ROUTE_TOKENS.energyInputExhaustGas) { <app-energy-input-exhaust-gas-losses-help [settings]="settings()" currentField=""></app-energy-input-exhaust-gas-losses-help> }
-      @case (ROUTE_TOKENS.energyInput) { <app-energy-input-help [settings]="settings()" currentField=""></app-energy-input-help> }
-      @case (ROUTE_TOKENS.exhaustGas) { <app-exhaust-gas-help [settings]="settings()" currentField=""></app-exhaust-gas-help> }
-      @case (ROUTE_TOKENS.slag) { <app-slag-help [settings]="settings()" currentField=""></app-slag-help> }
-      @case (ROUTE_TOKENS.heatSystemEfficiency) { <app-heat-system-efficiency-help [settings]="settings()" currentField=""></app-heat-system-efficiency-help> }
+      @case (ROUTE_TOKENS.operations) { <app-operations-help [currentField]="focusedField()"></app-operations-help> }
+      @case (ROUTE_TOKENS.chargeMaterial) { <app-charge-material-help [settings]="settings()" [currentField]="focusedField()"></app-charge-material-help> }
+      @case (ROUTE_TOKENS.wallLosses) { <app-wall-losses-help [settings]="settings()" [currentField]="focusedField()"></app-wall-losses-help> }
+      @case (ROUTE_TOKENS.extendedSurface) { <app-extended-surface-losses-help [settings]="settings()" [currentField]="focusedField()"></app-extended-surface-losses-help> }
+      @case (ROUTE_TOKENS.atmosphere) { <app-atmosphere-losses-help [settings]="settings()" [currentField]="focusedField()"></app-atmosphere-losses-help> }
+      @case (ROUTE_TOKENS.fixture) { <app-fixture-losses-help [settings]="settings()" [currentField]="focusedField()"></app-fixture-losses-help> }
+      @case (ROUTE_TOKENS.cooling) { <app-cooling-losses-help [settings]="settings()" [currentField]="focusedField()"></app-cooling-losses-help> }
+      @case (ROUTE_TOKENS.opening) { <app-opening-losses-help [settings]="settings()" [currentField]="focusedField()"></app-opening-losses-help> }
+      @case (ROUTE_TOKENS.other) { <app-other-losses-help [currentField]="focusedField()"></app-other-losses-help> }
+      @case (ROUTE_TOKENS.flueGas) { <app-flue-gas-losses-help [settings]="settings()" [currentField]="focusedField()"></app-flue-gas-losses-help> }
+      @case (ROUTE_TOKENS.gasLeakage) { <app-gas-leakage-losses-help [settings]="settings()" [currentField]="focusedField()"></app-gas-leakage-losses-help> }
+      @case (ROUTE_TOKENS.auxiliaryPower) { <app-auxiliary-power-losses-help [settings]="settings()" [currentField]="focusedField()"></app-auxiliary-power-losses-help> }
+      @case (ROUTE_TOKENS.energyInputExhaustGas) { <app-energy-input-exhaust-gas-losses-help [settings]="settings()" [currentField]="focusedField()"></app-energy-input-exhaust-gas-losses-help> }
+      @case (ROUTE_TOKENS.energyInput) { <app-energy-input-help [settings]="settings()" [currentField]="focusedField()"></app-energy-input-help> }
+      @case (ROUTE_TOKENS.exhaustGas) { <app-exhaust-gas-help [settings]="settings()" [currentField]="focusedField()"></app-exhaust-gas-help> }
+      @case (ROUTE_TOKENS.slag) { <app-slag-help [settings]="settings()" [currentField]="focusedField()"></app-slag-help> }
+      @case (ROUTE_TOKENS.heatSystemEfficiency) { <app-heat-system-efficiency-help [settings]="settings()" [currentField]="focusedField()"></app-heat-system-efficiency-help> }
       @default { <ng-container *ngTemplateOutlet="noHelp"></ng-container> }
     }
   } @else {
@@ -32,6 +32,30 @@
             </small>
           </h5>
           <hr class="my-1 hr-spacer">
+          @if (focusedField() === 'implementationCost') {
+            <h6 class="my-2" data-testid="implementation-cost-help">
+              Implementation Cost
+              <br>
+              <small class="text-muted">Cost associated with executing the modifications to the baseline system.</small>
+            </h6>
+          }
+        </div>
+      }
+      @case (ROUTE_TOKENS.assessmentSettings) {
+        <div class="p-2 pt-3 d-flex flex-column help-info">
+          <h5>
+            Assessment Settings
+            <br>
+            <small class="text-muted">
+              Assessment settings define the units of measure and other information related to the system you are modeling.
+              They are inherited from your directory or application settings and can be customized for this assessment.
+            </small>
+          </h5>
+          <div class="alert alert-info mt-2 mb-0">
+            <small class="text-muted">
+              The words furnace, process heating equipment, process heating system, and PH System may be used interchangeably throughout this tool.
+            </small>
+          </div>
         </div>
       }
       @default { <ng-container *ngTemplateOutlet="noHelp"></ng-container> }

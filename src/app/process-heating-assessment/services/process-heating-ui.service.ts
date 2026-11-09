@@ -47,7 +47,11 @@ export class ProcessHeatingUiService {
   activeModificationIdSignal: WritableSignal<string | undefined> = signal<string | undefined>(undefined);
 
   // UI state signals
-  focusedFieldSignal: WritableSignal<string> = signal<string>('default');
+  // Reset on navigation so a field focused on one view doesn't keep its help showing on the next.
+  focusedFieldSignal: WritableSignal<string> = linkedSignal({
+    source: () => `${this.childView()}/${this.lossSubView()}`,
+    computation: () => 'default',
+  });
   helpTextFieldSignal: WritableSignal<string> = signal<string>('default');
   modalOpenSignal: WritableSignal<boolean> = signal<boolean>(false);
   showModificationListModalSignal: WritableSignal<boolean> = signal<boolean>(false);
