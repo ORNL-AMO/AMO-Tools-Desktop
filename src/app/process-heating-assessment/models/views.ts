@@ -67,8 +67,9 @@ export type LossView = typeof LossView[keyof typeof LossView];
 
 export type ProcessHeatingView = MainView | BaselineView | AssessmentView | ReportView | CalculatorsView | LossView;
 
-/** Notes field edited from the results panel while each heat balance step is selected in Expert View. Operations has no Expert View step. */
+/** Notes field edited from the results panel while each heat balance step is selected in Expert View. */
 export const LOSS_VIEW_NOTES_KEY: Partial<Record<ProcessHeatingView, keyof Notes>> = {
+  [LossView.OPERATIONS]: 'operationsNotes',
   [LossView.CHARGE_MATERIAL]: 'chargeNotes',
   [LossView.WALL_LOSSES]: 'wallNotes',
   [LossView.EXTENDED_SURFACE]: 'extendedNotes',
