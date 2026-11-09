@@ -34,6 +34,7 @@ describe('deriveSteppedRoutes', () => {
       { view: ROUTE_TOKENS.diagram, path: ROUTE_TOKENS.diagram },
       { view: ROUTE_TOKENS.report, path: ROUTE_TOKENS.report },
       { view: ROUTE_TOKENS.sankey, path: ROUTE_TOKENS.sankey },
+      { view: ROUTE_TOKENS.calculators, path: ROUTE_TOKENS.calculators },
     ]);
   });
 

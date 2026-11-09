@@ -1,0 +1,32 @@
+<div class="calculators-container">
+  <div class="d-none d-lg-flex">
+    <ul class="tabs primary">
+      @for (link of CALCULATORS_VIEW_LINKS; track link.view) {
+        <li routerLinkActive="active" [routerLink]="[link.view]">
+          <a [routerLink]="[link.view]">{{link.label}}</a>
+        </li>
+      }
+    </ul>
+  </div>
+
+  <div class="d-flex d-lg-none flex-column">
+    <button type="button" class="btn btn-secondary mx-2 mb-2 text-left" (click)="toggleMobileTabs()">
+      Calculators <span class="fa float-right" [class.fa-chevron-up]="mobileTabsOpen()" [class.fa-chevron-down]="!mobileTabsOpen()"></span>
+    </button>
+    @if (mobileTabsOpen()) {
+      <ul class="tabs primary flex-column mx-2 mb-2">
+        @for (link of CALCULATORS_VIEW_LINKS; track link.view) {
+          <li routerLinkActive="active" [routerLink]="[link.view]" (click)="closeMobileTabs()">
+            <a [routerLink]="[link.view]">{{link.label}}</a>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+
+  <div class="assessment-container tab-content">
+    <div class="assessment-panel-container modification">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

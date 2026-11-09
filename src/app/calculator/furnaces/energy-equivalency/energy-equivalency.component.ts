@@ -167,29 +167,23 @@ export class EnergyEquivalencyComponent implements OnInit {
 
   async getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
-    if (this.calculator) {
-      this.calcExists = true;
-      if (this.calculator.energyEquivalencyInputs) {
-        this.energyEquivalencyElectric = this.calculator.energyEquivalencyInputs.energyEquivalencyElectric;
-        this.energyEquivalencyFuel = this.calculator.energyEquivalencyInputs.energyEquivalencyFuel;
-      } else {
-        let tmpEnergyEquivalencyInputs: { energyEquivalencyFuel: EnergyEquivalencyFuel, energyEquivalencyElectric: EnergyEquivalencyElectric } = {
-          energyEquivalencyElectric: this.energyEquivalencyService.getDefaultElectricData(this.settings),
-          energyEquivalencyFuel: this.energyEquivalencyService.getDefaultFuelData(this.settings)
-        };
-        this.calculator.energyEquivalencyInputs = tmpEnergyEquivalencyInputs;
-        this.energyEquivalencyElectric = this.calculator.energyEquivalencyInputs.energyEquivalencyElectric;
-        this.energyEquivalencyFuel = this.calculator.energyEquivalencyInputs.energyEquivalencyFuel;
-        await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
-
-      }
-    } else {
+    let isNewInputs = false;
+    if (!this.calculator) {
       this.calculator = this.initCalculator();
-      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
-
+      isNewInputs = true;
+    } else if (!this.calculator.energyEquivalencyInputs) {
+      this.calculator.energyEquivalencyInputs = this.initCalculator().energyEquivalencyInputs;
+      isNewInputs = true;
     }
+    this.calcExists = true;
+    this.energyEquivalencyElectric = this.calculator.energyEquivalencyInputs.energyEquivalencyElectric;
+    this.energyEquivalencyFuel = this.calculator.energyEquivalencyInputs.energyEquivalencyFuel;
+    // Build the forms before saving: the template binds them as soon as ngOnInit returns
     this.formElectric = this.energyEquivalencyService.getElectricFormFromObj(this.energyEquivalencyElectric);
     this.formFuel = this.energyEquivalencyService.getFuelFormFromObj(this.energyEquivalencyFuel);
+    if (isNewInputs) {
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
+    }
   }
 
   initCalculator(): Calculator {

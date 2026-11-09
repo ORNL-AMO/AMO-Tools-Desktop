@@ -22,7 +22,7 @@
       [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
       <div class="d-flex flex-column m-4">
         <app-energy-use-form [flowCalculations]="flowCalculations" [flowCalculationResults]="flowCalculationResults"
-          (changeField)="setCurrentField($event)" (emitCalculate)="calculate()" [settings]="settings">
+          (changeField)="setCurrentField($event)" (emitCalculate)="updateFlowCalculations($event)" [settings]="settings">
         </app-energy-use-form>
         <div class="w-100 justify-content-center btn-group btn-group-sm">
           <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
