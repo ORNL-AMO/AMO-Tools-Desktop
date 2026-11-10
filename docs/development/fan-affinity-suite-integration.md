@@ -46,6 +46,9 @@ Owned Suite classes and vectors retain cleanup; value-object outputs do not.
 The process-flow water-estimator loader uses the package's default factory and resolves
 WASM relative to the document for web and Electron file loading. Chiller efficiency rows
 use the current energy-result vectors with explicit cleanup of the owned vector handles.
+Motor catalog enum getters are unwrapped to numeric values before persistence. The beta
+returns embind enum objects for these getters despite numeric declarations; a real-WASM
+catalog test verifies physical 50/60 Hz values and numeric efficiency classes.
 
 ## Verification and release dependency
 

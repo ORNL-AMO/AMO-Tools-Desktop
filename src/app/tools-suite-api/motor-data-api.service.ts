@@ -30,8 +30,9 @@ export class MotorDataApiService {
   }
 
   getSuiteDbMotorFromWASM(suiteDbMotorPointer: MotorData): SuiteDbMotor {
-    let lineFrequency: number = this.suiteApiHelperService.getLineFrequencyFromSuiteEnumValue(suiteDbMotorPointer.getLineFrequency());
-    let efficiencyClass: number = suiteDbMotorPointer.getEfficiencyClass();
+    let lineFrequency: number = this.suiteApiHelperService.getLineFrequencyFromSuiteEnumValue(
+      this.enumValue(suiteDbMotorPointer.getLineFrequency()));
+    let efficiencyClass: number = this.enumValue(suiteDbMotorPointer.getEfficiencyClass());
 
     let suiteDbMotor: SuiteDbMotor = {
       id: suiteDbMotorPointer.getId(),
@@ -48,5 +49,11 @@ export class MotorDataApiService {
     };
 
     return suiteDbMotor;
+  }
+
+  // The beta's MotorData getters return embind enum objects despite numeric declarations.
+  // Persist the numeric value, also accepting numbers if the package aligns these getters later.
+  private enumValue(value: number | { value: number }): number {
+    return typeof value === 'number' ? value : value.value;
   }
 }
