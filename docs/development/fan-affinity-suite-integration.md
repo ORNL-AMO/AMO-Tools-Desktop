@@ -43,6 +43,9 @@ from [Desktop integration PR #9054](https://github.com/ORNL-AMO/AMO-Tools-Deskto
 without its unrelated feature work. The pump differential-pressure field is optional for
 existing records. Near-zero motor power-factor calculations now supply motor nameplate data.
 Owned Suite classes and vectors retain cleanup; value-object outputs do not.
+The process-flow water-estimator loader uses the package's default factory and resolves
+WASM relative to the document for web and Electron file loading. Chiller efficiency rows
+use the current energy-result vectors with explicit cleanup of the owned vector handles.
 
 ## Verification and release dependency
 
