@@ -152,3 +152,47 @@ describe('UpdateDataService.updateProcessCooling', () => {
     expect(() => service.updateAssessmentVersion(assessment)).not.toThrow();
   });
 });
+
+describe('UpdateDataService.updateSSMT', () => {
+  let service: UpdateDataService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [UpdateDataService, ConvertUnitsService]
+    });
+    service = TestBed.inject(UpdateDataService);
+  });
+
+  function buildSsmtAssessment(baselineValue?: boolean, modificationValue?: boolean): Assessment {
+    return {
+      name: 'legacy steam assessment',
+      type: 'SSMT',
+      appVersion: '1.8.1',
+      ssmt: {
+        headerInput: {},
+        boilerInput: { sendBlowdownToDeaerator: baselineValue },
+        modifications: [{
+          modificationId: 'modification-id',
+          ssmt: {
+            headerInput: {},
+            boilerInput: { sendBlowdownToDeaerator: modificationValue }
+          }
+        }]
+      }
+    } as Assessment;
+  }
+
+  it('defaults missing baseline and modification routing values to false', () => {
+    const updated = service.updateAssessmentVersion(buildSsmtAssessment());
+
+    expect(updated.ssmt.boilerInput.sendBlowdownToDeaerator).toBeFalse();
+    expect(updated.ssmt.modifications[0].ssmt.boilerInput.sendBlowdownToDeaerator).toBeFalse();
+  });
+
+  it('preserves explicit baseline and modification routing values', () => {
+    const updated = service.updateAssessmentVersion(buildSsmtAssessment(true, true));
+
+    expect(updated.ssmt.boilerInput.sendBlowdownToDeaerator).toBeTrue();
+    expect(updated.ssmt.modifications[0].ssmt.boilerInput.sendBlowdownToDeaerator).toBeTrue();
+  });
+});

@@ -18,7 +18,6 @@ export class ExploreOpportunitiesComponent {
   private injector = inject(Injector);
   private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
 
-  smallScreenTab: string = 'details';
   selectedModification$: Observable<Modification> = this.modificationService.selectedModification$
   
   get isAirCooled(): boolean {
@@ -29,7 +28,7 @@ export class ExploreOpportunitiesComponent {
     this.modalService.openModal(
       AddModificationComponent, 
       {
-        width: '800px',
+        width: 'min(800px, 95vw)',
         data: undefined,
       },
       // * injector required for providing services inside the global (core) module
@@ -39,9 +38,5 @@ export class ExploreOpportunitiesComponent {
   
   saveModification(selectedModification: Modification) {
     this.modificationService.updateModification(selectedModification);
-  }
-  
-  setSmallScreenTab(tab:string) {
-    this.smallScreenTab = tab;
   }
 }

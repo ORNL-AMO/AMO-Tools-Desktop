@@ -9,6 +9,7 @@ import { MeasurItemType } from '../models/app';
 import { LogToolDbData } from '../../log-tool/log-tool-models';
 import { AnalyticsService } from '../analytics/analytics.service';
 import { ImportExportOpportunities } from '../models/treasure-hunt';
+import { ExportOpportunitiesService } from '../../treasure-hunt/treasure-chest/export-opportunities.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,8 @@ export class EmailMeasurDataService {
   
   constructor(private httpClient: HttpClient, 
     private exportService: ExportService, 
-    private analyticsService: AnalyticsService) {
+    private analyticsService: AnalyticsService,
+    private exportOpportunitiesService: ExportOpportunitiesService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.emailSentStatus = new BehaviorSubject<EmailSentStatus>(undefined);
     this.showEmailMeasurDataModal = new BehaviorSubject<boolean>(undefined);
@@ -49,7 +51,8 @@ export class EmailMeasurDataService {
         attachmentExportData = this.measurItemAttachment.itemData;
         attachmentExportData['origin'] = "AMO-LOG-TOOL-DATA";
       } else if (this.measurItemAttachment.itemType === 'opportunities') {
-        attachmentExportData = this.measurItemAttachment.itemData
+        const includeUnselected: boolean = measurEmailForm.controls.includeUnselected?.value === true;
+        attachmentExportData = this.exportOpportunitiesService.setImportExportData(this.measurItemAttachment.itemData, includeUnselected);
       }
 
       this.measurEmailData = {

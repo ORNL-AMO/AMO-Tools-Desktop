@@ -17,6 +17,8 @@ const MARKER_SHAPES: Array<string> = [
   'star', 'star-diamond', 'hexagram', 'star-square', 'square',
   'diamond', 'cross', 'x', 'diamond-wide', 'diamond-tall'
 ];
+const COMPACT_FONT_SIZE = 11;
+const COMPACT_MARKER_SCALE = 0.6;
 const CHILLER_FILL_ALPHA = 0.07;
 const CHILLER_DASH_PATTERNS: Array<string> = ['solid', 'dash', 'dot', 'dashdot', 'longdash', 'longdashdot'];
 
@@ -30,7 +32,9 @@ function hexToRgba(hex: string, alpha: number): string {
 @Injectable({ providedIn: 'root' })
 export class ProcessCoolingChartsService {
 
-  buildChillerProfileChart(chillerOutput: ProcessCoolingChillerOutput[], showFactoredProfile = false): PlotlyChartConfig {
+  buildChillerProfileChart(chillerOutput: ProcessCoolingChillerOutput[], showFactoredProfile = false, compact = false): PlotlyChartConfig {
+    const titleFontSize = compact ? COMPACT_FONT_SIZE : CHART_TITLE_FONT_SIZE;
+    const markerScale = compact ? COMPACT_MARKER_SCALE : 1;
     const efficiencyLabel = PROCESS_COOLING_UNITS.efficiency.labelHTML.imperial;
 
     const traces: TraceData[] = chillerOutput.map((chiller, index) => {
@@ -43,7 +47,7 @@ export class ProcessCoolingChartsService {
         type: 'scatter',
         mode: 'lines+markers',
         name: chiller.name,
-        marker: { size: 12, color, symbol: MARKER_SHAPES[index % MARKER_SHAPES.length], line: { color: '#ffffff', width: 1.5 } },
+        marker: { size: 12 * markerScale, color, symbol: MARKER_SHAPES[index % MARKER_SHAPES.length], line: { color: '#ffffff', width: 1.5 } },
         line: { width: 2, dash, color },
         fill: 'tozeroy',
         fillcolor: fillColor,
@@ -59,7 +63,7 @@ export class ProcessCoolingChartsService {
         type: 'scatter',
         mode: 'lines+markers',
         name: `${chiller.name} (Adjusted)`,
-        marker: { size: 8, color, symbol: MARKER_SHAPES[index % MARKER_SHAPES.length], line: { color: '#ffffff', width: 1 } },
+        marker: { size: 8 * markerScale, color, symbol: MARKER_SHAPES[index % MARKER_SHAPES.length], line: { color: '#ffffff', width: 1 } },
         line: { width: 2, dash: 'dot', color },
         hovertemplate: `${chiller.name} (Adjusted)<br>Load: %{x}<br>Efficiency (${efficiencyLabel}): %{y:.2f}<extra></extra>`
       };
@@ -74,7 +78,7 @@ export class ProcessCoolingChartsService {
       showlegend: false,
       hoverinfo: 'skip',
       marker: {
-        size: 22,
+        size: 22 * markerScale,
         symbol: 'circle-open',
         color: trace.marker.color,
         line: { color: trace.marker.color as string, width: 1.5 },
@@ -111,14 +115,16 @@ export class ProcessCoolingChartsService {
 
     const layout = {
       xaxis: {
-        title: { text: '% Load', font: { size: CHART_TITLE_FONT_SIZE } },
+        title: { text: '% Load', font: { size: titleFontSize } },
         range: [0, 100],
-        dtick: 10,
+        dtick: compact ? 20 : 10,
+        tickfont: compact ? { size: COMPACT_FONT_SIZE } : undefined,
         ticksuffix: '%',
         automargin: true
       },
       yaxis: {
-        title: { text: `Efficiency (${efficiencyLabel})`, font: { size: CHART_TITLE_FONT_SIZE } },
+        title: { text: `Efficiency (${efficiencyLabel})`, font: { size: titleFontSize } },
+        tickfont: compact ? { size: COMPACT_FONT_SIZE } : undefined,
         rangemode: 'tozero',
         hoverformat: tickformat,
         automargin: true,
@@ -126,8 +132,13 @@ export class ProcessCoolingChartsService {
         tickvals,
         tickformat,
       },
-      margin: { t: 20, r: 20, l: 60, b: 60 },
-      legend: {
+      margin: compact ? { t: 10, r: 10, l: 45, b: 45 } : { t: 20, r: 20, l: 60, b: 60 },
+      legend: compact ? {
+        orientation: 'h', x: 0, y: -0.3, yanchor: 'top',
+        font: {
+          size: COMPACT_FONT_SIZE
+        }
+      } : {
         orientation: 'h', y: 1.15,
         font: {
           size: CHART_TITLE_FONT_SIZE

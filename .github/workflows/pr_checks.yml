@@ -3,6 +3,9 @@ name: PR Checks
 on:
   workflow_call:
 
+permissions:
+  contents: read
+
 jobs:
   unit-tests:
     runs-on: ubuntu-22.04
@@ -11,7 +14,7 @@ jobs:
         with:
           fetch-depth: 1
       - name: Get Node version
-        run: echo "BUILD_NODE_VER=$(grep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)" >> $GITHUB_ENV
+        run: echo "BUILD_NODE_VER=$(grep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)" >> "$GITHUB_ENV"
       - name: Node setup
         uses: actions/setup-node@v6
         with:
@@ -25,12 +28,14 @@ jobs:
       - name: Install dependencies
         run: |
           find . -name "package-lock.json" -not -path "*/node_modules/*" -not -path "*/dist/*" -exec dirname {} \; | sort -u |
-          while read dir; do
+          while IFS= read -r dir; do
             echo "Installing dependencies for: $dir"
-            (cd $dir && npm ci $dir);
+            (cd "$dir" && npm ci);
           done
       - name: Run unit tests
         run: npm test -- --watch=false --no-progress
+      - name: Test workflow deployment gates
+        run: node --test .github/tests/*.test.cjs
       - name: Run compressed-air regression-test fixture privacy checks
         run: npm run test:ca-regression-tests:fixtures
       - name: Run complete compressed-air regression-test corpus

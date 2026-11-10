@@ -1,4 +1,4 @@
-import { Component, DestroyRef, ElementRef, inject, Signal, ViewChild } from '@angular/core';
+import { Component, DestroyRef, inject, Signal } from '@angular/core';
 import { ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
 import { SETUP_VIEW_LINKS, ViewLink } from '../../models/views';
 import { ROUTE_TOKENS } from '../../constants/process-cooling-routes';
@@ -16,13 +16,11 @@ export class BaselineTabsComponent {
   private readonly processCoolingService = inject(ProcessCoolingAssessmentService);
   private readonly destroyRef = inject(DestroyRef);
 
-  smallScreenPanelTab: string = 'help';
-  readonly canContinue: Signal<boolean> = this.processCoolingUiService.canContinue;
+  readonly canContinue: Signal<boolean> = this.processCoolingUiService.canContinueSetupTab;
+  readonly canGoBack: Signal<boolean> = this.processCoolingUiService.canGoBackSetupTab;
 
   readonly SETUP_VIEW_LINKS = SETUP_VIEW_LINKS;
 
-  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
-  containerHeight: number;
   mainView: Signal<string> = this.processCoolingUiService.mainView;
   setupView: Signal<string> = this.processCoolingUiService.childView;
 
@@ -39,16 +37,11 @@ export class BaselineTabsComponent {
   }
 
   continue() {
-    this.processCoolingUiService.continue();
+    this.processCoolingUiService.continueSetupTab();
   }
 
   back() {
-    this.processCoolingUiService.back();
-  }
-
-
-  setSmallScreenPanelTab(tab: string) {
-    this.smallScreenPanelTab = tab;
+    this.processCoolingUiService.backSetupTab();
   }
 
   isTabInvalid(link: ViewLink): boolean {

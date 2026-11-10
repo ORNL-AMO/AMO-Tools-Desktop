@@ -33,6 +33,7 @@ export class BoilerSummaryComponent implements OnInit {
   combustionEfficiencyDiff: Array<boolean>;
   blowdownRateDiff: Array<boolean>;
   blowdownFlashedDiff: Array<boolean>;
+  sendBlowdownToDeaeratorDiff: Array<boolean>;
   preheatMakeupWaterDiff: Array<boolean>;
   steamTemperatureDiff: Array<boolean>;
   deaeratorVentRateDiff: Array<boolean>;
@@ -52,6 +53,7 @@ export class BoilerSummaryComponent implements OnInit {
     this.combustionEfficiencyDiff = new Array<boolean>();
     this.blowdownRateDiff = new Array<boolean>();
     this.blowdownFlashedDiff = new Array<boolean>();
+    this.sendBlowdownToDeaeratorDiff = new Array<boolean>();
     this.preheatMakeupWaterDiff = new Array<boolean>();
     this.steamTemperatureDiff = new Array<boolean>();
     this.deaeratorVentRateDiff = new Array<boolean>();
@@ -65,6 +67,7 @@ export class BoilerSummaryComponent implements OnInit {
         this.combustionEfficiencyDiff.push(false);
         this.blowdownRateDiff.push(false);
         this.blowdownFlashedDiff.push(false);
+        this.sendBlowdownToDeaeratorDiff.push(false);
 
         this.preheatMakeupWaterDiff.push(false);
         this.steamTemperatureDiff.push(false);

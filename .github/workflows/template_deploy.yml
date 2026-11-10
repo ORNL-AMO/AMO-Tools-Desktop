@@ -19,21 +19,54 @@ on:
         required: true
         type: string
 
+permissions:
+  actions: read
+  contents: read
+
 jobs:
   deploy:
     runs-on:
       - self-hosted
       - ${{ inputs.tag }}
     steps:
+      - name: Checkout production release policy
+        if: inputs.tag == 'prod'
+        uses: actions/checkout@v4
+        with:
+          path: .release-policy
+          persist-credentials: false
+      - name: Check production release state
+        if: inputs.tag == 'prod'
+        uses: ./.release-policy/.github/actions/check-production-state
+      - name: Prepare deployment staging directory
+        id: staging
+        run: |
+          STAGING_DIR=$(mktemp -d "$RUNNER_TEMP/measur-deploy.XXXXXX")
+          echo "path=$STAGING_DIR" >> "$GITHUB_OUTPUT"
       - name: Get artifact
         uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.artifact-name }}
+          path: ${{ steps.staging.outputs.path }}
       - name: Deploy
+        env:
+          APP_DIR: ${{ inputs.app-dir }}
+          BACKUP_DIR: ${{ inputs.backup-dir }}
+          DEPLOY_DIR: ${{ inputs.deploy-dir }}
+          STAGING_DIR: ${{ steps.staging.outputs.path }}
         run: |
-          if [[ -n "${{ inputs.backup-dir }}" ]]; then
-            tar -czf ${{ inputs.backup-dir }}/${{ inputs.app-dir }}_$(date +%F)_${GITHUB_SHA::7}.tar.gz ${{ inputs.deploy-dir }}/${{ inputs.app-dir }}
+          [[ "$APP_DIR" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ ]]
+          [[ "$DEPLOY_DIR" == /* && "$DEPLOY_DIR" != '/' ]]
+          test -d "$DEPLOY_DIR/$APP_DIR"
+          test -s "$STAGING_DIR/index.html"
+          if [[ -n "$BACKUP_DIR" ]]; then
+            tar -czf "$BACKUP_DIR/${APP_DIR}_$(date +%F)_${GITHUB_SHA::7}.tar.gz" "$DEPLOY_DIR/$APP_DIR"
           fi
-          rm -rf ${{ inputs.deploy-dir }}/${{ inputs.app-dir }}/*
-          chgrp -R apache ./
-          mv -v ./* ${{ inputs.deploy-dir }}/${{ inputs.app-dir }}/
+          chgrp -R apache "$STAGING_DIR"
+          rm -rf -- "${DEPLOY_DIR:?}/${APP_DIR:?}/"*
+          mv -v "$STAGING_DIR/"* "$DEPLOY_DIR/$APP_DIR/"
+      - name: Clean deployment staging directory
+        if: always() && steps.staging.outputs.path != ''
+        env:
+          STAGING_DIR: ${{ steps.staging.outputs.path }}
+        run: rm -rf -- "$STAGING_DIR"

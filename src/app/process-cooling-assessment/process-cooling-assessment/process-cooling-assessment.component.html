@@ -1,16 +1,16 @@
-<div #content class="process-cooling-container process-cooling-assessment d-flex flex-column">
-  <div #header class="w-100 hide-print" id="processCoolingBanner">
+<div class="layout-shell layout-theme-process-cooling process-cooling-container process-cooling-assessment">
+  <div class="w-100 hide-print" id="processCoolingBanner">
     <app-process-cooling-banner></app-process-cooling-banner>
   </div>
 
   <router-outlet></router-outlet>
 
-  <div #footer id="processCoolingFooter" class="footer hide-print d-none d-lg-block">
+  <div id="processCoolingFooter" class="footer hide-print layout-wide-only">
     <div class="pull-left">
       <button class="btn btn-default" (click)="back()" [disabled]="!canGoBack()">Back</button>
     </div>
     <div class="pull-right">
-      <button class="btn btn-primary" (click)="next()" [disabled]="!canContinue()">Next</button>
+      <button class="btn btn-primary" (click)="continue()" [disabled]="!canContinue()">Next</button>
     </div>
   </div>
 

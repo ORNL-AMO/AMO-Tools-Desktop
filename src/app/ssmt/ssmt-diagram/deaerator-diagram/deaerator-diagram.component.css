@@ -52,7 +52,7 @@
     position: relative;
 }
 
-.low-pressure .inlet-pressure-holder{
+.low-pressure:not(.with-flashtank) .inlet-pressure-holder{
     padding-top: 25px;
 }
 
@@ -126,4 +126,58 @@
     position: absolute;
     right: 48px;
     bottom: 20px;
+}
+
+
+.combined-tube {
+    background-color: #bcae53;
+}
+
+.low-pressure-inlet-tube {
+    height: .5rem;
+}
+
+.to-deaerator-connector{
+    height: fit-content;
+    width: 50px;
+}
+
+.low-pressure.with-flashtank{
+    height: 25px;
+    margin-top: -25px;
+}
+
+.combined-inlet-tube{
+    margin-bottom: 12px;
+    border-bottom-right-radius: 25px;
+}
+
+.outlet-steam-deaerator-holder {
+    width: 20px;
+}
+
+.one-header-routed-inlet {
+    min-width: 25px;
+    border-top-right-radius: 25px;
+}
+
+.one-header-pressure-drop {
+    flex: 0 0 25px;
+    height: 25px;
+    min-height: 25px;
+    border-top-right-radius: 25px;
+}
+
+.one-header-pressure-drop .fa-chevron-down {
+    margin-top: auto;
+}
+
+.one-header-combined-junction {
+    flex: 1;
+    min-height: 25px;
+    border-bottom-right-radius: 25px;
+}
+
+.one-header-combined-junction .inlet-pressure-mass-flow {
+    bottom: -4px;
 }
