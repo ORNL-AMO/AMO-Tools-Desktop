@@ -43,6 +43,15 @@
     background-color: #fff;
 }
 
+.action-item {
+    background: none;
+    border-top: none;
+    border-bottom: none;
+    padding-top: 0;
+    padding-bottom: 0;
+    color: inherit;
+}
+
 .action-item:hover {
     cursor: pointer;
     background: #efefef;

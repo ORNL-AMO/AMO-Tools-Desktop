@@ -220,7 +220,7 @@
         <div class="form-group">
           <label class="small" for="{{'purgeInputMode_' + idString}}">Purge Input</label>
           <select class="form-control" id="{{'purgeInputMode_' + idString}}" formControlName="purgeInputMode"
-            (change)="changeMode('purgeFlowRate')" (focus)="focusField('purgeInputMode')">
+            (change)="changePurgeMode()" (focus)="focusField('purgeInputMode')">
             <option [ngValue]="purgeInputMode.PercentOfDryerCapacity">Percent of Dryer Capacity</option>
             <option [ngValue]="purgeInputMode.DirectFlow">Direct Flow</option>
           </select>

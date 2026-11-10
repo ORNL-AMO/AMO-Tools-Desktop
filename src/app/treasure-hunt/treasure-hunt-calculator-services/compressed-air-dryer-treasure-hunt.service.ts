@@ -21,6 +21,9 @@ export class CompressedAirDryerTreasureHuntService {
   setCalculatorInputFromOpportunity(compressedAirDryer: CompressedAirDryerTreasureHunt) {
     this.compressedAirDryerService.baselineInput = compressedAirDryer.baseline;
     this.compressedAirDryerService.modificationInput = compressedAirDryer.modification;
+    // Saved opportunities are already in the Treasure Hunt's units (ConvertInputDataService
+    // converts them on a settings change), so a stale marker would convert them a second time.
+    this.compressedAirDryerService.lastUnitsOfMeasure = undefined;
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {
@@ -55,7 +58,7 @@ export class CompressedAirDryerTreasureHuntService {
       energySavings: 0,
       baselineCost: baselineOutput.totalCostPerYear,
       modificationCost: modificationOutput.totalCostPerYear,
-      utilityType: 'Compressed Air',
+      utilityType: 'Mixed',
     }
 
     return treasureHuntOpportunityResults;
@@ -70,6 +73,8 @@ export class CompressedAirDryerTreasureHuntService {
       }
     }
 
+    let currentCosts: number = currentEnergyUsage.electricityCosts + currentEnergyUsage.compressedAirCosts + currentEnergyUsage.waterCosts;
+
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
@@ -80,12 +85,12 @@ export class CompressedAirDryerTreasureHuntService {
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
         energyUnit: '',
-        label: 'Compressed Air'
+        label: 'Mixed'
       }],
-      utilityType: ['Compressed Air'],
+      utilityType: ['Electricity', 'Compressed Air', 'Water'],
       percentSavings: [{
-        percent: (opportunitySummary.costSavings / currentEnergyUsage.compressedAirCosts) * 100,
-        label: 'Compressed Air',
+        percent: currentCosts > 0 ? (opportunitySummary.costSavings / currentCosts) * 100 : 0,
+        label: 'Mixed',
         baselineCost: opportunitySummary.baselineCost,
         modificationCost: opportunitySummary.modificationCost,
       }],

@@ -187,6 +187,29 @@ describe('CompressedAirDryerFormComponent', () => {
       expect(form.controls.purgeRate.value).toBe(15);
     });
 
+    it('exposes a zero purge rate as an error when switching back to percent of capacity', () => {
+      const form = setForm(makeInput(DryerType.Heatless, { purgeInputMode: PurgeInputMode.DirectFlow, purgeRate: 0, purgeFlowRate: 100 }));
+      form.controls.purgeInputMode.setValue(PurgeInputMode.PercentOfDryerCapacity);
+
+      component.changePurgeMode();
+
+      expect(form.controls.purgeRate.enabled).toBeTrue();
+      expect(form.controls.purgeRate.value).toBeNull();
+      expect(form.controls.purgeRate.dirty).toBeTrue();
+      expect(form.valid).toBeFalse();
+    });
+
+    it('validates the purge flow rate when switching to direct flow', () => {
+      const form = setForm(makeInput(DryerType.Heatless));
+      form.controls.purgeInputMode.setValue(PurgeInputMode.DirectFlow);
+
+      component.changePurgeMode();
+
+      expect(form.controls.purgeFlowRate.enabled).toBeTrue();
+      expect(form.controls.purgeFlowRate.dirty).toBeTrue();
+      expect(form.controls.purgeRate.dirty).toBeFalse();
+    });
+
     it('shows and requires the heater power when manual sizing is selected', () => {
       const form = setForm(makeInput(DryerType.HeatedExternally));
       form.controls.heaterMode.setValue('manual');

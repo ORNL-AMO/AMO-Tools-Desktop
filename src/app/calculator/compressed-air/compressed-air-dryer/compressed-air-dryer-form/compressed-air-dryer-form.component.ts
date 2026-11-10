@@ -88,6 +88,12 @@ export class CompressedAirDryerFormComponent implements AfterViewInit {
     this.onFormChange();
   }
 
+  // Each purge mode shows a different value input; validate whichever one just became active.
+  changePurgeMode(): void {
+    const isDirectFlow = this.form.controls.purgeInputMode.value === PurgeInputMode.DirectFlow;
+    this.changeMode(isDirectFlow ? 'purgeFlowRate' : 'purgeRate');
+  }
+
   focusField(str: string): void {
     this.changeField.emit(str);
   }

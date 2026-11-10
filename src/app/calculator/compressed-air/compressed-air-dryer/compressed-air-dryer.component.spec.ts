@@ -64,7 +64,7 @@ describe('CompressedAirDryerComponent', () => {
     dryerService = {
       ...jasmine.createSpyObj('CompressedAirDryerService', [
         'convertStoredInputsForUnitChange', 'initObject', 'getFormFromObj', 'getObjFromForm', 'calculate',
-        'generateExample', 'generateExampleModification',
+        'generateExample', 'generateExampleModification', 'getEmptyOutput',
       ]),
       baselineInput: undefined,
       modificationInput: undefined,
@@ -199,6 +199,17 @@ describe('CompressedAirDryerComponent', () => {
       component.getResults();
 
       expect(component.baselineOutput.totalCostPerYear).toBe(2500);
+    });
+
+    it('returns empty results without calculating when the displayed form is invalid', () => {
+      dryerService.getEmptyOutput.and.returnValue(makeOutput(0));
+      dryerService.calculate.calls.reset();
+      component.baselineForm.setErrors({ invalid: true });
+
+      component.getResults();
+
+      expect(dryerService.calculate).not.toHaveBeenCalled();
+      expect(component.baselineOutput.totalCostPerYear).toBe(0);
     });
 
     it('creates a modification as a copy of the baseline and calculates both', () => {

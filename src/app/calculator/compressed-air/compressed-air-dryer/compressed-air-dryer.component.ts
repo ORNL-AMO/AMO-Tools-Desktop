@@ -112,15 +112,22 @@ export class CompressedAirDryerComponent implements OnInit, AfterViewInit, OnDes
 
   getResults(): void {
     this.baselineInput = this.compressedAirDryerService.getObjFromForm(this.baselineForm);
-    this.baselineOutput = this.compressedAirDryerService.calculate(this.baselineInput, this.settings);
+    this.baselineOutput = this.calculateDisplayedForm(this.baselineForm, this.baselineInput);
     if (this.modificationExists) {
       this.modificationInput = this.compressedAirDryerService.getObjFromForm(this.modificationForm);
-      this.modificationOutput = this.compressedAirDryerService.calculate(this.modificationInput, this.settings);
+      this.modificationOutput = this.calculateDisplayedForm(this.modificationForm, this.modificationInput);
     }
     if (this.assessmentCalculator) {
       this.setAssessmentCalculatorData();
       this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }
+  }
+
+  private calculateDisplayedForm(form: UntypedFormGroup, input: DryerOperatingCostInput): DryerOperatingCostOutput {
+    if (!form.valid) {
+      return this.compressedAirDryerService.getEmptyOutput();
+    }
+    return this.compressedAirDryerService.calculate(input, this.settings);
   }
 
   createModification(): void {
@@ -211,6 +218,9 @@ export class CompressedAirDryerComponent implements OnInit, AfterViewInit, OnDes
   }
 
   save(): void {
+    if (this.baselineForm.invalid || (this.modificationExists && this.modificationForm.invalid)) {
+      return;
+    }
     this.emitSave.emit({
       baseline: this.baselineInput,
       modification: this.modificationExists ? this.modificationInput : undefined,
