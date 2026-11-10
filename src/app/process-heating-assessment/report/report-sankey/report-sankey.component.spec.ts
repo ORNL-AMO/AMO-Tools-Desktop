@@ -57,7 +57,7 @@ describe('ReportSankeyComponent', () => {
     const result = fixture.debugElement.injector.get(PhastValidService).checkValid(phast, ui().settings);
 
     expect(scenarioValidity).toHaveBeenCalledWith('mod1');
-    expect(result).toEqual(jasmine.objectContaining(invalid));
+    expect(result).toBe(invalid);
   });
 
   it('renders one picker with a sankey per scenario', () => {

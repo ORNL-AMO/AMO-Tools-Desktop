@@ -35,6 +35,18 @@ describe('toLegacyJustifiAssessment', () => {
     expect(toLegacyJustifiAssessment(buildAssessment([]), false).phast.setupDone).toBeFalse();
   });
 
+  it('leaves saved auxiliary power losses out of the exported baseline and modifications', () => {
+    const assessment = buildAssessment([{ id: 'm1' }]);
+    (assessment.phast as unknown as PHAST).losses = { auxiliaryPowerLosses: [{ supplyVoltage: 480 }], wallLosses: [] };
+
+    const result = toLegacyJustifiAssessment(assessment, true);
+
+    expect(result.phast.losses.auxiliaryPowerLosses).toBeUndefined();
+    expect(result.phast.losses.wallLosses).toEqual([]);
+    expect(result.phast.modifications[0].phast.losses.auxiliaryPowerLosses).toBeUndefined();
+    expect(assessment.phast.losses.auxiliaryPowerLosses.length).toBe(1);
+  });
+
   it('does not mutate the saved assessment', () => {
     const assessment = buildAssessment([{ id: 'm1', scenarioOverrides: { name: 'Mod 1' } }]);
     toLegacyJustifiAssessment(assessment, true);

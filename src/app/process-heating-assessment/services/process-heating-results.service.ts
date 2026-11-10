@@ -1,6 +1,6 @@
 import { computed, inject, Injectable, Signal } from '@angular/core';
 import { PHAST, PhastResults } from '../models/phast';
-import { CalculatedByPhast, EnergyUseReportData, PHAST as SharedPHAST, ShowResultsCategories } from '../../shared/models/phast/phast';
+import { CalculatedByPhast, EnergyUseReportData, ShowResultsCategories } from '../../shared/models/phast/phast';
 import { DesignedEnergyResults } from '../../shared/models/phast/designedEnergy';
 import { MeteredEnergyResults } from '../../shared/models/phast/meteredEnergy';
 import { Settings } from '../../shared/models/settings';
@@ -8,18 +8,7 @@ import { PhastResultsService } from '../../phast/phast-results.service';
 import { MeteredEnergyService } from '../../phast/metered-energy/metered-energy.service';
 import { DesignedEnergyService } from '../../phast/designed-energy/designed-energy.service';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from './process-heating-assessment.service';
-
-/**
- * Auxiliary Power is not part of this module, but saved assessments can still hold its losses,
- * which the legacy heat balance would otherwise add to heat input.
- * @param phast scenario in this module's shape
- * @returns a legacy-shaped copy without auxiliary power losses
- */
-export function toLegacyPhast(phast: PHAST): SharedPHAST {
-  if (!phast?.losses) return { ...phast } as unknown as SharedPHAST;
-  const { auxiliaryPowerLosses, ...losses } = phast.losses;
-  return { ...phast, losses } as unknown as SharedPHAST;
-}
+import { toLegacyPhast } from './legacy-phast.util';
 
 @Injectable()
 export class ProcessHeatingResultsService {

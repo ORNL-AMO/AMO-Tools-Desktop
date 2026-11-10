@@ -145,7 +145,7 @@ export class ProcessHeatingValidityService {
       check.key,
       !phast || !isViewVisibleForConfiguration(check.view, configuration) || check.isValid(phast, settings, scenario),
     ])) as Record<ValidityKey, boolean>;
-    return { ...valid, isValid: !!phast && Object.values(valid).every(Boolean) };
+    return { ...valid, auxPowerValid: true, isValid: !!phast && Object.values(valid).every(Boolean) };
   }
 
   /**
