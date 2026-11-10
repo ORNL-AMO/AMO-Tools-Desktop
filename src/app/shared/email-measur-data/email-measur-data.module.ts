@@ -7,6 +7,7 @@ import { EmailMeasurDataService } from './email-measur-data.service';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { ReactiveFormsModule } from '@angular/forms';
+import { OpportunitiesExportPreviewModule } from '../opportunities-export-preview/opportunities-export-preview.module';
 
 
 
@@ -20,7 +21,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     ModalModule,
     TypeaheadModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    OpportunitiesExportPreviewModule
   ],
   exports: [
     EmailMeasurDataComponent,

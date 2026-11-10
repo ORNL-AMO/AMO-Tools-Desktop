@@ -47,7 +47,8 @@ export class BoilerService {
       deaeratorPressure: ['', [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
       approachTemperature: ['', [Validators.min(0.000005)]],
       blowdownConductivity: [''],
-      feedwaterConductivity: ['']
+      feedwaterConductivity: [''],
+      sendBlowdownToDeaerator: [false]
     });
 
     this.setSaturatedBoilerPressureValidators(form, settings);
@@ -78,7 +79,8 @@ export class BoilerService {
       deaeratorPressure: [obj.deaeratorPressure, [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
       approachTemperature: [obj.approachTemperature, approachTempValidators],
       blowdownConductivity: [obj.blowdownConductivity],
-      feedwaterConductivity: [obj.feedwaterConductivity]
+      feedwaterConductivity: [obj.feedwaterConductivity],
+      sendBlowdownToDeaerator: [obj.sendBlowdownToDeaerator ?? false]
     });
 
     this.setPressureAndTemperatureValidators(form, settings);
@@ -259,7 +261,8 @@ export class BoilerService {
       deaeratorPressure: form.controls.deaeratorPressure.value,
       approachTemperature: form.controls.approachTemperature.value,
       blowdownConductivity: form.controls.blowdownConductivity.value,
-      feedwaterConductivity: form.controls.feedwaterConductivity.value
+      feedwaterConductivity: form.controls.feedwaterConductivity.value,
+      sendBlowdownToDeaerator: form.controls.sendBlowdownToDeaerator.value
     };
   }
 
