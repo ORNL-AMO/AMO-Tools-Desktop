@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild, input } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -29,6 +29,8 @@ export class Co2SavingsPhastComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
+  
+  idPrefix = input('');
   @Output('emitUpdateCo2SavingsData')
   emitUpdateCo2SavingsData = new EventEmitter<PhastCo2SavingsData>();
   @Output('emitCurrentField')
@@ -66,6 +68,7 @@ export class Co2SavingsPhastComponent implements OnInit {
   showOtherFuelsMixedModal: boolean;
   otherFuelMixedCO2SavingsData: PhastCo2SavingsData[];
   isUsAverage: boolean;
+  private isInitializing = false;
 
   constructor(private phastCO2SavingsService: Co2SavingsPhastService, 
     private egridService: EGridService, 
@@ -96,7 +99,12 @@ export class Co2SavingsPhastComponent implements OnInit {
       this.cd.detectChanges();
     }
     if (changes.co2SavingsData && !changes.co2SavingsData.firstChange) {
-      this.initForm();
+      if (this.isBaseline) {
+        this.initForm();
+      } else {
+        // Rebind the shared value to the new scenario; the subscription re-initializes the form once.
+        this.publishModificationData();
+      }
     }
 
   }
@@ -112,7 +120,7 @@ export class Co2SavingsPhastComponent implements OnInit {
         }
       });
     } else {
-      this.phastCO2SavingsService.modificationCo2SavingsData.next(this.co2SavingsData);
+      this.publishModificationData();
       this.co2SavingsDataSub = this.phastCO2SavingsService.modificationCo2SavingsData.subscribe(modificationCo2SavingsData => {
         if (modificationCo2SavingsData) {
           this.co2SavingsData.eGridSubregion = modificationCo2SavingsData.eGridSubregion;
@@ -122,6 +130,11 @@ export class Co2SavingsPhastComponent implements OnInit {
         }
       });
     }
+  }
+
+  /** Shares a copy so updates made through the shared value never write into a scenario's saved data. */
+  private publishModificationData() {
+    this.phastCO2SavingsService.modificationCo2SavingsData.next({ ...this.co2SavingsData });
   }
 
   disableForm() {
@@ -146,6 +159,9 @@ export class Co2SavingsPhastComponent implements OnInit {
   }
 
   initForm() {
+    const incomingCo2SavingsData = this.co2SavingsData;
+    this.otherFuelMixedCO2SavingsData = incomingCo2SavingsData?.otherFuelMixedCO2SavingsData;
+    this.isInitializing = true;
     let shouldSetOutputRate: boolean = true;
     this.form = this.phastCO2SavingsService.getEmissionsForm(this.co2SavingsData);
     // Regions are the same for Mod
@@ -172,6 +188,21 @@ export class Co2SavingsPhastComponent implements OnInit {
       shouldSetOutputRate = !this.co2SavingsData.totalFuelEmissionOutputRate  === undefined;
       this.setEnergySource(shouldSetOutputRate);
     }
+    this.isInitializing = false;
+
+    // Opening the form only saves when it filled in something the incoming data lacked (e.g. unsaved defaults).
+    if (this.hasCo2SavingsDataChanged(incomingCo2SavingsData, this.co2SavingsData)) {
+      this.emitUpdateCo2SavingsData.emit(this.co2SavingsData);
+    }
+  }
+
+  /** Compares the fields the form writes, treating missing and null as equal. */
+  private hasCo2SavingsDataChanged(previous: PhastCo2SavingsData | undefined, current: PhastCo2SavingsData): boolean {
+    if (!previous) {
+      return true;
+    }
+    const keys = Object.keys(current) as (keyof PhastCo2SavingsData)[];
+    return keys.some(key => !_.isEqual(previous[key] ?? null, current[key] ?? null));
   }
 
   setEnergySource(shouldSetOutputRate: boolean = true) {
@@ -382,9 +413,25 @@ export class Co2SavingsPhastComponent implements OnInit {
     this.co2SavingsData.otherFuelMixedCO2SavingsData = this.otherFuelMixedCO2SavingsData;
     if (this.isBaseline) {
       this.setLockedModificationValues();
+    } else {
+      this.syncSharedModificationEmissionsFlag();
     }
-    // emit results up to parent component  to save on the ssmt/psat/fsat/etc object
-    this.emitUpdateCo2SavingsData.emit(this.co2SavingsData);
+    if (!this.isInitializing) {
+      // emit results up to parent component  to save on the ssmt/psat/fsat/etc object
+      this.emitUpdateCo2SavingsData.emit(this.co2SavingsData);
+    }
+  }
+
+  /**
+   * The shared modification value is the object this editor published on init, which calculate() replaces
+   * locally. Without this, the baseline republishes a stale flag and resets a custom modification emissions rate.
+   * Updated in place so the baseline's next publish carries it, without re-initializing this editor now.
+   */
+  private syncSharedModificationEmissionsFlag() {
+    const sharedModificationData = this.phastCO2SavingsService.modificationCo2SavingsData.getValue();
+    if (sharedModificationData) {
+      sharedModificationData.userEnteredModificationEmissions = this.co2SavingsData.userEnteredModificationEmissions;
+    }
   }
 
   showMixedCO2EmissionsModal() {

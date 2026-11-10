@@ -4,9 +4,9 @@
   
   <ng-container *ngIf="settings.furnaceType !== 'Electric Arc Furnace (EAF)'">
       <div class="form-group">
-        <label class="small" for="energySource">Energy Source</label>
+        <label class="small" for="{{idPrefix()}}energySource">Energy Source</label>
         <div class="input-group">
-          <select name="energySource" class="form-control" id="energySource" formControlName="energySource"
+          <select name="energySource" class="form-control" id="{{idPrefix()}}energySource" formControlName="energySource"
           [ngClass]="{'indicate-different': co2SavingsDifferent.energySource}"
             (change)="setEnergySource()" [required]="true" (focus)="focusField('energySource')">
             <option *ngFor="let option of energySources" [ngValue]="option.energySource">{{option.energySource}}</option>
@@ -15,9 +15,9 @@
       </div>
     
       <div class="form-group" *ngIf="form.controls.energySource.value != 'Mixed Fuels'">
-        <label class="small" for="fuelType">Fuel Type</label>
+        <label class="small" for="{{idPrefix()}}fuelType">Fuel Type</label>
         <div class="input-group">
-          <select name="fuelType" class="form-control" id="fuelType" formControlName="fuelType" (change)="setFuel()"
+          <select name="fuelType" class="form-control" id="{{idPrefix()}}fuelType" formControlName="fuelType" (change)="setFuel()"
           [ngClass]="{'indicate-different': co2SavingsDifferent.fuelType}"
             [required]="true" (focus)="focusField('fuelType')">
             <option *ngFor="let option of fuelOptions" [ngValue]="option.fuelType">{{option.fuelType}}</option>
@@ -26,12 +26,12 @@
       </div>
       
       <div class="form-group">
-        <label for="totalFuelEmissionOutputRate">Total Fuel Emission Output Rate
+        <label for="{{idPrefix()}}totalFuelEmissionOutputRate">Total Fuel Emission Output Rate
           <a class="form-text small click-link" *ngIf="form.controls.energySource.value == 'Mixed Fuels'" (click)="showMixedCO2EmissionsModal()">
             Calculate Net CO<sub>2</sub> Emissions from Mixed Sources</a>
           </label>
           <div class="input-group">
-            <input class="form-control" name="totalFuelEmissionOutputRate" 
+            <input class="form-control" name="totalFuelEmissionOutputRate" id="{{idPrefix()}}totalFuelEmissionOutputRate" 
             [ngClass]="{'indicate-different': co2SavingsDifferent.totalFuelEmissionOutputRate}"
             formControlName="totalFuelEmissionOutputRate" type="number" step="1"
             (focus)="focusField('totalEmissionOutputRate')" (input)="calculate()">
@@ -45,10 +45,10 @@
 
     <ng-container *ngIf="settings.furnaceType === 'Electric Arc Furnace (EAF)'">
     <div class="form-group">
-      <label for="totalNaturalGasEmissionOutputRate">Natural Gas Emission Output Rate
+      <label for="{{idPrefix()}}totalNaturalGasEmissionOutputRate">Natural Gas Emission Output Rate
       </label>
       <div class="input-group">
-        <input class="form-control" name="totalNaturalGasEmissionOutputRate"
+        <input class="form-control" name="totalNaturalGasEmissionOutputRate" id="{{idPrefix()}}totalNaturalGasEmissionOutputRate"
         [ngClass]="{'indicate-different': co2SavingsDifferent.totalNaturalGasEmissionOutputRate}"
           formControlName="totalNaturalGasEmissionOutputRate" type="number" step="1"
           (focus)="focusField('totalEmissionOutputRate')" (input)="calculate()">
@@ -60,9 +60,9 @@
     </div>
     
     <div class="form-group">
-      <label class="small" for="coalFuelType">Coal Carbon Fuel Type</label>
+      <label class="small" for="{{idPrefix()}}coalFuelType">Coal Carbon Fuel Type</label>
       <div class="input-group">
-          <select name="coalFuelType" class="form-control" id="coalFuelType" formControlName="coalFuelType"
+          <select name="coalFuelType" class="form-control" id="{{idPrefix()}}coalFuelType" formControlName="coalFuelType"
           [ngClass]="{'indicate-different': co2SavingsDifferent.coalFuelType}"
                (change)="setCoalFuel(true, true)" [required]="true" (focus)="focusField('fuelType')">
               <option *ngFor="let option of coalFuelOptions" [ngValue]="option.fuelType">{{option.fuelType}}</option>
@@ -70,10 +70,10 @@
       </div>
    </div>
     <div class="form-group">
-      <label for="totalCoalEmissionOutputRate">Coal Carbon Emission Output Rate
+      <label for="{{idPrefix()}}totalCoalEmissionOutputRate">Coal Carbon Emission Output Rate
       </label>
       <div class="input-group">
-        <input class="form-control" name="totalCoalEmissionOutputRate"
+        <input class="form-control" name="totalCoalEmissionOutputRate" id="{{idPrefix()}}totalCoalEmissionOutputRate"
         [ngClass]="{'indicate-different': co2SavingsDifferent.totalCoalEmissionOutputRate}"
           formControlName="totalCoalEmissionOutputRate" type="number" step="1"
           (focus)="focusField('totalEmissionOutputRate')" (input)="calculate()">
@@ -85,9 +85,9 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="eafOtherFuelSource">Other Fuel Energy Source</label>
+      <label class="small" for="{{idPrefix()}}eafOtherFuelSource">Other Fuel Energy Source</label>
       <div class="input-group">
-        <select name="eafOtherFuelSource" class="form-control" id="eafOtherFuelSource" formControlName="eafOtherFuelSource"
+        <select name="eafOtherFuelSource" class="form-control" id="{{idPrefix()}}eafOtherFuelSource" formControlName="eafOtherFuelSource"
         [ngClass]="{'indicate-different': co2SavingsDifferent.eafOtherFuelSource}"
           (change)="setEAFFuelSource()" [required]="true" (focus)="focusField('energySource')">
           <option *ngFor="let option of eafOtherFuelSources" [ngValue]="option.energySource">{{option.energySource}}</option>
@@ -96,9 +96,9 @@
     </div>
 
   <div class="form-group" *ngIf="form.controls.eafOtherFuelSource.value != 'Mixed Fuels' && form.controls.eafOtherFuelSource.value != 'None'">
-      <label class="small" for="otherFuelType">Other Fuel Type</label>
+      <label class="small" for="{{idPrefix()}}otherFuelType">Other Fuel Type</label>
       <div class="input-group">
-          <select name="otherFuelType" class="form-control" id="otherFuelType" formControlName="otherFuelType"
+          <select name="otherFuelType" class="form-control" id="{{idPrefix()}}otherFuelType" formControlName="otherFuelType"
           [ngClass]="{'indicate-different': co2SavingsDifferent.otherFuelType}"
                (change)="setOtherFuel()" [required]="true" (focus)="focusField('fuelType')">
               <option *ngFor="let option of eafOtherFuelOptions" [ngValue]="option.fuelType">{{option.fuelType}}</option>
@@ -107,12 +107,12 @@
   </div>
 
     <div class="form-group">
-      <label for="totalOtherEmissionOutputRate">Other Fuel Emission Output Rate
+      <label for="{{idPrefix()}}totalOtherEmissionOutputRate">Other Fuel Emission Output Rate
         <a *ngIf="form.controls.eafOtherFuelSource.value == 'Mixed Fuels'" class="form-text small click-link" (click)="showOtherFuelsMixedCO2EmissionsModal()">
           Calculate Net CO<sub>2</sub> Emissions from Mixed Sources</a>
       </label>
       <div class="input-group">
-        <input class="form-control" name="totalOtherEmissionOutputRate"
+        <input class="form-control" name="totalOtherEmissionOutputRate" id="{{idPrefix()}}totalOtherEmissionOutputRate"
         [ngClass]="{'indicate-different': co2SavingsDifferent.totalOtherEmissionOutputRate}"
           formControlName="totalOtherEmissionOutputRate" type="number" step="1"
           (focus)="focusField('totalEmissionOutputRate')" (input)="calculate()">
@@ -129,11 +129,11 @@
     <ng-container *ngIf="co2SavingsData.energyType == 'electricity'">
         <label class="group-label w-100 mt-2">Carbon Emissions From Electricity</label>
         <div class="form-group">
-            <label class="small" for="zipcode">
+            <label class="small" for="{{idPrefix()}}zipcode">
                 Zip code
             </label>
             <div class="input-group">
-                <input name="zipcode" type="text" step="1" class="form-control" formControlName="zipcode" id="zipcode"
+                <input name="zipcode" type="text" step="1" class="form-control" formControlName="zipcode" id="{{idPrefix()}}zipcode"
                 onfocus="this.select();" (input)="setZipcode()" (focus)="focusField('zipcode')">
             </div>
             <span class="alert-danger pull-right small" *ngIf="zipCodeSubRegionData.length === 0 && isBaseline">
@@ -143,9 +143,9 @@
         
         
         <div *ngIf="zipCodeSubRegionData" class="form-group">
-            <label class="small" for="eGridSubregion">eGRID Subregion</label>
+            <label class="small" for="{{idPrefix()}}eGridSubregion">eGRID Subregion</label>
             <div *ngIf="zipCodeSubRegionData.length > 1" class="input-group">
-                <select name="eGridSubregion" class="form-control" id="eGridSubregion" formControlName="eGridSubregion"
+                <select name="eGridSubregion" class="form-control" id="{{idPrefix()}}eGridSubregion" formControlName="eGridSubregion"
                     (focus)="focusField('eGridSubregion')" (change)="setSubRegionEmissionsOutput(setSubRegionEmissionsOutput)">
                     <option *ngFor="let subregion of zipCodeSubRegionData" [ngValue]="subregion">{{subregion}}</option>
                 </select>
@@ -159,13 +159,13 @@
         </div>
     
     <div class="form-group">
-        <label class="small" for="totalEmissionOutputRate">
+        <label class="small" for="{{idPrefix()}}totalEmissionOutputRate">
             Total Emission Output Rate
         </label>
         <div class="input-group">
             <input name="totalEmissionOutputRate" type="number" step="1" class="form-control"
             [ngClass]="{'indicate-different': co2SavingsDifferent.totalEmissionOutputRate}"
-            formControlName="totalEmissionOutputRate" id="totalEmissionOutputRate" onfocus="this.select();"
+            formControlName="totalEmissionOutputRate" id="{{idPrefix()}}totalEmissionOutputRate" onfocus="this.select();"
             (input)="setUserEmissionsOutput()" (focus)="focusField('totalEmissionOutputRate')">
             <span class="input-group-addon units small">kg CO<sub>2</sub>/MWh
             </span>

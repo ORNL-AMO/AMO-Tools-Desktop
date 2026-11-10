@@ -108,14 +108,14 @@ export class CoolingTabComponent implements OnInit {
 
 
   checkLossValid(loss: CoolingLoss) {
-    if (loss.coolingLossType === 'Gas') {
+    if (loss.coolingLossType === 'Gas' || loss.coolingLossType === 'Other Gas') {
       let tmpForm: UntypedFormGroup = this.coolingFormService.initGasFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;
       }
-    } else if (loss.coolingLossType === 'Liquid') {
+    } else if (loss.coolingLossType === 'Liquid' || loss.coolingLossType === 'Other Liquid') {
       let tmpForm: UntypedFormGroup = this.coolingFormService.initLiquidFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         return true;

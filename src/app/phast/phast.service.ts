@@ -656,7 +656,7 @@ export class PhastService {
       grossHeatRequired += this.sumAtmosphereLosses(losses.atmosphereLosses, settings);
     }
     if (losses.auxiliaryPowerLosses) {
-      grossHeatRequired += this.sumAuxilaryPowerLosses(losses.auxiliaryPowerLosses);
+      grossHeatRequired += this.sumAuxilaryPowerLosses(losses.auxiliaryPowerLosses, settings);
     }
     if (losses.chargeMaterials) {
       grossHeatRequired += this.sumChargeMaterials(losses.chargeMaterials, settings, undefined);
@@ -707,12 +707,12 @@ export class PhastService {
     return sum;
   }
 
-  sumAuxilaryPowerLosses(losses: AuxiliaryPowerLoss[]): number {
+  sumAuxilaryPowerLosses(losses: AuxiliaryPowerLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
       let tmpForm = this.auxiliaryPowerLossesService.getFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
-        sum += this.auxiliaryPowerLoss(loss);
+        sum += this.auxiliaryPowerLoss(this.createInputCopy(loss), settings);
       }
     });
     return sum;
@@ -748,16 +748,14 @@ export class PhastService {
   }
 
   sumCoolingLosses(losses: CoolingLoss[], settings: Settings): number {
-    // Known bug: only 'Gas' and 'Liquid' types are summed, so 'Other Gas' / 'Other Liquid' cooling
-    // losses add 0 to results even though the cooling form shows their heat loss.
     let sum = 0;
     losses.forEach(loss => {
-      if (loss.coolingLossType === 'Gas') {
+      if (loss.coolingLossType === 'Gas' || loss.coolingLossType === 'Other Gas') {
         let tmpForm = this.coolingFormService.initGasFormFromLoss(loss);
         if (tmpForm.status === 'VALID') {
           sum += this.gasCoolingLosses(loss.gasCoolingLoss, settings);
         }
-      } else if (loss.coolingLossType === 'Liquid') {
+      } else if (loss.coolingLossType === 'Liquid' || loss.coolingLossType === 'Other Liquid') {
         let tmpForm = this.coolingFormService.initLiquidFormFromLoss(loss);
         if (tmpForm.status === 'VALID') {
           sum += this.liquidCoolingLosses(loss.liquidCoolingLoss, settings);
@@ -810,13 +808,14 @@ export class PhastService {
         windVelocity: 5,
         surfaceEmissivity: loss.surfaceEmissivity,
         conditionFactor: 1,
-        correctionFactor: 1
+        correctionFactor: 1,
+        name: loss.name
       };
       let tmpForm = this.wallFormService.getWallLossForm(tmpWallLoss);
       if (tmpForm.status === 'VALID') {
         let lossVal = this.wallLosses(tmpWallLoss, settings);
         if (isNaN(lossVal) === false) {
-          sum += this.wallLosses(tmpWallLoss, settings);
+          sum += lossVal;
         }
       }
     });

@@ -52,7 +52,6 @@ export class ChargeMaterialCompareService {
       this.compareLiquidThermicReaction(index) ||
       this.compareSpecificHeatLiquid(index) ||
       this.compareVaporizingTemperature(index) ||
-      this.vaporizingTemperature(index) ||
       this.compareLiquidLatentHeat(index) ||
       this.compareLiquidSpecificHeatVapor(index) ||
       this.compareLiquidChargeFeedRate(index) ||
@@ -76,14 +75,11 @@ export class ChargeMaterialCompareService {
   compareVaporizingTemperature(index: number) {
     return this.compare(this.baselineMaterials[index].liquidChargeMaterial.vaporizingTemperature, this.modifiedMaterials[index].liquidChargeMaterial.vaporizingTemperature);
   }
-  vaporizingTemperature(index: number) {
+  compareLiquidLatentHeat(index: number) {
     return this.compare(this.baselineMaterials[index].liquidChargeMaterial.latentHeat, this.modifiedMaterials[index].liquidChargeMaterial.latentHeat);
   }
-  compareLiquidLatentHeat(index: number) {
-    return this.compare(this.baselineMaterials[index].liquidChargeMaterial.specificHeatVapor, this.modifiedMaterials[index].liquidChargeMaterial.specificHeatVapor);
-  }
   compareLiquidSpecificHeatVapor(index: number) {
-    return this.compare(this.baselineMaterials[index].liquidChargeMaterial.feedRate, this.modifiedMaterials[index].liquidChargeMaterial.feedRate);
+    return this.compare(this.baselineMaterials[index].liquidChargeMaterial.specificHeatVapor, this.modifiedMaterials[index].liquidChargeMaterial.specificHeatVapor);
   }
   compareLiquidChargeFeedRate(index: number) {
     return this.compare(this.baselineMaterials[index].liquidChargeMaterial.chargeFeedRate, this.modifiedMaterials[index].liquidChargeMaterial.chargeFeedRate);
