@@ -119,7 +119,7 @@ export class WaterReductionComponent implements OnInit {
   }
 
   addBaselineEquipment() {
-    let tmpObj: WaterReductionData = this.waterReductionService.initObject(this.baselineData.length, this.settings, this.calculatorType, this.operatingHours);
+    let tmpObj: WaterReductionData = this.waterReductionService.initObject(this.baselineData.length, this.settings, this.baselineData[0]?.calculatorType || this.calculatorType, this.operatingHours);
     this.baselineData.push(tmpObj);
     this.getResults();
   }
@@ -137,7 +137,7 @@ export class WaterReductionComponent implements OnInit {
   }
 
   addModificationEquipment() {
-    let tmpObj: WaterReductionData = this.waterReductionService.initObject(this.modificationData.length, this.settings, this.calculatorType, this.operatingHours);
+    let tmpObj: WaterReductionData = this.waterReductionService.initObject(this.modificationData.length, this.settings, this.baselineData[0]?.calculatorType || this.calculatorType, this.operatingHours);
     this.modificationData.push(tmpObj);
     this.getResults();
   }
