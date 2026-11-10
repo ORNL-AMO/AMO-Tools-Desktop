@@ -94,7 +94,7 @@ describe('ProcessHeatingUiService electrotechnology-standard gating', () => {
     service = TestBed.inject(ProcessHeatingUiService);
   });
 
-  const electroStandardViews = [LossView.AUXILIARY_POWER, LossView.ENERGY_INPUT_EXHAUST_GAS];
+  const electroStandardViews = [LossView.ENERGY_INPUT_EXHAUST_GAS];
   const hiddenConfigurations = [
     HeatingEquipmentConfiguration.FUEL_FIRED,
     HeatingEquipmentConfiguration.STEAM,
@@ -109,7 +109,7 @@ describe('ProcessHeatingUiService electrotechnology-standard gating', () => {
     expect(hiddenConfigurations.slice().sort()).toEqual(expected.slice().sort());
   });
 
-  it('shows Auxiliary Power and Energy Input Exhaust Gas in heat balance and Expert View for electrotechnology-standard', () => {
+  it('shows Energy Input Exhaust Gas in heat balance and Expert View for electrotechnology-standard', () => {
     const heatBalance = service.visibleHeatBalanceTabs().map(link => link.view);
     const expertView = service.visibleExpertViewTabs().map(link => link.view);
 
@@ -120,7 +120,7 @@ describe('ProcessHeatingUiService electrotechnology-standard gating', () => {
   });
 
   for (const hiddenConfiguration of hiddenConfigurations) {
-    it(`hides Auxiliary Power and Energy Input Exhaust Gas for ${hiddenConfiguration}`, () => {
+    it(`hides Energy Input Exhaust Gas for ${hiddenConfiguration}`, () => {
       configuration.set(hiddenConfiguration);
 
       const heatBalance = service.visibleHeatBalanceTabs().map(link => link.view);
@@ -134,7 +134,6 @@ describe('ProcessHeatingUiService electrotechnology-standard gating', () => {
   }
 
   it('uses the same route tokens the gating set is keyed on', () => {
-    expect(LossView.AUXILIARY_POWER).toBe(ROUTE_TOKENS.auxiliaryPower);
     expect(LossView.ENERGY_INPUT_EXHAUST_GAS).toBe(ROUTE_TOKENS.energyInputExhaustGas);
   });
 });

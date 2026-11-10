@@ -278,19 +278,6 @@ export const SECTION_DEFINITIONS: SectionDefinition[] = [
   },
   {
     kind: 'items',
-    label: 'Auxiliary Power Loss',
-    items: losses => losses.auxiliaryPowerLosses,
-    isVisible: categories => categories.showAuxPower,
-    fields: [
-      prop('Motor Current Phase(s)', 'motorPhase'),
-      prop('Supply Voltage', 'supplyVoltage', 'V'),
-      prop('Average Current', 'avgCurrent', 'A'),
-      prop('Power Factor', 'powerFactor'),
-      prop('Operating Time', 'operatingTime', PERCENT),
-    ],
-  },
-  {
-    kind: 'items',
     label: 'Exhaust Gas Loss',
     items: losses => losses.exhaustGasEAF,
     isVisible: categories => categories.showExGas,

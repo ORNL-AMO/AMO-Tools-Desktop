@@ -18,7 +18,6 @@ const LOSS_HELP_SELECTORS: Record<string, string> = {
   [ROUTE_TOKENS.other]: 'app-other-losses-help',
   [ROUTE_TOKENS.flueGas]: 'app-flue-gas-losses-help',
   [ROUTE_TOKENS.gasLeakage]: 'app-gas-leakage-losses-help',
-  [ROUTE_TOKENS.auxiliaryPower]: 'app-auxiliary-power-losses-help',
   [ROUTE_TOKENS.energyInputExhaustGas]: 'app-energy-input-exhaust-gas-losses-help',
   [ROUTE_TOKENS.energyInput]: 'app-energy-input-help',
   [ROUTE_TOKENS.exhaustGas]: 'app-exhaust-gas-help',

@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { DesignedEnergyService } from '../../phast/designed-energy/designed-energy.service';
 import { MeteredEnergyService } from '../../phast/metered-energy/metered-energy.service';
 import { PhastResultsService } from '../../phast/phast-results.service';
+import { ShowResultsCategories } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { Losses, PHAST, PhastResults } from '../models/phast';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
@@ -29,7 +30,10 @@ describe('ProcessHeatingResultsService', () => {
           provide: ProcessHeatingAssessmentService,
           useValue: { settingsSignal: settings, scenarioPhastSignal: (scenario: string) => scenarios[scenario]() },
         },
-        { provide: PhastResultsService, useValue: { getResults: legacyGetResults } },
+        {
+          provide: PhastResultsService,
+          useValue: { getResults: legacyGetResults, getResultCategories: () => ({ showAuxPower: true, showSlag: true } as ShowResultsCategories) },
+        },
         { provide: MeteredEnergyService, useValue: {} },
         { provide: DesignedEnergyService, useValue: {} },
       ],
@@ -70,6 +74,22 @@ describe('ProcessHeatingResultsService', () => {
       scenarios.mod1.set({ name: 'mod1' } as PHAST);
       expect(service.scenarioResults('mod1')).toBeUndefined();
       expect(legacyGetResults).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('auxiliary power', () => {
+    it('leaves saved auxiliary power losses out of the legacy calculation', () => {
+      const losses = { auxiliaryPowerLosses: [{ supplyVoltage: 480 }], wallLosses: [] } as Losses;
+      service.getResults({ name: 'baseline', losses }, settings() as Settings);
+
+      const legacyLosses = legacyGetResults.calls.mostRecent().args[0].losses;
+      expect(legacyLosses.auxiliaryPowerLosses).toBeUndefined();
+      expect(legacyLosses.wallLosses).toEqual([]);
+      expect(losses.auxiliaryPowerLosses.length).toBe(1);
+    });
+
+    it('never shows the auxiliary power result category', () => {
+      expect(service.getResultCategories(settings() as Settings)).toEqual(jasmine.objectContaining({ showAuxPower: false, showSlag: true }));
     });
   });
 

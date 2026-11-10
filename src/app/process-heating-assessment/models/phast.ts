@@ -117,6 +117,7 @@ export interface Notes {
   leakageNotes?: string;
   extendedNotes?: string;
   slagNotes?: string;
+  /** Unused by this module; kept to match the shared legacy shape (see scripts/check-phast-shape-drift.js). */
   auxiliaryPowerNotes?: string;
   exhaustGasNotes?: string;
   energyInputNotes?: string;
@@ -207,6 +208,7 @@ export interface PhastValid {
   energyInputValid: boolean;
   exhaustGasValid: boolean;
   inputExhaustValid: boolean;
+  /** Always true; this module has no Auxiliary Power step. Kept to match the shared legacy shape (see scripts/check-phast-shape-drift.js). */
   auxPowerValid: boolean;
 }
 

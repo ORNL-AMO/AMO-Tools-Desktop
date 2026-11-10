@@ -5,6 +5,7 @@ import { Settings } from '../../shared/models/settings';
 import { getModificationName } from '../models/modification';
 import { ModificationService } from '../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { toLegacyPhast } from '../services/legacy-phast.util';
 import { ProcessHeatingValidityService } from '../services/process-heating-validity.service';
 
 export interface SankeyScenario {
@@ -29,7 +30,7 @@ export class SankeyResultsService {
     ].map(({ id, name }) => ({
       id,
       name,
-      phast: { ...this.assessmentService.scenarioPhastSignal(id) } as unknown as SharedPHAST,
+      phast: toLegacyPhast(this.assessmentService.scenarioPhastSignal(id)),
     }))
   );
 }

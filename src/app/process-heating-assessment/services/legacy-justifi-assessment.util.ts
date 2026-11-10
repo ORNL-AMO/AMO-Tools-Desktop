@@ -1,8 +1,9 @@
 import { Assessment } from '../../shared/models/assessment';
-import { Modification as LegacyModification, PHAST as LegacyPHAST } from '../../shared/models/phast/phast';
+import { Modification as LegacyModification } from '../../shared/models/phast/phast';
 import { ExploreOpportunityCategory, PHAST } from '../models/phast';
 import { ProcessHeatingModification } from '../models/modification';
 import { getEffectivePhast } from './scenario-merge.util';
+import { toLegacyPhast } from './legacy-phast.util';
 
 const LEGACY_FLAG_KEYS: Record<ExploreOpportunityCategory, keyof LegacyModification> = {
   [ExploreOpportunityCategory.FlueGas]: 'exploreOppsShowFlueGas',
@@ -43,8 +44,8 @@ export function toLegacyJustifiAssessment(assessment: Assessment, setupDone: boo
       notes: modification.notes,
       exploreOpportunities: Object.keys(flags).length > 0,
       ...legacyFlags,
-      phast: getEffectivePhast(baseline, modification) as unknown as LegacyPHAST,
+      phast: toLegacyPhast(getEffectivePhast(baseline, modification)),
     } as LegacyModification;
   });
-  return { ...assessment, phast: { ...assessment.phast, setupDone, modifications: legacyModifications } };
+  return { ...assessment, phast: { ...toLegacyPhast(baseline), setupDone, modifications: legacyModifications } };
 }

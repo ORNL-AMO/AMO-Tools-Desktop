@@ -39,7 +39,6 @@ interface ScenarioSummary {
 
 const LOSS_LABELS: Array<{ key: keyof Losses; label: string }> = [
   { key: 'atmosphereLosses', label: 'Atmosphere' },
-  { key: 'auxiliaryPowerLosses', label: 'Auxiliary power' },
   { key: 'chargeMaterials', label: 'Charge Materials' },
   { key: 'coolingLosses', label: 'Cooling' },
   { key: 'energyInputEAF', label: 'Energy Input' },
@@ -59,7 +58,6 @@ const PERCENT = '%';
 
 const NOTE_LABELS: Array<{ key: keyof Notes; label: string }> = [
   { key: 'atmosphereNotes', label: 'Atmosphere Losses' },
-  { key: 'auxiliaryPowerNotes', label: 'Auxiliary Power Losses' },
   { key: 'chargeNotes', label: 'Charge Materials' },
   { key: 'coolingNotes', label: 'Cooling Losses' },
   { key: 'energyInputNotes', label: 'Energy Input' },

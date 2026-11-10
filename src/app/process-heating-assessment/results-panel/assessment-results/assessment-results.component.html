@@ -88,15 +88,6 @@
           <td>@if (mod?.totalExtSurfaceLoss) { {{mod.totalExtSurfaceLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
         }
       </tr>
-      @if (cats.showAuxPower) {
-        <tr>
-          <td>Aux Power Losses</td>
-          <td>@if (base?.totalAuxPower) { {{base.totalAuxPower | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          @if (modification()) {
-            <td>@if (mod?.totalAuxPower) { {{mod.totalAuxPower | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          }
-        </tr>
-      }
       @if (cats.showSlag) {
         <tr>
           <td>Slag Losses</td>

@@ -123,7 +123,7 @@ describe('ResultsDataResultsService', () => {
     it('adds electrical rows for non-EAF electric furnaces', () => {
       settings.update(current => ({ ...current, energySourceType: 'Electricity' }));
       categories = { ...NO_CATEGORIES, showHeatDelivered: true, showElectricalDelivered: true, showAuxPower: true, showEnInput2: true };
-      expect(labels()).toContain('Aux Power Losses');
+      expect(labels()).not.toContain('Aux Power Losses');
       expect(labels()).toContain('Electrical Heat Delivered');
       expect(labels()).toContain('Electrical Heater Losses');
       expect(labels()).toContain('Total Provided Electrical Heat');
