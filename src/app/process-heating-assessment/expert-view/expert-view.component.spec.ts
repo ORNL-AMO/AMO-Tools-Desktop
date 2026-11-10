@@ -11,7 +11,7 @@ import { ExpertViewComponent } from './expert-view.component';
 
 const EXPERT_VIEW_TABS: ViewLink[] = HEAT_BALANCE_VIEW_LINKS.filter(link =>
   link.view === LossView.CHARGE_MATERIAL || link.view === LossView.WALL_LOSSES || link.view === LossView.EXTENDED_SURFACE
-    || link.view === LossView.AUXILIARY_POWER || link.view === LossView.ENERGY_INPUT_EXHAUST_GAS
+    || link.view === LossView.ENERGY_INPUT_EXHAUST_GAS
     || link.view === LossView.ENERGY_INPUT || link.view === LossView.EXHAUST_GAS || link.view === LossView.SLAG
     || link.view === LossView.HEAT_SYSTEM_EFFICIENCY
 );
@@ -82,7 +82,7 @@ describe('ExpertViewComponent', () => {
   });
 
   it('renders one tab per built loss type', () => {
-    expect(query('.tabs li').map(tab => tab.textContent.trim())).toEqual(['Charge Material', 'Wall Losses', 'Extended Surface', 'Auxiliary Power', 'Energy Input Exhaust Gas', 'Energy Input', 'Exhaust Gas', 'Slag', 'Heat System Efficiency']);
+    expect(query('.tabs li').map(tab => tab.textContent.trim())).toEqual(['Charge Material', 'Wall Losses', 'Extended Surface', 'Energy Input Exhaust Gas', 'Energy Input', 'Exhaust Gas', 'Slag', 'Heat System Efficiency']);
   });
 
   it('shows charge material in both panels by default', () => {
@@ -110,33 +110,21 @@ describe('ExpertViewComponent', () => {
     expect(panels.map(panel => panel.scenario)).toEqual(['baseline', 'mod-1']);
   });
 
-  it('switches both panels to Auxiliary Power with baseline and the modification id', () => {
-    query('.tabs li')[3].click();
-    fixture.detectChanges();
-
-    const panels = query('app-auxiliary-power') as (HTMLElement & { scenario: string })[];
-    expect(query('app-charge-material').length).toBe(0);
-    expect(panels.map(panel => panel.scenario)).toEqual(['baseline', 'mod-1']);
-    expect(query('.tabs li.active')[0].textContent.trim()).toBe('Auxiliary Power');
-  });
-
   it('switches both panels to Energy Input Exhaust Gas with baseline and the modification id', () => {
     query('.tabs li')[3].click();
     fixture.detectChanges();
-    query('.tabs li')[4].click();
-    fixture.detectChanges();
 
     const panels = query('app-energy-input-exhaust-gas') as (HTMLElement & { scenario: string })[];
-    expect(query('app-auxiliary-power').length).toBe(0);
+    expect(query('app-charge-material').length).toBe(0);
     expect(panels.map(panel => panel.scenario)).toEqual(['baseline', 'mod-1']);
     expect(query('.tabs li.active')[0].textContent.trim()).toBe('Energy Input Exhaust Gas');
   });
 
   const eafAndEfficiencyTabs: { index: number; selector: string; label: string }[] = [
-    { index: 5, selector: 'app-energy-input', label: 'Energy Input' },
-    { index: 6, selector: 'app-exhaust-gas', label: 'Exhaust Gas' },
-    { index: 7, selector: 'app-slag', label: 'Slag' },
-    { index: 8, selector: 'app-heat-system-efficiency', label: 'Heat System Efficiency' },
+    { index: 4, selector: 'app-energy-input', label: 'Energy Input' },
+    { index: 5, selector: 'app-exhaust-gas', label: 'Exhaust Gas' },
+    { index: 6, selector: 'app-slag', label: 'Slag' },
+    { index: 7, selector: 'app-heat-system-efficiency', label: 'Heat System Efficiency' },
   ];
 
   for (const { index, selector, label } of eafAndEfficiencyTabs) {

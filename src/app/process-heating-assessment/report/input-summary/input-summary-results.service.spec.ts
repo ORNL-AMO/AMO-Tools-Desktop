@@ -152,9 +152,8 @@ describe('InputSummaryResultsService', () => {
       scenarios['mod1'] = buildPhast({ losses, systemEfficiency: 75 });
     });
 
-    it('hides flue gas, auxiliary power, and system efficiency when the configuration does not use them', () => {
+    it('hides flue gas and system efficiency when the configuration does not use them', () => {
       expect(section('Flue Gas Loss 1')).toBeUndefined();
-      expect(section('Auxiliary Power Loss 1')).toBeUndefined();
       expect(section('Heat System Efficiency')).toBeUndefined();
     });
 
@@ -163,9 +162,9 @@ describe('InputSummaryResultsService', () => {
       expect(row('Flue Gas Loss 1', 'Flue Gas Temperature').baseline.value).toBe(500);
     });
 
-    it('shows auxiliary power when applicable', () => {
+    it('never shows saved auxiliary power losses', () => {
       categories.update(current => ({ ...current, showAuxPower: true }));
-      expect(row('Auxiliary Power Loss 1', 'Supply Voltage').baseline.value).toBe(480);
+      expect(section('Auxiliary Power Loss 1')).toBeUndefined();
     });
 
     it('shows system efficiency with baseline and modification values', () => {

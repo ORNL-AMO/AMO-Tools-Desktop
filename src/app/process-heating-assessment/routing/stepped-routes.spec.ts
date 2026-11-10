@@ -20,7 +20,6 @@ describe('deriveSteppedRoutes', () => {
       { view: ROUTE_TOKENS.opening, path: `${HEAT_BALANCE_BASE}/${ROUTE_TOKENS.opening}` },
       { view: ROUTE_TOKENS.other, path: `${HEAT_BALANCE_BASE}/${ROUTE_TOKENS.other}` },
       { view: ROUTE_TOKENS.gasLeakage, path: `${HEAT_BALANCE_BASE}/${ROUTE_TOKENS.gasLeakage}` },
-      { view: ROUTE_TOKENS.auxiliaryPower, path: `${HEAT_BALANCE_BASE}/${ROUTE_TOKENS.auxiliaryPower}` },
       { view: ROUTE_TOKENS.energyInputExhaustGas, path: `${HEAT_BALANCE_BASE}/${ROUTE_TOKENS.energyInputExhaustGas}` },
       { view: ROUTE_TOKENS.energyInput, path: `${HEAT_BALANCE_BASE}/${ROUTE_TOKENS.energyInput}` },
       { view: ROUTE_TOKENS.exhaustGas, path: `${HEAT_BALANCE_BASE}/${ROUTE_TOKENS.exhaustGas}` },

@@ -6,7 +6,6 @@ import { FlueGas } from '../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../shared/models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { AtmosphereFormService } from '../heat-balance/losses/atmosphere/atmosphere-form.service';
-import { AuxiliaryPowerFormService } from '../heat-balance/losses/auxiliary-power/auxiliary-power-form.service';
 import { GasMaterialFormService } from '../heat-balance/losses/charge-material/gas-form/gas-material-form.service';
 import { LiquidMaterialFormService } from '../heat-balance/losses/charge-material/liquid-form/liquid-material-form.service';
 import { SolidMaterialFormService } from '../heat-balance/losses/charge-material/solid-form/solid-material-form.service';
@@ -78,7 +77,7 @@ describe('ProcessHeatingValidityService', () => {
         SolidMaterialFormService, LiquidMaterialFormService, GasMaterialFormService, FlueGasFormService,
         FixtureFormService, WallLossesFormService, CoolingFormService, AtmosphereFormService, OpeningFormService,
         GasLeakageFormService, ExtendedSurfaceFormService, OtherFormService, SlagFormService, EnergyInputFormService,
-        ExhaustGasFormService, EnergyInputExhaustGasFormService, AuxiliaryPowerFormService,
+        ExhaustGasFormService, EnergyInputExhaustGasFormService,
         ConvertUnitsService,
         {
           provide: ProcessHeatingAssessmentService,

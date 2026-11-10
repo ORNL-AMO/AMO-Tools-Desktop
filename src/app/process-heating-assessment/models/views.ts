@@ -56,7 +56,6 @@ export const LossView = {
   OTHER: 'other',
   FLUE_GAS: 'flue-gas',
   GAS_LEAKAGE: 'gas-leakage',
-  AUXILIARY_POWER: 'auxiliary-power',
   ENERGY_INPUT_EXHAUST_GAS: 'energy-input-exhaust-gas',
   ENERGY_INPUT: 'energy-input',
   EXHAUST_GAS: 'exhaust-gas',
@@ -80,7 +79,6 @@ export const LOSS_VIEW_NOTES_KEY: Partial<Record<ProcessHeatingView, keyof Notes
   [LossView.OTHER]: 'otherNotes',
   [LossView.FLUE_GAS]: 'flueGasNotes',
   [LossView.GAS_LEAKAGE]: 'leakageNotes',
-  [LossView.AUXILIARY_POWER]: 'auxiliaryPowerNotes',
   [LossView.ENERGY_INPUT_EXHAUST_GAS]: 'energyInputExhaustGasNotes',
   [LossView.ENERGY_INPUT]: 'energyInputNotes',
   [LossView.EXHAUST_GAS]: 'exhaustGasNotes',
@@ -139,7 +137,6 @@ export const HEAT_BALANCE_VIEW_LINKS: ViewLink[] = [
   { view: LossView.OPENING, label: 'Opening' },
   { view: LossView.OTHER, label: 'Other' },
   { view: LossView.GAS_LEAKAGE, label: 'Gas Leakage' },
-  { view: LossView.AUXILIARY_POWER, label: 'Auxiliary Power' },
   { view: LossView.ENERGY_INPUT_EXHAUST_GAS, label: 'Energy Input Exhaust Gas' },
   { view: LossView.ENERGY_INPUT, label: 'Energy Input' },
   { view: LossView.EXHAUST_GAS, label: 'Exhaust Gas' },
@@ -160,7 +157,6 @@ export const EXPERT_VIEW_LOSS_VIEWS: ReadonlySet<ProcessHeatingView> = new Set<L
   LossView.OTHER,
   LossView.FLUE_GAS,
   LossView.GAS_LEAKAGE,
-  LossView.AUXILIARY_POWER,
   LossView.ENERGY_INPUT_EXHAUST_GAS,
   LossView.ENERGY_INPUT,
   LossView.EXHAUST_GAS,
@@ -191,7 +187,7 @@ export const CALCULATORS_VIEW_LINKS: ViewLink[] = [
 ];
 
 const FUEL_FIRED_ONLY_VIEWS: ReadonlySet<string> = new Set<string>([LossView.FLUE_GAS, LossView.GAS_LEAKAGE]);
-const ELECTRO_STANDARD_ONLY_VIEWS: ReadonlySet<string> = new Set<string>([LossView.AUXILIARY_POWER, LossView.ENERGY_INPUT_EXHAUST_GAS]);
+const ELECTRO_STANDARD_ONLY_VIEWS: ReadonlySet<string> = new Set<string>([LossView.ENERGY_INPUT_EXHAUST_GAS]);
 const EAF_ONLY_VIEWS: ReadonlySet<string> = new Set<string>([LossView.ENERGY_INPUT, LossView.EXHAUST_GAS, LossView.SLAG]);
 const STEAM_CUSTOM_ONLY_VIEWS: ReadonlySet<string> = new Set<string>([LossView.HEAT_SYSTEM_EFFICIENCY]);
 

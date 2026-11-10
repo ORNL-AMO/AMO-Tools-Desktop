@@ -9,6 +9,18 @@ import { MeteredEnergyService } from '../../phast/metered-energy/metered-energy.
 import { DesignedEnergyService } from '../../phast/designed-energy/designed-energy.service';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 
+/**
+ * Auxiliary Power is not part of this module, but saved assessments can still hold its losses,
+ * which the legacy heat balance would otherwise add to heat input.
+ * @param phast scenario in this module's shape
+ * @returns a legacy-shaped copy without auxiliary power losses
+ */
+export function toLegacyPhast(phast: PHAST): SharedPHAST {
+  if (!phast?.losses) return { ...phast } as unknown as SharedPHAST;
+  const { auxiliaryPowerLosses, ...losses } = phast.losses;
+  return { ...phast, losses } as unknown as SharedPHAST;
+}
+
 @Injectable()
 export class ProcessHeatingResultsService {
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
@@ -18,8 +30,7 @@ export class ProcessHeatingResultsService {
 
   getResults(phast: PHAST, settings: Settings): PhastResults | undefined {
     if (!phast || !settings || !phast.losses) return undefined;
-    // The legacy results service still expects the shared, legacy-owned PHAST shape.
-    return this.phastResultsService.getResults(phast as unknown as SharedPHAST, settings);
+    return this.phastResultsService.getResults(toLegacyPhast(phast), settings);
   }
 
   private readonly scenarioResultsCache = new Map<AssessmentScenario, Signal<PhastResults | undefined>>();
@@ -44,7 +55,7 @@ export class ProcessHeatingResultsService {
    * @returns flags for which conditional result rows apply to the configuration
    */
   getResultCategories(settings: Settings): ShowResultsCategories {
-    return this.phastResultsService.getResultCategories(settings);
+    return { ...this.phastResultsService.getResultCategories(settings), showAuxPower: false };
   }
 
   /**
@@ -66,13 +77,13 @@ export class ProcessHeatingResultsService {
   getEnergyUseReportData(phast: PHAST, results: PhastResults, settings: Settings): EnergyUseReportData {
     // Legacy reads flueGasLosses[0] whenever the array exists, which throws on an empty array.
     const flueGasLosses = phast.losses.flueGasLosses?.length ? phast.losses.flueGasLosses : undefined;
-    const legacyPhast = { ...phast, losses: { ...phast.losses, flueGasLosses } } as unknown as SharedPHAST;
+    const legacyPhast = toLegacyPhast({ ...phast, losses: { ...phast.losses, flueGasLosses } });
     return this.phastResultsService.getEnergyUseReportData(legacyPhast, results as never, settings);
   }
 
   /** @returns energy used, energy intensity, and auxiliary electricity calculated by the heat balance */
   getCalculatedByPhast(phast: PHAST, settings: Settings): CalculatedByPhast {
-    return this.phastResultsService.calculatedByPhast(phast as unknown as SharedPHAST, settings);
+    return this.phastResultsService.calculatedByPhast(toLegacyPhast(phast), settings);
   }
 
   /** @returns the metered energy comparison, or undefined when no metered energy was entered */
@@ -81,7 +92,7 @@ export class ProcessHeatingResultsService {
     if (!metered?.meteredEnergyElectricity && !metered?.meteredEnergySteam && !metered?.meteredEnergyFuel) {
       return undefined;
     }
-    return this.meteredEnergyService.calculateMeteredEnergy(phast as unknown as SharedPHAST, settings);
+    return this.meteredEnergyService.calculateMeteredEnergy(toLegacyPhast(phast), settings);
   }
 
   /** @returns the designed energy comparison, or undefined when no designed energy was entered */
@@ -89,6 +100,6 @@ export class ProcessHeatingResultsService {
     if (!phast.designedEnergy) {
       return undefined;
     }
-    return this.designedEnergyService.calculateDesignedEnergy(phast as unknown as SharedPHAST, settings);
+    return this.designedEnergyService.calculateDesignedEnergy(toLegacyPhast(phast), settings);
   }
 }

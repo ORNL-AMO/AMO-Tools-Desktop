@@ -33,7 +33,6 @@ export class ProcessHeatingUiService {
     [LossView.OPENING]: 'openingLosses',
     [LossView.OTHER]: 'otherLosses',
     [LossView.GAS_LEAKAGE]: 'leakageLosses',
-    [LossView.AUXILIARY_POWER]: 'auxiliaryPowerLosses',
     [LossView.ENERGY_INPUT_EXHAUST_GAS]: 'energyInputExhaustGasLoss',
     [LossView.ENERGY_INPUT]: 'energyInputEAF',
     [LossView.EXHAUST_GAS]: 'exhaustGasEAF',

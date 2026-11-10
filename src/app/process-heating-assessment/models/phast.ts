@@ -117,7 +117,6 @@ export interface Notes {
   leakageNotes?: string;
   extendedNotes?: string;
   slagNotes?: string;
-  auxiliaryPowerNotes?: string;
   exhaustGasNotes?: string;
   energyInputNotes?: string;
   energyInputExhaustGasNotes?: string;
@@ -207,7 +206,6 @@ export interface PhastValid {
   energyInputValid: boolean;
   exhaustGasValid: boolean;
   inputExhaustValid: boolean;
-  auxPowerValid: boolean;
 }
 
 export interface PhastCo2SavingsData {

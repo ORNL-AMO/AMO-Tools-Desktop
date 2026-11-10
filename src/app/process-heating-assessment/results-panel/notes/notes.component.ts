@@ -14,7 +14,6 @@ const NOTE_PLACEHOLDERS: Record<keyof Notes, string> = {
   extendedNotes: 'Add note for extended surfaces',
   otherNotes: 'Add note for other losses',
   slagNotes: 'Add note for slag loss',
-  auxiliaryPowerNotes: 'Add note for aux power',
   energyInputNotes: 'Add note for energy input',
   exhaustGasNotes: 'Add note for exhaust gas',
   energyInputExhaustGasNotes: 'Add note for exhaust gas',

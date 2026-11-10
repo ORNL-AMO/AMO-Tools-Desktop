@@ -5,6 +5,7 @@ import { Settings } from '../../shared/models/settings';
 import { getModificationName } from '../models/modification';
 import { ModificationService } from '../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { toLegacyPhast } from '../services/process-heating-results.service';
 import { ProcessHeatingValidityService } from '../services/process-heating-validity.service';
 
 export interface SankeyScenario {
@@ -29,7 +30,7 @@ export class SankeyResultsService {
     ].map(({ id, name }) => ({
       id,
       name,
-      phast: { ...this.assessmentService.scenarioPhastSignal(id) } as unknown as SharedPHAST,
+      phast: toLegacyPhast(this.assessmentService.scenarioPhastSignal(id)),
     }))
   );
 }
@@ -44,7 +45,8 @@ export function providePhastValidService(): Pick<PhastValidService, 'checkValid'
   return {
     checkValid: (phast: SharedPHAST): SharedPhastValid => {
       const scenario = sankeyResultsService.scenarios().find(entry => entry.phast === phast);
-      return validityService.scenarioValidity(scenario.id);
+      // Legacy's validity shape still has a flag for Auxiliary Power, which this module doesn't have.
+      return { ...validityService.scenarioValidity(scenario.id), auxPowerValid: true };
     },
   };
 }

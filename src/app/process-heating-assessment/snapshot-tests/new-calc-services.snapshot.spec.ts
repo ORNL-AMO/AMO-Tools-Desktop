@@ -39,7 +39,6 @@ import { FixtureCalculationService } from '../heat-balance/losses/fixture/fixtur
 import { CoolingCalculationService } from '../heat-balance/losses/cooling/cooling-calculation.service';
 import { GasLeakageCalculationService } from '../heat-balance/losses/gas-leakage/gas-leakage-calculation.service';
 import { EnergyInputExhaustGasCalculationService } from '../heat-balance/losses/energy-input-exhaust-gas/energy-input-exhaust-gas-calculation.service';
-import { AuxiliaryPowerCalculationService } from '../heat-balance/losses/auxiliary-power/auxiliary-power-calculation.service';
 import { FlueGasCalculationService } from '../heat-balance/losses/flue-gas/flue-gas-calculation.service';
 import { SlagCalculationService } from '../heat-balance/losses/slag/slag-calculation.service';
 import { EnergyInputCalculationService } from '../heat-balance/losses/energy-input/energy-input-calculation.service';
@@ -81,7 +80,6 @@ describe('New calculation services vs. legacy snapshot totals', () => {
   let cooling: CoolingCalculationService;
   let gasLeakage: GasLeakageCalculationService;
   let flueGas: FlueGasCalculationService;
-  let auxiliaryPower: AuxiliaryPowerCalculationService;
   let energyInputExhaustGas: EnergyInputExhaustGasCalculationService;
   let slag: SlagCalculationService;
   let energyInput: EnergyInputCalculationService;
@@ -99,7 +97,6 @@ describe('New calculation services vs. legacy snapshot totals', () => {
         { provide: CoolingCalculationService, useClass: CoolingCalculationService, deps: [] },
         { provide: GasLeakageCalculationService, useClass: GasLeakageCalculationService, deps: [] },
         { provide: FlueGasCalculationService, useClass: FlueGasCalculationService, deps: [] },
-        { provide: AuxiliaryPowerCalculationService, useClass: AuxiliaryPowerCalculationService, deps: [] },
         { provide: EnergyInputExhaustGasCalculationService, useClass: EnergyInputExhaustGasCalculationService, deps: [] },
         { provide: SlagCalculationService, useClass: SlagCalculationService, deps: [] },
         { provide: EnergyInputCalculationService, useClass: EnergyInputCalculationService, deps: [] },
@@ -113,7 +110,6 @@ describe('New calculation services vs. legacy snapshot totals', () => {
     cooling = injector.get(CoolingCalculationService);
     gasLeakage = injector.get(GasLeakageCalculationService);
     flueGas = injector.get(FlueGasCalculationService);
-    auxiliaryPower = injector.get(AuxiliaryPowerCalculationService);
     energyInputExhaustGas = injector.get(EnergyInputExhaustGasCalculationService);
     slag = injector.get(SlagCalculationService);
     energyInput = injector.get(EnergyInputCalculationService);
@@ -173,17 +169,6 @@ describe('New calculation services vs. legacy snapshot totals', () => {
           for (const key of Object.keys(actual)) {
             expect(actual[key]).withContext(key).toBeCloseTo(expected[key] ?? 0, 6);
           }
-        });
-
-        it(`${scenario.label} auxiliary power matches snapshot`, () => {
-          const expected = snapshots[scenario.snapshotKey];
-          const losses = scenario.effective().losses.auxiliaryPowerLosses;
-          if (!losses?.length || expected.totalAuxPower === undefined) {
-            pending('no auxiliary power result in this scenario');
-            return;
-          }
-          const actual = sum(losses, loss => auxiliaryPower.calculate(loss, settings));
-          expect(actual).withContext('totalAuxPower').toBeCloseTo(expected.totalAuxPower, 6);
         });
 
         it(`${scenario.label} energy input exhaust gas matches snapshot`, () => {

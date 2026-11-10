@@ -47,7 +47,6 @@ export const ROUTE_TOKENS = {
   flueGas: 'flue-gas',
   gasLeakage: 'gas-leakage',
   // Electrotechnology-standard only
-  auxiliaryPower: 'auxiliary-power',
   energyInputExhaustGas: 'energy-input-exhaust-gas',
   // EAF only
   energyInput: 'energy-input',

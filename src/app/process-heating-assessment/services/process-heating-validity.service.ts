@@ -5,7 +5,6 @@ import { ChargeMaterialType } from '../../shared/models/phast/losses/chargeMater
 import { Settings } from '../../shared/models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { AtmosphereFormService } from '../heat-balance/losses/atmosphere/atmosphere-form.service';
-import { AuxiliaryPowerFormService } from '../heat-balance/losses/auxiliary-power/auxiliary-power-form.service';
 import { GasMaterialFormService } from '../heat-balance/losses/charge-material/gas-form/gas-material-form.service';
 import { LiquidMaterialFormService } from '../heat-balance/losses/charge-material/liquid-form/liquid-material-form.service';
 import { SolidMaterialFormService } from '../heat-balance/losses/charge-material/solid-form/solid-material-form.service';
@@ -74,7 +73,6 @@ export class ProcessHeatingValidityService {
   private readonly energyInputFormService = inject(EnergyInputFormService);
   private readonly exhaustGasFormService = inject(ExhaustGasFormService);
   private readonly energyInputExhaustGasFormService = inject(EnergyInputExhaustGasFormService);
-  private readonly auxiliaryPowerFormService = inject(AuxiliaryPowerFormService);
 
   /** In the order legacy's alert lists them. */
   private readonly checks: ValidityCheck[] = [
@@ -102,7 +100,6 @@ export class ProcessHeatingValidityService {
     { key: 'slagValid', view: LossView.SLAG, label: 'Slag', isValid: phast => this.allValid(phast.losses?.slagLosses, loss => this.slagFormService.getSlagForm(loss)) },
     { key: 'energyInputValid', view: LossView.ENERGY_INPUT, label: 'Energy Input', isValid: (phast, settings, scenario) => this.isEnergyInputValid(phast, settings, scenario) },
     { key: 'systemEfficiencyValid', view: LossView.HEAT_SYSTEM_EFFICIENCY, label: 'System Efficiency', isValid: phast => new FormControl(phast.systemEfficiency ?? null, HEAT_SYSTEM_EFFICIENCY_VALIDATORS).valid },
-    { key: 'auxPowerValid', view: LossView.AUXILIARY_POWER, label: 'Auxiliary Power', isValid: phast => this.allValid(phast.losses?.auxiliaryPowerLosses, loss => this.auxiliaryPowerFormService.getAuxiliaryPowerForm(loss)) },
     { key: 'inputExhaustValid', view: LossView.ENERGY_INPUT_EXHAUST_GAS, label: 'Energy Input Exhaust Gas', isValid: phast => this.allValid(phast.losses?.energyInputExhaustGasLoss, loss => this.energyInputExhaustGasFormService.getEnergyInputExhaustGasForm(loss)) },
     { key: 'exhaustGasValid', view: LossView.EXHAUST_GAS, label: 'Exhaust Gas', isValid: phast => this.allValid(phast.losses?.exhaustGasEAF, loss => this.exhaustGasFormService.getExhaustGasForm(loss)) },
   ];

@@ -19,7 +19,6 @@ const EMPTY_NOTES: Notes = {
   leakageNotes: '',
   extendedNotes: '',
   slagNotes: '',
-  auxiliaryPowerNotes: '',
   exhaustGasNotes: '',
   energyInputNotes: '',
   energyInputExhaustGasNotes: '',

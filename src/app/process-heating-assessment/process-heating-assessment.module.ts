@@ -22,7 +22,6 @@ import { ProcessHeatingOperationsFormService } from './services/process-heating-
 import { ProcessHeatingResultsService } from './services/process-heating-results.service';
 import { ProcessHeatingValidityService } from './services/process-heating-validity.service';
 import { AtmosphereFormService } from './heat-balance/losses/atmosphere/atmosphere-form.service';
-import { AuxiliaryPowerFormService } from './heat-balance/losses/auxiliary-power/auxiliary-power-form.service';
 import { GasMaterialFormService } from './heat-balance/losses/charge-material/gas-form/gas-material-form.service';
 import { LiquidMaterialFormService } from './heat-balance/losses/charge-material/liquid-form/liquid-material-form.service';
 import { SolidMaterialFormService } from './heat-balance/losses/charge-material/solid-form/solid-material-form.service';
@@ -152,8 +151,6 @@ import { AirFuelRatioOpportunityComponent } from './explore-opportunities/air-fu
 import { PreheatCombustionAirOpportunityComponent } from './explore-opportunities/preheat-combustion-air-opportunity/preheat-combustion-air-opportunity.component';
 import { OperationsOpportunityComponent } from './explore-opportunities/operations-opportunity/operations-opportunity.component';
 import { GasLeakageOpportunityComponent } from './explore-opportunities/gas-leakage-opportunity/gas-leakage-opportunity.component';
-import { AuxiliaryPowerComponent } from './heat-balance/losses/auxiliary-power/auxiliary-power.component';
-import { AuxiliaryPowerFormComponent } from './heat-balance/losses/auxiliary-power/auxiliary-power-form.component';
 import { EnergyInputExhaustGasComponent } from './heat-balance/losses/energy-input-exhaust-gas/energy-input-exhaust-gas.component';
 import { EnergyInputExhaustGasFormComponent } from './heat-balance/losses/energy-input-exhaust-gas/energy-input-exhaust-gas-form.component';
 import { EnergyInputComponent } from './heat-balance/losses/energy-input/energy-input.component';
@@ -244,58 +241,53 @@ export const ROUTES: Route[] = [
                 data: { lossSubView: ROUTE_TOKENS.gasLeakage, stepIndex: 11 },
               },
               {
-                path: ROUTE_TOKENS.auxiliaryPower,
-                component: AuxiliaryPowerComponent,
-                data: { lossSubView: ROUTE_TOKENS.auxiliaryPower, stepIndex: 12 },
-              },
-              {
                 path: ROUTE_TOKENS.energyInputExhaustGas,
                 component: EnergyInputExhaustGasComponent,
-                data: { lossSubView: ROUTE_TOKENS.energyInputExhaustGas, stepIndex: 13 },
+                data: { lossSubView: ROUTE_TOKENS.energyInputExhaustGas, stepIndex: 12 },
               },
               {
                 path: ROUTE_TOKENS.energyInput,
                 component: EnergyInputComponent,
-                data: { lossSubView: ROUTE_TOKENS.energyInput, stepIndex: 14 },
+                data: { lossSubView: ROUTE_TOKENS.energyInput, stepIndex: 13 },
               },
               {
                 path: ROUTE_TOKENS.exhaustGas,
                 component: ExhaustGasComponent,
-                data: { lossSubView: ROUTE_TOKENS.exhaustGas, stepIndex: 15 },
+                data: { lossSubView: ROUTE_TOKENS.exhaustGas, stepIndex: 14 },
               },
               {
                 path: ROUTE_TOKENS.slag,
                 component: SlagComponent,
-                data: { lossSubView: ROUTE_TOKENS.slag, stepIndex: 16 },
+                data: { lossSubView: ROUTE_TOKENS.slag, stepIndex: 15 },
               },
               {
                 path: ROUTE_TOKENS.heatSystemEfficiency,
                 component: HeatSystemEfficiencyComponent,
-                data: { lossSubView: ROUTE_TOKENS.heatSystemEfficiency, stepIndex: 17 },
+                data: { lossSubView: ROUTE_TOKENS.heatSystemEfficiency, stepIndex: 16 },
               },
             ]
           },
           {
             path: ROUTE_TOKENS.auxiliaryEquipment,
             component: AuxiliaryEquipmentComponent,
-            data: { childView: ROUTE_TOKENS.auxiliaryEquipment, stepIndex: 18 },
+            data: { childView: ROUTE_TOKENS.auxiliaryEquipment, stepIndex: 17 },
           },
           {
             path: ROUTE_TOKENS.designedEnergy,
             component: DesignedEnergyComponent,
-            data: { childView: ROUTE_TOKENS.designedEnergy, stepIndex: 19 },
+            data: { childView: ROUTE_TOKENS.designedEnergy, stepIndex: 18 },
           },
           {
             path: ROUTE_TOKENS.meteredEnergy,
             component: MeteredEnergyComponent,
-            data: { childView: ROUTE_TOKENS.meteredEnergy, stepIndex: 20 },
+            data: { childView: ROUTE_TOKENS.meteredEnergy, stepIndex: 19 },
           },
         ]
       },
       {
         path: ROUTE_TOKENS.assessment,
         component: AssessmentComponent,
-        data: { mainView: ROUTE_TOKENS.assessment, stepIndex: 21 },
+        data: { mainView: ROUTE_TOKENS.assessment, stepIndex: 20 },
         canActivate: [requiresValidBaselineGuard],
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.exploreOpportunities, pathMatch: 'full' },
@@ -314,13 +306,13 @@ export const ROUTES: Route[] = [
       {
         path: ROUTE_TOKENS.diagram,
         component: ProcessHeatingDiagramComponent,
-        data: { mainView: ROUTE_TOKENS.diagram, stepIndex: 22 },
+        data: { mainView: ROUTE_TOKENS.diagram, stepIndex: 21 },
         canActivate: [requiresValidBaselineGuard],
       },
       {
         path: ROUTE_TOKENS.report,
         component: ReportComponent,
-        data: { mainView: ROUTE_TOKENS.report, stepIndex: 23 },
+        data: { mainView: ROUTE_TOKENS.report, stepIndex: 22 },
         canActivate: [requiresValidBaselineGuard],
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.energySummary, pathMatch: 'full' },
@@ -364,13 +356,13 @@ export const ROUTES: Route[] = [
       {
         path: ROUTE_TOKENS.sankey,
         component: ProcessHeatingSankeyComponent,
-        data: { mainView: ROUTE_TOKENS.sankey, stepIndex: 24 },
+        data: { mainView: ROUTE_TOKENS.sankey, stepIndex: 23 },
         canActivate: [requiresValidBaselineGuard],
       },
       {
         path: ROUTE_TOKENS.calculators,
         component: CalculatorsComponent,
-        data: { mainView: ROUTE_TOKENS.calculators, stepIndex: 25 },
+        data: { mainView: ROUTE_TOKENS.calculators, stepIndex: 24 },
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.o2Enrichment, pathMatch: 'full' },
           {
@@ -481,8 +473,6 @@ export const ROUTES: Route[] = [
     AddSolidLiquidFlueGasMaterialModalComponent,
     GasLeakageComponent,
     GasLeakageFormComponent,
-    AuxiliaryPowerComponent,
-    AuxiliaryPowerFormComponent,
     EnergyInputExhaustGasComponent,
     EnergyInputExhaustGasFormComponent,
     EnergyInputComponent,
@@ -548,7 +538,6 @@ export const ROUTES: Route[] = [
     EnergyInputFormService,
     ExhaustGasFormService,
     EnergyInputExhaustGasFormService,
-    AuxiliaryPowerFormService,
     ExecutiveSummaryResultsService,
     ResultsDataResultsService,
     ReportGraphsResultsService,

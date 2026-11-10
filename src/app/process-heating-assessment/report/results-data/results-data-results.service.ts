@@ -68,7 +68,6 @@ export class ResultsDataResultsService {
       row('Leakage Losses', r => r.totalLeakageLoss),
       row('Extended Surface Losses', r => r.totalExtSurfaceLoss),
     ];
-    if (categories.showAuxPower) rows.push(row('Aux Power Losses', r => r.totalAuxPower));
     if (categories.showSlag) rows.push(row('Slag Losses', r => r.totalSlag));
     rows.push(
       row('Other Losses', r => r.totalOtherLoss),
