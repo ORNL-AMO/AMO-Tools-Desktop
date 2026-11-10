@@ -72,7 +72,8 @@ export class WaterReductionService {
   getDefaultWaterCostForForm(settings: Settings, calculatorType: WaterReductionCalculatorType): number {
     let waterCost: number = this.getDefaultWaterCost(settings, calculatorType);
     if (settings.unitsOfMeasure != 'Imperial') {
-      waterCost = this.convertInitWaterCost(waterCost);
+      let settingsWaterCost: number = calculatorType == 'wastewater' ? settings.waterWasteCost : settings.waterCost;
+      waterCost = settingsWaterCost ? Number((settingsWaterCost * 1000).toFixed(3)) : this.convertInitWaterCost(waterCost);
     }
     return waterCost;
   }
