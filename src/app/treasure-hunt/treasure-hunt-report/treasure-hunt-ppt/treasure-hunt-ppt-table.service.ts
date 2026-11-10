@@ -233,13 +233,14 @@ export class TreasureHuntPptTableService {
     getOpportunityTableRows(rows: any[], opportunity: OpportunitySummary, settings: Settings, isTotalCostSavings: boolean) {
         let utilityUnit: string;
         if (opportunity.mixedIndividualResults) {
-            opportunity.mixedIndividualResults.forEach(opp => {
+            opportunity.mixedIndividualResults.forEach((opp, index) => {
+                let includeSharedFinancials: boolean = index === 0;
                 let additionalSavings: number = 0;
-                if (opp.opportunityCost.additionalAnnualSavings) {
+                if (includeSharedFinancials && opp.opportunityCost.additionalAnnualSavings) {
                     additionalSavings = opp.opportunityCost.additionalAnnualSavings.cost;
                 }
                 utilityUnit = this.getUtilityUnit(opp.utilityType, settings);
-                rows.push([opp.opportunityName, opp.utilityType, this.roundValToFormatString(opp.totalEnergySavings), utilityUnit, this.roundValToCurrency(opp.costSavings + additionalSavings), this.roundValToCurrency(opp.opportunityCost.material), this.roundValToCurrency(opp.opportunityCost.labor), this.getOtherCost(opp.opportunityCost), this.roundValToCurrency(opp.totalCost), this.roundValToFormatString(opp.payback)]);
+                rows.push([opp.opportunityName, opp.utilityType, this.roundValToFormatString(opp.totalEnergySavings), utilityUnit, this.roundValToCurrency(opp.costSavings + additionalSavings), this.roundValToCurrency(includeSharedFinancials ? opp.opportunityCost.material : 0), this.roundValToCurrency(includeSharedFinancials ? opp.opportunityCost.labor : 0), includeSharedFinancials ? this.getOtherCost(opp.opportunityCost) : '', this.roundValToCurrency(includeSharedFinancials ? opp.totalCost : 0), this.roundValToFormatString(includeSharedFinancials ? opp.payback : 0)]);
             });
         } else {
             let additionalSavings: number = 0;
