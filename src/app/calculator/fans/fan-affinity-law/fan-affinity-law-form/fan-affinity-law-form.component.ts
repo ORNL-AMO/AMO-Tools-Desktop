@@ -51,10 +51,7 @@ export class FanAffinityLawFormComponent implements OnInit {
     this.calculate.emit(true);
   }
 
-  // Actual Flow only affects the calculation when Current Motor Control is VSD or Two-Speed
-  // (see FanAffinityLaws::compute()). When switching to On/Off, keep the hidden field in sync
-  // with Rated Flow so a stale value can't push flowPercentBaseline out of its valid 0-100 range.
-  // Rated Flow edits are synced too, so the stored value never goes stale while On/Off is selected.
+  // On/Off operates at rated flow; synchronize edits before validation and calculation.
   syncActualFlow() {
     if (this.fanAffinityLawForm.controls.motorControlTypeCurrent.value === 0) {
       this.fanAffinityLawForm.controls.actualFlow.patchValue(this.fanAffinityLawForm.controls.ratedFlow.value);

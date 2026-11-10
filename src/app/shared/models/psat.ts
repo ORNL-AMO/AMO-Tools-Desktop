@@ -48,6 +48,8 @@ export interface PsatInputs {
   operating_hours: number;
   flow_rate?: number;
   head?: number;
+  /** Optional pump differential pressure, units psi; existing head-based records may omit it. */
+  differentialPressure?: number;
   motor_field_power?: number;
   motor_field_current?: number;
   motor_field_voltage?: number;

@@ -114,7 +114,7 @@ export class FanAffinityLawComponent implements OnInit {
   }
 
   async getResults() {
-    let inputs: FanAffinityLawsInput = this.fanAffinityLawService.getObjFromForm(this.fanAffinityLawForm);
+    let inputs: FanAffinityLawsInput = this.fanAffinityLawService.getObjFromForm(this.fanAffinityLawForm, this.modificationExists);
     this.fanAffinityLawService.setNoAdjustmentValidator(this.fanAffinityLawForm, this.modificationExists);
     if (this.fanAffinityLawForm.valid) {
       this.fanAffinityLawResults = this.fanAffinityLawService.getResults(inputs, this.settings, this.modificationExists);
@@ -167,9 +167,7 @@ export class FanAffinityLawComponent implements OnInit {
     this.setModificationSelected();
   }
 
-    // New Fan Diameter can't exceed the baseline Fan Diameter; that limit moves whenever
-  // Fan Diameter changes, and the validator itself is only (re)applied when Change Fan Size
-  // is toggled, so both need to refresh validators before recalculating.
+  // Refresh flow-capacity and diameter checks whenever the resize selection changes.
   refreshValidators() {
     this.fanAffinityLawService.setValidators(this.fanAffinityLawForm);
     this.getResults();

@@ -11,7 +11,9 @@
         "build": {
           "builder": "@angular-builders/custom-esbuild:application",
           "options": {
-            "plugins": ["./esbuild.plugins.js"],
+            "plugins": [
+              "./esbuild.plugins.js"
+            ],
             "allowedCommonJsDependencies": [
               "lodash",
               "regression",
@@ -188,7 +190,12 @@
               "src/favicon.ico",
               "src/robots.txt",
               "src/sitemap.xml",
-              "src/manifest.webmanifest"
+              "src/manifest.webmanifest",
+              {
+                "glob": "client.*",
+                "input": "node_modules/measur-tools-suite/bin",
+                "output": "/"
+              }
             ]
           }
         },

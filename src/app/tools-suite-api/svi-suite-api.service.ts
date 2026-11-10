@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { StatePointAnalysisInput, StatePointAnalysisResults } from '../shared/models/waste-water';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
+import { type GraphDataPoint, type SludgeVolumeIndex, type SludgeVolumeIndexOutput, type SVIParameter } from 'measur-tools-suite';
 
 @Injectable({
   providedIn: 'root'
@@ -10,13 +11,13 @@ export class SviSuiteApiService {
   constructor(private toolsSuiteApiService: ToolsSuiteApiService) { }
 
   svi(inputs: StatePointAnalysisInput): StatePointAnalysisResults {
-    let sviParamEnum = this.getParameter(inputs.sviParameter);
-    let instance = new this.toolsSuiteApiService.ToolsSuiteModule.SludgeVolumeIndex(sviParamEnum, inputs.sviValue, inputs.numberOfClarifiers, inputs.areaOfClarifier, inputs.MLSS, inputs.influentFlow, inputs.rasFlow, inputs.sludgeSettlingVelocity);
-    let results = instance.calculate();
+    let sviParamEnum: SVIParameter = this.getParameter(inputs.sviParameter);
+    let instance: SludgeVolumeIndex = new this.toolsSuiteApiService.ToolsSuiteModule.SludgeVolumeIndex(sviParamEnum, inputs.sviValue, inputs.numberOfClarifiers, inputs.areaOfClarifier, inputs.MLSS, inputs.influentFlow, inputs.rasFlow, inputs.sludgeSettlingVelocity);
+    let results: SludgeVolumeIndexOutput = instance.calculate();
     let graphData: Array<Array<number>> = new Array();
-    for (let i = 0; i < results.GraphData.size(); i++) {
-      let dataPoint = results.GraphData.get(i)
-      let graphDataPoints = [dataPoint.SolidsConcentration, dataPoint.SolidsFlux];
+    for (let i: number = 0; i < results.GraphData.size(); i++) {
+      let dataPoint: GraphDataPoint = results.GraphData.get(i)
+      let graphDataPoints: Array<number> = [dataPoint.SolidsConcentration, dataPoint.SolidsFlux];
       graphData.push(graphDataPoints)
       dataPoint.delete();
     }
@@ -39,7 +40,7 @@ export class SviSuiteApiService {
   }
 
 
-  getParameter(sviParameter: number) {
+  getParameter(sviParameter: number): SVIParameter {
     if (sviParameter == 0) {
       return this.toolsSuiteApiService.ToolsSuiteModule.SVIParameter.SVISN;
     } else if (sviParameter == 1) {

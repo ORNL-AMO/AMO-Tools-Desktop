@@ -41,8 +41,9 @@
       Motor Power
       <small class="text-muted">
         <br>
-        The nameplate power of the motor, or the maximum deliverable mechanical power of the motor. Values often
-        displayed in horsepower or kilowatts.
+        Mechanical power delivered to the fan at the baseline operating point, after motor and drive losses.
+        Enter delivered power in hp for imperial settings or kW for metric settings. This is not nameplate
+        power or electrical input power. Review older entries that used nameplate or full-speed rated power.
         <hr>
       </small>
     </h6>
@@ -175,10 +176,16 @@
       Fan Diameter
       <small class="text-muted">
         <br>
-        Diameter of the circle swept by the fan at its blade tips in the new configuration. Must be greater than
-        the Baseline Fan Diameter.
+        Diameter of the circle swept by the modified fan at its blade tips. Must be greater than zero.
+        Larger and smaller fans are supported; requested flow cannot exceed the modified fan's rated capacity.
         <hr>
       </small>
     </h6>
+  </div>
+  <div class="my-2">
+    <a class="pl-1" [href]="docsLink + 'group__fan__affinity__laws__calculator'" target="_blank" rel="noopener noreferrer">
+      <span class="fa fa-external-link"></span>
+      How are fan affinity-law energy savings calculated?
+    </a>
   </div>
 </div>

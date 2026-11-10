@@ -792,7 +792,15 @@ export interface FanAffinityLawsInput {
   efficiencyDrive: number;
 }
 
-export type FanAffinityLawsScenario = 'vsd' | 'twoSpeed' | 'changeFanSize' | 'vsdChangeFanSize' | 'twoSpeedChangeFanSize' | 'none';
+export type FanAffinityLawsScenario = 'vsd' | 'twoSpeed' | 'changeFanSize' | 'vsdChangeFanSize' | 'twoSpeedChangeFanSize' | 'onOff' | 'none';
+
+/** Plain Two-Speed power factor and time shares, all dimensionless fractions. */
+export interface FanAffinityLawsTimeFactors {
+  factor: number;
+  timeAbove50Percent: number;
+  timeAt50Percent: number;
+  timeAt0Percent: number;
+}
 
 export interface FanAffinityLawsOutput {
   annualEnergyBaseline: number;

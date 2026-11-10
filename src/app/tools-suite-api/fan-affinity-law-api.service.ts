@@ -1,86 +1,68 @@
 import { Injectable } from '@angular/core';
-import { FanAffinityLawsInput, FanAffinityLawsOutput } from '../shared/models/standalone';
-import { SuiteApiHelperService } from './suite-api-helper.service';
+import {
+  type FanAffinityLawsInput as SuiteFanAffinityLawsInput,
+  type FanAffinityLawsResult,
+  type FanAffinityLawsTimeFactorResult,
+  type FlowMode,
+  type MeasurToolsSuite,
+  type MotorControlType
+} from 'measur-tools-suite';
+import { FanAffinityLawsInput, FanAffinityLawsOutput, FanAffinityLawsTimeFactors } from '../shared/models/standalone';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
 
 @Injectable()
 export class FanAffinityLawApiService {
-  constructor(
-    private suiteApiHelperService: SuiteApiHelperService,
-    private toolsSuiteApiService: ToolsSuiteApiService,
-  ) {}
+  constructor(private toolsSuiteApiService: ToolsSuiteApiService) {}
 
   calculate(inputData: FanAffinityLawsInput): FanAffinityLawsOutput {
-    const instance = this.buildInstance(inputData);
-    const suiteOutput = instance.calculate();
-    const results = this.mapOutput(suiteOutput);
-    suiteOutput.delete();
-    instance.delete();
-    return results;
+    const suite: MeasurToolsSuite = this.toolsSuiteApiService.ToolsSuiteModule;
+    const input: SuiteFanAffinityLawsInput = this.buildInput(inputData, suite);
+    const output: FanAffinityLawsResult = suite.calculateFanAffinityLaws(input);
+    return { ...output };
   }
 
   changeFanSize(inputData: FanAffinityLawsInput, currentDiameter: number, newDiameter: number): FanAffinityLawsOutput {
-    const instance = this.buildInstance(inputData);
-    const suiteOutput = instance.changeFanSize(currentDiameter, newDiameter);
-    const results = this.mapOutput(suiteOutput);
-    suiteOutput.delete();
-    instance.delete();
-    return results;
+    const suite: MeasurToolsSuite = this.toolsSuiteApiService.ToolsSuiteModule;
+    const input: SuiteFanAffinityLawsInput = this.buildInput(inputData, suite);
+    const output: FanAffinityLawsResult = suite.calculateFanAffinityLawsWithFanSize(input, currentDiameter, newDiameter);
+    return { ...output };
   }
 
-  private buildInstance(inputData: FanAffinityLawsInput): any {
-    const desiredFlowRate: number = (inputData.flowMode === 1) ? inputData.desiredFlowVolume : inputData.desiredFlowPercent;
-    // clamped defensively: the wasm constructor throws if flowPercentBaseline is outside 0-100,
-    // which actualFlow > ratedFlow would otherwise trigger. On/Off always runs at full rated flow,
-    // so a stale hidden Actual Flow value is ignored.
-    const flowPercentBaseline: number = inputData.motorControlTypeCurrent === 0
-      ? 100
-      : Math.min(100, Math.max(0, (inputData.actualFlow / inputData.ratedFlow) * 100));
-    const wasmInput = {
-      electricityCost: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.electricalRate),
-      driveEfficiency: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.efficiencyDrive),
-      motorEfficiency: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.efficiencyMotor),
-      flowPercentBaseline: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(flowPercentBaseline),
-      operatingHours: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.hoursOperation),
-      motorPower: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.powerMotor),
-      ratedFlow: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.ratedFlow),
-      motorControlTypeCurrent: this.getMotorControlTypeEnum(inputData.motorControlTypeCurrent),
-      motorControlTypeNew: this.getMotorControlTypeEnum(inputData.motorControlTypeNew),
-      flowMode: this.getFlowModeEnum(inputData.flowMode),
-      desiredFlowRate: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(desiredFlowRate),
-    };
-    return new this.toolsSuiteApiService.ToolsSuiteModule.FanAffinityLaws(wasmInput);
+  get50PercentTimeFactor(flowFraction: number): FanAffinityLawsTimeFactors {
+    const suite: MeasurToolsSuite = this.toolsSuiteApiService.ToolsSuiteModule;
+    const output: FanAffinityLawsTimeFactorResult = suite.get50PercentTimeFactor(flowFraction);
+    return { ...output };
   }
 
-  private mapOutput(suiteOutput: any): FanAffinityLawsOutput {
+  private buildInput(inputData: FanAffinityLawsInput, suite: MeasurToolsSuite): SuiteFanAffinityLawsInput {
+    const controlledFlow: boolean = inputData.motorControlTypeNew === 1 || inputData.motorControlTypeNew === 2;
+    const desiredFlowRate: number = controlledFlow
+      ? (inputData.flowMode === 1 ? inputData.desiredFlowVolume : inputData.desiredFlowPercent) : 0;
     return {
-      annualEnergyBaseline: suiteOutput.annualEnergyBaseline,
-      annualEnergyNew: suiteOutput.annualEnergyNew,
-      annualCostSavings: suiteOutput.annualCostSavings,
+      electricityCost: inputData.electricalRate,
+      driveEfficiency: inputData.efficiencyDrive,
+      motorEfficiency: inputData.efficiencyMotor,
+      flowPercentBaseline: inputData.motorControlTypeCurrent === 0 ? 100 : inputData.actualFlow / inputData.ratedFlow * 100,
+      operatingHours: inputData.hoursOperation,
+      motorPower: inputData.powerMotor,
+      ratedFlow: inputData.ratedFlow,
+      motorControlTypeCurrent: this.getMotorControlTypeEnum(inputData.motorControlTypeCurrent, suite),
+      motorControlTypeNew: this.getMotorControlTypeEnum(inputData.motorControlTypeNew, suite),
+      flowMode: this.getFlowModeEnum(inputData.flowMode, suite),
+      desiredFlowRate
     };
   }
 
-  private getMotorControlTypeEnum(controlType: number): any {
+  private getMotorControlTypeEnum(controlType: number, suite: MeasurToolsSuite): MotorControlType {
     switch (controlType) {
-      case 0:
-        return this.toolsSuiteApiService.ToolsSuiteModule.MotorControlType.OnOff;
-      case 1:
-        return this.toolsSuiteApiService.ToolsSuiteModule.MotorControlType.TwoSpeed;
-      case 2:
-        return this.toolsSuiteApiService.ToolsSuiteModule.MotorControlType.VSD;
-      case 3:
-      default:
-        return this.toolsSuiteApiService.ToolsSuiteModule.MotorControlType.None;
+      case 0: return suite.MotorControlType.OnOff;
+      case 1: return suite.MotorControlType.TwoSpeed;
+      case 2: return suite.MotorControlType.VSD;
+      default: return suite.MotorControlType.None;
     }
   }
 
-  private getFlowModeEnum(flowMode: number): any {
-    switch (flowMode) {
-      case 1:
-        return this.toolsSuiteApiService.ToolsSuiteModule.FlowMode.Volume;
-      case 0:
-      default:
-        return this.toolsSuiteApiService.ToolsSuiteModule.FlowMode.Percent;
-    }
+  private getFlowModeEnum(flowMode: number, suite: MeasurToolsSuite): FlowMode {
+    return flowMode === 1 ? suite.FlowMode.Volume : suite.FlowMode.Percent;
   }
 }

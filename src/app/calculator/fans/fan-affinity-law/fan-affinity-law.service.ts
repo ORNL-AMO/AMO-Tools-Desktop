@@ -1,18 +1,27 @@
 import { Injectable } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
-import { FanAffinityLawsInput, FanAffinityLawsOutput } from '../../../shared/models/standalone';
+import { FanAffinityLawsInput, FanAffinityLawsOutput, FanAffinityLawsTimeFactors } from '../../../shared/models/standalone';
 import { FanAffinityLawApiService } from '../../../tools-suite-api/fan-affinity-law-api.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
 export class FanAffinityLawService {
-
   fanAffinityLawInputs: FanAffinityLawsInput;
 
   constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService,
-    private fanAffinityLawApiService: FanAffinityLawApiService) { }
+    private fanAffinityLawApiService: FanAffinityLawApiService) {}
+
+  private readonly finiteNumber: ValidatorFn = (control: AbstractControl) => {
+    if (control.value === null || control.value === undefined || control.value === '') { return null; }
+    return typeof control.value === 'number' && Number.isFinite(control.value) ? null : { finite: true };
+  };
+
+  private numericValidators(positive: boolean = true): ValidatorFn[] {
+    return [Validators.required, this.finiteNumber,
+      positive ? GreaterThanValidator.greaterThan(0) : Validators.min(0)];
+  }
 
   initObject(settings: Settings): FanAffinityLawsInput {
     let electricalRate: number = 0.12;
@@ -39,117 +48,105 @@ export class FanAffinityLawService {
     return obj;
   }
 
-  getFormFromObj(inputObj: FanAffinityLawsInput): UntypedFormGroup {
-    let form: UntypedFormGroup = this.formBuilder.group({
-      hoursOperation: [inputObj.hoursOperation, [Validators.required, Validators.min(0), Validators.max(8760)]],
-      electricalRate: [inputObj.electricalRate, [Validators.required, GreaterThanValidator.greaterThan(0)]],
-      efficiencyMotor: [inputObj.efficiencyMotor, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]],
-      powerMotor: [inputObj.powerMotor, [Validators.required, GreaterThanValidator.greaterThan(0)]],
-      ratedFlow: [inputObj.ratedFlow, [Validators.required, GreaterThanValidator.greaterThan(0)]],
+  getFormFromObj(inputObj: FanAffinityLawsInput, modificationExists: boolean = true): UntypedFormGroup {
+    const form: UntypedFormGroup = this.formBuilder.group({
+      hoursOperation: [inputObj.hoursOperation, [...this.numericValidators(), Validators.max(8760)]],
+      electricalRate: [inputObj.electricalRate, this.numericValidators(false)],
+      efficiencyMotor: [inputObj.efficiencyMotor, [...this.numericValidators(), Validators.max(100)]],
+      powerMotor: [inputObj.powerMotor, this.numericValidators()],
+      ratedFlow: [inputObj.ratedFlow, this.numericValidators()],
       actualFlow: [inputObj.actualFlow],
-      motorControlTypeCurrent: [inputObj.motorControlTypeCurrent, [Validators.required]],
-      motorControlTypeNew: [inputObj.motorControlTypeNew, [Validators.required]],
-      flowMode: [inputObj.flowMode, [Validators.required]],
+      motorControlTypeCurrent: [inputObj.motorControlTypeCurrent, [Validators.required,
+        control => [0, 1, 2].includes(control.value) ? null : { controlType: true }]],
+      motorControlTypeNew: [inputObj.motorControlTypeNew],
+      flowMode: [inputObj.flowMode],
       desiredFlowVolume: [inputObj.desiredFlowVolume],
       desiredFlowPercent: [inputObj.desiredFlowPercent],
       diameterFan: [inputObj.diameterFan],
-      changeFanSize: [inputObj.changeFanSize],
+      changeFanSize: [inputObj.changeFanSize, control => typeof control.value === 'boolean' ? null : { selection: true }],
       diameterFanNew: [inputObj.diameterFanNew],
-      efficiencyDrive: [inputObj.efficiencyDrive, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]]
+      efficiencyDrive: [inputObj.efficiencyDrive, [...this.numericValidators(), Validators.max(100)]]
     });
-    form = this.setValidators(form);
-    return form;
+    return this.setValidators(form, modificationExists);
   }
 
-  setValidators(form: UntypedFormGroup): UntypedFormGroup {
-    // Actual Flow is hidden (and ignored) for On/Off control
-    if (form.controls.motorControlTypeCurrent.value !== 0) {
-      form.controls.actualFlow.setValidators([Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(form.controls.ratedFlow.value)]);
-    } else {
+  setValidators(form: UntypedFormGroup, modificationExists: boolean = true): UntypedFormGroup {
+    if (form.controls.motorControlTypeCurrent.value === 0) {
+      form.controls.actualFlow.patchValue(form.controls.ratedFlow.value, { emitEvent: false });
       form.controls.actualFlow.clearValidators();
-    }
-    form.controls.actualFlow.updateValueAndValidity();
-
-    const maxFlowVolume: number = this.getMaxDesiredFlowVolume(form);
-    if (form.controls.motorControlTypeNew.value === 3) {
-      form.controls.desiredFlowVolume.clearValidators();
-      form.controls.desiredFlowPercent.clearValidators();
-    } else if (form.controls.flowMode.value === 1) {
-      form.controls.desiredFlowVolume.setValidators([Validators.required, Validators.min(0), Validators.max(maxFlowVolume)]);
-      form.controls.desiredFlowPercent.clearValidators();
     } else {
-      const maxFlowPercent: number = Math.min(100, (maxFlowVolume / form.controls.ratedFlow.value) * 100);
-      form.controls.desiredFlowPercent.setValidators([Validators.required, Validators.min(0), Validators.max(maxFlowPercent)]);
-      form.controls.desiredFlowVolume.clearValidators();
+      form.controls.actualFlow.setValidators([...this.numericValidators(), Validators.max(form.controls.ratedFlow.value)]);
     }
-    form.controls.desiredFlowVolume.updateValueAndValidity();
-    form.controls.desiredFlowPercent.updateValueAndValidity();
-
-    // Fan diameters are hidden (and unused) unless Change Fan Size is Yes
-    if (form.controls.changeFanSize.value) {
-      form.controls.diameterFan.setValidators([Validators.required, GreaterThanValidator.greaterThan(0)]);
-      form.controls.diameterFanNew.setValidators([Validators.required, Validators.min(0), Validators.max(form.controls.diameterFan.value)]);
+    const usesFlow = modificationExists && [1, 2].includes(form.controls.motorControlTypeNew.value);
+    const maxFlowVolume: number = this.getMaxDesiredFlowVolume(form);
+    form.controls.desiredFlowVolume.clearValidators();
+    form.controls.desiredFlowPercent.clearValidators();
+    form.controls.flowMode.clearValidators();
+    if (usesFlow) {
+      form.controls.flowMode.setValidators([Validators.required,
+        control => [0, 1].includes(control.value) ? null : { flowMode: true }]);
+      if (form.controls.flowMode.value === 1) {
+        form.controls.desiredFlowVolume.setValidators([...this.numericValidators(false), Validators.max(maxFlowVolume)]);
+      } else {
+        const maxFlowPercent: number = maxFlowVolume / form.controls.ratedFlow.value * 100;
+        form.controls.desiredFlowPercent.setValidators([...this.numericValidators(false), Validators.max(maxFlowPercent)]);
+      }
+    }
+    if (modificationExists && form.controls.changeFanSize.value) {
+      form.controls.diameterFan.setValidators(this.numericValidators());
+      form.controls.diameterFanNew.setValidators(this.numericValidators());
     } else {
       form.controls.diameterFan.clearValidators();
       form.controls.diameterFanNew.clearValidators();
     }
-    form.controls.diameterFan.updateValueAndValidity();
-    form.controls.diameterFanNew.updateValueAndValidity();
+    for (const name of ['actualFlow', 'flowMode', 'desiredFlowVolume', 'desiredFlowPercent', 'diameterFan', 'diameterFanNew']) {
+      form.controls[name].updateValueAndValidity({ emitEvent: false });
+    }
+    this.setNoAdjustmentValidator(form, modificationExists);
     return form;
   }
 
   getMaxDesiredFlowVolume(form: UntypedFormGroup): number {
     const ratedFlow: number = form.controls.ratedFlow.value;
-    const diameterFan: number = form.controls.diameterFan.value;
-    const diameterFanNew: number = form.controls.diameterFanNew.value;
-    if (form.controls.changeFanSize.value && diameterFan > 0 && diameterFanNew > 0) {
-      return ratedFlow * Math.pow(diameterFanNew / diameterFan, 3);
-    }
-    return ratedFlow;
+    const current: number = form.controls.diameterFan.value;
+    const next: number = form.controls.diameterFanNew.value;
+    return form.controls.changeFanSize.value && current > 0 && next > 0
+      ? ratedFlow * Math.pow(next / current, 3) : ratedFlow;
   }
 
   setNoAdjustmentValidator(form: UntypedFormGroup, modificationExists: boolean) {
-    const noAdjustment: boolean = modificationExists && form.controls.motorControlTypeNew.value === 3 && !form.controls.changeFanSize.value;
-    if (noAdjustment) {
-      form.controls.motorControlTypeNew.setValidators([Validators.required, () => ({ noAdjustment: true })]);
-    } else {
-      form.controls.motorControlTypeNew.setValidators([Validators.required]);
-    }
-    form.controls.motorControlTypeNew.updateValueAndValidity();
+    const newControl: number = form.controls.motorControlTypeNew.value;
+    const noAdjustment: boolean = modificationExists && form.controls.motorControlTypeCurrent.value === 0 &&
+      (newControl === 0 || newControl === 3) && !form.controls.changeFanSize.value;
+    form.controls.motorControlTypeNew.setValidators(modificationExists ? [Validators.required,
+      control => [0, 1, 2, 3].includes(control.value) ? null : { controlType: true },
+      () => noAdjustment ? { noAdjustment: true } : null] : []);
+    form.controls.motorControlTypeNew.updateValueAndValidity({ emitEvent: false });
   }
 
-  getObjFromForm(form: UntypedFormGroup): FanAffinityLawsInput {
-    form = this.setValidators(form);
-    let obj: FanAffinityLawsInput = {
-      hoursOperation: form.controls.hoursOperation.value,
-      electricalRate: form.controls.electricalRate.value,
-      efficiencyMotor: form.controls.efficiencyMotor.value,
-      powerMotor: form.controls.powerMotor.value,
-      ratedFlow: form.controls.ratedFlow.value,
-      actualFlow: form.controls.actualFlow.value,
-      motorControlTypeCurrent: form.controls.motorControlTypeCurrent.value,
-      motorControlTypeNew: form.controls.motorControlTypeNew.value,
-      flowMode: form.controls.flowMode.value,
-      desiredFlowVolume: form.controls.desiredFlowVolume.value,
-      desiredFlowPercent: form.controls.desiredFlowPercent.value,
-      diameterFan: form.controls.diameterFan.value,
-      changeFanSize: form.controls.changeFanSize.value,
-      diameterFanNew: form.controls.diameterFanNew.value,
-      efficiencyDrive: form.controls.efficiencyDrive.value
-    };
-    return obj;
+  getObjFromForm(form: UntypedFormGroup, modificationExists: boolean = true): FanAffinityLawsInput {
+    this.setValidators(form, modificationExists);
+    return { ...form.getRawValue() };
   }
 
   getResults(inputs: FanAffinityLawsInput, settings: Settings, modificationExists: boolean = true): FanAffinityLawsOutput {
-    let inputsCpy: FanAffinityLawsInput = JSON.parse(JSON.stringify(inputs));
-    inputsCpy = this.convertInputs(inputsCpy, settings);
-    let results: FanAffinityLawsOutput;
-    if (inputsCpy.changeFanSize) {
-      results = this.fanAffinityLawApiService.changeFanSize(inputsCpy, inputsCpy.diameterFan, inputsCpy.diameterFanNew);
-    } else {
-      results = this.fanAffinityLawApiService.calculate(inputsCpy);
+    const form: UntypedFormGroup = this.getFormFromObj(inputs, modificationExists);
+    if (form.invalid) { return this.emptyResults(); }
+    const normalized: FanAffinityLawsInput = this.getObjFromForm(form, modificationExists);
+    if (!modificationExists) {
+      normalized.changeFanSize = false;
+      normalized.motorControlTypeNew = normalized.motorControlTypeCurrent;
+      normalized.flowMode = 1;
+      normalized.desiredFlowVolume = normalized.actualFlow;
     }
-    Object.assign(results, this.getIntermediateValues(inputsCpy, settings));
+    const converted: FanAffinityLawsInput = this.convertInputs(normalized, settings);
+    const results: FanAffinityLawsOutput = converted.changeFanSize
+      ? this.fanAffinityLawApiService.changeFanSize(converted, converted.diameterFan, converted.diameterFanNew)
+      : this.fanAffinityLawApiService.calculate(converted);
+    if (![results.annualEnergyBaseline, results.annualEnergyNew, results.annualCostSavings].every(Number.isFinite)) {
+      return this.emptyResults();
+    }
+    Object.assign(results, this.getIntermediateValues(converted, settings, results));
     if (!modificationExists) {
       results.annualEnergyNew = results.annualEnergyBaseline;
       results.annualCostSavings = 0;
@@ -158,115 +155,55 @@ export class FanAffinityLawService {
     return results;
   }
 
-  // Mirrors FanAffinityLaws::compute() in MEASUR-Tools-Suite (bindings-wasm/motorDriven/fans/fan_affinity_laws.cpp),
-  // which only returns the 3 aggregate Output fields. These intermediates are recomputed here purely for display
-  // in the results table since the wasm module doesn't expose them.
-  getIntermediateValues(inputs: FanAffinityLawsInput, settings: Settings): Partial<FanAffinityLawsOutput> {
-    const motorEfficiency: number = inputs.efficiencyMotor / 100;
-    const driveEfficiency: number = inputs.efficiencyDrive / 100;
-    const ratedPower: number = inputs.powerMotor / motorEfficiency / driveEfficiency;
+  private emptyResults(): FanAffinityLawsOutput {
+    return { annualEnergyBaseline: 0, annualEnergyNew: 0, annualCostSavings: 0 };
+  }
+
+  getIntermediateValues(inputs: FanAffinityLawsInput, settings: Settings, results: FanAffinityLawsOutput): Partial<FanAffinityLawsOutput> {
     const baselineFlowPercent: number = this.getBaselineFlowPercent(inputs);
-
-    let desiredFlowPercent: number;
-    let desiredFlowVolume: number;
-    if (inputs.flowMode === 1) {
-      desiredFlowVolume = inputs.desiredFlowVolume;
-      desiredFlowPercent = (inputs.desiredFlowVolume / inputs.ratedFlow) * 100;
-    } else {
-      desiredFlowPercent = inputs.desiredFlowPercent;
-      desiredFlowVolume = (inputs.desiredFlowPercent / 100) * inputs.ratedFlow;
+    const ratio: number = inputs.changeFanSize ? inputs.diameterFanNew / inputs.diameterFan : 1;
+    const newRatedFlow: number = inputs.ratedFlow * Math.pow(ratio, 3);
+    const controlledFlow: boolean = inputs.motorControlTypeNew === 1 || inputs.motorControlTypeNew === 2;
+    const desiredVolume: number = controlledFlow
+      ? (inputs.flowMode === 1 ? inputs.desiredFlowVolume : inputs.desiredFlowPercent / 100 * inputs.ratedFlow)
+      : newRatedFlow;
+    const modifiedFraction: number = desiredVolume / newRatedFlow;
+    const values: Partial<FanAffinityLawsOutput> = {
+      ratedFlow: this.convertFlowForDisplay(inputs.ratedFlow, settings),
+      baselineFlowVolume: this.convertFlowForDisplay(inputs.motorControlTypeCurrent === 0 ? inputs.ratedFlow : inputs.actualFlow, settings),
+      baselineFlowPercent,
+      baselinePower: results.annualEnergyBaseline / inputs.hoursOperation,
+      newPower: results.annualEnergyNew / inputs.hoursOperation,
+      desiredFlowVolume: this.convertFlowForDisplay(desiredVolume, settings),
+      desiredFlowPercent: desiredVolume / inputs.ratedFlow * 100,
+      scenario: controlledFlow
+        ? (inputs.motorControlTypeNew === 1 ? (inputs.changeFanSize ? 'twoSpeedChangeFanSize' : 'twoSpeed')
+          : (inputs.changeFanSize ? 'vsdChangeFanSize' : 'vsd'))
+        : (inputs.changeFanSize ? 'changeFanSize' : 'onOff')
+    };
+    if (inputs.changeFanSize) {
+      values.fanDiameterRatio = ratio * 100;
+      values.newFanRatedFlow = this.convertFlowForDisplay(newRatedFlow, settings);
+      values.newFlowPercent = modifiedFraction * 100;
+      if (!controlledFlow) { values.newFlowPercent = ratio * ratio * ratio * 100; }
     }
-
-    const ratedFlow: number = this.convertFlowForDisplay(inputs.ratedFlow, settings);
-    const baselineFlowVolume: number = this.convertFlowForDisplay(inputs.motorControlTypeCurrent === 0 ? inputs.ratedFlow : inputs.actualFlow, settings);
-    const values: Partial<FanAffinityLawsOutput> = { ratedFlow, baselineFlowVolume, baselinePower: ratedPower, baselineFlowPercent };
-
-    if (inputs.motorControlTypeCurrent === 2) {
-      // Current Motor Control is VSD
-      values.baselinePower = ratedPower * Math.pow(baselineFlowPercent / 100, 3);
-    } else if (inputs.motorControlTypeCurrent === 1) {
-      // Current Motor Control is Two-Speed, so the baseline power also runs on the same duty-cycle
-      // assumption as a new Two-Speed selection.
-      const baselineTimeFactor = this.get50PercentTimeFactor(baselineFlowPercent / 100);
-      values.baselinePower = ratedPower * baselineTimeFactor.factor;
-      values.baselineTimeAbove50Percent = baselineTimeFactor.timeAbove50Percent * 100;
-      values.baselineTimeAt0Percent = baselineTimeFactor.timeAt0Percent * 100;
-      values.baselineTimeAt50Percent = baselineTimeFactor.timeAt50Percent * 100;
+    if (inputs.motorControlTypeCurrent === 1) {
+      const times: FanAffinityLawsTimeFactors = this.fanAffinityLawApiService.get50PercentTimeFactor(baselineFlowPercent / 100);
+      values.baselineTimeAbove50Percent = times.timeAbove50Percent * 100;
+      values.baselineTimeAt50Percent = times.timeAt50Percent * 100;
+      values.baselineTimeAt0Percent = times.timeAt0Percent * 100;
     }
-
-    if (!inputs.changeFanSize && inputs.motorControlTypeNew === 2) {
-      // VSD
-      values.scenario = 'vsd';
-      values.desiredFlowPercent = desiredFlowPercent;
-      values.desiredFlowVolume = this.convertFlowForDisplay(desiredFlowVolume, settings);
-      values.newPower = ratedPower * Math.pow(desiredFlowPercent / 100, 3);
-    } else if (!inputs.changeFanSize && inputs.motorControlTypeNew === 1) {
-      // Two-Speed
-      const timeFactor = this.get50PercentTimeFactor(desiredFlowPercent / 100);
-      values.scenario = 'twoSpeed';
-      values.desiredFlowPercent = desiredFlowPercent;
-      values.desiredFlowVolume = this.convertFlowForDisplay(desiredFlowVolume, settings);
-      values.timeAbove50Percent = timeFactor.timeAbove50Percent * 100;
-      values.timeAt0Percent = timeFactor.timeAt0Percent * 100;
-      values.timeAt50Percent = timeFactor.timeAt50Percent * 100;
-      values.newPower = ratedPower * timeFactor.factor;
-    } else if (inputs.changeFanSize && inputs.motorControlTypeNew === 3) {
-      // Change Fan Size only
-      const fanDiameterRatio: number = inputs.diameterFanNew / inputs.diameterFan;
-      const newFanFlow: number = inputs.ratedFlow * Math.pow(fanDiameterRatio, 3);
-      values.scenario = 'changeFanSize';
-      values.fanDiameterRatio = fanDiameterRatio * 100;
-      values.newFlowPercent = (newFanFlow / inputs.ratedFlow) * 100;
-      values.newPower = ratedPower * Math.pow(fanDiameterRatio, 5);
-    } else if (inputs.changeFanSize && inputs.motorControlTypeNew === 2) {
-      // VSD + Change Fan Size
-      const fanDiameterRatio: number = inputs.diameterFanNew / inputs.diameterFan;
-      const newFanRatedFlow: number = inputs.ratedFlow * Math.pow(fanDiameterRatio, 3);
-      const newFlowPercent: number = desiredFlowVolume / newFanRatedFlow;
-      values.scenario = 'vsdChangeFanSize';
-      values.desiredFlowPercent = desiredFlowPercent;
-      values.desiredFlowVolume = this.convertFlowForDisplay(desiredFlowVolume, settings);
-      values.fanDiameterRatio = fanDiameterRatio * 100;
-      values.newFanRatedFlow = this.convertFlowForDisplay(newFanRatedFlow, settings);
-      values.newFlowPercent = newFlowPercent * 100;
-      values.newPower = ratedPower * Math.pow(newFlowPercent, 3) * Math.pow(fanDiameterRatio, 5);
-    } else if (inputs.changeFanSize && inputs.motorControlTypeNew === 1) {
-      // Two-Speed + Change Fan Size
-      const fanDiameterRatio: number = inputs.diameterFanNew / inputs.diameterFan;
-      const newFanRatedFlow: number = inputs.ratedFlow * Math.pow(fanDiameterRatio, 3);
-      const newFlowPercent: number = desiredFlowVolume / newFanRatedFlow;
-      const timeFactor = this.get50PercentTimeFactor(newFlowPercent);
-      values.scenario = 'twoSpeedChangeFanSize';
-      values.desiredFlowPercent = desiredFlowPercent;
-      values.desiredFlowVolume = this.convertFlowForDisplay(desiredFlowVolume, settings);
-      values.fanDiameterRatio = fanDiameterRatio * 100;
-      values.newFanRatedFlow = this.convertFlowForDisplay(newFanRatedFlow, settings);
-      values.newFlowPercent = newFlowPercent * 100;
-      values.timeAbove50Percent = timeFactor.timeAbove50Percent * 100;
-      values.timeAt0Percent = timeFactor.timeAt0Percent * 100;
-      values.timeAt50Percent = timeFactor.timeAt50Percent * 100;
-      values.newPower = ratedPower * timeFactor.factor * Math.pow(fanDiameterRatio, 5);
-    } else {
-      // Nothing is being modified (New Motor Control is On/Off and no fan size change), so New mirrors Current.
-      values.scenario = 'none';
-      values.newPower = values.baselinePower;
+    if (inputs.motorControlTypeNew === 1) {
+      const times: FanAffinityLawsTimeFactors = this.fanAffinityLawApiService.get50PercentTimeFactor(modifiedFraction);
+      values.timeAbove50Percent = times.timeAbove50Percent * 100;
+      values.timeAt50Percent = times.timeAt50Percent * 100;
+      values.timeAt0Percent = times.timeAt0Percent * 100;
     }
-
     return values;
   }
 
   getBaselineFlowPercent(inputs: FanAffinityLawsInput): number {
-    if (inputs.motorControlTypeCurrent === 0) {
-      return 100;
-    }
-    return Math.min(100, Math.max(0, (inputs.actualFlow / inputs.ratedFlow) * 100));
-  }
-
-  private get50PercentTimeFactor(flowPercent: number): { timeAbove50Percent: number, timeAt0Percent: number, timeAt50Percent: number, factor: number } {
-    const timeAbove50Percent: number = Math.max(0, (flowPercent - 0.5) / 0.5);
-    const timeAt0Percent: number = Math.max(0, (0.5 - flowPercent) / 0.5);
-    const timeAt50Percent: number = 1 - timeAbove50Percent - timeAt0Percent;
-    return { timeAbove50Percent, timeAt0Percent, timeAt50Percent, factor: timeAbove50Percent + timeAt50Percent * 0.125 };
+    return inputs.motorControlTypeCurrent === 0 ? 100 : inputs.actualFlow / inputs.ratedFlow * 100;
   }
 
   // flow intermediates are computed in calculation units (ft3/min); convert back to m3/s for metric display
@@ -285,9 +222,9 @@ export class FanAffinityLawService {
     } else {
       inputs.ratedFlow = this.convertUnitsService.value(inputs.ratedFlow).from('m3/s').to('ft3/min');
       inputs.actualFlow = this.convertUnitsService.value(inputs.actualFlow).from('m3/s').to('ft3/min');
-      inputs.desiredFlowVolume = this.convertUnitsService.value(inputs.desiredFlowVolume).from('m3/s').to('ft3/min');
-      inputs.diameterFan = this.convertUnitsService.value(inputs.diameterFan).from('cm').to('in');
-      inputs.diameterFanNew = this.convertUnitsService.value(inputs.diameterFanNew).from('cm').to('in');
+      inputs.desiredFlowVolume = this.convertUnitsService.value((inputs.desiredFlowVolume ?? 0)).from('m3/s').to('ft3/min');
+      inputs.diameterFan = this.convertUnitsService.value((inputs.diameterFan ?? 0)).from('cm').to('in');
+      inputs.diameterFanNew = this.convertUnitsService.value((inputs.diameterFanNew ?? 0)).from('cm').to('in');
     }
     return inputs;
   }
