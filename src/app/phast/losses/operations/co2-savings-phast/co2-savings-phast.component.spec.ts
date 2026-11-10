@@ -136,6 +136,24 @@ describe('Co2SavingsPhastComponent', () => {
     });
   });
 
+  describe('scenario switching', () => {
+    it('keeps each modification\'s custom emissions rate when switching A → B → A', () => {
+      const modificationA = makeSavedCo2Data({ totalEmissionOutputRate: 999, userEnteredModificationEmissions: true });
+      const modificationB = makeSavedCo2Data();
+      const { fixture } = createEditor(modificationA, false);
+
+      fixture.componentRef.setInput('co2SavingsData', modificationB);
+      fixture.detectChanges();
+      expect(fixture.componentInstance.form.controls.totalEmissionOutputRate.value).toBe(US_AVERAGE_RATE);
+
+      fixture.componentRef.setInput('co2SavingsData', modificationA);
+      fixture.detectChanges();
+
+      expect(modificationA.userEnteredModificationEmissions).toBeTrue();
+      expect(fixture.componentInstance.form.controls.totalEmissionOutputRate.value).toBe(999);
+    });
+  });
+
   describe('template ids', () => {
     it('prefixes every control id and label target', () => {
       // A zip code with two subregions renders the subregion select, so every label has a control.

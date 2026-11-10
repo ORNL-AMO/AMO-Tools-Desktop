@@ -99,7 +99,12 @@ export class Co2SavingsPhastComponent implements OnInit {
       this.cd.detectChanges();
     }
     if (changes.co2SavingsData && !changes.co2SavingsData.firstChange) {
-      this.initForm();
+      if (this.isBaseline) {
+        this.initForm();
+      } else {
+        // Rebind the shared value to the new scenario; the subscription re-initializes the form once.
+        this.publishModificationData();
+      }
     }
 
   }
@@ -115,7 +120,7 @@ export class Co2SavingsPhastComponent implements OnInit {
         }
       });
     } else {
-      this.phastCO2SavingsService.modificationCo2SavingsData.next(this.co2SavingsData);
+      this.publishModificationData();
       this.co2SavingsDataSub = this.phastCO2SavingsService.modificationCo2SavingsData.subscribe(modificationCo2SavingsData => {
         if (modificationCo2SavingsData) {
           this.co2SavingsData.eGridSubregion = modificationCo2SavingsData.eGridSubregion;
@@ -125,6 +130,11 @@ export class Co2SavingsPhastComponent implements OnInit {
         }
       });
     }
+  }
+
+  /** Shares a copy so updates made through the shared value never write into a scenario's saved data. */
+  private publishModificationData() {
+    this.phastCO2SavingsService.modificationCo2SavingsData.next({ ...this.co2SavingsData });
   }
 
   disableForm() {
