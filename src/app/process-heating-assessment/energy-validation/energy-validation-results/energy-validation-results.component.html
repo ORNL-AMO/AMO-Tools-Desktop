@@ -1,0 +1,25 @@
+<div class="output-summary">
+  <table #copyTable class="table table-hover table-striped panel-table">
+    <thead>
+      <tr>
+        <th>Energy Validation</th>
+        <th>Calculated By PHA</th>
+        <th>Metered</th>
+        <th>Design</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of comparison(); track row.label) {
+        <tr>
+          <td>{{row.label}} <span>({{row.unit}})</span></td>
+          @for (value of [row.calculated, row.metered, row.designed]; track $index) {
+            <td>@if (value) { {{value | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<app-exportable-results-table [tableString]="copyTableString"
+  (updateTableString)="updateCopyTableString()"></app-exportable-results-table>

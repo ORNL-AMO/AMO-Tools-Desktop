@@ -23,11 +23,13 @@ import { SlagFormService } from '../heat-balance/losses/slag/slag-form.service';
 import { WallLossesFormService } from '../heat-balance/losses/wall-losses/wall-losses-form.service';
 import { ProcessHeatingModification } from '../models/modification';
 import { Losses, PHAST, PhastResults } from '../models/phast';
-import { BaselineView, LossView } from '../models/views';
+import { EnergyValidationView, LossView } from '../models/views';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingOperationsFormService } from './process-heating-operations-form.service';
 import { ProcessHeatingResultsService } from './process-heating-results.service';
 import { ProcessHeatingValidityService } from './process-heating-validity.service';
+import { MeteredEnergyFormService } from '../metered-energy/metered-energy-form.service';
+import { DesignedEnergyFormService } from '../designed-energy/designed-energy-form.service';
 
 const FUEL_FIRED = { unitsOfMeasure: 'Imperial', energyResultUnit: 'kWh', energySourceType: 'Fuel' } as Settings;
 const STEAM = { ...FUEL_FIRED, energySourceType: 'Steam' } as Settings;
@@ -77,7 +79,7 @@ describe('ProcessHeatingValidityService', () => {
         SolidMaterialFormService, LiquidMaterialFormService, GasMaterialFormService, FlueGasFormService,
         FixtureFormService, WallLossesFormService, CoolingFormService, AtmosphereFormService, OpeningFormService,
         GasLeakageFormService, ExtendedSurfaceFormService, OtherFormService, SlagFormService, EnergyInputFormService,
-        ExhaustGasFormService, EnergyInputExhaustGasFormService,
+        ExhaustGasFormService, EnergyInputExhaustGasFormService, MeteredEnergyFormService, DesignedEnergyFormService,
         ConvertUnitsService,
         {
           provide: ProcessHeatingAssessmentService,
@@ -240,7 +242,7 @@ describe('ProcessHeatingValidityService', () => {
     });
 
     it('treats a step without a validity check as valid', () => {
-      expect(service.isStepValid('baseline', BaselineView.METERED_ENERGY)).toBeTrue();
+      expect(service.isStepValid('baseline', EnergyValidationView.METERED_ENERGY)).toBeTrue();
     });
   });
 

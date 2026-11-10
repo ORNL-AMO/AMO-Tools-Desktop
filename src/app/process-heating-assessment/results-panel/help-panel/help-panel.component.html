@@ -57,6 +57,8 @@
           </div>
         </div>
       }
+      @case (ROUTE_TOKENS.meteredEnergy) { <app-metered-energy-help [currentField]="focusedField()"></app-metered-energy-help> }
+      @case (ROUTE_TOKENS.designedEnergy) { <app-designed-energy-help [currentField]="focusedField()"></app-designed-energy-help> }
       @default { <ng-container *ngTemplateOutlet="noHelp"></ng-container> }
     }
   }

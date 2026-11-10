@@ -1,4 +1,134 @@
-<div class="panel-container p-3">
-  <h4>Designed Energy</h4>
-  <p class="text-muted">Placeholder — implementation pending.</p>
-</div>
+@let model = designedEnergy();
+<form [formGroup]="form" class="panel-container p-2">
+  <div class="d-flex flex-column align-items-center mb-2">
+    <div class="btn-group btn-group-sm" role="group" aria-label="Energy sources">
+      <button type="button" class="btn btn-secondary btn-sm toggle-btn" [class.active]="model.electricity"
+        [attr.aria-pressed]="model.electricity" [attr.aria-disabled]="lockedSource() === 'electricity' || null" [attr.title]="lockedSource() === 'electricity' ? 'At least one energy source is required' : null" (click)="toggleSource('electricity')">Electric</button>
+      <button type="button" class="btn btn-secondary btn-sm toggle-btn" [class.active]="model.fuel"
+        [attr.aria-pressed]="model.fuel" [attr.aria-disabled]="lockedSource() === 'fuel' || null" [attr.title]="lockedSource() === 'fuel' ? 'At least one energy source is required' : null" (click)="toggleSource('fuel')">Fuel</button>
+      <button type="button" class="btn btn-secondary btn-sm toggle-btn" [class.active]="model.steam"
+        [attr.aria-pressed]="model.steam" [attr.aria-disabled]="lockedSource() === 'steam' || null" [attr.title]="lockedSource() === 'steam' ? 'At least one energy source is required' : null" (click)="toggleSource('steam')">Steam-based</button>
+    </div>
+    <span class="text-muted small">Select multiple energy source types for hybrid units. At least one is required.</span>
+  </div>
+
+  <div class="d-flex justify-content-end mb-2">
+    <button type="button" class="btn btn-primary loss-add-btn" (click)="addZone()">Add Zone</button>
+  </div>
+
+  @if (form.controls.zones.length === 0) {
+    <div class="no-data text-center p-4">
+      <p class="text-muted">No zones. Click <strong>Add Zone</strong> to begin.</p>
+    </div>
+  }
+
+  <div formArrayName="zones">
+    @for (zone of form.controls.zones.controls; track zone; let i = $index) {
+      @let fuel = zone.controls.designedEnergyFuel.controls;
+      @let steam = zone.controls.designedEnergySteam.controls;
+      @let electricity = zone.controls.designedEnergyElectricity.controls;
+      @let collapsed = isCollapsed(zone);
+      <div class="card mb-2" [formGroupName]="i">
+        <div class="card-header d-flex align-items-center flex-wrap py-1 px-2">
+          <button type="button" class="btn btn-link btn-sm p-0 mr-2"
+            [attr.aria-label]="collapsed ? 'Expand zone' : 'Collapse zone'" (click)="toggleCollapse(zone)">
+            <span class="fa" [class.fa-chevron-right]="collapsed" [class.fa-chevron-down]="!collapsed"></span>
+          </button>
+          <input type="text" class="form-control form-control-sm loss-name-input mr-2" formControlName="name"
+            aria-label="Zone name" (focus)="focusField('name')">
+          <button type="button" class="btn btn-link btn-sm small text-danger py-0 ml-auto" (click)="removeZone(i)" title="Remove zone">
+            <span class="fa fa-trash"></span> Remove
+          </button>
+        </div>
+
+        @if (!collapsed) {
+          <div class="card-body p-2">
+            @if (model.steam) {
+              <div class="form-section" formGroupName="designedEnergySteam">
+                <div class="form-group">
+                  <label class="small" [for]="'designedSteamTotalHeat_' + i">Heat Content of Steam</label>
+                  <div class="input-group" [class.invalid]="steam.totalHeat.invalid">
+                    <input type="number" step="any" class="form-control" [id]="'designedSteamTotalHeat_' + i" formControlName="totalHeat"
+                      (focus)="focusField('steamTotalHeat')" onfocus="this.select();">
+                    <span class="input-group-addon units">{{ isMetric() ? 'kJ/kg' : 'Btu/lb' }}</span>
+                  </div>
+                  <app-form-control-errors [control]="steam.totalHeat" [settings]="settings()" imperialUnit="Btu/lb" metricUnit="kJ/kg"></app-form-control-errors>
+                </div>
+                <div class="form-group">
+                  <label class="small" [for]="'designedSteamFlow_' + i">Steam Flow Rate</label>
+                  <div class="input-group" [class.invalid]="steam.steamFlow.invalid">
+                    <input type="number" step="any" class="form-control" [id]="'designedSteamFlow_' + i" formControlName="steamFlow"
+                      (focus)="focusField('steamFlow')" onfocus="this.select();">
+                    <span class="input-group-addon units">{{ isMetric() ? 'kg/hr' : 'lb/hr' }}</span>
+                  </div>
+                  <app-form-control-errors [control]="steam.steamFlow" [settings]="settings()" imperialUnit="lb/hr" metricUnit="kg/hr"></app-form-control-errors>
+                </div>
+                <div class="form-group">
+                  <label class="small" [for]="'designedSteamCapacityUsed_' + i">% of Rated Capacity Used</label>
+                  <div class="input-group" [class.invalid]="steam.percentCapacityUsed.invalid">
+                    <input type="number" step="any" class="form-control" [id]="'designedSteamCapacityUsed_' + i" formControlName="percentCapacityUsed"
+                      (focus)="focusField('steamPercentCapacityUsed')" onfocus="this.select();">
+                    <span class="input-group-addon units">%</span>
+                  </div>
+                  <app-form-control-errors [control]="steam.percentCapacityUsed" [settings]="settings()" defaultUnit="%"></app-form-control-errors>
+                </div>
+                <app-energy-operating-hours-field [operatingHours]="steam.operatingHours" [operatingHoursCalc]="steam.operatingHoursCalc"
+                  [inputId]="'designedSteamOperatingHours_' + i" [settings]="settings()"></app-energy-operating-hours-field>
+              </div>
+            }
+
+            @if (model.fuel) {
+              <div class="form-section" formGroupName="designedEnergyFuel">
+                <div class="form-group">
+                  <label class="small" [for]="'designedFuelBurnerCapacity_' + i">Total Burner Rated Capacity</label>
+                  <div class="input-group" [class.invalid]="fuel.totalBurnerCapacity.invalid">
+                    <input type="number" step="any" class="form-control" [id]="'designedFuelBurnerCapacity_' + i" formControlName="totalBurnerCapacity"
+                      (focus)="focusField('fuelTotalBurnerCapacity')" onfocus="this.select();">
+                    <span class="input-group-addon units">{{ isMetric() ? 'GJ/hr' : 'MMBtu/hr' }}</span>
+                  </div>
+                  <app-form-control-errors [control]="fuel.totalBurnerCapacity" [settings]="settings()" imperialUnit="MMBtu/hr" metricUnit="GJ/hr"></app-form-control-errors>
+                </div>
+                <div class="form-group">
+                  <label class="small" [for]="'designedFuelCapacityUsed_' + i">% of Rated Capacity Used</label>
+                  <div class="input-group" [class.invalid]="fuel.percentCapacityUsed.invalid">
+                    <input type="number" step="any" class="form-control" [id]="'designedFuelCapacityUsed_' + i" formControlName="percentCapacityUsed"
+                      (focus)="focusField('fuelPercentCapacityUsed')" onfocus="this.select();">
+                    <span class="input-group-addon units">%</span>
+                  </div>
+                  <app-form-control-errors [control]="fuel.percentCapacityUsed" [settings]="settings()" defaultUnit="%"></app-form-control-errors>
+                </div>
+                <app-energy-operating-hours-field [operatingHours]="fuel.operatingHours" [operatingHoursCalc]="fuel.operatingHoursCalc"
+                  [inputId]="'designedFuelOperatingHours_' + i" [settings]="settings()"></app-energy-operating-hours-field>
+              </div>
+            }
+
+            @if (model.electricity) {
+              <div class="form-section" formGroupName="designedEnergyElectricity">
+                <div class="form-group">
+                  <label class="small" [for]="'designedElectricityKwRating_' + i">kW Rating for all sections</label>
+                  <div class="input-group" [class.invalid]="electricity.kwRating.invalid">
+                    <input type="number" step="any" class="form-control" [id]="'designedElectricityKwRating_' + i" formControlName="kwRating"
+                      (focus)="focusField('electricitykwRating')" onfocus="this.select();">
+                    <span class="input-group-addon units">kW</span>
+                  </div>
+                  <app-form-control-errors [control]="electricity.kwRating" [settings]="settings()" defaultUnit="kW"></app-form-control-errors>
+                </div>
+                <div class="form-group">
+                  <label class="small" [for]="'designedElectricityCapacityUsed_' + i">% of Rated Capacity Used</label>
+                  <div class="input-group" [class.invalid]="electricity.percentCapacityUsed.invalid">
+                    <input type="number" step="any" class="form-control" [id]="'designedElectricityCapacityUsed_' + i" formControlName="percentCapacityUsed"
+                      (focus)="focusField('electricityPercentCapacityUsed')" onfocus="this.select();">
+                    <span class="input-group-addon units">%</span>
+                  </div>
+                  <app-form-control-errors [control]="electricity.percentCapacityUsed" [settings]="settings()" defaultUnit="%"></app-form-control-errors>
+                </div>
+                <app-energy-operating-hours-field [operatingHours]="electricity.operatingHours" [operatingHoursCalc]="electricity.operatingHoursCalc"
+                  [inputId]="'designedElectricityOperatingHours_' + i" [settings]="settings()"></app-energy-operating-hours-field>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</form>

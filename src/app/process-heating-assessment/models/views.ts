@@ -12,12 +12,17 @@ export type MainView = typeof MainView[keyof typeof MainView];
 
 export const BaselineView = {
   ASSESSMENT_SETTINGS: 'assessment-settings',
+  ENERGY_VALIDATION: 'energy-validation',
   HEAT_BALANCE: 'heat-balance',
   AUXILIARY_EQUIPMENT: 'auxiliary-equipment',
-  DESIGNED_ENERGY: 'designed-energy',
-  METERED_ENERGY: 'metered-energy',
 } as const;
 export type BaselineView = typeof BaselineView[keyof typeof BaselineView];
+
+export const EnergyValidationView = {
+  METERED_ENERGY: 'metered-energy',
+  DESIGNED_ENERGY: 'designed-energy',
+} as const;
+export type EnergyValidationView = typeof EnergyValidationView[keyof typeof EnergyValidationView];
 
 export const AssessmentView = {
   EXPLORE_OPPORTUNITIES: 'explore-opportunities',
@@ -64,7 +69,7 @@ export const LossView = {
 } as const;
 export type LossView = typeof LossView[keyof typeof LossView];
 
-export type ProcessHeatingView = MainView | BaselineView | AssessmentView | ReportView | CalculatorsView | LossView;
+export type ProcessHeatingView = MainView | BaselineView | EnergyValidationView | AssessmentView | ReportView | CalculatorsView | LossView;
 
 /** Notes field edited from the results panel while each heat balance step is selected in Expert View. */
 export const LOSS_VIEW_NOTES_KEY: Partial<Record<ProcessHeatingView, keyof Notes>> = {
@@ -119,10 +124,14 @@ export const MAIN_VIEW_LINKS: ViewLink[] = [
 
 export const BASELINE_VIEW_LINKS: ViewLink[] = [
   { view: BaselineView.ASSESSMENT_SETTINGS, label: 'Assessment Settings' },
+  { view: BaselineView.ENERGY_VALIDATION, label: 'Energy Validation' },
   { view: BaselineView.HEAT_BALANCE, label: 'Heat Balance' },
   { view: BaselineView.AUXILIARY_EQUIPMENT, label: 'Auxiliary Equipment' },
-  { view: BaselineView.DESIGNED_ENERGY, label: 'Designed Energy' },
-  { view: BaselineView.METERED_ENERGY, label: 'Metered Energy' },
+];
+
+export const ENERGY_VALIDATION_VIEW_LINKS: ViewLink[] = [
+  { view: EnergyValidationView.METERED_ENERGY, label: 'Metered Energy' },
+  { view: EnergyValidationView.DESIGNED_ENERGY, label: 'Designed Energy' },
 ];
 
 export const HEAT_BALANCE_VIEW_LINKS: ViewLink[] = [

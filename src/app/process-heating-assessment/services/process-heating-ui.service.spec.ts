@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { WallLoss } from '../../shared/models/phast/losses/wallLoss';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
 import { Losses, PHAST } from '../models/phast';
-import { BaselineView, HeatingEquipmentConfiguration, LossView, MainView, ReportView } from '../models/views';
+import { BaselineView, EnergyValidationView, HeatingEquipmentConfiguration, LossView, MainView, ReportView } from '../models/views';
 import { STEPPED_ROUTES } from '../routing/stepped-routes';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingUiService } from './process-heating-ui.service';
@@ -198,7 +198,7 @@ describe('ProcessHeatingUiService EAF and heat system efficiency gating', () => 
 
 describe('ProcessHeatingUiService validity gating', () => {
   const STEPS = [
-    { view: BaselineView.METERED_ENERGY, path: 'baseline/metered-energy' },
+    { view: EnergyValidationView.METERED_ENERGY, path: 'baseline/energy-validation/metered-energy' },
     { view: MainView.ASSESSMENT, path: 'assessment' },
     { view: MainView.REPORT, path: 'report' },
   ];
@@ -208,8 +208,12 @@ describe('ProcessHeatingUiService validity gating', () => {
   let settingsValid: WritableSignal<boolean>;
   let baselineValid: WritableSignal<boolean>;
   let invalidBaselineSteps: WritableSignal<string[]>;
+  let meteredEnergyValid: WritableSignal<boolean>;
+  let designedEnergyValid: WritableSignal<boolean>;
 
   beforeEach(() => {
+    meteredEnergyValid = signal(true);
+    designedEnergyValid = signal(true);
     settingsValid = signal(true);
     baselineValid = signal(true);
     invalidBaselineSteps = signal<string[]>([]);
@@ -232,11 +236,30 @@ describe('ProcessHeatingUiService validity gating', () => {
             scenarioValidity: () => ({ isValid: baselineValid() }),
             isStepValid: (scenario: string, view: string) => scenario !== 'baseline' || !invalidBaselineSteps().includes(view),
             invalidStepLabels: () => invalidBaselineSteps(),
+            isMeteredEnergyValid: meteredEnergyValid,
+            isDesignedEnergyValid: designedEnergyValid,
           },
         },
       ],
     });
     service = TestBed.inject(ProcessHeatingUiService);
+  });
+
+  it('marks Energy Validation and its Metered sub-tab for invalid metered inputs without blocking Assessment', () => {
+    meteredEnergyValid.set(false);
+
+    expect(service.isViewInvalid(BaselineView.ENERGY_VALIDATION)).toBeTrue();
+    expect(service.isViewInvalid(EnergyValidationView.METERED_ENERGY)).toBeTrue();
+    expect(service.canVisitView(MainView.ASSESSMENT)).toBeTrue();
+    expect(service.blockedReason()).toBeUndefined();
+  });
+
+  it('marks Energy Validation and only its Designed sub-tab for invalid designed inputs', () => {
+    designedEnergyValid.set(false);
+
+    expect(service.isViewInvalid(BaselineView.ENERGY_VALIDATION)).toBeTrue();
+    expect(service.isViewInvalid(EnergyValidationView.DESIGNED_ENERGY)).toBeTrue();
+    expect(service.isViewInvalid(EnergyValidationView.METERED_ENERGY)).toBeFalse();
   });
 
   it('explains nothing while the settings and baseline are valid', () => {
@@ -450,5 +473,24 @@ describe('ProcessHeatingUiService focused field', () => {
     navigate({ childView: ROUTE_TOKENS.assessmentSettings });
 
     expect(service.focusedFieldSignal()).toBe('default');
+  });
+  it('resets the focused field when switching Energy Validation sub-tabs', () => {
+    navigate({ childView: ROUTE_TOKENS.meteredEnergy });
+    service.focusedFieldSignal.set('fuelHeatingValue');
+    navigate({ childView: ROUTE_TOKENS.designedEnergy });
+
+    expect(service.focusedFieldSignal()).toBe('default');
+  });
+
+  it('leaves the results panel to Heat Balance and Energy Validation, which render their own', () => {
+    expect(service.showResultsPanel()).toBeFalse();
+
+    navigate({ childView: ROUTE_TOKENS.meteredEnergy });
+    expect(service.showResultsPanel()).toBeFalse();
+    expect(service.isEnergyValidationView()).toBeTrue();
+
+    navigate({ childView: ROUTE_TOKENS.auxiliaryEquipment });
+    expect(service.showResultsPanel()).toBeTrue();
+    expect(service.isEnergyValidationView()).toBeFalse();
   });
 });

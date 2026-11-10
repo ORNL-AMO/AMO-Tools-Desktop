@@ -1,0 +1,4 @@
+/* The only source on stays styled as selected; the form service ignores turning it off. */
+.toggle-btn[aria-disabled="true"] {
+  cursor: default;
+}

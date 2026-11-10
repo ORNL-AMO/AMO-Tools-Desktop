@@ -1,0 +1,23 @@
+.output-summary .table {
+  font-size: 14px;
+}
+
+.output-summary .table th {
+  border: none;
+  padding: 0;
+  text-align: left;
+}
+
+.output-summary .table td {
+  text-align: left;
+}
+
+.panel-table td:first-child,
+.panel-table th:first-child {
+  width: 40%;
+}
+
+.panel-table td:not(:first-child),
+.panel-table th:not(:first-child) {
+  width: 20%;
+}
