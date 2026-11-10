@@ -164,6 +164,7 @@
       [co2SavingsData]="co2SavingsData"
       [settings]="settings()"
       [isBaseline]="isBaseline()"
+      [idPrefix]="scenario() + '_'"
       [isFormDisabled]="false"
       (emitUpdateCo2SavingsData)="updateCo2SavingsData($event)"
       (emitCurrentField)="setFocusedField($event)">

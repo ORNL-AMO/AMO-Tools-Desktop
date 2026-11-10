@@ -4,7 +4,7 @@
      'justify-content-center': horizontalAnchor === 'center',
     'justify-content-end': horizontalAnchor === 'right'}">
   <span class="input-group-btn hide-print">
-    <button (mouseenter)="emitUpdateTableString()" class="btn-copy-table hide-print" type="button" ngxClipboard [cbContent]="tableString"
+    <button (mouseenter)="emitUpdateTableString()" (focus)="emitUpdateTableString()" class="btn-copy-table hide-print" type="button" ngxClipboard [cbContent]="tableString"
       (cbOnSuccess)="copySuccess()">Copy Table</button>
   </span>
 </div>
