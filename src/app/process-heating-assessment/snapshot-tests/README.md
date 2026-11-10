@@ -76,5 +76,4 @@ Both baseline and modification should be By Mass if the modification is meant to
 ## Coverage limits
 
 See the header of `new-calc-services.snapshot.spec.ts`. In short: all fixtures are Imperial (Metric is
-covered by unit specs and by the live cases in `flue-gas-by-mass.snapshot.spec.ts`), and extended surface
-totals are not compared because legacy always totals them as 0.
+covered by unit specs and by the live cases in `flue-gas-by-mass.snapshot.spec.ts`).
