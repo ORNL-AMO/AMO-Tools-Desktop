@@ -19,8 +19,8 @@ export const BaselineView = {
 export type BaselineView = typeof BaselineView[keyof typeof BaselineView];
 
 export const EnergyValidationView = {
-  METERED_ENERGY: 'metered-energy',
   DESIGNED_ENERGY: 'designed-energy',
+  METERED_ENERGY: 'metered-energy',
 } as const;
 export type EnergyValidationView = typeof EnergyValidationView[keyof typeof EnergyValidationView];
 
@@ -130,8 +130,8 @@ export const BASELINE_VIEW_LINKS: ViewLink[] = [
 ];
 
 export const ENERGY_VALIDATION_VIEW_LINKS: ViewLink[] = [
-  { view: EnergyValidationView.METERED_ENERGY, label: 'Metered Energy' },
   { view: EnergyValidationView.DESIGNED_ENERGY, label: 'Designed Energy' },
+  { view: EnergyValidationView.METERED_ENERGY, label: 'Metered Energy' },
 ];
 
 export const HEAT_BALANCE_VIEW_LINKS: ViewLink[] = [

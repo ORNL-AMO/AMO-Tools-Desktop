@@ -10,8 +10,8 @@ describe('deriveSteppedRoutes', () => {
 
     expect(deriveSteppedRoutes(ROUTES)).toEqual([
       { view: ROUTE_TOKENS.assessmentSettings, path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.assessmentSettings}` },
-      { view: ROUTE_TOKENS.meteredEnergy, path: `${ENERGY_VALIDATION_BASE}/${ROUTE_TOKENS.meteredEnergy}` },
       { view: ROUTE_TOKENS.designedEnergy, path: `${ENERGY_VALIDATION_BASE}/${ROUTE_TOKENS.designedEnergy}` },
+      { view: ROUTE_TOKENS.meteredEnergy, path: `${ENERGY_VALIDATION_BASE}/${ROUTE_TOKENS.meteredEnergy}` },
       { view: ROUTE_TOKENS.operations, path: `${HEAT_BALANCE_BASE}/${ROUTE_TOKENS.operations}` },
       { view: ROUTE_TOKENS.chargeMaterial, path: `${HEAT_BALANCE_BASE}/${ROUTE_TOKENS.chargeMaterial}` },
       { view: ROUTE_TOKENS.flueGas, path: `${HEAT_BALANCE_BASE}/${ROUTE_TOKENS.flueGas}` },

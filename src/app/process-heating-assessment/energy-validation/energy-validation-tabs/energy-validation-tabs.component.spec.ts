@@ -30,17 +30,17 @@ describe('EnergyValidationTabsComponent', () => {
     fixture = TestBed.createComponent(EnergyValidationTabsComponent);
   });
 
-  it('lists Metered Energy before Designed Energy', () => {
+  it('lists Designed Energy before Metered Energy', () => {
     fixture.detectChanges();
 
-    expect(largeTabs().map(tab => tab.textContent.trim())).toEqual(['Metered Energy', 'Designed Energy']);
+    expect(largeTabs().map(tab => tab.textContent.trim())).toEqual(['Designed Energy', 'Metered Energy']);
   });
 
   it('marks only the sub-tab with invalid inputs and names why', () => {
     tabNavHelper.isTabInvalid.and.callFake(link => link.view === EnergyValidationView.DESIGNED_ENERGY);
     fixture.detectChanges();
 
-    const [metered, designed] = largeTabs();
+    const [designed, metered] = largeTabs();
     expect(metered.classList).not.toContain('missing-data');
     expect(designed.classList).toContain('missing-data');
     expect(designed.querySelector('a').getAttribute('title')).toBe('Designed Energy, has invalid inputs');

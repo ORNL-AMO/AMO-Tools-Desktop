@@ -191,16 +191,16 @@ export const ROUTES: Route[] = [
             path: ROUTE_TOKENS.energyValidation,
             component: EnergyValidationComponent,
             children: [
-              { path: '', redirectTo: ROUTE_TOKENS.meteredEnergy, pathMatch: 'full' },
-              {
-                path: ROUTE_TOKENS.meteredEnergy,
-                component: MeteredEnergyComponent,
-                data: { childView: ROUTE_TOKENS.meteredEnergy, stepIndex: 1 },
-              },
+              { path: '', redirectTo: ROUTE_TOKENS.designedEnergy, pathMatch: 'full' },
               {
                 path: ROUTE_TOKENS.designedEnergy,
                 component: DesignedEnergyComponent,
-                data: { childView: ROUTE_TOKENS.designedEnergy, stepIndex: 2 },
+                data: { childView: ROUTE_TOKENS.designedEnergy, stepIndex: 1 },
+              },
+              {
+                path: ROUTE_TOKENS.meteredEnergy,
+                component: MeteredEnergyComponent,
+                data: { childView: ROUTE_TOKENS.meteredEnergy, stepIndex: 2 },
               },
             ]
           },

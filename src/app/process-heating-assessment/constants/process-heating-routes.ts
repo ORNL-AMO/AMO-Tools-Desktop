@@ -21,8 +21,8 @@ export const ROUTE_TOKENS = {
   auxiliaryEquipment: 'auxiliary-equipment',
 
   // Energy Validation sub-tabs
-  meteredEnergy: 'metered-energy',
   designedEnergy: 'designed-energy',
+  meteredEnergy: 'metered-energy',
 
   // Assessment sub-tabs
   exploreOpportunities: 'explore-opportunities',
