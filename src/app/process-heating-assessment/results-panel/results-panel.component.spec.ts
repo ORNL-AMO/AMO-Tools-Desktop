@@ -8,6 +8,7 @@ describe('ResultsPanelComponent tabs', () => {
   let fixture: ComponentFixture<ResultsPanelComponent>;
   let childView: WritableSignal<string>;
   let selectedExpertViewTab: WritableSignal<string | undefined>;
+  let isEnergyValidationView: WritableSignal<boolean>;
 
   const tab = (label: string): HTMLElement =>
     Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('.panel-tab-item a')).find(link => link.textContent.trim() === label);
@@ -19,6 +20,7 @@ describe('ResultsPanelComponent tabs', () => {
   beforeEach(() => {
     childView = signal('explore-opportunities');
     selectedExpertViewTab = signal(undefined);
+    isEnergyValidationView = signal(false);
     TestBed.configureTestingModule({
       declarations: [ResultsPanelComponent],
       providers: [{
@@ -28,6 +30,7 @@ describe('ResultsPanelComponent tabs', () => {
           childView,
           selectedExpertViewTab,
           exploreNotesKey: signal(undefined),
+          isEnergyValidationView,
         },
       }],
       schemas: [NO_ERRORS_SCHEMA],
@@ -59,5 +62,53 @@ describe('ResultsPanelComponent tabs', () => {
     selectedExpertViewTab.set(LossView.OPERATIONS);
 
     expect(fixture.componentInstance.notesKey()).toBe('operationsNotes');
+  });
+
+  describe('results tables', () => {
+    const shown = (selector: string): boolean => fixture.nativeElement.querySelector(selector) !== null;
+
+    it('adds the energy validation table below the heat balance results on Heat Balance', () => {
+      childView.set('heat-balance');
+      fixture.detectChanges();
+
+      expect(shown('app-process-heating-assessment-results')).toBeTrue();
+      expect(shown('app-process-heating-assessment-results + div app-energy-validation-results')).toBeTrue();
+    });
+
+    it('shows only the energy validation table on Energy Validation', () => {
+      childView.set('metered-energy');
+      isEnergyValidationView.set(true);
+      fixture.detectChanges();
+
+      expect(shown('app-energy-validation-results')).toBeTrue();
+      expect(shown('app-process-heating-assessment-results')).toBeFalse();
+    });
+
+    it('shows only the heat balance results elsewhere', () => {
+      fixture.detectChanges();
+
+      expect(shown('app-process-heating-assessment-results')).toBeTrue();
+      expect(shown('app-energy-validation-results')).toBeFalse();
+    });
+  });
+
+  describe('assessment settings', () => {
+    it('hides the Results tab and shows Help instead', () => {
+      childView.set('assessment-settings');
+      fixture.detectChanges();
+
+      expect(tab('Results')).toBeUndefined();
+      expect(tab('Help').getAttribute('aria-pressed')).toBe('true');
+      expect(fixture.nativeElement.querySelector('app-process-heating-help-panel')).not.toBeNull();
+    });
+
+    it('returns to Results on leaving Assessment Settings', () => {
+      childView.set('assessment-settings');
+      fixture.detectChanges();
+      childView.set('auxiliary-equipment');
+      fixture.detectChanges();
+
+      expect(tab('Results').getAttribute('aria-pressed')).toBe('true');
+    });
   });
 });

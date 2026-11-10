@@ -16,8 +16,11 @@ export const ROUTE_TOKENS = {
   // Baseline sub-tabs
   assessmentSettings: 'assessment-settings',
   operations: 'operations',
+  energyValidation: 'energy-validation',
   heatBalance: 'heat-balance',
   auxiliaryEquipment: 'auxiliary-equipment',
+
+  // Energy Validation sub-tabs
   designedEnergy: 'designed-energy',
   meteredEnergy: 'metered-energy',
 

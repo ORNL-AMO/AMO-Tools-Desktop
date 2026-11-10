@@ -27,6 +27,9 @@ import { isViewVisibleForConfiguration, LossView } from '../models/views';
 import { AssessmentScenario, deriveHeatingEquipmentConfiguration, ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingOperationsFormService } from './process-heating-operations-form.service';
 import { ProcessHeatingResultsService } from './process-heating-results.service';
+import { defaultEnergySources } from '../energy-validation/default-energy-sources';
+import { MeteredEnergyFormService } from '../metered-energy/metered-energy-form.service';
+import { DesignedEnergyFormService } from '../designed-energy/designed-energy-form.service';
 
 // Derived so the checks table tracks every per-step flag PhastValid declares.
 type ValidityKey = Exclude<keyof PhastValid, 'isValid'>;
@@ -73,6 +76,19 @@ export class ProcessHeatingValidityService {
   private readonly energyInputFormService = inject(EnergyInputFormService);
   private readonly exhaustGasFormService = inject(ExhaustGasFormService);
   private readonly energyInputExhaustGasFormService = inject(EnergyInputExhaustGasFormService);
+  private readonly meteredEnergyFormService = inject(MeteredEnergyFormService);
+  private readonly designedEnergyFormService = inject(DesignedEnergyFormService);
+
+  /** Energy Validation inputs only feed the comparison against the heat balance, so they mark their tab without blocking results. */
+  readonly isMeteredEnergyValid: Signal<boolean> = computed(() => this.meteredEnergyFormService.isValid(
+    this.assessmentService.processHeatingSignal()?.meteredEnergy,
+    defaultEnergySources(deriveHeatingEquipmentConfiguration(this.assessmentService.settingsSignal())),
+  ));
+
+  readonly isDesignedEnergyValid: Signal<boolean> = computed(() => this.designedEnergyFormService.isValid(
+    this.assessmentService.processHeatingSignal()?.designedEnergy,
+    defaultEnergySources(deriveHeatingEquipmentConfiguration(this.assessmentService.settingsSignal())),
+  ));
 
   /** In the order legacy's alert lists them. */
   private readonly checks: ValidityCheck[] = [

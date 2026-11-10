@@ -6,9 +6,12 @@ import { deriveSteppedRoutes } from './stepped-routes';
 describe('deriveSteppedRoutes', () => {
   it('matches the hand-written step order this replaced, including path and view per step', () => {
     const HEAT_BALANCE_BASE = `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.heatBalance}`;
+    const ENERGY_VALIDATION_BASE = `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.energyValidation}`;
 
     expect(deriveSteppedRoutes(ROUTES)).toEqual([
       { view: ROUTE_TOKENS.assessmentSettings, path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.assessmentSettings}` },
+      { view: ROUTE_TOKENS.designedEnergy, path: `${ENERGY_VALIDATION_BASE}/${ROUTE_TOKENS.designedEnergy}` },
+      { view: ROUTE_TOKENS.meteredEnergy, path: `${ENERGY_VALIDATION_BASE}/${ROUTE_TOKENS.meteredEnergy}` },
       { view: ROUTE_TOKENS.operations, path: `${HEAT_BALANCE_BASE}/${ROUTE_TOKENS.operations}` },
       { view: ROUTE_TOKENS.chargeMaterial, path: `${HEAT_BALANCE_BASE}/${ROUTE_TOKENS.chargeMaterial}` },
       { view: ROUTE_TOKENS.flueGas, path: `${HEAT_BALANCE_BASE}/${ROUTE_TOKENS.flueGas}` },
@@ -26,8 +29,6 @@ describe('deriveSteppedRoutes', () => {
       { view: ROUTE_TOKENS.slag, path: `${HEAT_BALANCE_BASE}/${ROUTE_TOKENS.slag}` },
       { view: ROUTE_TOKENS.heatSystemEfficiency, path: `${HEAT_BALANCE_BASE}/${ROUTE_TOKENS.heatSystemEfficiency}` },
       { view: ROUTE_TOKENS.auxiliaryEquipment, path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.auxiliaryEquipment}` },
-      { view: ROUTE_TOKENS.designedEnergy, path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.designedEnergy}` },
-      { view: ROUTE_TOKENS.meteredEnergy, path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.meteredEnergy}` },
       /** `assessment`'s target is its bare path; the router's own `redirectTo` resolves it, same as `report` below. */
       { view: ROUTE_TOKENS.assessment, path: ROUTE_TOKENS.assessment },
       { view: ROUTE_TOKENS.diagram, path: ROUTE_TOKENS.diagram },

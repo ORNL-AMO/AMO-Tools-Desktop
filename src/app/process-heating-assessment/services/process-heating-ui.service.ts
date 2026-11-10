@@ -4,11 +4,13 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
 import { Losses, Notes } from '../models/phast';
-import { AssessmentView, BaselineView, EXPERT_VIEW_LOSS_VIEWS, HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, isViewVisibleForConfiguration, LossView, MainView, ProcessHeatingView, ReportView, ViewLink } from '../models/views';
+import { AssessmentView, BaselineView, EnergyValidationView, EXPERT_VIEW_LOSS_VIEWS, HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, isViewVisibleForConfiguration, LossView, MainView, ProcessHeatingView, ReportView, ViewLink } from '../models/views';
 import { ProcessHeatingRouteData, STEPPED_ROUTES } from '../routing/stepped-routes';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingValidityService } from './process-heating-validity.service';
-export { MainView, BaselineView, AssessmentView, ReportView, LossView, HeatingEquipmentConfiguration, ProcessHeatingView, ViewLink, MAIN_VIEW_LINKS, BASELINE_VIEW_LINKS, HEAT_BALANCE_VIEW_LINKS, REPORT_VIEW_LINKS } from '../models/views';
+export { MainView, BaselineView, EnergyValidationView, AssessmentView, ReportView, LossView, HeatingEquipmentConfiguration, ProcessHeatingView, ViewLink, MAIN_VIEW_LINKS, BASELINE_VIEW_LINKS, HEAT_BALANCE_VIEW_LINKS, REPORT_VIEW_LINKS } from '../models/views';
+
+const ENERGY_VALIDATION_VIEWS: ReadonlySet<string> = new Set<string>(Object.values(EnergyValidationView));
 
 @Injectable()
 export class ProcessHeatingUiService {
@@ -135,8 +137,13 @@ export class ProcessHeatingUiService {
     this.findNextVisibleStep(this.currentStepIndex() - 1, 'back') !== -1
   );
 
+  /** Heat Balance and Energy Validation render their own results panel beside their sub-tab row. */
   readonly showResultsPanel: Signal<boolean> = computed(() =>
-    this.childView() !== ROUTE_TOKENS.heatBalance
+    this.childView() !== ROUTE_TOKENS.heatBalance && !this.isEnergyValidationView()
+  );
+
+  readonly isEnergyValidationView: Signal<boolean> = computed(() =>
+    ENERGY_VALIDATION_VIEWS.has(this.childView())
   );
 
   private get assessmentId(): string {
@@ -181,13 +188,19 @@ export class ProcessHeatingUiService {
     }
   }
 
-  /** Marks the Baseline and Heat Balance tabs whose invalid inputs block Assessment and Report. */
+  /** Marks the Baseline, Energy Validation and Heat Balance tabs with invalid inputs; only Energy Validation's don't block Assessment and Report. */
   isViewInvalid(view: string): boolean {
     switch (view) {
       case BaselineView.ASSESSMENT_SETTINGS:
         return !this.isAssessmentSettingsValidSignal();
       case BaselineView.HEAT_BALANCE:
         return !this.isHeatBalanceValidSignal();
+      case BaselineView.ENERGY_VALIDATION:
+        return !this.validityService.isMeteredEnergyValid() || !this.validityService.isDesignedEnergyValid();
+      case EnergyValidationView.METERED_ENERGY:
+        return !this.validityService.isMeteredEnergyValid();
+      case EnergyValidationView.DESIGNED_ENERGY:
+        return !this.validityService.isDesignedEnergyValid();
       default:
         return !this.validityService.isStepValid('baseline', view);
     }

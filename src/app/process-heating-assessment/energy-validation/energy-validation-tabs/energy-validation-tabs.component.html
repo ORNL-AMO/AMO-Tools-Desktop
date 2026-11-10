@@ -1,0 +1,33 @@
+<!-- LARGE VIEWPORT TABS -->
+<ul class="tabs subtabs progress-tabs process-heating-assessment d-none d-lg-block">
+  @for (link of ENERGY_VALIDATION_VIEW_LINKS; track link.view) {
+    <li routerLinkActive="active" [routerLink]="[link.view]" [class.missing-data]="isTabInvalid(link)">
+      <a routerLinkActive="active" [routerLink]="[link.view]"
+         [attr.aria-label]="invalidTabLabel(link)"
+         [attr.title]="invalidTabLabel(link)">
+        {{link.label}}
+      </a>
+    </li>
+  }
+</ul>
+
+<!-- SMALL SCREEN TABS -->
+<nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs process-heating-assessment flex-wrap flex-fill">
+  <ul class="pagination d-flex justify-content-between tabs subtabs progress-tabs flex-fill process-heating-assessment">
+    <li class="page-item" [class.disabled]="!canGoBack()">
+      <a class="nav-link small" (click)="back()"><span class="fa fa-chevron-left"></span></a>
+    </li>
+    @for (link of ENERGY_VALIDATION_VIEW_LINKS; track link.view) {
+      <li class="page-item" routerLinkActive="active" [routerLink]="[link.view]" [class.missing-data]="isTabInvalid(link)">
+        <a class="nav-link small" routerLinkActive="active" [routerLink]="[link.view]"
+           [attr.aria-label]="invalidTabLabel(link)"
+           [attr.title]="invalidTabLabel(link)">
+          {{link.label}}
+        </a>
+      </li>
+    }
+    <li class="page-item" [class.disabled]="!canContinue()">
+      <a class="nav-link small" (click)="continue()"><span class="fa fa-chevron-right"></span></a>
+    </li>
+  </ul>
+</nav>

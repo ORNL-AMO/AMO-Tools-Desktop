@@ -1,5 +1,6 @@
 import { computed, inject, Injectable, Signal } from '@angular/core';
 import { ConvertValue } from '../../../shared/convert-units/ConvertValue';
+import { EnergyUseReportData } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
@@ -39,18 +40,51 @@ export class EnergySummaryResultsService {
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   private readonly resultsService = inject(ProcessHeatingResultsService);
 
+  private readonly energyUseReportData: Signal<EnergyUseReportData | undefined> = computed(() => {
+    const results = this.resultsService.scenarioResults('baseline');
+    return results
+      ? this.resultsService.getEnergyUseReportData(this.assessmentService.scenarioPhastSignal('baseline'), results, this.assessmentService.settingsSignal())
+      : undefined;
+  });
+
+  private readonly units: Signal<{ baseEnergyUnit: string; energyPerMassUnit: string }> = computed(() => {
+    const settings = this.assessmentService.settingsSignal();
+    const energyUsed = this.energyUseReportData();
+    return {
+      baseEnergyUnit: energyUsed?.baseEnergyUnit ?? this.getBaseEnergyUnit(settings),
+      energyPerMassUnit: energyUsed?.energyPerMassUnit ?? this.getEnergyPerMassUnit(settings),
+    };
+  });
+
+  /**
+   * Calculated vs metered vs designed rows, shared by the report and the Energy Validation results panel.
+   * Metered and designed don't wait for heat balance results, since Energy Validation comes before Heat Balance.
+   */
+  readonly energyComparison: Signal<EnergyComparisonRow[]> = computed(() => {
+    const settings = this.assessmentService.settingsSignal();
+    const phast = this.assessmentService.scenarioPhastSignal('baseline');
+    const { baseEnergyUnit, energyPerMassUnit } = this.units();
+    const calculated = this.resultsService.scenarioResults('baseline') ? this.resultsService.getCalculatedByPhast(phast, settings) : undefined;
+    const metered = this.resultsService.getMeteredEnergyResults(phast, settings);
+    const designed = this.resultsService.getDesignedEnergyResults(phast, settings);
+    return [
+      { label: 'Energy Used', unit: baseEnergyUnit, calculated: calculated?.fuelEnergyUsed, metered: metered?.metered.hourlyEnergy, designed: designed?.designed.hourlyEnergy },
+      { label: 'Energy Intensity for Charge Materials', unit: energyPerMassUnit, calculated: calculated?.energyIntensity, metered: metered?.metered.energyIntensity, designed: designed?.designed.energyIntensity },
+      { label: 'Auxiliary Electricity Used', unit: 'kW', calculated: calculated?.electricityUsed, metered: metered?.metered.hourlyElectricity, designed: designed?.designed.hourlyElectricity },
+    ];
+  });
+
   readonly energySummaryUI: Signal<EnergySummaryUI | undefined> = computed(() => {
     const settings = this.assessmentService.settingsSignal();
     const phast = this.assessmentService.scenarioPhastSignal('baseline');
     const results = this.resultsService.scenarioResults('baseline');
-    if (!results) {
+    const energyUsed = this.energyUseReportData();
+    if (!results || !energyUsed) {
       return undefined;
     }
 
     const isEaf = settings.furnaceType === 'Electric Arc Furnace (EAF)';
-    const energyUsed = this.resultsService.getEnergyUseReportData(phast, results, settings);
-    const baseEnergyUnit = energyUsed.baseEnergyUnit ?? this.getBaseEnergyUnit(settings);
-    const energyPerMassUnit = energyUsed.energyPerMassUnit ?? this.getEnergyPerMassUnit(settings);
+    const { baseEnergyUnit, energyPerMassUnit } = this.units();
     const energyPerTimeUnit = `${settings.energyResultUnit}/kWh`;
     const energyCostUnit = settings.unitsOfMeasure === 'Metric' ? '/GJ' : '/MMBtu';
     const costs = phast.operatingCosts;
@@ -85,7 +119,6 @@ export class EnergySummaryResultsService {
         costUnit: '/kWh',
       });
     }
-    const metered = this.resultsService.getMeteredEnergyResults(phast, settings);
     const steamHeatingValue = phast.meteredEnergy?.meteredEnergySteam?.totalHeatSteam;
     sources.push({
       name: 'Steam',
@@ -97,17 +130,9 @@ export class EnergySummaryResultsService {
       costUnit: energyCostUnit,
     });
 
-    const calculated = this.resultsService.getCalculatedByPhast(phast, settings);
-    const designed = this.resultsService.getDesignedEnergyResults(phast, settings);
-    const comparison: EnergyComparisonRow[] = [
-      { label: 'Energy Used', unit: baseEnergyUnit, calculated: calculated.fuelEnergyUsed, metered: metered?.metered.hourlyEnergy, designed: designed?.designed.hourlyEnergy },
-      { label: 'Energy Intensity for Charge Materials', unit: energyPerMassUnit, calculated: calculated.energyIntensity, metered: metered?.metered.energyIntensity, designed: designed?.designed.energyIntensity },
-      { label: 'Auxiliary Electricity Used', unit: 'kW', calculated: calculated.electricityUsed, metered: metered?.metered.hourlyElectricity, designed: designed?.designed.hourlyElectricity },
-    ];
-
     return {
       sources,
-      comparison,
+      comparison: this.energyComparison(),
       equipmentNotes: phast.equipmentNotes,
       operatingConditions: phast.operatingHours?.operatingConditions,
       energyPerTimeUnit,

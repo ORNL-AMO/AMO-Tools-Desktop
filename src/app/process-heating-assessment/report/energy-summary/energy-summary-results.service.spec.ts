@@ -109,4 +109,15 @@ describe('EnergySummaryResultsService', () => {
     results = undefined;
     expect(ui()).toBeUndefined();
   });
+
+  it('still compares metered and designed energy before heat balance results exist', () => {
+    results = undefined;
+    resultsService.getMeteredEnergyResults.and.returnValue({ metered: { hourlyEnergy: 9, energyIntensity: 8, hourlyElectricity: 1 } } as never);
+    resultsService.getDesignedEnergyResults.and.returnValue({ designed: { hourlyEnergy: 11, energyIntensity: 12, hourlyElectricity: 3 } } as never);
+
+    const [energy, intensity] = service.energyComparison();
+    expect(energy).toEqual({ label: 'Energy Used', unit: 'MMBtu/hr', calculated: undefined, metered: 9, designed: 11 });
+    expect(intensity.unit).toBe('Btu/lb');
+    expect(resultsService.getCalculatedByPhast).not.toHaveBeenCalled();
+  });
 });

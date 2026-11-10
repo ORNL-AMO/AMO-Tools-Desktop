@@ -113,6 +113,14 @@ import { LossTabBadgeComponent } from './heat-balance/loss-tab-badge/loss-tab-ba
 import { AuxiliaryEquipmentComponent } from './auxiliary-equipment/auxiliary-equipment.component';
 import { DesignedEnergyComponent } from './designed-energy/designed-energy.component';
 import { MeteredEnergyComponent } from './metered-energy/metered-energy.component';
+import { MeteredEnergyFormService } from './metered-energy/metered-energy-form.service';
+import { DesignedEnergyFormService } from './designed-energy/designed-energy-form.service';
+import { MeteredEnergyModule } from '../phast/metered-energy/metered-energy.module';
+import { DesignedEnergyModule } from '../phast/designed-energy/designed-energy.module';
+import { EnergyValidationComponent } from './energy-validation/energy-validation.component';
+import { EnergyValidationTabsComponent } from './energy-validation/energy-validation-tabs/energy-validation-tabs.component';
+import { EnergyValidationResultsComponent } from './energy-validation/energy-validation-results/energy-validation-results.component';
+import { OperatingHoursFieldComponent } from './energy-validation/operating-hours-field/operating-hours-field.component';
 
 import { ChargeMaterialComponent } from './heat-balance/losses/charge-material/charge-material.component';
 import { ChargeMaterialSolidFormComponent } from './heat-balance/losses/charge-material/solid-form/charge-material-solid-form.component';
@@ -180,6 +188,23 @@ export const ROUTES: Route[] = [
             data: { childView: ROUTE_TOKENS.assessmentSettings, stepIndex: 0 },
           },
           {
+            path: ROUTE_TOKENS.energyValidation,
+            component: EnergyValidationComponent,
+            children: [
+              { path: '', redirectTo: ROUTE_TOKENS.designedEnergy, pathMatch: 'full' },
+              {
+                path: ROUTE_TOKENS.designedEnergy,
+                component: DesignedEnergyComponent,
+                data: { childView: ROUTE_TOKENS.designedEnergy, stepIndex: 1 },
+              },
+              {
+                path: ROUTE_TOKENS.meteredEnergy,
+                component: MeteredEnergyComponent,
+                data: { childView: ROUTE_TOKENS.meteredEnergy, stepIndex: 2 },
+              },
+            ]
+          },
+          {
             path: ROUTE_TOKENS.heatBalance,
             component: HeatBalanceComponent,
             data: { childView: ROUTE_TOKENS.heatBalance },
@@ -188,99 +213,89 @@ export const ROUTES: Route[] = [
               {
                 path: ROUTE_TOKENS.operations,
                 component: OperationsComponent,
-                data: { lossSubView: ROUTE_TOKENS.operations, stepIndex: 1 },
+                data: { lossSubView: ROUTE_TOKENS.operations, stepIndex: 3 },
               },
               {
                 path: ROUTE_TOKENS.chargeMaterial,
                 component: ChargeMaterialComponent,
-                data: { lossSubView: ROUTE_TOKENS.chargeMaterial, stepIndex: 2 },
+                data: { lossSubView: ROUTE_TOKENS.chargeMaterial, stepIndex: 4 },
               },
               {
                 path: ROUTE_TOKENS.flueGas,
                 component: FlueGasComponent,
-                data: { lossSubView: ROUTE_TOKENS.flueGas, stepIndex: 3 },
+                data: { lossSubView: ROUTE_TOKENS.flueGas, stepIndex: 5 },
               },
               {
                 path: ROUTE_TOKENS.wallLosses,
                 component: WallLossesComponent,
-                data: { lossSubView: ROUTE_TOKENS.wallLosses, stepIndex: 4 },
+                data: { lossSubView: ROUTE_TOKENS.wallLosses, stepIndex: 6 },
               },
               {
                 path: ROUTE_TOKENS.extendedSurface,
                 component: ExtendedSurfaceComponent,
-                data: { lossSubView: ROUTE_TOKENS.extendedSurface, stepIndex: 5 },
+                data: { lossSubView: ROUTE_TOKENS.extendedSurface, stepIndex: 7 },
               },
               {
                 path: ROUTE_TOKENS.atmosphere,
                 component: AtmosphereComponent,
-                data: { lossSubView: ROUTE_TOKENS.atmosphere, stepIndex: 6 },
+                data: { lossSubView: ROUTE_TOKENS.atmosphere, stepIndex: 8 },
               },
               {
                 path: ROUTE_TOKENS.fixture,
                 component: FixtureComponent,
-                data: { lossSubView: ROUTE_TOKENS.fixture, stepIndex: 7 },
+                data: { lossSubView: ROUTE_TOKENS.fixture, stepIndex: 9 },
               },
               {
                 path: ROUTE_TOKENS.cooling,
                 component: CoolingComponent,
-                data: { lossSubView: ROUTE_TOKENS.cooling, stepIndex: 8 },
+                data: { lossSubView: ROUTE_TOKENS.cooling, stepIndex: 10 },
               },
               {
                 path: ROUTE_TOKENS.opening,
                 component: OpeningComponent,
-                data: { lossSubView: ROUTE_TOKENS.opening, stepIndex: 9 },
+                data: { lossSubView: ROUTE_TOKENS.opening, stepIndex: 11 },
               },
               {
                 path: ROUTE_TOKENS.other,
                 component: OtherComponent,
-                data: { lossSubView: ROUTE_TOKENS.other, stepIndex: 10 },
+                data: { lossSubView: ROUTE_TOKENS.other, stepIndex: 12 },
               },
               {
                 path: ROUTE_TOKENS.gasLeakage,
                 component: GasLeakageComponent,
-                data: { lossSubView: ROUTE_TOKENS.gasLeakage, stepIndex: 11 },
+                data: { lossSubView: ROUTE_TOKENS.gasLeakage, stepIndex: 13 },
               },
               {
                 path: ROUTE_TOKENS.energyInputExhaustGas,
                 component: EnergyInputExhaustGasComponent,
-                data: { lossSubView: ROUTE_TOKENS.energyInputExhaustGas, stepIndex: 12 },
+                data: { lossSubView: ROUTE_TOKENS.energyInputExhaustGas, stepIndex: 14 },
               },
               {
                 path: ROUTE_TOKENS.energyInput,
                 component: EnergyInputComponent,
-                data: { lossSubView: ROUTE_TOKENS.energyInput, stepIndex: 13 },
+                data: { lossSubView: ROUTE_TOKENS.energyInput, stepIndex: 15 },
               },
               {
                 path: ROUTE_TOKENS.exhaustGas,
                 component: ExhaustGasComponent,
-                data: { lossSubView: ROUTE_TOKENS.exhaustGas, stepIndex: 14 },
+                data: { lossSubView: ROUTE_TOKENS.exhaustGas, stepIndex: 16 },
               },
               {
                 path: ROUTE_TOKENS.slag,
                 component: SlagComponent,
-                data: { lossSubView: ROUTE_TOKENS.slag, stepIndex: 15 },
+                data: { lossSubView: ROUTE_TOKENS.slag, stepIndex: 17 },
               },
               {
                 path: ROUTE_TOKENS.heatSystemEfficiency,
                 component: HeatSystemEfficiencyComponent,
-                data: { lossSubView: ROUTE_TOKENS.heatSystemEfficiency, stepIndex: 16 },
+                data: { lossSubView: ROUTE_TOKENS.heatSystemEfficiency, stepIndex: 18 },
               },
             ]
           },
           {
             path: ROUTE_TOKENS.auxiliaryEquipment,
             component: AuxiliaryEquipmentComponent,
-            data: { childView: ROUTE_TOKENS.auxiliaryEquipment, stepIndex: 17 },
-          },
-          {
-            path: ROUTE_TOKENS.designedEnergy,
-            component: DesignedEnergyComponent,
-            data: { childView: ROUTE_TOKENS.designedEnergy, stepIndex: 18 },
-          },
-          {
-            path: ROUTE_TOKENS.meteredEnergy,
-            component: MeteredEnergyComponent,
-            data: { childView: ROUTE_TOKENS.meteredEnergy, stepIndex: 19 },
+            data: { childView: ROUTE_TOKENS.auxiliaryEquipment, stepIndex: 19 },
           },
         ]
       },
@@ -438,8 +453,12 @@ export const ROUTES: Route[] = [
     HeatBalanceLossTabsComponent,
     LossTabBadgeComponent,
     AuxiliaryEquipmentComponent,
-    DesignedEnergyComponent,
+    EnergyValidationComponent,
+    EnergyValidationTabsComponent,
+    EnergyValidationResultsComponent,
+    OperatingHoursFieldComponent,
     MeteredEnergyComponent,
+    DesignedEnergyComponent,
     ChargeMaterialComponent,
     ChargeMaterialSolidFormComponent,
     ChargeMaterialLiquidFormComponent,
@@ -501,6 +520,9 @@ export const ROUTES: Route[] = [
     UnitConverterModule,
     SharedPipesModule,
     LossesHelpModule,
+    // Legacy Metered/Designed Energy help, reused as LossesHelpModule is until this module has its own.
+    MeteredEnergyModule,
+    DesignedEnergyModule,
     AddModificationComponent,
     ModificationListComponent,
     PercentGraphModule,
@@ -519,6 +541,8 @@ export const ROUTES: Route[] = [
     ProcessHeatingAssessmentService,
     ModificationService,
     ProcessHeatingOperationsFormService,
+    MeteredEnergyFormService,
+    DesignedEnergyFormService,
     ProcessHeatingResultsService,
     ProcessHeatingValidityService,
     // Stateless form builders for module-scoped services; each loss step still provides its own instance.

@@ -3,21 +3,23 @@
     <div class="row no-gutters">
       <div class="col-12">
         <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
-          <div class="panel-tab-item h-100 flex-fill" [class.active]="selectedPanelTab === 'results'">
-            <a class="h-100 d-flex justify-content-center align-items-center" role="button" tabindex="0" [attr.aria-pressed]="selectedPanelTab === 'results'"
-              (click)="setPanelTab('results')" (keydown.enter)="setPanelTab('results')" (keydown.space)="setPanelTab('results'); $event.preventDefault()">
-              <div>Results</div>
-            </a>
-          </div>
-          <div class="panel-tab-item h-100 flex-fill" [class.active]="selectedPanelTab === 'help'">
-            <a class="h-100 d-flex justify-content-center align-items-center" role="button" tabindex="0" [attr.aria-pressed]="selectedPanelTab === 'help'"
+          @if (showResultsTab()) {
+            <div class="panel-tab-item h-100 flex-fill" [class.active]="activePanelTab() === 'results'">
+              <a class="h-100 d-flex justify-content-center align-items-center" role="button" tabindex="0" [attr.aria-pressed]="activePanelTab() === 'results'"
+                (click)="setPanelTab('results')" (keydown.enter)="setPanelTab('results')" (keydown.space)="setPanelTab('results'); $event.preventDefault()">
+                <div>Results</div>
+              </a>
+            </div>
+          }
+          <div class="panel-tab-item h-100 flex-fill" [class.active]="activePanelTab() === 'help'">
+            <a class="h-100 d-flex justify-content-center align-items-center" role="button" tabindex="0" [attr.aria-pressed]="activePanelTab() === 'help'"
               (click)="setPanelTab('help')" (keydown.enter)="setPanelTab('help')" (keydown.space)="setPanelTab('help'); $event.preventDefault()">
               <div>Help</div>
             </a>
           </div>
           @if (showNotesTab()) {
-            <div class="panel-tab-item h-100 flex-fill" [class.active]="selectedPanelTab === 'notes'">
-              <a class="h-100 d-flex justify-content-center align-items-center" role="button" tabindex="0" [attr.aria-pressed]="selectedPanelTab === 'notes'"
+            <div class="panel-tab-item h-100 flex-fill" [class.active]="activePanelTab() === 'notes'">
+              <a class="h-100 d-flex justify-content-center align-items-center" role="button" tabindex="0" [attr.aria-pressed]="activePanelTab() === 'notes'"
                 (click)="setPanelTab('notes')" (keydown.enter)="setPanelTab('notes')" (keydown.space)="setPanelTab('notes'); $event.preventDefault()">
                 <div>Notes</div>
               </a>
@@ -28,13 +30,22 @@
     </div>
     <div class="row no-gutters">
       <div class="col-12 pr-2 pl-2 pb-4 mt-1">
-        @if (selectedPanelTab === 'results') {
-          <app-process-heating-assessment-results [scenario]="scenario()"></app-process-heating-assessment-results>
+        @if (activePanelTab() === 'results') {
+          @if (isEnergyValidationView()) {
+            <app-energy-validation-results></app-energy-validation-results>
+          } @else {
+            <app-process-heating-assessment-results [scenario]="scenario()"></app-process-heating-assessment-results>
+            @if (isHeatBalanceView()) {
+              <div class="mt-3">
+                <app-energy-validation-results></app-energy-validation-results>
+              </div>
+            }
+          }
         }
-        @if (selectedPanelTab === 'help') {
+        @if (activePanelTab() === 'help') {
           <app-process-heating-help-panel></app-process-heating-help-panel>
         }
-        @if (selectedPanelTab === 'notes' && showNotesTab()) {
+        @if (activePanelTab() === 'notes' && showNotesTab()) {
           @if (scenario() === 'baseline') {
             <p class="p-2 mb-0">You must add a modification to take notes on it.</p>
           } @else {
