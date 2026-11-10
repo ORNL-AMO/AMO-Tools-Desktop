@@ -143,11 +143,10 @@ describe('Fan affinity Desktop integration with the published beta', () => {
     const calculate = spyOn(api, 'calculate').and.callThrough();
     const resize = spyOn(api, 'changeFanSize').and.callThrough();
     const invalid: Partial<FanAffinityLawsInput>[] = [
-      {hoursOperation: 0}, {hoursOperation: Infinity}, {powerMotor: 0}, {powerMotor: NaN},
-      {electricalRate: NaN}, {electricalRate: Infinity},
+      {hoursOperation: 0}, {powerMotor: 0},
       {efficiencyMotor: 0}, {efficiencyDrive: 101}, {ratedFlow: 0}, {actualFlow: 0},
       {actualFlow: 31000}, {desiredFlowPercent: -1}, {desiredFlowPercent: 101},
-      {flowMode: 1, desiredFlowVolume: 31000}, {flowMode: 1, desiredFlowVolume: Infinity},
+      {flowMode: 1, desiredFlowVolume: 31000},
       {changeFanSize: true, diameterFan: 0}, {changeFanSize: true, diameterFanNew: 0},
       {changeFanSize: true, diameterFanNew: 32, desiredFlowPercent: 90}
     ];
@@ -160,10 +159,6 @@ describe('Fan affinity Desktop integration with the published beta', () => {
     const treasure = new FanAffinityLawTreasureHuntService(service, convert);
     const opportunity: FanAffinityLawTreasureHunt = { inputData: input({efficiencyMotor: 0}), opportunityType: Treasure.fanAffinityLaw };
     expect(treasure.getTreasureHuntOpportunityResults(opportunity, imperial).costSavings).toBe(0);
-    opportunity.inputData = input({electricalRate: NaN});
-    expect(treasure.getTreasureHuntOpportunityResults(opportunity, imperial)).toEqual({
-      costSavings: 0, energySavings: 0, baselineCost: 0, modificationCost: 0, utilityType: 'Electricity'
-    });
     expect(calculate).not.toHaveBeenCalled(); expect(resize).not.toHaveBeenCalled();
   });
 

@@ -30,7 +30,7 @@ is included.
 
 Desktop owns validation. Invalid active inputs clear results and prevent Suite calls,
 including Treasure Hunt calculations. Power, efficiencies, rated flow, operating hours,
-variable-control baseline flow, and active diameters must be finite and positive.
+variable-control baseline flow, and active diameters must be positive.
 Efficiencies cannot exceed 100%; hours cannot exceed 8,760 per year. Electricity price and
 modification flow may be zero. Baseline flow cannot exceed rated flow; modification flow
 cannot exceed the resized rated capacity. Positive larger and smaller diameters are supported.
@@ -43,9 +43,9 @@ from [Desktop integration PR #9054](https://github.com/ORNL-AMO/AMO-Tools-Deskto
 without its unrelated feature work. The pump differential-pressure field is optional for
 existing records. Near-zero motor power-factor calculations now supply motor nameplate data.
 Owned Suite classes and vectors retain cleanup; value-object outputs do not.
-The process-flow water-estimator loader uses the package's default factory and resolves
-WASM relative to the document for web and Electron file loading. Chiller efficiency rows
-use the current energy-result vectors with explicit cleanup of the owned vector handles.
+The process-flow loader is unchanged in this PR; its beta factory compatibility is deferred
+to separate work. Chiller efficiency rows use the current energy-result vectors with explicit
+cleanup of the owned vector handles.
 Motor catalog enum getters are unwrapped to numeric values before persistence. The beta
 returns embind enum objects for these getters despite numeric declarations; a real-WASM
 catalog test verifies physical 50/60 Hz values and numeric efficiency classes.
@@ -57,8 +57,6 @@ resized Two-Speed flow/time shares, percent/volume equivalence, unit conversion,
 operating points, saved inputs, invalid inputs, and Treasure Hunt. Pump/motor fixtures record
 accepted Suite corrections explicitly in `expected-differences.json`. A runtime export
 inventory also checks active adapter members because the shared module is typed as `any`.
-The runtime smoke fixture uses the application initializer and checks pump, motor, and fan
-calculations over HTTP and the Electron-style `file:` loading path.
 
 The help link uses `environment.measurDocsUrl + 'group__fan__affinity__laws__calculator'`.
 The development target returned HTTP 404 during integration on 2026-11-10. **Deploy the new

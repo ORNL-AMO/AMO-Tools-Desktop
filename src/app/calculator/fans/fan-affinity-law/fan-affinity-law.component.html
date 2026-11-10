@@ -55,7 +55,6 @@
                     <span class="alert-danger pull-right small"
                       *ngIf="fanAffinityLawForm.controls.hoursOperation.invalid && !fanAffinityLawForm.controls.hoursOperation.pristine">
                       <span *ngIf="fanAffinityLawForm.controls.hoursOperation.errors.required">Value required.</span>
-                      <span *ngIf="fanAffinityLawForm.controls.hoursOperation.errors.finite">Enter a finite number.</span>
                       <span *ngIf="fanAffinityLawForm.controls.hoursOperation.errors.max">Value can't be greater than
                         {{fanAffinityLawForm.controls.hoursOperation.errors.max.max}}.</span>
                       <span *ngIf="fanAffinityLawForm.controls.hoursOperation.errors.greaterThan != null">Value must be greater than
@@ -74,7 +73,6 @@
                     <span class="alert-danger pull-right small"
                       *ngIf="fanAffinityLawForm.controls.electricalRate.invalid && !fanAffinityLawForm.controls.electricalRate.pristine">
                       <span *ngIf="fanAffinityLawForm.controls.electricalRate.errors.required">Value required.</span>
-                      <span *ngIf="fanAffinityLawForm.controls.electricalRate.errors.finite">Enter a finite number.</span>
                       <span *ngIf="fanAffinityLawForm.controls.electricalRate.errors.greaterThan != null">Value must be greater than
                         {{fanAffinityLawForm.controls.electricalRate.errors.greaterThan}}.</span>
                     </span>
@@ -106,7 +104,6 @@
                     <span class="alert-danger pull-right small"
                       *ngIf="fanAffinityLawForm.controls.powerMotor.invalid && !fanAffinityLawForm.controls.powerMotor.pristine">
                       <span *ngIf="fanAffinityLawForm.controls.powerMotor.errors.required">Value required.</span>
-                      <span *ngIf="fanAffinityLawForm.controls.powerMotor.errors.finite">Enter a finite number.</span>
                       <span *ngIf="fanAffinityLawForm.controls.powerMotor.errors.greaterThan != null">Value must be greater than
                         {{fanAffinityLawForm.controls.powerMotor.errors.greaterThan}}.</span>
                     </span>
@@ -123,7 +120,6 @@
                     <span class="alert-danger pull-right small"
                       *ngIf="fanAffinityLawForm.controls.efficiencyMotor.invalid && !fanAffinityLawForm.controls.efficiencyMotor.pristine">
                       <span *ngIf="fanAffinityLawForm.controls.efficiencyMotor.errors.required">Value required.</span>
-                      <span *ngIf="fanAffinityLawForm.controls.efficiencyMotor.errors.finite">Enter a finite number.</span>
                       <span *ngIf="fanAffinityLawForm.controls.efficiencyMotor.errors.max">Value can't be greater than
                         {{fanAffinityLawForm.controls.efficiencyMotor.errors.max.max}}.</span>
                       <span *ngIf="fanAffinityLawForm.controls.efficiencyMotor.errors.greaterThan != null">Value must be greater than
@@ -142,7 +138,6 @@
                     <span class="alert-danger pull-right small"
                       *ngIf="fanAffinityLawForm.controls.efficiencyDrive.invalid && !fanAffinityLawForm.controls.efficiencyDrive.pristine">
                       <span *ngIf="fanAffinityLawForm.controls.efficiencyDrive.errors.required">Value required.</span>
-                      <span *ngIf="fanAffinityLawForm.controls.efficiencyDrive.errors.finite">Enter a finite number.</span>
                       <span *ngIf="fanAffinityLawForm.controls.efficiencyDrive.errors.max">Value can't be greater than
                         {{fanAffinityLawForm.controls.efficiencyDrive.errors.max.max}}.</span>
                       <span *ngIf="fanAffinityLawForm.controls.efficiencyDrive.errors.greaterThan != null">Value must be greater than

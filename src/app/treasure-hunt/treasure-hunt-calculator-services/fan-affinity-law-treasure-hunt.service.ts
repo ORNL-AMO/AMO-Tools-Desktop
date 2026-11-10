@@ -38,14 +38,11 @@ export class FanAffinityLawTreasureHuntService {
 
   getTreasureHuntOpportunityResults(fanAffinityLaw: FanAffinityLawTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
     let results: FanAffinityLawsOutput = this.fanAffinityLawService.getResults(fanAffinityLaw.inputData, settings, true);
-    // Invalid inputs clear calculation results; do not multiply those zeros by a nonfinite tariff.
-    const electricalRate = Number.isFinite(fanAffinityLaw.inputData.electricalRate)
-      ? fanAffinityLaw.inputData.electricalRate : 0;
     let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
       costSavings: results.annualCostSavings,
       energySavings: results.annualEnergyBaseline - results.annualEnergyNew,
-      baselineCost: results.annualEnergyBaseline * electricalRate,
-      modificationCost: results.annualEnergyNew * electricalRate,
+      baselineCost: results.annualEnergyBaseline * fanAffinityLaw.inputData.electricalRate,
+      modificationCost: results.annualEnergyNew * fanAffinityLaw.inputData.electricalRate,
       utilityType: 'Electricity',
     }
 

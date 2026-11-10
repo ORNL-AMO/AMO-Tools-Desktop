@@ -28,7 +28,6 @@
           <span class="alert-danger pull-right small"
             *ngIf="fanAffinityLawForm.controls.ratedFlow.invalid && !fanAffinityLawForm.controls.ratedFlow.pristine">
             <span *ngIf="fanAffinityLawForm.controls.ratedFlow.errors.required">Value required.</span>
-            <span *ngIf="fanAffinityLawForm.controls.ratedFlow.errors.finite">Enter a finite number.</span>
             <span *ngIf="fanAffinityLawForm.controls.ratedFlow.errors.greaterThan != null">Value must be greater than
               {{fanAffinityLawForm.controls.ratedFlow.errors.greaterThan}}.</span>
           </span>
@@ -47,7 +46,6 @@
           <span class="alert-danger pull-right small"
             *ngIf="fanAffinityLawForm.controls.actualFlow.invalid && !fanAffinityLawForm.controls.actualFlow.pristine">
             <span *ngIf="fanAffinityLawForm.controls.actualFlow.errors.required">Value required.</span>
-            <span *ngIf="fanAffinityLawForm.controls.actualFlow.errors.finite">Enter a finite number.</span>
             <span *ngIf="fanAffinityLawForm.controls.actualFlow.errors.greaterThan != null">Value must be greater than
               {{fanAffinityLawForm.controls.actualFlow.errors.greaterThan}}.</span>
             <span *ngIf="fanAffinityLawForm.controls.actualFlow.errors.max">Actual Flow can't exceed Rated Flow
@@ -71,7 +69,6 @@
           <span class="alert-danger pull-right small"
             *ngIf="fanAffinityLawForm.controls.diameterFan.invalid && !fanAffinityLawForm.controls.diameterFan.pristine">
             <span *ngIf="fanAffinityLawForm.controls.diameterFan.errors.required">Value required.</span>
-            <span *ngIf="fanAffinityLawForm.controls.diameterFan.errors.finite">Enter a finite number.</span>
             <span *ngIf="fanAffinityLawForm.controls.diameterFan.errors.greaterThan != null">Value must be greater than
               {{fanAffinityLawForm.controls.diameterFan.errors.greaterThan}}.</span>
           </span>
@@ -120,7 +117,6 @@
             <span class="alert-danger pull-right small"
               *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.invalid && !fanAffinityLawForm.controls.desiredFlowVolume.pristine">
               <span *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.errors.required">Value required.</span>
-            <span *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.errors.finite">Enter a finite number.</span>
               <span *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.errors.min">Value can't be less than
                 {{fanAffinityLawForm.controls.desiredFlowVolume.errors.min.min}}.</span>
               <span *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.errors.max">
@@ -140,7 +136,6 @@
             <span class="alert-danger pull-right small"
               *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.invalid && !fanAffinityLawForm.controls.desiredFlowPercent.pristine">
               <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.required">Value required.</span>
-            <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.finite">Enter a finite number.</span>
               <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.max">
                 Flow Rate can't exceed the {{fanAffinityLawForm.controls.changeFanSize.value ? "new fan's " : ''}}rated flow
                 ({{fanAffinityLawForm.controls.desiredFlowPercent.errors.max.max | number:'1.0-1'}}%).</span>
@@ -164,7 +159,6 @@
           <span class="alert-danger pull-right small"
             *ngIf="fanAffinityLawForm.controls.diameterFanNew.invalid && !fanAffinityLawForm.controls.diameterFanNew.pristine">
             <span *ngIf="fanAffinityLawForm.controls.diameterFanNew.errors.required">Value required.</span>
-            <span *ngIf="fanAffinityLawForm.controls.diameterFanNew.errors.finite">Enter a finite number.</span>
             <span *ngIf="fanAffinityLawForm.controls.diameterFanNew.errors.greaterThan != null">Value must be greater than
               {{fanAffinityLawForm.controls.diameterFanNew.errors.greaterThan}}.</span>
           </span>

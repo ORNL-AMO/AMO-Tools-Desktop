@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { FanAffinityLawsInput, FanAffinityLawsOutput, FanAffinityLawsTimeFactors } from '../../../shared/models/standalone';
 import { FanAffinityLawApiService } from '../../../tools-suite-api/fan-affinity-law-api.service';
@@ -13,13 +13,8 @@ export class FanAffinityLawService {
   constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService,
     private fanAffinityLawApiService: FanAffinityLawApiService) {}
 
-  private readonly finiteNumber: ValidatorFn = (control: AbstractControl) => {
-    if (control.value === null || control.value === undefined || control.value === '') { return null; }
-    return typeof control.value === 'number' && Number.isFinite(control.value) ? null : { finite: true };
-  };
-
   private numericValidators(positive: boolean = true): ValidatorFn[] {
-    return [Validators.required, this.finiteNumber,
+    return [Validators.required,
       positive ? GreaterThanValidator.greaterThan(0) : Validators.min(0)];
   }
 

@@ -1,13 +1,13 @@
-import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
+import measurToolsFactory from 'measur-tools-suite/bin/client.js';
 import { useEffect, useState } from 'react';
 
 export const useMeasurToolsSuite = () => {
-  const [toolsSuiteModule, setToolsSuiteModule] = useState<MeasurToolsSuite | null>(null);
+  const [toolsSuiteModule, setToolsSuiteModule] = useState(null);
 
   const initializeModule = async () => {
     try {
-      const module = await createModule({
-        locateFile: (path) => new URL(path, document.baseURI).href
+      const module = await measurToolsFactory.default({
+        locateFile: (path) => `/${path}`
       });
       
       setToolsSuiteModule(module);
