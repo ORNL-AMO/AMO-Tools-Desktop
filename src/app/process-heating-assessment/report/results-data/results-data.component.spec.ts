@@ -14,6 +14,7 @@ function buildUI(overrides: Partial<ResultsDataUI> = {}): ResultsDataUI {
       { label: 'Available Heat', units: '%', className: 'default', baseline: { value: 55, decimalPipe: '1.0-0' }, modifications: [{ value: null }] },
       { label: 'Gross Heat Input', className: 'emphasis', baseline: { value: 10, decimalPipe: '1.2-2' }, modifications: [{ value: 8, decimalPipe: '1.2-2' }] },
     ],
+    auxiliaryEquipmentRows: [],
     ...overrides,
   };
 }

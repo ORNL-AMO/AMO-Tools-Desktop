@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, Signal, viewChild } from '@angular/core';
 import { InvalidModification, ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
-import { ResultsDataResultsService, ResultsDataUI } from './results-data-results.service';
+import { AUXILIARY_EQUIPMENT_TABLE_TITLE, ResultsDataResultsService, ResultsDataUI } from './results-data-results.service';
 
 @Component({
   selector: 'app-results-data',
@@ -22,5 +22,13 @@ export class ResultsDataComponent {
 
   updateCopyTableString(): void {
     this.copyTableString = this.copyTable()?.nativeElement.innerText;
+  }
+
+  readonly auxiliaryEquipmentTitle = AUXILIARY_EQUIPMENT_TABLE_TITLE;
+  private readonly auxiliaryEquipmentCopyTable = viewChild<ElementRef<HTMLTableElement>>('auxiliaryEquipmentCopyTable');
+  auxiliaryEquipmentCopyTableString: string;
+
+  updateAuxiliaryEquipmentCopyTableString(): void {
+    this.auxiliaryEquipmentCopyTableString = this.auxiliaryEquipmentCopyTable()?.nativeElement.innerText;
   }
 }

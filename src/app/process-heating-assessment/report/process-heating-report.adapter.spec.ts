@@ -54,6 +54,7 @@ const RESULTS_DATA: ResultsDataUI = {
     { label: 'Available Heat', units: '%', className: 'default', baseline: { value: 55.5, decimalPipe: '1.1-1' }, modifications: [{ value: 60, decimalPipe: '1.1-1' }] },
     { label: 'Gross Heat Input', className: 'emphasis', baseline: { value: 10, decimalPipe: '1.2-2' }, modifications: [{ value: 8, decimalPipe: '1.2-2' }] },
   ],
+  auxiliaryEquipmentRows: [],
 };
 
 function buildReportGraphs(modificationCount = 1, deliver = false): ReportGraphsUI {

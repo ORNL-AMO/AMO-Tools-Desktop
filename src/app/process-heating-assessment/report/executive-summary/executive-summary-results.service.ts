@@ -10,6 +10,7 @@ import { EAFResults, Losses, Notes, PHAST, PhastResults } from '../../models/pha
 import { ModificationService } from '../../services/modification.service';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
+import { AuxiliaryEquipmentResultsService } from '../../services/auxiliary-equipment-results.service';
 
 export interface ExecutiveSummaryUI {
   modificationNames: ModificationNameCell[];
@@ -35,6 +36,10 @@ export interface SummaryNote {
 interface ScenarioSummary {
   summary: ExecutiveSummary;
   results: PhastResults;
+  /** Auxiliary equipment energy in `settings.energyResultUnit`/yr; not part of `summary.annualEnergyUsed`, but included in savings and cost */
+  auxAnnualEnergyUsed: number;
+  /** $/yr at the facility electricity cost, included in `summary.annualCost` */
+  auxAnnualCost: number;
 }
 
 const LOSS_LABELS: Array<{ key: keyof Losses; label: string }> = [
@@ -58,6 +63,7 @@ const PERCENT = '%';
 
 const NOTE_LABELS: Array<{ key: keyof Notes; label: string }> = [
   { key: 'atmosphereNotes', label: 'Atmosphere Losses' },
+  { key: 'auxiliaryPowerNotes', label: 'Auxiliary Equipment' },
   { key: 'chargeNotes', label: 'Charge Materials' },
   { key: 'coolingNotes', label: 'Cooling Losses' },
   { key: 'energyInputNotes', label: 'Energy Input' },
@@ -85,6 +91,7 @@ export class ExecutiveSummaryResultsService {
   private readonly resultsService = inject(ProcessHeatingResultsService);
   private readonly modificationService = inject(ModificationService);
   private readonly featureFlagService = inject(FeatureFlagService);
+  private readonly auxiliaryEquipmentResultsService = inject(AuxiliaryEquipmentResultsService);
 
   private readonly scenarioSummaries = computed(() => {
     const settings = this.assessmentService.settingsSignal();
@@ -96,7 +103,7 @@ export class ExecutiveSummaryResultsService {
     }
 
     const modificationSummaries: ScenarioSummary[] = modifications.map(modification =>
-      this.getScenarioSummary(modification.id, settings, baseline.summary)
+      this.getScenarioSummary(modification.id, settings, baseline)
     );
     this.applyCo2Savings(baseline, modificationSummaries.filter(Boolean));
     return { settings, baselinePhast, baseline, modifications, modificationSummaries };
@@ -139,17 +146,25 @@ export class ExecutiveSummaryResultsService {
     };
   });
 
-  private getScenarioSummary(scenario: AssessmentScenario, settings: Settings, baselineSummary?: ExecutiveSummary): ScenarioSummary | undefined {
+  /**
+   * Auxiliary equipment is calculated apart from the heat balance, then added to the scenario's energy intensity,
+   * savings, and cost.
+   */
+  private getScenarioSummary(scenario: AssessmentScenario, settings: Settings, baseline?: ScenarioSummary): ScenarioSummary | undefined {
     const phast = this.assessmentService.scenarioPhastSignal(scenario);
     const results = this.resultsService.scenarioResults(scenario);
     if (!results) {
       return undefined;
     }
+    const auxiliaryEquipment = this.auxiliaryEquipmentResultsService.scenarioResults(scenario);
+    const auxAnnualEnergyUsed = new ConvertValue(auxiliaryEquipment.totalEnergyUse, 'kWh', settings.energyResultUnit).convertedValue;
+    // kW running for one hour, in the same per-hour basis as gross heat input
+    const auxHourlyEnergyUsed = new ConvertValue(auxiliaryEquipment.totalPower, 'kWh', settings.energyResultUnit).convertedValue;
     const annualEnergyUsed = results.grossHeatInput * phast.operatingHours.hoursPerYear;
     const summary: ExecutiveSummary = {
       percentSavings: 0,
       annualEnergyUsed,
-      energyPerMass: this.calcEnergyPerMass(phast, settings, results.grossHeatInput),
+      energyPerMass: this.calcEnergyPerMass(phast, settings, results.grossHeatInput + auxHourlyEnergyUsed),
       annualEnergySavings: 0,
       annualCost: 0,
       annualCostSavings: 0,
@@ -158,21 +173,22 @@ export class ExecutiveSummaryResultsService {
       co2EmissionsOutput: results.co2EmissionsOutput,
     };
     this.calcAnnualCosts(summary, results, settings, phast);
+    summary.annualCost += auxiliaryEquipment.totalEnergyCost;
 
-    if (baselineSummary) {
-      summary.annualCostSavings = baselineSummary.annualCost - summary.annualCost;
-      summary.annualEnergySavings = baselineSummary.annualEnergyUsed - summary.annualEnergyUsed;
-      summary.percentSavings = Math.round((summary.annualCostSavings * 100) / baselineSummary.annualCost) || 0;
+    if (baseline) {
+      summary.annualCostSavings = baseline.summary.annualCost - summary.annualCost;
+      summary.annualEnergySavings = (baseline.summary.annualEnergyUsed + baseline.auxAnnualEnergyUsed) - (summary.annualEnergyUsed + auxAnnualEnergyUsed);
+      summary.percentSavings = Math.round((summary.annualCostSavings * 100) / baseline.summary.annualCost) || 0;
       summary.implementationCosts = phast.implementationCost;
       summary.paybackPeriod = summary.annualCostSavings > 0 && phast.implementationCost
         ? (phast.implementationCost / summary.annualCostSavings) * 12
         : 0;
     }
-    return { summary, results };
+    return { summary, results, auxAnnualEnergyUsed, auxAnnualCost: auxiliaryEquipment.totalEnergyCost };
   }
 
-  /** @returns annual energy per unit of charge feed rate, in Btu/lb or kJ/kg when the result unit is MMBtu or GJ */
-  private calcEnergyPerMass(phast: PHAST, settings: Settings, grossHeatInput: number): number {
+  /** @returns hourly energy per unit of charge feed rate, in Btu/lb or kJ/kg when the result unit is MMBtu or GJ */
+  private calcEnergyPerMass(phast: PHAST, settings: Settings, hourlyEnergyUsed: number): number {
     const feedRate = (phast.losses?.chargeMaterials ?? []).reduce((sum, material) => {
       switch (material.chargeMaterialType) {
         case 'Gas': return sum + material.gasChargeMaterial.feedRate;
@@ -181,7 +197,7 @@ export class ExecutiveSummaryResultsService {
         default: return sum;
       }
     }, 0);
-    const energyPerMass = (grossHeatInput / feedRate) || 0;
+    const energyPerMass = (hourlyEnergyUsed / feedRate) || 0;
     if (settings.energyResultUnit === 'MMBtu') {
       return new ConvertValue(energyPerMass, 'MMBtu', 'Btu').convertedValue;
     }
@@ -252,8 +268,11 @@ export class ExecutiveSummaryResultsService {
         this.row('CO<sub>2</sub> Emissions Savings', emissionsUnit, baseline, mods, s => s.co2EmissionsOutput?.emissionsSavings, 'decimal2', false),
       );
     }
+    rows.push(this.row('Energy Used', annualEnergyUnit, baseline, mods, s => s.annualEnergyUsed, 'sig5'));
+    if (this.hasAuxiliaryEquipment(baseline, mods)) {
+      rows.push(this.scenarioRow('Aux. Energy Used', annualEnergyUnit, baseline, mods, s => s.auxAnnualEnergyUsed, 'sig5'));
+    }
     rows.push(
-      this.row('Energy Used', annualEnergyUnit, baseline, mods, s => s.annualEnergyUsed, 'sig5'),
       { ...this.row('Energy Savings', annualEnergyUnit, baseline, mods, s => s.annualEnergySavings, 'sig5', false), className: 'emphasis' },
       this.row('Cost', settings.currency, baseline, mods, s => s.annualCost, 'whole'),
       { ...this.row('Cost Savings', settings.currency, baseline, mods, s => s.annualCostSavings, 'whole', false), className: 'emphasis' },
@@ -313,7 +332,14 @@ export class ExecutiveSummaryResultsService {
     } else {
       rows.push(this.row('Fuel', unit, baseline, mods, s => s.annualTotalFuelCost, 'whole'));
     }
+    if (this.hasAuxiliaryEquipment(baseline, mods)) {
+      rows.push(this.scenarioRow('Auxiliary Equipment', unit, baseline, mods, s => s.auxAnnualCost, 'whole'));
+    }
     return rows;
+  }
+
+  private hasAuxiliaryEquipment(baseline: ScenarioSummary, mods: ScenarioSummary[]): boolean {
+    return [baseline, ...mods].some(scenario => scenario.auxAnnualEnergyUsed > 0);
   }
 
   /** A baseline-less row whose modification cells list one item per line. */
@@ -392,6 +418,9 @@ export class ExecutiveSummaryResultsService {
     }
     if (baseline.systemEfficiency !== modification.systemEfficiency) {
       changes.push('Heat System Efficiency');
+    }
+    if (!isEqual(baseline.auxiliaryEquipment ?? [], modification.auxiliaryEquipment ?? [])) {
+      changes.push('Auxiliary Equipment');
     }
     return changes;
   }

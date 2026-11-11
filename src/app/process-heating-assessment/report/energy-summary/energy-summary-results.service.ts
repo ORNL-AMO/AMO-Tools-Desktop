@@ -4,6 +4,7 @@ import { EnergyUseReportData } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
+import { AuxiliaryEquipmentResultsService } from '../../services/auxiliary-equipment-results.service';
 
 /** Typical electricity heating value, 9,800 Btu/kWh, used by legacy for the Electricity row. */
 const ELECTRICITY_HEATING_VALUE_BTU_PER_KWH = 9800;
@@ -39,6 +40,7 @@ export interface EnergySummaryUI {
 export class EnergySummaryResultsService {
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   private readonly resultsService = inject(ProcessHeatingResultsService);
+  private readonly auxiliaryEquipmentResultsService = inject(AuxiliaryEquipmentResultsService);
 
   private readonly energyUseReportData: Signal<EnergyUseReportData | undefined> = computed(() => {
     const results = this.resultsService.scenarioResults('baseline');
@@ -70,7 +72,13 @@ export class EnergySummaryResultsService {
     return [
       { label: 'Energy Used', unit: baseEnergyUnit, calculated: calculated?.fuelEnergyUsed, metered: metered?.metered.hourlyEnergy, designed: designed?.designed.hourlyEnergy },
       { label: 'Energy Intensity for Charge Materials', unit: energyPerMassUnit, calculated: calculated?.energyIntensity, metered: metered?.metered.energyIntensity, designed: designed?.designed.energyIntensity },
-      { label: 'Auxiliary Electricity Used', unit: 'kW', calculated: calculated?.electricityUsed, metered: metered?.metered.hourlyElectricity, designed: designed?.designed.hourlyElectricity },
+      {
+        label: 'Auxiliary Electricity Used',
+        unit: 'kW',
+        calculated: this.auxiliaryEquipmentResultsService.scenarioResults('baseline').totalPower,
+        metered: metered?.metered.hourlyElectricity,
+        designed: designed?.designed.hourlyElectricity,
+      },
     ];
   });
 

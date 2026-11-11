@@ -1,0 +1,187 @@
+<form [formGroup]="form()">
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="{{controlIds().operatingHours}}">Annual Operating Hours</label>
+      <div class="input-group" [class.invalid]="form().controls.operatingHours.invalid" [class.indicate-different]="differingFields()?.has('operatingHours')">
+        <input type="number" step="1" class="form-control"
+          id="{{controlIds().operatingHours}}" formControlName="operatingHours" (focus)="focusField('operatingHours')" onfocus="this.select();">
+        <app-input-unit [settings]="settings()" defaultUnit="hrs/yr"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.operatingHours" [settings]="settings()" defaultUnit="hrs/yr"></app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds().measurementMethod}}">Measurement Method</label>
+      <select class="form-control" id="{{controlIds().measurementMethod}}" formControlName="measurementMethod" (focus)="focusField('measurementMethod')"
+        [class.indicate-different]="differingFields()?.has('measurementMethod')">
+        @for (option of measurementMethodOptions; track option.value) {
+          <option [ngValue]="option.value">{{ option.label }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  @switch (form().controls.measurementMethod.value) {
+    @case (MeasurementMethod.MULTIMETER) {
+      <div class="form-section" formGroupName="multimeterData">
+        <div class="form-group">
+          <label class="small" id="{{controlIds().numberOfPhases}}">Number of Phases</label>
+          <div class="btn-group btn-group-sm" role="group" [attr.aria-labelledby]="controlIds().numberOfPhases"
+            [class.indicate-different]="multimeterDifferences().has('numberOfPhases')">
+            <button type="button" class="btn btn-secondary toggle-btn" [class.active]="multimeter().numberOfPhases.value === 1"
+              (click)="setNumberOfPhases(1)" (focus)="focusField('numberOfPhases')">1</button>
+            <button type="button" class="btn btn-secondary toggle-btn" [class.active]="multimeter().numberOfPhases.value === 3"
+              (click)="setNumberOfPhases(3)" (focus)="focusField('numberOfPhases')">3</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="{{controlIds().supplyVoltage}}">Supply Voltage</label>
+          <div class="input-group" [class.invalid]="multimeter().supplyVoltage.invalid" [class.indicate-different]="multimeterDifferences().has('supplyVoltage')">
+            <input type="number" class="form-control"
+              id="{{controlIds().supplyVoltage}}" formControlName="supplyVoltage" (focus)="focusField('supplyVoltage')" onfocus="this.select();">
+            <app-input-unit [settings]="settings()" defaultUnit="V"></app-input-unit>
+          </div>
+          <app-form-control-errors [control]="multimeter().supplyVoltage" [settings]="settings()" defaultUnit="V"></app-form-control-errors>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="{{controlIds().averageCurrent}}">Average Current</label>
+          <div class="input-group" [class.invalid]="multimeter().averageCurrent.invalid" [class.indicate-different]="multimeterDifferences().has('averageCurrent')">
+            <input type="number" class="form-control"
+              id="{{controlIds().averageCurrent}}" formControlName="averageCurrent" (focus)="focusField('averageCurrent')" onfocus="this.select();">
+            <app-input-unit [settings]="settings()" defaultUnit="A"></app-input-unit>
+          </div>
+          <app-form-control-errors [control]="multimeter().averageCurrent" [settings]="settings()" defaultUnit="A"></app-form-control-errors>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="{{controlIds().powerFactor}}">Power Factor</label>
+          <input type="number" step="0.01" class="form-control"
+            id="{{controlIds().powerFactor}}" formControlName="powerFactor" (focus)="focusField('powerFactor')" onfocus="this.select();"
+            [class.invalid]="multimeter().powerFactor.invalid" [class.indicate-different]="multimeterDifferences().has('powerFactor')">
+          @let powerFactorErrors = multimeter().powerFactor.errors;
+          @if (powerFactorErrors) {
+            <!-- The shared errors component has no greaterThan message, so all three are listed here -->
+            <span class="alert-danger pull-right small">
+              @if (powerFactorErrors['required']) { Value Required }
+              @if (powerFactorErrors['greaterThan'] != null) { Value must be greater than 0 }
+              @if (powerFactorErrors['max']) { Value can't be greater than 1 }
+            </span>
+          }
+        </div>
+      </div>
+    }
+
+    @case (MeasurementMethod.NAMEPLATE) {
+      <div class="form-section" formGroupName="nameplateData">
+        <div class="form-group">
+          <label class="small" for="{{controlIds().ratedMotorPower}}">
+            Rated Motor Power
+            <a class="form-text small click-link" role="button" tabindex="0" (click)="toggleUserSelectedHP()" (keydown.enter)="toggleUserSelectedHP()">
+              Enter Rated Motor Power in {{ form().controls.userSelectedHP.value ? 'kW' : 'hp' }}
+            </a>
+          </label>
+          <div class="input-group" [class.invalid]="nameplate().ratedMotorPower.invalid"
+            [class.indicate-different]="nameplateDifferences().has('ratedMotorPower') || differingFields()?.has('userSelectedHP')">
+            <input type="number" class="form-control"
+              id="{{controlIds().ratedMotorPower}}" formControlName="ratedMotorPower" (focus)="focusField('ratedMotorPower')" onfocus="this.select();">
+            <app-input-unit [settings]="settings()" [defaultUnit]="form().controls.userSelectedHP.value ? 'hp' : 'kW'"></app-input-unit>
+          </div>
+          <app-form-control-errors [control]="nameplate().ratedMotorPower" [settings]="settings()"></app-form-control-errors>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="{{controlIds().variableSpeedMotor}}">Variable Speed Motor?</label>
+          <select class="form-control" id="{{controlIds().variableSpeedMotor}}" formControlName="variableSpeedMotor" (focus)="focusField('variableSpeedMotor')"
+            [class.indicate-different]="nameplateDifferences().has('variableSpeedMotor')">
+            <option [ngValue]="true">Yes</option>
+            <option [ngValue]="false">No</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="{{controlIds().lineFrequency}}">Line Frequency</label>
+          <select class="form-control" id="{{controlIds().lineFrequency}}" formControlName="lineFrequency" (focus)="focusField('lineFrequency')"
+            [class.invalid]="nameplate().lineFrequency.invalid" [class.indicate-different]="nameplateDifferences().has('lineFrequency')">
+            <option [ngValue]="60">60 Hz</option>
+            <option [ngValue]="50">50 Hz</option>
+          </select>
+          <app-form-control-errors [control]="nameplate().lineFrequency" [settings]="settings()"></app-form-control-errors>
+        </div>
+
+        @if (nameplate().variableSpeedMotor.value) {
+          <div class="form-group">
+            <label class="small" for="{{controlIds().operationalFrequency}}">Operational Frequency</label>
+            <div class="input-group" [class.invalid]="nameplate().operationalFrequency.invalid" [class.indicate-different]="nameplateDifferences().has('operationalFrequency')">
+              <input type="number" class="form-control"
+                id="{{controlIds().operationalFrequency}}" formControlName="operationalFrequency" (focus)="focusField('operationalFrequency')" onfocus="this.select();">
+              <app-input-unit [settings]="settings()" defaultUnit="Hz"></app-input-unit>
+            </div>
+            <app-form-control-errors [control]="nameplate().operationalFrequency" [settings]="settings()" defaultUnit="Hz"></app-form-control-errors>
+          </div>
+        }
+
+        <div class="form-group">
+          <label class="small" for="{{controlIds().motorAndDriveEfficiency}}">Motor &amp; Drive Efficiency</label>
+          <div class="input-group" [class.invalid]="nameplate().motorAndDriveEfficiency.invalid" [class.indicate-different]="nameplateDifferences().has('motorAndDriveEfficiency')">
+            <input type="number" class="form-control"
+              id="{{controlIds().motorAndDriveEfficiency}}" formControlName="motorAndDriveEfficiency" (focus)="focusField('motorAndDriveEfficiency')" onfocus="this.select();">
+            <app-input-unit [settings]="settings()" defaultUnit="%"></app-input-unit>
+          </div>
+          <app-form-control-errors [control]="nameplate().motorAndDriveEfficiency" [settings]="settings()" defaultUnit="%"></app-form-control-errors>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="{{controlIds().loadFactor}}">Percent Loaded</label>
+          <div class="input-group" [class.invalid]="nameplate().loadFactor.invalid" [class.indicate-different]="nameplateDifferences().has('loadFactor')">
+            <input type="number" class="form-control"
+              id="{{controlIds().loadFactor}}" formControlName="loadFactor" (focus)="focusField('loadFactor')" onfocus="this.select();">
+            <app-input-unit [settings]="settings()" defaultUnit="%"></app-input-unit>
+          </div>
+          <app-form-control-errors [control]="nameplate().loadFactor" [settings]="settings()" defaultUnit="%"></app-form-control-errors>
+        </div>
+      </div>
+    }
+
+    @case (MeasurementMethod.POWER_METER) {
+      <div class="form-section" formGroupName="powerMeterData">
+        <div class="form-group">
+          <label class="small" for="{{controlIds().power}}">Equipment Power</label>
+          <div class="input-group" [class.invalid]="form().controls.powerMeterData.controls.power.invalid" [class.indicate-different]="differingFields()?.has('powerMeterData.power')">
+            <input type="number" class="form-control"
+              id="{{controlIds().power}}" formControlName="power" (focus)="focusField('power')" onfocus="this.select();">
+            <app-input-unit [settings]="settings()" defaultUnit="kW"></app-input-unit>
+          </div>
+          <app-form-control-errors [control]="form().controls.powerMeterData.controls.power" [settings]="settings()" defaultUnit="kW"></app-form-control-errors>
+        </div>
+      </div>
+    }
+
+    @case (MeasurementMethod.OTHER) {
+      <div class="form-section" formGroupName="otherMethodData">
+        <div class="form-group">
+          <label class="small" for="{{controlIds().energy}}">Energy</label>
+          <div class="input-group" [class.invalid]="form().controls.otherMethodData.controls.energy.invalid" [class.indicate-different]="differingFields()?.has('otherMethodData.energy')">
+            <input type="number" class="form-control"
+              id="{{controlIds().energy}}" formControlName="energy" (focus)="focusField('energy')" onfocus="this.select();">
+            <app-input-unit [settings]="settings()" defaultUnit="kWh/yr"></app-input-unit>
+          </div>
+          <app-form-control-errors [control]="form().controls.otherMethodData.controls.energy" [settings]="settings()" defaultUnit="kWh/yr"></app-form-control-errors>
+        </div>
+      </div>
+    }
+  }
+
+  @if (form().controls.measurementMethod.value !== MeasurementMethod.OTHER) {
+    <div class="form-section">
+      <div class="form-group">
+        <label class="small" for="{{controlIds().units}}"># of Units</label>
+        <input type="number" step="1" class="form-control"
+          id="{{controlIds().units}}" formControlName="units" (focus)="focusField('units')" onfocus="this.select();"
+          [class.invalid]="form().controls.units.invalid" [class.indicate-different]="differingFields()?.has('units')">
+        <app-form-control-errors [control]="form().controls.units" [settings]="settings()"></app-form-control-errors>
+      </div>
+    </div>
+  }
+</form>

@@ -20,6 +20,7 @@ export class ResultsPanelComponent {
 
   readonly isEnergyValidationView: Signal<boolean> = this.uiService.isEnergyValidationView;
   readonly isHeatBalanceView: Signal<boolean> = computed(() => this.uiService.childView() === BaselineView.HEAT_BALANCE);
+  readonly isAuxiliaryEquipmentView: Signal<boolean> = this.uiService.isAuxiliaryEquipmentView;
 
   readonly showNotesTab: Signal<boolean> = computed(() => this.uiService.mainView() === MainView.ASSESSMENT);
 

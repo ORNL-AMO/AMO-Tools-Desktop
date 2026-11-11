@@ -1,0 +1,69 @@
+@let base = baselineResults();
+@let mod = modificationResults();
+<div class="output-summary">
+  <table #copyTable class="table table-hover table-striped panel-table" [class.compare]="mod">
+    <thead>
+      <tr>
+        <th>Auxiliary Equipment</th>
+        <th>Baseline</th>
+        @if (mod) {
+          <th>{{ modificationName() }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="section-header">
+        <td [attr.colspan]="mod ? 3 : 2">Energy Use (kWh/yr)</td>
+      </tr>
+      @for (row of rows(); track $index) {
+        <tr>
+          <td>{{ row.name }}</td>
+          <td>@if (row.baseline != null) { {{ row.baseline | number: '1.0-0' }} } @else {&mdash; &mdash;}</td>
+          @if (mod) {
+            <td>@if (row.modification != null) { {{ row.modification | number: '1.0-0' }} } @else {&mdash; &mdash;}</td>
+          }
+        </tr>
+      } @empty {
+        <tr>
+          <td [attr.colspan]="mod ? 3 : 2">No auxiliary equipment.</td>
+        </tr>
+      }
+      <tr class="tr-border">
+        <td>Total Power (kW)</td>
+        <td>{{ base.totalPower | number: '1.0-2' }}</td>
+        @if (mod) {
+          <td>{{ mod.totalPower | number: '1.0-2' }}</td>
+        }
+      </tr>
+      <tr>
+        <td>Total Energy Use (kWh/yr)</td>
+        <td>{{ base.totalEnergyUse | number: '1.0-0' }}</td>
+        @if (mod) {
+          <td>{{ mod.totalEnergyUse | number: '1.0-0' }}</td>
+        }
+      </tr>
+      <tr>
+        <td>Total Energy Cost ($/yr)</td>
+        <td>{{ base.totalEnergyCost | number: '1.0-0' }}</td>
+        @if (mod) {
+          <td>{{ mod.totalEnergyCost | number: '1.0-0' }}</td>
+        }
+      </tr>
+      @if (mod) {
+        <tr>
+          <td>Energy Savings (kWh/yr)</td>
+          <td>&mdash; &mdash;</td>
+          <td>{{ base.totalEnergyUse - mod.totalEnergyUse | number: '1.0-0' }}</td>
+        </tr>
+        <tr>
+          <td>Cost Savings ($/yr)</td>
+          <td>&mdash; &mdash;</td>
+          <td>{{ base.totalEnergyCost - mod.totalEnergyCost | number: '1.0-0' }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<app-exportable-results-table [tableString]="copyTableString"
+  (updateTableString)="updateCopyTableString()"></app-exportable-results-table>

@@ -10,11 +10,14 @@ export const MainView = {
 } as const;
 export type MainView = typeof MainView[keyof typeof MainView];
 
+/** Auxiliary Equipment's view in every context it appears: its Baseline step and its Expert View tab. */
+export const AUXILIARY_EQUIPMENT_VIEW = 'auxiliary-equipment';
+
 export const BaselineView = {
   ASSESSMENT_SETTINGS: 'assessment-settings',
   ENERGY_VALIDATION: 'energy-validation',
   HEAT_BALANCE: 'heat-balance',
-  AUXILIARY_EQUIPMENT: 'auxiliary-equipment',
+  AUXILIARY_EQUIPMENT: AUXILIARY_EQUIPMENT_VIEW,
 } as const;
 export type BaselineView = typeof BaselineView[keyof typeof BaselineView];
 
@@ -71,8 +74,9 @@ export type LossView = typeof LossView[keyof typeof LossView];
 
 export type ProcessHeatingView = MainView | BaselineView | EnergyValidationView | AssessmentView | ReportView | CalculatorsView | LossView;
 
-/** Notes field edited from the results panel while each heat balance step is selected in Expert View. */
+/** Notes field edited from the results panel while each tab is selected in Expert View. */
 export const LOSS_VIEW_NOTES_KEY: Partial<Record<ProcessHeatingView, keyof Notes>> = {
+  [AUXILIARY_EQUIPMENT_VIEW]: 'auxiliaryPowerNotes',
   [LossView.OPERATIONS]: 'operationsNotes',
   [LossView.CHARGE_MATERIAL]: 'chargeNotes',
   [LossView.WALL_LOSSES]: 'wallNotes',
@@ -122,11 +126,14 @@ export const MAIN_VIEW_LINKS: ViewLink[] = [
   { view: MainView.CALCULATORS, label: 'Calculators' },
 ];
 
+/** Baseline step, also the last Expert View tab; kept out of the heat balance tabs since it isn't part of the heat balance. */
+export const AUXILIARY_EQUIPMENT_VIEW_LINK: ViewLink = { view: AUXILIARY_EQUIPMENT_VIEW, label: 'Auxiliary Equipment' };
+
 export const BASELINE_VIEW_LINKS: ViewLink[] = [
   { view: BaselineView.ASSESSMENT_SETTINGS, label: 'Assessment Settings' },
   { view: BaselineView.ENERGY_VALIDATION, label: 'Energy Validation' },
   { view: BaselineView.HEAT_BALANCE, label: 'Heat Balance' },
-  { view: BaselineView.AUXILIARY_EQUIPMENT, label: 'Auxiliary Equipment' },
+  AUXILIARY_EQUIPMENT_VIEW_LINK,
 ];
 
 export const ENERGY_VALIDATION_VIEW_LINKS: ViewLink[] = [

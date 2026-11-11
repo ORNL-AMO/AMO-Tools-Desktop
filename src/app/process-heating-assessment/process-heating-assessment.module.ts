@@ -20,6 +20,7 @@ import { ProcessHeatingAssessmentService } from './services/process-heating-asse
 import { ModificationService } from './services/modification.service';
 import { ProcessHeatingOperationsFormService } from './services/process-heating-operations-form.service';
 import { ProcessHeatingResultsService } from './services/process-heating-results.service';
+import { AuxiliaryEquipmentResultsService } from './services/auxiliary-equipment-results.service';
 import { ProcessHeatingValidityService } from './services/process-heating-validity.service';
 import { AtmosphereFormService } from './heat-balance/losses/atmosphere/atmosphere-form.service';
 import { GasMaterialFormService } from './heat-balance/losses/charge-material/gas-form/gas-material-form.service';
@@ -111,12 +112,16 @@ import { HeatBalanceComponent } from './heat-balance/heat-balance.component';
 import { HeatBalanceLossTabsComponent } from './heat-balance/heat-balance-loss-tabs/heat-balance-loss-tabs.component';
 import { LossTabBadgeComponent } from './heat-balance/loss-tab-badge/loss-tab-badge.component';
 import { AuxiliaryEquipmentComponent } from './auxiliary-equipment/auxiliary-equipment.component';
+import { AuxiliaryEquipmentFormComponent } from './auxiliary-equipment/auxiliary-equipment-form.component';
+import { AuxiliaryEquipmentHelpComponent } from './auxiliary-equipment/auxiliary-equipment-help.component';
+import { AuxiliaryEquipmentFormService } from './auxiliary-equipment/auxiliary-equipment-form.service';
 import { DesignedEnergyComponent } from './designed-energy/designed-energy.component';
 import { MeteredEnergyComponent } from './metered-energy/metered-energy.component';
 import { MeteredEnergyFormService } from './metered-energy/metered-energy-form.service';
 import { DesignedEnergyFormService } from './designed-energy/designed-energy-form.service';
 import { MeteredEnergyModule } from '../phast/metered-energy/metered-energy.module';
 import { DesignedEnergyModule } from '../phast/designed-energy/designed-energy.module';
+import { AuxiliaryEquipmentResultsComponent } from './results-panel/auxiliary-equipment-results/auxiliary-equipment-results.component';
 import { EnergyValidationComponent } from './energy-validation/energy-validation.component';
 import { EnergyValidationTabsComponent } from './energy-validation/energy-validation-tabs/energy-validation-tabs.component';
 import { EnergyValidationResultsComponent } from './energy-validation/energy-validation-results/energy-validation-results.component';
@@ -412,6 +417,7 @@ export const ROUTES: Route[] = [
     ProcessHeatingBannerComponent,
     ResultsPanelComponent,
     AssessmentResultsComponent,
+    AuxiliaryEquipmentResultsComponent,
     HelpPanelComponent,
     NotesComponent,
     BaselineComponent,
@@ -453,6 +459,8 @@ export const ROUTES: Route[] = [
     HeatBalanceLossTabsComponent,
     LossTabBadgeComponent,
     AuxiliaryEquipmentComponent,
+    AuxiliaryEquipmentFormComponent,
+    AuxiliaryEquipmentHelpComponent,
     EnergyValidationComponent,
     EnergyValidationTabsComponent,
     EnergyValidationResultsComponent,
@@ -544,6 +552,7 @@ export const ROUTES: Route[] = [
     MeteredEnergyFormService,
     DesignedEnergyFormService,
     ProcessHeatingResultsService,
+    AuxiliaryEquipmentResultsService,
     ProcessHeatingValidityService,
     // Stateless form builders for module-scoped services; each loss step still provides its own instance.
     SolidMaterialFormService,
@@ -552,6 +561,7 @@ export const ROUTES: Route[] = [
     FlueGasFormService,
     FixtureFormService,
     WallLossesFormService,
+    AuxiliaryEquipmentFormService,
     CoolingFormService,
     AtmosphereFormService,
     OpeningFormService,

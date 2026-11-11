@@ -13,6 +13,8 @@ import { PHAST, PhastResults, Losses } from '../../models/phast';
 import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
+import { AuxiliaryEquipmentResultsService } from '../../services/auxiliary-equipment-results.service';
+import { AuxiliaryEquipmentResults } from '../../models/auxiliary-equipment';
 import { ExecutiveSummaryResultsService, ExecutiveSummaryUI } from './executive-summary-results.service';
 
 function buildPhast(name: string, overrides: Partial<PHAST> = {}): PHAST {
@@ -36,6 +38,7 @@ describe('ExecutiveSummaryResultsService', () => {
   let resultsByName: Record<string, Partial<PhastResults>>;
   let modifications: WritableSignal<ProcessHeatingModification[]>;
   let showOperationalImpacts: WritableSignal<boolean>;
+  let auxiliaryEquipmentByName: Record<string, AuxiliaryEquipmentResults>;
 
   function ui(): ExecutiveSummaryUI {
     return service.executiveSummaryUI();
@@ -66,10 +69,13 @@ describe('ExecutiveSummaryResultsService', () => {
       { id: 'mod1', scenarioOverrides: { name: 'Scenario 1' } },
     ]);
     showOperationalImpacts = signal(false);
+    const noEquipment: AuxiliaryEquipmentResults = { items: [], totalPower: 0, totalEnergyUse: 0, totalEnergyCost: 0 };
+    auxiliaryEquipmentByName = { baseline: noEquipment, mod1: noEquipment };
 
     TestBed.configureTestingModule({
       providers: [
         ExecutiveSummaryResultsService,
+        { provide: AuxiliaryEquipmentResultsService, useValue: { scenarioResults: (scenario: string) => auxiliaryEquipmentByName[scenario] } },
         {
           provide: ProcessHeatingAssessmentService,
           useValue: {
@@ -270,5 +276,51 @@ describe('ExecutiveSummaryResultsService', () => {
   it('returns undefined when baseline results are unavailable', () => {
     resultsByName['baseline'] = undefined;
     expect(ui()).toBeUndefined();
+  });
+
+  describe('auxiliary equipment', () => {
+    // 293,071.07 kWh = 1,000 MMBtu; 293.07107 kW = 1 MMBtu/hr
+    const KWH_PER_MMBTU = 293.07107;
+    const equipment = (mmbtuPerYear: number, mmbtuPerHour: number, cost: number): AuxiliaryEquipmentResults =>
+      ({ items: [], totalEnergyUse: mmbtuPerYear * KWH_PER_MMBTU, totalPower: mmbtuPerHour * KWH_PER_MMBTU, totalEnergyCost: cost });
+
+    beforeEach(() => {
+      auxiliaryEquipmentByName = { baseline: equipment(1000, 1, 2000), mod1: equipment(500, 0.5, 1000) };
+    });
+
+    it('adds an Aux. Energy Used row after Energy Used, leaving Energy Used heat-only', () => {
+      const labels = ui().summaryRows.map(row => row.label);
+      const auxRow = rowOf(ui().summaryRows, 'Aux. Energy Used');
+
+      expect(labels.indexOf('Aux. Energy Used')).toBe(labels.indexOf('Energy Used') + 1);
+      expect(auxRow.units).toBe('MMBtu/yr');
+      expect(auxRow.baseline.value as number).toBeCloseTo(1000, 1);
+      expect(auxRow.modifications[0].value as number).toBeCloseTo(500, 1);
+      expect(rowOf(ui().summaryRows, 'Energy Used').baseline.value).toBe(10000);
+    });
+
+    it('includes auxiliary energy and its electricity cost in savings, cost, and payback', () => {
+      expect(rowOf(ui().summaryRows, 'Energy Savings').modifications[0].value as number).toBeCloseTo(2500, 1);
+      expect(rowOf(ui().summaryRows, 'Cost').baseline.value).toBe(52000);
+      expect(rowOf(ui().summaryRows, 'Cost').modifications[0].value).toBe(41000);
+      expect(rowOf(ui().summaryRows, 'Cost Savings').modifications[0].value).toBe(11000);
+      expect(rowOf(ui().summaryRows, 'Percent Savings').modifications[0].value).toBe(21);
+      expect(rowOf(ui().summaryRows, 'Simple Payback Period').modifications[0].value as number).toBeCloseTo(5000 / 11000 * 12, 3);
+    });
+
+    it('includes auxiliary power in energy intensity', () => {
+      expect(rowOf(ui().summaryRows, 'Energy Intensity').baseline.value as number).toBeCloseTo(110000, 0);
+    });
+
+    it('omits the Aux. Energy Used row when no scenario has auxiliary energy', () => {
+      const noEquipment = equipment(0, 0, 0);
+      auxiliaryEquipmentByName = { baseline: noEquipment, mod1: noEquipment };
+      expect(rowOf(ui().summaryRows, 'Aux. Energy Used')).toBeUndefined();
+    });
+
+    it('lists Auxiliary Equipment among the modifications made when the equipment differs', () => {
+      scenarios.mod1 = buildPhast('mod1', { auxiliaryEquipment: [{ id: 'aux-1' } as never] });
+      expect(rowOf(ui().summaryRows, 'Modifications').modifications[0].value).toContain('Auxiliary Equipment');
+    });
   });
 });

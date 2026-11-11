@@ -19,7 +19,7 @@ import { AuxiliaryPowerLoss } from '../../shared/models/phast/losses/auxiliaryPo
 import { EnergyInputEAF } from '../../shared/models/phast/losses/energyInputEAF';
 import { ExhaustGasEAF } from '../../shared/models/phast/losses/exhaustGasEAF';
 import { EnergyInputExhaustGasLoss } from '../../shared/models/phast/losses/energyInputExhaustGasLosses';
-import { AuxEquipment } from '../../shared/models/phast/auxEquipment';
+import { AuxEquipment, AuxiliaryEquipmentItem } from '../../shared/models/phast/auxEquipment';
 import { MeteredEnergy } from '../../shared/models/phast/meteredEnergy';
 import { DesignedEnergy } from '../../shared/models/phast/designedEnergy';
 import { OperatingHours, OperatingCosts } from '../../shared/models/operations';
@@ -31,6 +31,7 @@ export interface PHAST {
   modifications?: Modification[];
   setupDone?: boolean;
   auxEquipment?: AuxEquipment[];
+  auxiliaryEquipment?: AuxiliaryEquipmentItem[];
   meteredEnergy?: MeteredEnergy;
   designedEnergy?: DesignedEnergy;
   operatingHours?: OperatingHours;

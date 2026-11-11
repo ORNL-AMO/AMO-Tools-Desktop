@@ -4,7 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
 import { Losses, Notes } from '../models/phast';
-import { AssessmentView, BaselineView, EnergyValidationView, EXPERT_VIEW_LOSS_VIEWS, HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, isViewVisibleForConfiguration, LossView, MainView, ProcessHeatingView, ReportView, ViewLink } from '../models/views';
+import { AssessmentView, AUXILIARY_EQUIPMENT_VIEW, AUXILIARY_EQUIPMENT_VIEW_LINK, BaselineView, EnergyValidationView, EXPERT_VIEW_LOSS_VIEWS, HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, isViewVisibleForConfiguration, LossView, MainView, ProcessHeatingView, ReportView, ViewLink } from '../models/views';
 import { ProcessHeatingRouteData, STEPPED_ROUTES } from '../routing/stepped-routes';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingValidityService } from './process-heating-validity.service';
@@ -88,9 +88,10 @@ export class ProcessHeatingUiService {
     HEAT_BALANCE_VIEW_LINKS.filter(link => this.isTabVisibleForHeatingEquipmentConfiguration(link.view))
   );
 
-  readonly visibleExpertViewTabs: Signal<ViewLink[]> = computed(() =>
-    this.visibleHeatBalanceTabs().filter(link => EXPERT_VIEW_LOSS_VIEWS.has(link.view))
-  );
+  readonly visibleExpertViewTabs: Signal<ViewLink[]> = computed(() => [
+    ...this.visibleHeatBalanceTabs().filter(link => EXPERT_VIEW_LOSS_VIEWS.has(link.view)),
+    AUXILIARY_EQUIPMENT_VIEW_LINK,
+  ]);
 
   // Service-held so the selection survives leaving and returning to Expert View. Falls back to the
   // first tab when a configuration change hides the selected one.
@@ -144,6 +145,12 @@ export class ProcessHeatingUiService {
 
   readonly isEnergyValidationView: Signal<boolean> = computed(() =>
     ENERGY_VALIDATION_VIEWS.has(this.childView())
+  );
+
+  /** The Auxiliary Equipment baseline step, or its Expert View tab. */
+  readonly isAuxiliaryEquipmentView: Signal<boolean> = computed(() =>
+    this.childView() === BaselineView.AUXILIARY_EQUIPMENT
+    || (this.childView() === AssessmentView.EXPERT_VIEW && this.selectedExpertViewTab() === AUXILIARY_EQUIPMENT_VIEW)
   );
 
   private get assessmentId(): string {
@@ -214,6 +221,9 @@ export class ProcessHeatingUiService {
   lossCount(view: string, scenario: AssessmentScenario = 'baseline'): number | undefined {
     if (view === LossView.HEAT_SYSTEM_EFFICIENCY) {
       return this.processHeatingAssessmentService.scenarioPhastSignal(scenario)?.systemEfficiency ? 1 : 0;
+    }
+    if (view === AUXILIARY_EQUIPMENT_VIEW) {
+      return this.processHeatingAssessmentService.scenarioPhastSignal(scenario)?.auxiliaryEquipment?.length ?? 0;
     }
     const lossKey = this.LOSS_VIEW_KEYS[view];
     return lossKey ? this.processHeatingAssessmentService.lossSignal(scenario, lossKey)?.length ?? 0 : undefined;

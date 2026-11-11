@@ -6,6 +6,7 @@ import { Settings } from '../../../shared/models/settings';
 import { PHAST, PhastResults } from '../../models/phast';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
+import { AuxiliaryEquipmentResultsService } from '../../services/auxiliary-equipment-results.service';
 import { EnergySummaryResultsService, EnergySummaryUI } from './energy-summary-results.service';
 
 describe('EnergySummaryResultsService', () => {
@@ -49,6 +50,7 @@ describe('EnergySummaryResultsService', () => {
         EnergySummaryResultsService,
         { provide: ProcessHeatingAssessmentService, useValue: { settingsSignal: settings, scenarioPhastSignal: () => phast } },
         { provide: ProcessHeatingResultsService, useValue: resultsService },
+        { provide: AuxiliaryEquipmentResultsService, useValue: { scenarioResults: () => ({ items: [], totalPower: 4, totalEnergyUse: 0, totalEnergyCost: 0 }) } },
       ],
     });
     service = TestBed.inject(EnergySummaryResultsService);
@@ -86,13 +88,13 @@ describe('EnergySummaryResultsService', () => {
     expect(ui().sources[2].energyUsed).toBe(2);
   });
 
-  it('compares calculated, metered, and designed energy', () => {
+  it('compares calculated, metered, and designed energy, with auxiliary electricity from the auxiliary equipment step', () => {
     resultsService.getMeteredEnergyResults.and.returnValue({ metered: { hourlyEnergy: 9, energyIntensity: 8, hourlyElectricity: 1 } } as never);
     resultsService.getDesignedEnergyResults.and.returnValue({ designed: { hourlyEnergy: 11, energyIntensity: 12, hourlyElectricity: 3 } } as never);
     const [energy, intensity, electricity] = ui().comparison;
     expect(energy).toEqual(jasmine.objectContaining({ calculated: 10, metered: 9, designed: 11 }));
     expect(intensity).toEqual(jasmine.objectContaining({ calculated: 100000, metered: 8, designed: 12 }));
-    expect(electricity).toEqual(jasmine.objectContaining({ calculated: 2, metered: 1, designed: 3 }));
+    expect(electricity).toEqual(jasmine.objectContaining({ calculated: 4, metered: 1, designed: 3 }));
   });
 
   it('leaves metered and designed empty when not entered', () => {

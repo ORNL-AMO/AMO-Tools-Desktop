@@ -8,13 +8,19 @@ import { PhastResults } from '../../models/phast';
 import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
+import { AuxiliaryEquipmentResultsService } from '../../services/auxiliary-equipment-results.service';
+import { AuxiliaryEquipmentResults } from '../../models/auxiliary-equipment';
 
 export interface ResultsDataUI {
   modificationNames: ModificationNameCell[];
   /** Header of the label column, including the hourly energy unit */
   title: string;
   rows: ReportTableRow[];
+  /** Annual energy per auxiliary equipment item and in total; empty when no scenario has any */
+  auxiliaryEquipmentRows: ReportTableRow[];
 }
+
+export const AUXILIARY_EQUIPMENT_TABLE_TITLE = 'Auxiliary Equipment (kWh/yr)';
 
 type ResultSelector = (results: PhastResults) => number | undefined;
 
@@ -28,6 +34,7 @@ export class ResultsDataResultsService {
   private readonly resultsService = inject(ProcessHeatingResultsService);
   private readonly modificationService = inject(ModificationService);
   private readonly featureFlagService = inject(FeatureFlagService);
+  private readonly auxiliaryEquipmentResultsService = inject(AuxiliaryEquipmentResultsService);
 
   readonly resultsDataUI: Signal<ResultsDataUI | undefined> = computed(() => {
     const settings = this.assessmentService.settingsSignal();
@@ -46,8 +53,40 @@ export class ResultsDataResultsService {
       modificationNames: validModifications.map(modification => ({ id: modification.id, name: getModificationName(modification) })),
       title: `Hourly Energy Loss/Use (${lossUnit})`,
       rows: this.buildRows(baselineResults, mods, settings),
+      auxiliaryEquipmentRows: this.buildAuxiliaryEquipmentRows(
+        this.auxiliaryEquipmentResultsService.scenarioResults('baseline'),
+        validModifications.map(modification => this.auxiliaryEquipmentResultsService.scenarioResults(modification.id)),
+      ),
     };
   });
+
+  /**
+   * @param baseline baseline auxiliary equipment results
+   * @param mods auxiliary equipment results of each modification column
+   * @returns one row per item of any scenario, matched by id in baseline order, then the total; empty when no scenario has equipment
+   */
+  private buildAuxiliaryEquipmentRows(baseline: AuxiliaryEquipmentResults, mods: AuxiliaryEquipmentResults[]): ReportTableRow[] {
+    const names = new Map<string, string>();
+    [baseline, ...mods].forEach(results => results.items.forEach(item => {
+      if (!names.has(item.id)) names.set(item.id, item.name);
+    }));
+    if (!names.size) {
+      return [];
+    }
+    const energyUse = (results: AuxiliaryEquipmentResults, id: string): number | undefined => results.items.find(item => item.id === id)?.energyUse;
+    const itemRows: ReportTableRow[] = [...names].map(([id, name]) => ({
+      label: name,
+      className: 'default',
+      baseline: this.cell(energyUse(baseline, id), 0),
+      modifications: mods.map(results => this.cell(energyUse(results, id), 0)),
+    }));
+    return [...itemRows, {
+      label: 'Total Auxiliary Energy Use',
+      className: 'emphasis',
+      baseline: this.cell(baseline.totalEnergyUse, 0),
+      modifications: mods.map(results => this.cell(results.totalEnergyUse, 0)),
+    }];
+  }
 
   private buildRows(baseline: PhastResults, mods: PhastResults[], settings: Settings): ReportTableRow[] {
     const categories: ShowResultsCategories = this.resultsService.getResultCategories(settings);

@@ -1,0 +1,36 @@
+.output-summary .table {
+  font-size: 14px;
+}
+
+.output-summary .table th {
+  border: none;
+  padding: 0;
+  text-align: left;
+}
+
+.output-summary .table td {
+  text-align: left;
+}
+
+.panel-table td:first-child,
+.panel-table th:first-child {
+  width: 50%;
+}
+
+.panel-table td:not(:first-child),
+.panel-table th:not(:first-child) {
+  width: 50%;
+}
+
+.panel-table.compare td:not(:first-child),
+.panel-table.compare th:not(:first-child) {
+  width: 25%;
+}
+
+.tr-border {
+  border-top: 2px groove #bf3d00;
+}
+
+.section-header td {
+  font-weight: bold;
+}

@@ -1,4 +1,74 @@
-<div class="panel-container p-3">
-  <h4>Auxiliary Equipment</h4>
-  <p class="text-muted">Placeholder — implementation pending.</p>
+<div class="panel-container p-2">
+  <div class="d-flex justify-content-end mb-2">
+    <button class="btn btn-primary" (click)="service.add()">Add Equipment</button>
+  </div>
+
+  @if (service.equipment().length > 1) {
+    <div class="result-strip result-totals">
+      <div class="result-strip-title">All Equipment</div>
+      <div class="result-item">
+        <span class="result-label">Total Power</span>
+        <span class="result-value">{{ results().totalPower | number: '1.0-2' }} kW</span>
+      </div>
+      <div class="result-item">
+        <span class="result-label">Total Energy</span>
+        <span class="result-value">{{ results().totalEnergyUse | number: '1.0-0' }} kWh/yr</span>
+      </div>
+    </div>
+  }
+
+  @if (service.equipment().length === 0) {
+    <div class="no-data text-center p-4">
+      <p class="text-muted">No auxiliary equipment. Click <strong>Add Equipment</strong> to begin.</p>
+    </div>
+  }
+
+  @for (item of service.equipment(); track scenario() + '_' + item.id) {
+    <div class="card mb-2">
+      <div class="card-header d-flex align-items-center flex-wrap py-1 px-2">
+        <button
+          type="button"
+          class="btn btn-link btn-sm p-0 mr-2"
+          [attr.aria-label]="item.collapse ? 'Expand equipment' : 'Collapse equipment'"
+          (click)="service.toggleCollapse(item.id)"
+        >
+          <span class="fa" [class.fa-chevron-right]="item.collapse" [class.fa-chevron-down]="!item.collapse"></span>
+        </button>
+        <input
+          type="text"
+          class="form-control form-control-sm loss-name-input mr-2"
+          aria-label="Equipment name"
+          [value]="item.name"
+          (input)="service.setName(item.id, $event.target['value'])"
+        />
+        <button class="btn btn-link btn-sm small text-danger py-0 ml-auto" (click)="service.remove(item.id)" title="Remove equipment">
+          <span class="fa fa-trash"></span> Remove
+        </button>
+      </div>
+
+      @if (!item.collapse) {
+        <div class="card-body p-2">
+          <app-auxiliary-equipment-form [item]="item" [differingFields]="service.differingFields(item.id)" [settings]="settings()"></app-auxiliary-equipment-form>
+        </div>
+      }
+
+      <div class="loss-results result-strip card-body p-2">
+        @if (itemResult(item.id); as result) {
+          <div class="result-item">
+            <span class="result-label">Power</span>
+            <span class="result-value">{{ result.power | number: '1.0-2' }} kW</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Energy</span>
+            <span class="result-value">{{ result.energyUse | number: '1.0-0' }} kWh/yr</span>
+          </div>
+        } @else {
+          <div class="result-item">
+            <span class="result-label">Energy</span>
+            <span class="result-value">&mdash;&mdash;</span>
+          </div>
+        }
+      </div>
+    </div>
+  }
 </div>

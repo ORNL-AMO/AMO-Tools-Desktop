@@ -23,12 +23,15 @@ export interface LossEntity {
 }
 
 /**
- * Shared multi-entry loss list behavior: load, build a per-entry form, recalculate and autosave on
- * `valueChanges`, add/remove/rename. Parameterized by the loss key and three hooks for what's
- * type-specific (form build, loss build, calculation). Materially different shapes (e.g.
- * `ChargeMaterialService`'s solid/liquid/gas sub-forms) stay their own service instead.
+ * Shared multi-entry list behavior: load, build a per-entry form, recalculate and autosave on
+ * `valueChanges`, add/remove/rename. Parameterized by where the entries are stored and three hooks for
+ * what's type-specific (form build, entry build, calculation).
+ *
+ * Heat balance losses use it through {@link LossFormListService}, which stores entries under `losses`;
+ * extend it directly only for a list stored elsewhere on the scenario (e.g. `AuxiliaryEquipmentService`).
+ * Naming (`TLoss`, `heatLoss`, `onLossesChanged`) follows the loss case.
  */
-export abstract class LossFormListService<TLoss extends LossEntity, TForm extends FormGroup<any>> {
+export abstract class ItemFormListService<TLoss extends LossEntity, TForm extends FormGroup<any>> {
   protected readonly destroyRef = inject(DestroyRef);
   protected readonly assessmentService = inject(ProcessHeatingAssessmentService);
 
@@ -37,7 +40,7 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
   private readonly subscriptions = new Map<string, Subscription>();
   private readonly differences = createLossDifferences<TLoss>(
     this.scenario,
-    source => this.assessmentService.lossSignal(source, this.lossKey) as TLoss[] | undefined,
+    source => this.readItems(source),
     loss => this.normalize(loss),
   );
 
@@ -46,14 +49,15 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
     this.items().reduce((sum, item) => sum + (item.heatLoss ?? 0), 0)
   );
 
-  protected abstract readonly lossKey: keyof Losses;
+  protected abstract readItems(scenario: AssessmentScenario): TLoss[] | undefined;
+  protected abstract writeItems(scenario: AssessmentScenario, items: TLoss[]): void;
   protected abstract buildForm(loss: TLoss): TForm;
   protected abstract buildLoss(form: TForm): TLoss;
   protected abstract calculateResult(form: TForm, settings: Settings): number | null;
 
   initialize(scenario: AssessmentScenario = 'baseline'): void {
     this.scenario.set(scenario);
-    const losses = (this.assessmentService.lossSignal(scenario, this.lossKey) as TLoss[] | undefined) ?? [];
+    const losses = this.readItems(scenario) ?? [];
     const items = losses.map((loss, idx) => this.buildItem(this.ensureId(loss), idx + 1));
     this.store.load(items);
     this.onLossesChanged();
@@ -123,7 +127,7 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
   private buildItem(loss: TLoss & EntityWithId, fallbackIdx: number): LossFormItem<TForm> {
     const item: LossFormItem<TForm> = {
       id: loss.id,
-      name: loss.name ?? `Loss #${fallbackIdx}`,
+      name: loss.name ?? this.defaultName(fallbackIdx),
       form: this.buildForm(loss),
       collapse: false,
       heatLoss: loss.heatLoss ?? null,
@@ -159,8 +163,7 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
       heatLoss: item.heatLoss ?? undefined,
     }));
 
-    /** `TLoss[]` matches `Losses[typeof this.lossKey]` per subclass, but TS can't verify that generically here. */
-    this.assessmentService.updateLossesProperty(this.scenario(), this.lossKey, losses as never);
+    this.writeItems(this.scenario(), losses);
     this.onLossesChanged();
   }
 
@@ -185,4 +188,26 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
 
   /** Called after entries are loaded or saved; override for work that depends on the scenario's updated losses. */
   protected onLossesChanged(): void {}
+
+  /** Name for a saved entry that has none. */
+  protected defaultName(index: number): string {
+    return `Loss #${index}`;
+  }
+}
+
+/**
+ * {@link ItemFormListService} for one loss type stored under `losses`. Materially different shapes (e.g.
+ * `ChargeMaterialService`'s solid/liquid/gas sub-forms) stay their own service instead.
+ */
+export abstract class LossFormListService<TLoss extends LossEntity, TForm extends FormGroup<any>> extends ItemFormListService<TLoss, TForm> {
+  protected abstract readonly lossKey: keyof Losses;
+
+  protected readItems(scenario: AssessmentScenario): TLoss[] | undefined {
+    return this.assessmentService.lossSignal(scenario, this.lossKey) as TLoss[] | undefined;
+  }
+
+  protected writeItems(scenario: AssessmentScenario, losses: TLoss[]): void {
+    /** `TLoss[]` matches `Losses[typeof this.lossKey]` per subclass, but TS can't verify that generically here. */
+    this.assessmentService.updateLossesProperty(scenario, this.lossKey, losses as never);
+  }
 }

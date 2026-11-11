@@ -13,7 +13,7 @@ import { ProcessHeatingAssessmentService } from '../services/process-heating-ass
 import { ProcessHeatingValidityService } from '../services/process-heating-validity.service';
 import { EnergySummaryResultsService, EnergySummaryUI } from './energy-summary/energy-summary-results.service';
 import { ExecutiveSummaryResultsService, ExecutiveSummaryUI } from './executive-summary/executive-summary-results.service';
-import { ResultsDataResultsService, ResultsDataUI } from './results-data/results-data-results.service';
+import { AUXILIARY_EQUIPMENT_TABLE_TITLE, ResultsDataResultsService, ResultsDataUI } from './results-data/results-data-results.service';
 import { ReportGraphsResultsService, ReportGraphsUI } from './report-graphs/report-graphs-results.service';
 import { ReportSankeyResultsService, ReportSankeyUI } from './report-sankey/report-sankey-results.service';
 import { InputSummaryResultsService, InputSummaryUI } from './input-summary/input-summary-results.service';
@@ -179,6 +179,14 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
         group: ROUTE_TOKENS.resultsData,
         pageBreakBefore: !invalidModifications.length,
       },
+      ...(ui.auxiliaryEquipmentRows.length ? [{
+        type: 'summary-table' as const,
+        title: 'Auxiliary Equipment',
+        headers: [AUXILIARY_EQUIPMENT_TABLE_TITLE, ...this.buildHeaders(ui.modificationNames.filter(isValidColumn)).slice(1)],
+        rows: ui.auxiliaryEquipmentRows.map(row => this.rowToStrings({ ...row, modifications: row.modifications.filter(isValidColumn) })),
+        emphasisRowsIndices: [ui.auxiliaryEquipmentRows.length - 1],
+        group: ROUTE_TOKENS.resultsData,
+      }] : []),
     ];
   }
 

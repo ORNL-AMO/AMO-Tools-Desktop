@@ -12,7 +12,7 @@ import { Slag } from './losses/slag';
 import { AuxiliaryPowerLoss } from './losses/auxiliaryPowerLoss';
 import { EnergyInputEAF } from './losses/energyInputEAF';
 import { ExhaustGasEAF } from './losses/exhaustGasEAF';
-import { AuxEquipment } from './auxEquipment';
+import { AuxEquipment, AuxiliaryEquipmentItem } from './auxEquipment';
 import { MeteredEnergy } from './meteredEnergy';
 import { DesignedEnergy } from './designedEnergy';
 import { EnergyInputExhaustGasLoss } from './losses/energyInputExhaustGasLosses';
@@ -26,6 +26,7 @@ export interface PHAST {
   modifications?: Modification[];
   setupDone?: boolean;
   auxEquipment?: AuxEquipment[];
+  auxiliaryEquipment?: AuxiliaryEquipmentItem[];
   meteredEnergy?: MeteredEnergy;
   designedEnergy?: DesignedEnergy;
   operatingHours?: OperatingHours;

@@ -44,8 +44,19 @@ export function toLegacyJustifiAssessment(assessment: Assessment, setupDone: boo
       notes: modification.notes,
       exploreOpportunities: Object.keys(flags).length > 0,
       ...legacyFlags,
-      phast: toLegacyPhast(getEffectivePhast(baseline, modification)),
+      phast: toLegacyPhast(withoutAuxiliaryEquipment(getEffectivePhast(baseline, modification))),
     } as LegacyModification;
   });
-  return { ...assessment, phast: { ...toLegacyPhast(baseline), setupDone, modifications: legacyModifications } };
+  return { ...assessment, phast: { ...toLegacyPhast(withoutAuxiliaryEquipment(baseline)), setupDone, modifications: legacyModifications } };
+}
+
+/**
+ * Auxiliary equipment is not exported: the edited items live in `auxiliaryEquipment`, so the legacy
+ * `auxEquipment` may be stale.
+ * @param phast scenario to export
+ * @returns a copy without either auxiliary equipment field
+ */
+function withoutAuxiliaryEquipment(phast: PHAST): PHAST {
+  const { auxEquipment, auxiliaryEquipment, ...rest } = phast;
+  return rest;
 }

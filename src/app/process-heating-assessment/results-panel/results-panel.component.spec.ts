@@ -9,6 +9,7 @@ describe('ResultsPanelComponent tabs', () => {
   let childView: WritableSignal<string>;
   let selectedExpertViewTab: WritableSignal<string | undefined>;
   let isEnergyValidationView: WritableSignal<boolean>;
+  let isAuxiliaryEquipmentView: WritableSignal<boolean>;
 
   const tab = (label: string): HTMLElement =>
     Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('.panel-tab-item a')).find(link => link.textContent.trim() === label);
@@ -21,6 +22,7 @@ describe('ResultsPanelComponent tabs', () => {
     childView = signal('explore-opportunities');
     selectedExpertViewTab = signal(undefined);
     isEnergyValidationView = signal(false);
+    isAuxiliaryEquipmentView = signal(false);
     TestBed.configureTestingModule({
       declarations: [ResultsPanelComponent],
       providers: [{
@@ -31,6 +33,7 @@ describe('ResultsPanelComponent tabs', () => {
           selectedExpertViewTab,
           exploreNotesKey: signal(undefined),
           isEnergyValidationView,
+          isAuxiliaryEquipmentView,
         },
       }],
       schemas: [NO_ERRORS_SCHEMA],
@@ -82,6 +85,22 @@ describe('ResultsPanelComponent tabs', () => {
 
       expect(shown('app-energy-validation-results')).toBeTrue();
       expect(shown('app-process-heating-assessment-results')).toBeFalse();
+    });
+
+    it('shows only the auxiliary equipment results, for the panel scenario, on Auxiliary Equipment', () => {
+      isAuxiliaryEquipmentView.set(true);
+      fixture.detectChanges();
+
+      expect(shown('app-auxiliary-equipment-results')).toBeTrue();
+      expect(shown('app-process-heating-assessment-results')).toBeFalse();
+      expect(shown('app-energy-validation-results')).toBeFalse();
+    });
+
+    it('edits Auxiliary Equipment notes when Auxiliary Equipment is selected in Expert View', () => {
+      childView.set('expert-view');
+      selectedExpertViewTab.set('auxiliary-equipment');
+
+      expect(fixture.componentInstance.notesKey()).toBe('auxiliaryPowerNotes');
     });
 
     it('shows only the heat balance results elsewhere', () => {

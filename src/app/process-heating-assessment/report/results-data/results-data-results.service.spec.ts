@@ -9,6 +9,8 @@ import { PhastResults } from '../../models/phast';
 import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
+import { AuxiliaryEquipmentResultsService } from '../../services/auxiliary-equipment-results.service';
+import { AuxiliaryEquipmentResults } from '../../models/auxiliary-equipment';
 import { ResultsDataResultsService, ResultsDataUI } from './results-data-results.service';
 
 const NO_CATEGORIES: ShowResultsCategories = {
@@ -22,6 +24,7 @@ describe('ResultsDataResultsService', () => {
   let categories: ShowResultsCategories;
   let modifications: WritableSignal<ProcessHeatingModification[]>;
   let showOperationalImpacts: WritableSignal<boolean>;
+  let auxiliaryEquipmentByName: Record<string, AuxiliaryEquipmentResults>;
 
   function ui(): ResultsDataUI {
     return service.resultsDataUI();
@@ -48,10 +51,13 @@ describe('ResultsDataResultsService', () => {
     categories = { ...NO_CATEGORIES };
     modifications = signal<ProcessHeatingModification[]>([{ id: 'mod1', scenarioOverrides: { name: 'Scenario 1' } }]);
     showOperationalImpacts = signal(false);
+    const noEquipment: AuxiliaryEquipmentResults = { items: [], totalPower: 0, totalEnergyUse: 0, totalEnergyCost: 0 };
+    auxiliaryEquipmentByName = { baseline: noEquipment, mod1: noEquipment };
 
     TestBed.configureTestingModule({
       providers: [
         ResultsDataResultsService,
+        { provide: AuxiliaryEquipmentResultsService, useValue: { scenarioResults: (scenario: string) => auxiliaryEquipmentByName[scenario] } },
         {
           provide: ProcessHeatingAssessmentService,
           useValue: { settingsSignal: settings },
@@ -186,5 +192,26 @@ describe('ResultsDataResultsService', () => {
   it('is undefined when the baseline has no results', () => {
     resultsByName.baseline = undefined;
     expect(ui()).toBeUndefined();
+  });
+
+  describe('auxiliary equipment', () => {
+    const item = (id: string, name: string, energyUse: number) => ({ id, name, power: 0, energyUse, energyCost: 0 });
+
+    it('has no rows when no scenario has equipment', () => {
+      expect(ui().auxiliaryEquipmentRows).toEqual([]);
+    });
+
+    it('lists each item by id in baseline order, items only a modification has, then the total', () => {
+      auxiliaryEquipmentByName = {
+        baseline: { items: [item('a', 'Fan', 1000), item('b', 'Pump', 500)], totalPower: 0, totalEnergyUse: 1500, totalEnergyCost: 0 },
+        mod1: { items: [item('c', 'Blower', 200), item('a', 'Fan', 750)], totalPower: 0, totalEnergyUse: 950, totalEnergyCost: 0 },
+      };
+
+      const rows = ui().auxiliaryEquipmentRows;
+
+      expect(rows.map(row => row.label)).toEqual(['Fan', 'Pump', 'Blower', 'Total Auxiliary Energy Use']);
+      expect(rows.map(row => [row.baseline.value, row.modifications[0].value])).toEqual([[1000, 750], [500, null], [null, 200], [1500, 950]]);
+      expect(rows[3].className).toBe('emphasis');
+    });
   });
 });

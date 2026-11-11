@@ -23,7 +23,8 @@ import { SlagFormService } from '../heat-balance/losses/slag/slag-form.service';
 import { WallLossesFormService } from '../heat-balance/losses/wall-losses/wall-losses-form.service';
 import { getModificationName } from '../models/modification';
 import { PHAST, PhastValid } from '../models/phast';
-import { isViewVisibleForConfiguration, LossView } from '../models/views';
+import { AUXILIARY_EQUIPMENT_VIEW, isViewVisibleForConfiguration, LossView } from '../models/views';
+import { AuxiliaryEquipmentFormService } from '../auxiliary-equipment/auxiliary-equipment-form.service';
 import { AssessmentScenario, deriveHeatingEquipmentConfiguration, ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingOperationsFormService } from './process-heating-operations-form.service';
 import { ProcessHeatingResultsService } from './process-heating-results.service';
@@ -78,6 +79,7 @@ export class ProcessHeatingValidityService {
   private readonly energyInputExhaustGasFormService = inject(EnergyInputExhaustGasFormService);
   private readonly meteredEnergyFormService = inject(MeteredEnergyFormService);
   private readonly designedEnergyFormService = inject(DesignedEnergyFormService);
+  private readonly auxiliaryEquipmentFormService = inject(AuxiliaryEquipmentFormService);
 
   /** Energy Validation inputs only feed the comparison against the heat balance, so they mark their tab without blocking results. */
   readonly isMeteredEnergyValid: Signal<boolean> = computed(() => this.meteredEnergyFormService.isValid(
@@ -121,6 +123,22 @@ export class ProcessHeatingValidityService {
   ];
 
   private readonly scenarioValidityCache = new Map<AssessmentScenario, Signal<PhastValid>>();
+  private readonly auxiliaryEquipmentValidityCache = new Map<AssessmentScenario, Signal<boolean>>();
+
+  /**
+   * Auxiliary equipment is calculated apart from the heat balance, so it marks its tab without blocking results.
+   * @param scenario 'baseline' or a modification id
+   * @returns whether every item has the inputs its measurement method needs
+   */
+  isAuxiliaryEquipmentValid(scenario: AssessmentScenario): boolean {
+    let cached = this.auxiliaryEquipmentValidityCache.get(scenario);
+    if (!cached) {
+      cached = computed(() => (this.assessmentService.scenarioPhastSignal(scenario)?.auxiliaryEquipment ?? [])
+        .every(item => this.auxiliaryEquipmentFormService.isValid(item)));
+      this.auxiliaryEquipmentValidityCache.set(scenario, cached);
+    }
+    return cached();
+  }
 
   /** Assessment Settings step: the settings form's own validation. Built from a copy because the settings service normalizes the object it is given. */
   readonly isAssessmentSettingsValid: Signal<boolean> = computed(() => {
@@ -170,6 +188,9 @@ export class ProcessHeatingValidityService {
    * @returns whether the step's saved inputs pass its form validation; a step without a check is valid
    */
   isStepValid(scenario: AssessmentScenario, view: string): boolean {
+    if (view === AUXILIARY_EQUIPMENT_VIEW) {
+      return this.isAuxiliaryEquipmentValid(scenario);
+    }
     const check = this.checks.find(candidate => candidate.view === view);
     return !check || this.scenarioValidity(scenario)[check.key];
   }
