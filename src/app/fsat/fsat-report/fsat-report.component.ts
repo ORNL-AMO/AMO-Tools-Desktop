@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { FSAT } from '../../shared/models/fans';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
@@ -6,10 +6,10 @@ import { Directory } from '../../shared/models/directory';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsService } from '../../settings/settings.service';
-import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
-import { Subscription } from 'rxjs';
-import { PrintOptions } from '../../shared/models/printing';
+import { Observable, Subscription } from 'rxjs';
 import { FsatService } from '../fsat.service';
+import { ReportDocument, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
+import { FsatReportAdapter, FSAT_SECTION_GROUPS } from './fsat-report.adapter';
 
 @Component({
   selector: 'app-fsat-report',
@@ -17,7 +17,7 @@ import { FsatService } from '../fsat.service';
   styleUrls: ['./fsat-report.component.css'],
   standalone: false
 })
-export class FsatReportComponent implements OnInit {
+export class FsatReportComponent implements OnInit, OnDestroy {
   @Output('closeReport')
   closeReport = new EventEmitter();
   @Input()
@@ -38,59 +38,73 @@ export class FsatReportComponent implements OnInit {
   @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
 
-
-  showPrintView: boolean = false;
-  showPrintViewSub: Subscription;
-  showPrintMenu: boolean = false;
-  showPrintMenuSub: Subscription;
-  showPrintDiv: boolean = false;
   selectAll: boolean = false;
 
   assessmentDirectories: Directory[];
   currentTab: string = 'results';
   createdDate: Date;
   reportContainerHeight: number;
-  printOptions: PrintOptions;
   tabsCollapsed: boolean = true;
+  reportDocument$: Observable<ReportDocument>;
+  readonly sectionGroups: ReportSectionGroup[] = FSAT_SECTION_GROUPS;
+  private containerHeightSub: Subscription;
+  private settingsSub: Subscription;
+  private assessmentSub: Subscription;
 
-  constructor(private fsatService: FsatService, private printOptionsMenuService: PrintOptionsMenuService,
+  constructor(private fsatService: FsatService,
     private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
-    private settingsService: SettingsService) { }
+    private settingsService: SettingsService, private reportAdapter: FsatReportAdapter) { }
 
   ngOnInit() {
     this.createdDate = new Date();
-    if (!this.settings) {
-      //find settings
-      this.getSettings();
+    if (!this.assessment) {
+      this.inFsat = true;
+      this.containerHeightSub = this.fsatService.containerHeight.subscribe(val => {
+        this.containerHeight = val;
+        this.getContainerHeight();
+      });
+      // service assessment/settings can re-seed on a `/fsat/:id` navigation without recreating this routed component
+      this.settingsSub = this.fsatService.settings.subscribe(settings => {
+        if (settings) {
+          this.settings = settings;
+        }
+      });
+      this.assessmentSub = this.fsatService.assessment.subscribe(assessment => {
+        if (assessment) {
+          this.assessment = assessment;
+          this.buildReportState();
+        }
+      });
+    } else {
+      if (!this.settings) {
+        this.getSettings();
+      }
+      this.buildReportState();
     }
-    if (this.assessment) {
-      this.assessmentDirectories = new Array();
-      this.getDirectoryList(this.assessment.directoryId);
-    }
+  }
+
+  private buildReportState() {
+    this.assessmentDirectories = new Array();
+    this.getDirectoryList(this.assessment.directoryId);
 
     if (!this.assessment.fsat.modifications) {
       this.assessment.fsat.modifications = new Array();
     }
 
-    if (!this.inRollup) {
-      this.showPrintMenuSub = this.printOptionsMenuService.showPrintMenu.subscribe(val => {
-        this.showPrintMenu = val;
-      });
-    }
-
-    this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
-      this.printOptions = this.printOptionsMenuService.printOptions.getValue();
-      this.showPrintDiv = val;
-      if (val == true) {
-        //use delay to show loading before print payload starts
-        setTimeout(() => {
-          this.showPrintView = val;
-        }, 20)
-      } else {
-        this.showPrintView = val;
-      }
-    });
     this.setOutputs();
+    this.reportDocument$ = this.reportAdapter.buildDocument(this.assessment);
+  }
+
+  ngOnDestroy() {
+    if (this.containerHeightSub) {
+      this.containerHeightSub.unsubscribe();
+    }
+    if (this.settingsSub) {
+      this.settingsSub.unsubscribe();
+    }
+    if (this.assessmentSub) {
+      this.assessmentSub.unsubscribe();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -105,14 +119,10 @@ export class FsatReportComponent implements OnInit {
     }, 100);
   }
 
-  ngOnDestroy() {
-    if (this.showPrintMenuSub) {
-      this.showPrintMenuSub.unsubscribe();
-    }
-    this.showPrintViewSub.unsubscribe();
-  }
-
   getContainerHeight() {
+    if (!this.reportBtns || !this.reportHeader) {
+      return;
+    }
     let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
     let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
     this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 2;
@@ -151,12 +161,6 @@ export class FsatReportComponent implements OnInit {
     this.selectModification.emit(event);
   }
 
-  print() {
-    this.printOptionsMenuService.printContext.next('fsat');
-    this.printOptionsMenuService.showPrintMenu.next(true);
-    this.collapseTabs();
-  }
-
   setOutputs() {
     this.assessment.fsat.valid = this.fsatService.checkValid(this.assessment.fsat, true, this.settings);
     this.assessment.fsat.outputs = this.fsatService.getResults(this.assessment.fsat, true, this.settings);
@@ -167,7 +171,7 @@ export class FsatReportComponent implements OnInit {
         modification.fsat.outputs.percentSavings = this.fsatService.getSavingsPercentage(this.assessment.fsat.outputs.annualCost, modification.fsat.outputs.annualCost);
         modification.fsat.outputs.energySavings = this.assessment.fsat.outputs.annualEnergy - modification.fsat.outputs.annualEnergy;
         modification.fsat.outputs.annualSavings = this.assessment.fsat.outputs.annualCost - modification.fsat.outputs.annualCost;
-
+        modification.fsat.outputs.paybackPeriod = this.fsatService.getPaybackPeriod(modification.fsat.outputs.annualSavings, modification.fsat.implementationCosts);
       }
     }
     );

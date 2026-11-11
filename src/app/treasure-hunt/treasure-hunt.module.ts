@@ -64,7 +64,7 @@ import { PowerFactorCorrectionTreasureHuntService } from './treasure-hunt-calcul
 import { FanAffinityLawTreasureHuntService } from './treasure-hunt-calculator-services/fan-affinity-law-treasure-hunt.service';
 import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 import { ExportOpportunitiesService } from './treasure-chest/export-opportunities.service';
-
+import { SteamLeakTreasureHuntService } from './treasure-hunt-calculator-services/steam-leak-treasure-hunt.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -134,6 +134,7 @@ import { ExportOpportunitiesService } from './treasure-chest/export-opportunitie
     CoolingTowerBasinTreasureHuntService,
     BoilerBlowdownRateTreasureHuntService,
     PowerFactorCorrectionTreasureHuntService,
+    SteamLeakTreasureHuntService,
     FanAffinityLawTreasureHuntService,
     ExportOpportunitiesService
   ]

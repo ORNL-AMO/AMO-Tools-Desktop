@@ -1,41 +1,65 @@
-<div class="d-flex flex-column w-100 psat position-sticky" *ngIf="!inSetup || showResults" #resultTabs>
+@if (!inSetup || showResults) {
+  <div class="d-flex flex-column w-100 psat position-sticky" #resultTabs>
     <div class="d-flex flex-wrap tabs primary">
-        <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
-            <a class="border-left-0" (click)="setTab('results')">Results</a>
+      <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
+        <a class="border-left-0" (click)="setTab('results')">Results</a>
+      </div>
+      <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
+        <a (click)="setTab('help')">Help</a>
+      </div>
+      @if (!inSetup) {
+        <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'notes'}">
+          <a (click)="setTab('notes')">Notes</a>
         </div>
-        <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
-            <a (click)="setTab('help')">Help</a>
-        </div>
-        <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'notes'}" *ngIf="!inSetup">
-            <a (click)="setTab('notes')">Notes</a>
-        </div>
+      }
     </div>
-</div>
+  </div>
+}
 <div [ngStyle]="{'height.px': helpHeight}">
-    <div *ngIf="inSetup && !showResults" class="header">
-        <h3>Help</h3>
+  @if (inSetup && !showResults) {
+    <div class="header">
+      <h3>Help</h3>
     </div>
-    <div class="pr-1 pl-2 help-panel" *ngIf="inSetup && !showResults || tabSelect == 'help'">
-        <app-pump-operations-help *ngIf="currentTab == 'operations'"></app-pump-operations-help>
-        <app-system-basics-help *ngIf="currentTab == 'baseline'"></app-system-basics-help>
-        <app-pump-fluid-help [settings]="settings" [psat]="psat" *ngIf="currentTab == 'pump-fluid'"></app-pump-fluid-help>
-
-        <app-motor-help [settings]="settings" [psat]="psat" *ngIf="currentTab == 'motor'"></app-motor-help>
-
-        <app-field-data-help [settings]="settings" [psat]="psat" *ngIf="currentTab == 'field-data'"></app-field-data-help>
+  }
+  @if (inSetup && !showResults || tabSelect == 'help') {
+    <div class="pr-1 pl-2 help-panel">
+      @if (currentTab == 'operations') {
+        <app-pump-operations-help></app-pump-operations-help>
+      }
+      @if (currentTab == 'baseline') {
+        <app-system-basics-help></app-system-basics-help>
+      }
+      @if (currentTab == 'pump-fluid') {
+        <app-pump-fluid-help [settings]="settings" [psat]="psat"></app-pump-fluid-help>
+      }
+      @if (currentTab == 'motor') {
+        <app-motor-help [settings]="settings" [psat]="psat"></app-motor-help>
+      }
+      @if (currentTab == 'field-data') {
+        <app-field-data-help [settings]="settings" [psat]="psat"></app-field-data-help>
+      }
     </div>
-    <div *ngIf="tabSelect == 'notes' && !inSetup">
-        <div *ngIf="modification">
-            <app-modify-conditions-notes [(notes)]="modification.notes" [currentTab]="currentTab" (emitSave)="save()"></app-modify-conditions-notes>
+  }
+  @if (tabSelect == 'notes' && !inSetup) {
+    <div>
+      @if (modification) {
+        <div>
+          <app-modify-conditions-notes [(notes)]="modification.notes" [currentTab]="currentTab" (emitSave)="save()"></app-modify-conditions-notes>
         </div>
-        <div class="col-11 p-4" *ngIf="!modification">
-            You must add a modification to take notes on it.
+      }
+      @if (!modification) {
+        <div class="col-11 p-4">
+          You must add a modification to take notes on it.
         </div>
+      }
     </div>
-    <div *ngIf="tabSelect == 'results' && !inSetup || tabSelect == 'results' && showResults">
-        <app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="modificationIndex"
-            [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings"
-            [inSetup]="inSetup" [modificationName]="modificationName">
-        </app-explore-opportunities-results>
+  }
+  @if (tabSelect == 'results' && !inSetup || tabSelect == 'results' && showResults) {
+    <div>
+      <app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="modificationIndex"
+        [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings"
+        [inSetup]="inSetup" [modificationName]="modificationName">
+      </app-explore-opportunities-results>
     </div>
+  }
 </div>

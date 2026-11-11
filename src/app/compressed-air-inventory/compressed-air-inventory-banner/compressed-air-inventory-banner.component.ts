@@ -3,12 +3,15 @@ import { InventoryItem } from '../../shared/models/inventory/inventory';
 import { Subscription } from 'rxjs';
 import { CompressedAirInventoryData } from '../compressed-air-inventory';
 import { CompressedAirInventoryService } from '../compressed-air-inventory.service';
-import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 import { CompressedAirCatalogService } from '../compressed-air-inventory-setup/compressed-air-catalog/compressed-air-catalog.service';
 import _ from 'lodash';
+import { COMPRESSED_AIR_INVENTORY_SETUP_GATED_VIEWS, CompressedAirInventoryMainView, CompressedAirInventorySetupView, CompressedAirInventorySummaryView } from '../compressed-air-inventory.routing';
+import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
   selector: 'app-compressed-air-inventory-banner',
@@ -37,9 +40,9 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   bannerCollapsed: boolean = true;
   isSelected: boolean = false;
 
-  constructor(private compressedAirInventoryService: CompressedAirInventoryService, 
-    private securityAndPrivacyService: SecurityAndPrivacyService, 
-    private emailMeasurDataService: EmailMeasurDataService, 
+  constructor(private compressedAirInventoryService: CompressedAirInventoryService,
+    private modalDialogService: ModalDialogService,
+    private emailMeasurDataService: EmailMeasurDataService,
     private dashboardService: DashboardService, 
     private compressedAirCatalogService: CompressedAirCatalogService,
     private integrationStateService: IntegrationStateService) { }
@@ -73,10 +76,6 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
     this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
       this.showConnectedItemBadge = connectedInventoryData.connectedItem !== undefined;
     });
-
-    this.compressedAirInventoryService.setupTab.next('plant-setup');
-    let nextID: string = this.compressedAirInventoryData.systems[0].id;
-    this.compressedAirCatalogService.selectedSystemId.next(nextID);
   }
 
 
@@ -102,23 +101,33 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
     this.connectedInventoryDataSub.unsubscribe();
   }
 
-  setSetupTab(str: string) {
-    this.compressedAirInventoryService.setupTab.next(str);
+  setSetupTab(str: CompressedAirInventorySetupView) {
+    this.compressedAirInventoryService.goToSetupTab(str);
   }
 
 
-  setMainTab(str: string) {
-    this.compressedAirInventoryService.mainTab.next(str);
+  canOpenMainTab(view: CompressedAirInventoryMainView): boolean {
+    return isMainTabAllowed(COMPRESSED_AIR_INVENTORY_SETUP_GATED_VIEWS, view, this.compressedAirInventoryData.isValid);
+  }
+
+  setMainTab(str: CompressedAirInventoryMainView) {
+    if (this.canOpenMainTab(str)) {
+      this.compressedAirInventoryService.goToMainTab(str);
+    }
     this.collapseBanner();
   }
 
-  setSummaryTab(str: string) {
-    this.compressedAirInventoryService.summaryTab.next(str);
+  setSummaryTab(str: CompressedAirInventorySummaryView) {
+    this.compressedAirInventoryService.goToSummaryTab(str);
   }
 
   showSecurityAndPrivacyModal() {
-    this.securityAndPrivacyService.modalOpen.next(true);
-    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+    // Collapse banner to prevent it from reopening the modal on mobile when dismissed
+    this.bannerCollapsed = true;
+    this.modalDialogService.openModal(
+      SecurityAndPrivacyItemComponent,
+      SecurityAndPrivacyItemComponent.getDialogConfig()
+    );
   }
 
   collapseBanner() {
@@ -127,35 +136,19 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   }
 
   back() {
-    if (this.mainTab == 'summary') {
-      this.compressedAirInventoryService.mainTab.next('setup');
-    }
+    this.compressedAirInventoryService.backMainTab();
   }
 
   continue() {
-    if (this.mainTab == 'setup') {
-      this.compressedAirInventoryService.mainTab.next('summary');
-    }
+    this.compressedAirInventoryService.continueMainTab();
   }
 
   backSetupTabs() {
-    if (this.setupTab == 'end-uses') {
-      this.compressedAirInventoryService.setupTab.next('compressed-air-catalog');
-    } else if (this.setupTab == 'compressed-air-catalog') {
-      this.compressedAirInventoryService.setupTab.next('system-setup');
-    } else if (this.setupTab == 'system-setup') {
-      this.compressedAirInventoryService.setupTab.next('plant-setup');
-    }
+    this.compressedAirInventoryService.backSetupTab();
   }
 
   continueSetupTabs() {
-    if (this.setupTab == 'plant-setup') {
-      this.compressedAirInventoryService.setupTab.next('system-setup');
-    } else if (this.setupTab == 'system-setup') {
-      this.compressedAirInventoryService.setupTab.next('compressed-air-catalog');
-    } else if (this.setupTab == 'compressed-air-catalog') {
-      this.compressedAirInventoryService.setupTab.next('end-uses');
-    }
+    this.compressedAirInventoryService.continueSetupTab();
   }
 
   continueCompressedAirCatalogTabs() {
@@ -196,19 +189,11 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   }
 
   continueSummaryTabs() {
-    if (this.summaryTab == 'overview') {
-      this.compressedAirInventoryService.summaryTab.next('graphs');
-    } else if (this.summaryTab == 'graphs') {
-      this.compressedAirInventoryService.summaryTab.next('table');
-    }
+    this.compressedAirInventoryService.continueSummaryTab();
   }
 
   backSummaryTabs() {
-    if (this.summaryTab == 'table') {
-      this.compressedAirInventoryService.summaryTab.next('graphs');
-    } else if (this.summaryTab == 'graphs') {
-      this.compressedAirInventoryService.summaryTab.next('overview');
-    }
+    this.compressedAirInventoryService.backSummaryTab();
   }
 
   openExportModal() {

@@ -19,3 +19,11 @@ app-baseline-tab-content {
 .compressed-air-container app-compressed-air-report{
     height: 100%;
 }
+
+/* lets a wide table scroll horizontally on its own instead of stretching the page */
+@media screen {
+  .table-scroll {
+    overflow-x: auto;
+    contain: inline-size;
+  }
+}

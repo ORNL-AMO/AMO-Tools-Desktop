@@ -31,7 +31,7 @@ If you've never contributed before, see the following for help:
 
 ### Issues
 
-We are not accepting new contributor-created issues at this time. Issues that are eligible for community contribution will be marked with the `help wanted` label.
+We are not accepting new contributor-created issues at this time. Issues that are eligible for community contribution will be marked with the `Eligible for contributor help` label.
 
 Before starting work on an issue:
 1. Comment on the issue saying you'd like to work on it
@@ -65,7 +65,7 @@ PRs should:
 - Use a hashtag to connect the issue number it satisfies 
 - Avoid merge commits in your PR branch; instead, use rebase or cherry-pick to keep the commit history clean.
 - Follow best practices for code style:
-    - [CODING_STYLE_GUIDE](CODING_STYLE_GUIDE.md)
+    - [CODING_STYLE_GUIDE](CODING_STYLE_GUIDE.MD)
 
 #### Pre-PR Checklist
 Before creating a pull request, please review your code using this checklist:
@@ -97,14 +97,14 @@ Fork and pull process for contributors:
 
 ## Coding Style
 
-MEASUR specific style and pattern guidelines can be found in the [CODING_STYLE_GUIDE](CODING_STYLE_GUIDE.md)
+MEASUR specific style and pattern guidelines can be found in the [CODING_STYLE_GUIDE](CODING_STYLE_GUIDE.MD)
 
 Above all else, contributors should do their best to follow the conventions of modern Angular, React, Typescript, and Javascript versions.
 
 
 ## Release Process
 
-Releases are managed by the core development team. An "Epic" issue and a Milestone are used to track the issues going into the next release of MEASUR. Our QA team will test issues via the project board. When QA has been completed on the full set of "Epic" issues develop is merged into main and a release will be drafted by the CI system. Release notes are compiled from the changelog entries in PRs. Version numbers follow semantic versioning. Only core maintainers should publish releases.
+Releases are managed by the core development team using a release epic, milestone, and QA approvals. Prepare the approved version in `develop`, then promote it to `master` through a reviewed PR using **Create a merge commit**. Every `master` push is an intentional release and must advance the version. Tests and the complete signed/notarized desktop workflow, including draft GitHub Release creation, must succeed before production web deployment. Only core maintainers review the installers and release notes and publish the draft. See the [release process](docs/release-process.md) for normal promotions, hotfixes, required checks, manual runs, and failure recovery.
 
 ## Versioning
 

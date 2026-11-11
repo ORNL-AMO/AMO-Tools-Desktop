@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { FieldMeasurements, FieldMeasurementsOptions, FluidProperties, FluidPropertiesOptions, NameplateData, NameplateDataOptions, PumpInventoryData, PumpItem, PumpMotorProperties, PumpMotorPropertiesOptions, PumpProperties, PumpPropertiesOptions, PumpPropertyDisplayOptions, PumpStatus, PumpStatusOptions, SystemProperties, SystemPropertiesOptions } from '../../pump-inventory';
 import { PumpInventorySummaryService, PumpSummaryUnitsImperial, PumpSummaryUnitsMetric } from '../pump-inventory-summary.service';
+import { isPositiveDisplacementPump } from '../../../psat/psatConstants';
 
 @Injectable()
 export class InventorySummaryTableService {
@@ -11,10 +12,12 @@ export class InventorySummaryTableService {
   getInventorySummaryData(pumpInventoryData: PumpInventoryData, settings: Settings): InventorySummaryData {
     let pumpData: Array<Array<SummaryPumpData>> = new Array();
     // let fields: Array<PumpField>;
-    let fields: Array<PumpField> = this.pumpInventorySummaryService.getFields(pumpInventoryData.displayOptions, settings);
+    let pumps: Array<PumpItem> = this.pumpInventorySummaryService.getAllPumps(pumpInventoryData);
+    let fields: Array<PumpField> = this.pumpInventorySummaryService.getFields(pumpInventoryData.displayOptions, settings, pumps);
+    let hasPositiveDisplacementPump: boolean = this.pumpInventorySummaryService.hasPositiveDisplacementPump(pumps);
     pumpInventoryData.departments.forEach(department => {
       department.catalog.forEach(pumpItem => {
-        let pumpItemData = this.getPumpData(pumpItem, department.name, pumpInventoryData.displayOptions, settings);
+        let pumpItemData = this.getPumpData(pumpItem, department.name, pumpInventoryData.displayOptions, settings, hasPositiveDisplacementPump);
         pumpData.push(pumpItemData);
       });
     });
@@ -24,16 +27,16 @@ export class InventorySummaryTableService {
     }
   }
 
-  getPumpData(pumpItem: PumpItem, departmentName: string, displayOptions: PumpPropertyDisplayOptions, settings: Settings): Array<SummaryPumpData> {
+  getPumpData(pumpItem: PumpItem, departmentName: string, displayOptions: PumpPropertyDisplayOptions, settings: Settings, hasPositiveDisplacementPump: boolean): Array<SummaryPumpData> {
     let pumpData: Array<SummaryPumpData> = new Array();
     pumpData = [{ value: pumpItem.name, fieldStr: 'name' }, { value: departmentName, fieldStr: 'departmentName' }];
     let nameplateData = this.getNameplateData(pumpItem.nameplateData, displayOptions.nameplateDataOptions);
     pumpData = pumpData.concat(nameplateData);
-    let pumpProperties = this.getPumpPropertiesData(pumpItem.pumpEquipment, displayOptions.pumpPropertiesOptions, settings);
+    let pumpProperties = this.getPumpPropertiesData(pumpItem.pumpEquipment, displayOptions.pumpPropertiesOptions, settings, hasPositiveDisplacementPump);
     pumpData = pumpData.concat(pumpProperties);
     let fluidProperties = this.getFluidPropertiesData(pumpItem.fluid, displayOptions.fluidPropertiesOptions, settings);
     pumpData = pumpData.concat(fluidProperties);
-    let fieldMeasurements = this.getFieldMeasurementsData(pumpItem.fieldMeasurements, displayOptions.fieldMeasurementOptions, settings);
+    let fieldMeasurements = this.getFieldMeasurementsData(pumpItem.fieldMeasurements, displayOptions.fieldMeasurementOptions, settings, pumpItem.pumpEquipment.pumpType, hasPositiveDisplacementPump);
     pumpData = pumpData.concat(fieldMeasurements);
     let pumpMotorProperties = this.getPumpMotorData(pumpItem.pumpMotor, displayOptions.pumpMotorPropertiesOptions, settings);
     pumpData = pumpData.concat(pumpMotorProperties);
@@ -61,7 +64,7 @@ export class InventorySummaryTableService {
     return pumpData;
   }
 
-  getPumpPropertiesData(pumpProperties: PumpProperties, pumpPropertiesOptions: PumpPropertiesOptions, settings: Settings): Array<SummaryPumpData> {
+  getPumpPropertiesData(pumpProperties: PumpProperties, pumpPropertiesOptions: PumpPropertiesOptions, settings: Settings, hasPositiveDisplacementPump: boolean): Array<SummaryPumpData> {
     let units = settings.unitsOfMeasure === 'Imperial'? PumpSummaryUnitsImperial.pumpEquipment : PumpSummaryUnitsMetric.pumpEquipment; 
 
     let pumpData: Array<SummaryPumpData> = [];
@@ -111,7 +114,11 @@ export class InventorySummaryTableService {
       pumpData.push({ value: pumpProperties.pumpSize, fieldStr: 'pumpSize', unit: units.pumpSize });
     } 
     if (pumpPropertiesOptions.designHead) {
-      pumpData.push({ value: pumpProperties.designHead, fieldStr: 'designHead', unit: units.designHead });
+      let isPositiveDisplacement = isPositiveDisplacementPump(pumpProperties.pumpType);
+      pumpData.push({ value: isPositiveDisplacement ? undefined : pumpProperties.designHead, fieldStr: 'designHead', unit: units.designHead });
+      if (hasPositiveDisplacementPump) {
+        pumpData.push({ value: isPositiveDisplacement ? pumpProperties.designDifferentialPressure : undefined, fieldStr: 'designDifferentialPressure', unit: units.designDifferentialPressure });
+      }
     }
     if (pumpPropertiesOptions.designFlow) {
       pumpData.push({ value: pumpProperties.designFlow, fieldStr: 'designFlow', unit: units.designFlow });
@@ -137,7 +144,7 @@ export class InventorySummaryTableService {
     return pumpData;
   }
 
-  getFieldMeasurementsData(fieldMeasurements: FieldMeasurements, fieldMeasurementsOptions: FieldMeasurementsOptions,  settings: Settings): Array<SummaryPumpData> {
+  getFieldMeasurementsData(fieldMeasurements: FieldMeasurements, fieldMeasurementsOptions: FieldMeasurementsOptions,  settings: Settings, pumpType: number, hasPositiveDisplacementPump: boolean): Array<SummaryPumpData> {
     let pumpData: Array<SummaryPumpData> = [];
     let units = settings.unitsOfMeasure === 'Imperial'? PumpSummaryUnitsImperial.fieldMeasurements : PumpSummaryUnitsMetric.fieldMeasurements; 
 
@@ -163,7 +170,11 @@ export class InventorySummaryTableService {
       pumpData.push({ value: fieldMeasurements.operatingFlowRate, fieldStr: 'operatingFlowRate', unit: units.operatingFlowRate });
     }
     if (fieldMeasurementsOptions.operatingHead) {
-      pumpData.push({ value: fieldMeasurements.operatingHead, fieldStr: 'operatingHead', unit: units.operatingHead });
+      let isPositiveDisplacement = isPositiveDisplacementPump(pumpType);
+      pumpData.push({ value: isPositiveDisplacement ? undefined : fieldMeasurements.operatingHead, fieldStr: 'operatingHead', unit: units.operatingHead });
+      if (hasPositiveDisplacementPump) {
+        pumpData.push({ value: isPositiveDisplacement ? fieldMeasurements.operatingDifferentialPressure : undefined, fieldStr: 'operatingDifferentialPressure', unit: units.operatingDifferentialPressure });
+      }
     }
     if (fieldMeasurementsOptions.operatingHours) {
       pumpData.push({ value: fieldMeasurements.operatingHours.hoursPerYear, fieldStr: 'operatingHours' });

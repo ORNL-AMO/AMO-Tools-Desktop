@@ -32,6 +32,7 @@ export interface PsatInputs {
   pump_rated_speed?: number;
   drive?: number;
   specifiedDriveEfficiency?: number;
+  differentialPressure?: number;
   kinematic_viscosity?: number;
   specific_gravity?: number;
   stages?: number;
@@ -80,6 +81,7 @@ export interface PsatOutputs {
   optimization_rating?: number;
   percent_annual_savings?: number;
   co2EmissionsOutput?: number;
+  paybackPeriod?: number;
 }
 
 export interface PsatOutputsExistingOptimal {

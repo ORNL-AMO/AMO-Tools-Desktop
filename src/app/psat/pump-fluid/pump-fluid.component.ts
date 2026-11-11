@@ -64,7 +64,6 @@ export class PumpFluidComponent implements OnInit {
       this.idString = 'psat_baseline';
     }
     this.pumpTypes = JSON.parse(JSON.stringify(pumpTypesConstant));
-    this.pumpTypes.pop();
     //initialize constants
     this.drives = JSON.parse(JSON.stringify(driveConstants));
     this.fluidProperties = JSON.parse(JSON.stringify(fluidProperties));

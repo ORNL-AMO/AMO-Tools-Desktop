@@ -44,6 +44,8 @@ export class AnnualStationGraphComponent {
     drawChart() {
         if (this.annualDataChart) {
             let chartTitle = 'Wet Bulb Temp. and Dry Bulb Temp. (TMY3 year)';
+            // * smaller title so it fits on compact-width charts
+            const titleFontSize = this.annualDataChart.nativeElement.clientWidth < 500 ? 13 : 18;
             let traceData = [
                 {
                     x: this.annualHourlyWeather.map(data => new Date(data.time)),
@@ -79,7 +81,7 @@ export class AnnualStationGraphComponent {
                 title: {
                     text: chartTitle,
                     font: {
-                        size: 18
+                        size: titleFontSize
                     },
                 },
                 xaxis: {

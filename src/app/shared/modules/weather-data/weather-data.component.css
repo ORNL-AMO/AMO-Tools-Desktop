@@ -1,10 +1,13 @@
 .width-wrapper {
     width: 100%;
     margin: auto;
+    /* keeps the negative margins of Bootstrap rows inside the wrapper */
+    padding: 0 15px;
 }
 
 @media (min-width: 1080px) {
     .width-wrapper {
         width: 75%;
+        padding: 0;
     }
 }

@@ -11,6 +11,7 @@ import { UtilityTypeDropdownComponent } from './utility-type-dropdown/utility-ty
 import { CalculatorTypeDropdownComponent } from './calculator-type-dropdown/calculator-type-dropdown.component';
 import { TeamsDropdownComponent } from './teams-dropdown/teams-dropdown.component';
 import { EquipmentsDropdownComponent } from './equipments-dropdown/equipments-dropdown.component';
+import { OpportunitiesExportPreviewModule } from '../../../shared/opportunities-export-preview/opportunities-export-preview.module';
 @NgModule({
   declarations: [
     TreasureChestMenuComponent,
@@ -24,7 +25,8 @@ import { EquipmentsDropdownComponent } from './equipments-dropdown/equipments-dr
   imports: [
     CommonModule,
     ModalModule,
-    FormsModule
+    FormsModule,
+    OpportunitiesExportPreviewModule
   ],
   providers: [
     TreasureChestMenuService,

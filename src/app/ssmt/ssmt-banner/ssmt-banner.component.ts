@@ -2,10 +2,13 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { SsmtService } from '../ssmt.service';
 import { Subscription } from 'rxjs';
-import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
+import { SSMT_SETUP_GATED_VIEWS, SsmtMainView } from '../routing/ssmt.routing';
+import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
   selector: 'app-ssmt-banner',
@@ -23,7 +26,7 @@ export class SsmtBannerComponent implements OnInit {
 
   constructor(private ssmtService: SsmtService,
     private emailMeasurDataService: EmailMeasurDataService,
-    private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService,
+    private dashboardService: DashboardService, private modalDialogService: ModalDialogService,
     private coreService: CoreService) { }
 
   ngOnInit() {
@@ -41,15 +44,21 @@ export class SsmtBannerComponent implements OnInit {
   }
 
   showSecurityAndPrivacyModal() {
-    this.securityAndPrivacyService.modalOpen.next(true);
-    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+    // Collapse banner to prevent it from reopening the modal on mobile when dismissed
+    this.bannerCollapsed = true;
+    this.modalDialogService.openModal(
+      SecurityAndPrivacyItemComponent,
+      SecurityAndPrivacyItemComponent.getDialogConfig()
+    );
   }
 
-  changeTab(str: string) {
-    if (str === 'baseline' || str === 'calculators') {
-      this.ssmtService.mainTab.next(str);
-    } else if (this.assessment.ssmt.setupDone) {
-      this.ssmtService.mainTab.next(str);
+  canOpenMainTab(view: SsmtMainView): boolean {
+    return isMainTabAllowed(SSMT_SETUP_GATED_VIEWS, view, this.assessment.ssmt.setupDone);
+  }
+
+  changeTab(str: SsmtMainView) {
+    if (this.canOpenMainTab(str)) {
+      this.ssmtService.goToMainTab(str);
     }
     this.collapseBanner();
   }
@@ -60,31 +69,11 @@ export class SsmtBannerComponent implements OnInit {
   }
 
   back() {
-    if (this.mainTab == 'calculators') {
-      this.ssmtService.mainTab.next('sankey');
-    } else if (this.mainTab == 'sankey') {
-      this.ssmtService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.ssmtService.mainTab.next('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.ssmtService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.ssmtService.mainTab.next('baseline');
-    }
+    this.ssmtService.backMainTab();
   }
 
   continue() {
-    if (this.mainTab == 'baseline') {
-      this.ssmtService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.ssmtService.mainTab.next('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.ssmtService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.ssmtService.mainTab.next('sankey');
-    } else if (this.mainTab == 'sankey') {
-      this.ssmtService.mainTab.next('calculators');
-    }
+    this.ssmtService.continueMainTab();
   }
 
   openExportModal() {

@@ -2,11 +2,14 @@ import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { Subscription } from 'rxjs';
 import { PsatTabService } from '../psat-tab.service';
-import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
+import { PSAT_SETUP_GATED_VIEWS, PsatMainView } from '../routing/psat.routing';
+import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
   selector: 'app-psat-banner',
@@ -27,7 +30,7 @@ export class PsatBannerComponent implements OnInit {
   constructor(private psatTabService: PsatTabService,
     private integrationStateService: IntegrationStateService,
     private emailMeasurDataService: EmailMeasurDataService,
-    private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService,
+    private dashboardService: DashboardService, private modalDialogService: ModalDialogService,
     private coreService: CoreService) { }
 
   ngOnInit() {
@@ -52,15 +55,21 @@ export class PsatBannerComponent implements OnInit {
   }
 
   showSecurityAndPrivacyModal() {
-    this.securityAndPrivacyService.modalOpen.next(true);
-    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+    // Collapse banner to prevent it from reopening the modal on mobile when dismissed
+    this.bannerCollapsed = true;
+    this.modalDialogService.openModal(
+      SecurityAndPrivacyItemComponent,
+      SecurityAndPrivacyItemComponent.getDialogConfig()
+    );
   }
 
-  changeTab(str: string) {
-    if (str == 'baseline' || str == 'calculators') {
-      this.psatTabService.mainTab.next(str);
-    } else if (this.assessment.psat.setupDone) {
-      this.psatTabService.mainTab.next(str);
+  canOpenMainTab(view: PsatMainView): boolean {
+    return isMainTabAllowed(PSAT_SETUP_GATED_VIEWS, view, this.assessment.psat.setupDone);
+  }
+
+  changeTab(str: PsatMainView) {
+    if (this.canOpenMainTab(str)) {
+      this.psatTabService.goToMainTab(str);
     }
     this.collapseBanner();
   }
@@ -70,31 +79,11 @@ export class PsatBannerComponent implements OnInit {
   }
 
   back() {
-    if (this.mainTab == 'calculators') {
-      this.psatTabService.mainTab.next('sankey');
-    } else if (this.mainTab == 'sankey') {
-      this.psatTabService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.psatTabService.mainTab.next('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.psatTabService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.psatTabService.mainTab.next('baseline');
-    }
+    this.psatTabService.backMainTab();
   }
 
   continue() {
-    if (this.mainTab == 'baseline') {
-      this.psatTabService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.psatTabService.mainTab.next('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.psatTabService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.psatTabService.mainTab.next('sankey');
-    } else if (this.mainTab == 'sankey') {
-      this.psatTabService.mainTab.next('calculators');
-    }
+    this.psatTabService.continueMainTab();
   }
 
   openExportModal() {

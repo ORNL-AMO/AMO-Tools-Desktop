@@ -8,6 +8,22 @@ i.fa.fa-chevron-down:hover,
     font-size: 16px;
 }
 
+.include-unselected input[type="checkbox"] {
+  width: 19.5px;
+  height: 19.5px;
+  flex-shrink: 0;
+}
+
+.opportunities-preview {
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+/* keeps long emails and links from pushing past the modal edge on narrow screens */
+.wrap-anywhere {
+  overflow-wrap: anywhere;
+}
+
 .alert-danger {
   width: unset;
 }

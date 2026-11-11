@@ -1,11 +1,12 @@
 // (TowerForm and methods moved into class below)
 import { inject, Injectable } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, FormControl, ValidatorFn } from '@angular/forms';
-import { Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, CondenserCoolingMethod, SystemInformation, TowerType, AirCoolingSource, TowerSizeMetric } from '../../shared/models/process-cooling-assessment';
+import { Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, CondenserCoolingMethod, SystemInformation, AirCoolingSource, TowerSizeMetric, FanType, FanSpeedType } from '../../shared/models/process-cooling-assessment';
 import { PROCESS_COOLING_VALIDATION } from '../constants/process-cooling-validation-rules';
 import { ConvertValue } from '../../shared/convert-units/ConvertValue';
 import { Settings } from '../../shared/models/settings';
 import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
+import { getTowerTypeDependentValues } from '../constants/process-cooling-constants';
 
 
 @Injectable()
@@ -118,11 +119,8 @@ export class SystemInformationFormService {
         Validators.min(PROCESS_COOLING_VALIDATION.efficiency.min),
         Validators.max(PROCESS_COOLING_VALIDATION.efficiency.max)
       ]],
-      motorSize: [pumpInput.motorSize, [
-        Validators.required,
-        Validators.min(PROCESS_COOLING_VALIDATION.motorSize.min),
-        Validators.max(PROCESS_COOLING_VALIDATION.motorSize.max)
-      ]],
+      isMotorSizeKnown: [pumpInput.isMotorSizeKnown ?? true],
+      motorSize: [pumpInput.motorSize, this.getMotorSizeValidators(pumpInput.isMotorSizeKnown ?? true)],
       motorEfficiency: [pumpInput.motorEfficiency, [
         Validators.required,
         Validators.min(PROCESS_COOLING_VALIDATION.motorEfficiency.min),
@@ -135,7 +133,19 @@ export class SystemInformationFormService {
     return {
       ...currentPumpInput,
       ...formValue,
+      motorSize: formValue.isMotorSizeKnown ? formValue.motorSize : 0,
     };
+  }
+
+  getMotorSizeValidators(isMotorSizeKnown: boolean): ValidatorFn[] {
+    if (!isMotorSizeKnown) {
+      return [];
+    }
+    return [
+      Validators.required,
+      Validators.min(PROCESS_COOLING_VALIDATION.motorSize.min),
+      Validators.max(PROCESS_COOLING_VALIDATION.motorSize.max)
+    ];
   }
 
   getAirCooledSystemInputForm(input: AirCooledSystemInput, settings: Settings): FormGroup<AirCooledSystemInputForm> {
@@ -301,6 +311,7 @@ getWaterCooledFollowingTempDifferentialValidators(settings: Settings): Validator
       ]],
       fanSpeedType: [input.fanSpeedType],
       towerSizeMetric: [input.towerSizeMetric],
+      isFanTypeKnown: [input.isFanTypeKnown ?? true],
       fanType: [input.fanType],
       towerSize: [input.towerSize, towerSizeValidators],
     });
@@ -353,37 +364,12 @@ getWaterCooledFollowingTempDifferentialValidators(settings: Settings): Validator
     return {
       ...currentInput,
       ...formValue,
+      fanType: formValue.isFanTypeKnown ? formValue.fanType : FanType.Axial,
     };
   }
 
-  public getTowerTypeDependentValues(towerType: number): { numberOfFans: number; fanSpeedType: number; } {
-    let dependentValues: { numberOfFans: number; fanSpeedType: number; } = { numberOfFans: 1, fanSpeedType: 1 };
-    switch (towerType) {
-      case TowerType.OneCellOneSpeed:
-        dependentValues = { numberOfFans: 1, fanSpeedType: 1 };
-        break;
-      case TowerType.OneCellTwoSpeed:
-        dependentValues = { numberOfFans: 1, fanSpeedType: 2 };
-        break;
-      case TowerType.TwoCellOneSpeed:
-        dependentValues = { numberOfFans: 2, fanSpeedType: 1 };
-        break;
-      case TowerType.TwoCellTwoSpeed:
-        dependentValues = { numberOfFans: 2, fanSpeedType: 2 };
-        break;
-      case TowerType.ThreeCellOneSpeed:
-        dependentValues = { numberOfFans: 3, fanSpeedType: 1 };
-        break;
-      case TowerType.ThreeCellTwoSpeed:
-        dependentValues = { numberOfFans: 3, fanSpeedType: 2 };
-        break;
-      case TowerType.VariableSpeed:
-        dependentValues = { numberOfFans: 1, fanSpeedType: 0 };
-        break;
-      default:
-        dependentValues = { numberOfFans: 1, fanSpeedType: 0 };
-    }
-    return dependentValues;
+  public getTowerTypeDependentValues(towerType: number): { numberOfFans: number; fanSpeedType: FanSpeedType; } {
+    return getTowerTypeDependentValues(towerType);
   }
 
   public isSystemInformationValid(systemInformationInput: SystemInformation, settings: Settings): boolean {
@@ -428,6 +414,7 @@ export interface TowerForm {
   numberOfFans: FormControl<number>;
   fanSpeedType: FormControl<number>;
   towerSizeMetric: FormControl<number>;
+  isFanTypeKnown: FormControl<boolean>;
   fanType: FormControl<number>;
   towerSize: FormControl<number>;
 }
@@ -446,6 +433,7 @@ export interface PumpInputForm {
   variableFlow: FormControl<boolean>;
   flowRate: FormControl<number>;
   efficiency: FormControl<number>;
+  isMotorSizeKnown: FormControl<boolean>;
   motorSize: FormControl<number>;
   motorEfficiency: FormControl<number>;
 }

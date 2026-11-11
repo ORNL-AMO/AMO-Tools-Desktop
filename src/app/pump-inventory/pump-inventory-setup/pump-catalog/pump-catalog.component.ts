@@ -5,9 +5,9 @@ import { PumpInventoryService } from '../../pump-inventory.service';
 import { PumpCatalogService } from './pump-catalog.service';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
 import { FormGroup } from '@angular/forms';
-import { PsatIntegrationService } from '../../../shared/connected-inventory/psat-integration.service';
 import { IntegrationStateService } from '../../../shared/connected-inventory/integration-state.service';
 import { ConnectedItem } from '../../../shared/connected-inventory/integrations';
+import { isPositiveDisplacementPump } from '../../../psat/psatConstants';
 
 @Component({
     selector: 'app-pump-catalog',
@@ -122,6 +122,10 @@ export class PumpCatalogComponent implements OnInit {
 
   setModalOpenView(event) {
     this.pumpInventoryService.modalOpen.next(true);
+  }
+
+  get isPumpTypeConnectable(): boolean {
+    return !isPositiveDisplacementPump(this.selectedPumpItem.pumpEquipment.pumpType);
   }
 
 }

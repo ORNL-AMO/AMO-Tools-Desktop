@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
 import { CompressedAirInventoryData, CompressedAirInventorySystem, CompressedAirItem, CompressedAirPropertyDisplayOptions, EndUse, SystemInformation, ValidCompressedAir } from './compressed-air-inventory';
@@ -14,13 +15,15 @@ import { PerformancePointsCatalogService } from './compressed-air-inventory-setu
 import _ from 'lodash';
 import { copyObject } from '../shared/helperFunctions';
 import { CompressedAirMotorIntegrationService } from '../shared/connected-inventory/compressed-air-motor-integration.service';
+import { COMPRESSED_AIR_INVENTORY_MAIN_VIEWS, COMPRESSED_AIR_INVENTORY_SETUP_VIEWS, COMPRESSED_AIR_INVENTORY_SUMMARY_VIEWS, CompressedAirInventoryMainView, CompressedAirInventorySetupView, CompressedAirInventorySummaryView } from './compressed-air-inventory.routing';
+import { getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 
 @Injectable()
 export class CompressedAirInventoryService {
 
-  mainTab: BehaviorSubject<string>;
-  setupTab: BehaviorSubject<string>;
-  summaryTab: BehaviorSubject<string>;
+  mainTab: BehaviorSubject<CompressedAirInventoryMainView>;
+  setupTab: BehaviorSubject<CompressedAirInventorySetupView>;
+  summaryTab: BehaviorSubject<CompressedAirInventorySummaryView>;
   compressedAirInventoryData: BehaviorSubject<CompressedAirInventoryData>;
   focusedField: BehaviorSubject<string>;
   focusedDataGroup: BehaviorSubject<string>;
@@ -40,17 +43,18 @@ export class CompressedAirInventoryService {
     private fieldMeasurementsCatalogService: FieldMeasurementsCatalogService,
     private nameplateDataCatalogService: NameplateDataCatalogService,
     private performancePointsCatalogService: PerformancePointsCatalogService,
-    private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService
+    private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService,
+    private router: Router
 
   ) {
-    this.setupTab = new BehaviorSubject<string>('plant-setup');
-    this.mainTab = new BehaviorSubject<string>('setup');
+    this.setupTab = new BehaviorSubject<CompressedAirInventorySetupView>('plant-setup');
+    this.mainTab = new BehaviorSubject<CompressedAirInventoryMainView>('setup');
     let inventoryData: CompressedAirInventoryData;
     this.compressedAirInventoryData = new BehaviorSubject<CompressedAirInventoryData>(inventoryData);
     this.focusedField = new BehaviorSubject<string>('default');
     this.focusedDataGroup = new BehaviorSubject<string>(undefined);
     this.modalOpen = new BehaviorSubject<boolean>(false);
-    this.summaryTab = new BehaviorSubject<string>('overview');
+    this.summaryTab = new BehaviorSubject<CompressedAirInventorySummaryView>('overview');
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.helpPanelTab = new BehaviorSubject<string>(undefined);
     this.showExportModal = new BehaviorSubject<boolean>(false);
@@ -60,6 +64,71 @@ export class CompressedAirInventoryService {
       controlTypes: new Array<number>(),
       horsepowerTypes: new Array<number>(),
     });
+  }
+
+  /**
+   * Opens a main tab on its last visited sub-tab.
+   * @param view one of `COMPRESSED_AIR_INVENTORY_MAIN_VIEWS`
+   */
+  goToMainTab(view: CompressedAirInventoryMainView) {
+    if (view === 'setup') {
+      this.goToSetupTab(this.setupTab.getValue());
+    } else {
+      this.goToSummaryTab(this.summaryTab.getValue());
+    }
+  }
+
+  goToSetupTab(view: CompressedAirInventorySetupView) {
+    this.router.navigate(['/compressed-air-inventory', this.currentInventoryId, 'setup', view]);
+  }
+
+  goToSummaryTab(view: CompressedAirInventorySummaryView) {
+    this.router.navigate(['/compressed-air-inventory', this.currentInventoryId, 'summary', view]);
+  }
+
+  continueMainTab() {
+    this.stepMainTab(1);
+  }
+
+  backMainTab() {
+    this.stepMainTab(-1);
+  }
+
+  continueSetupTab() {
+    this.stepSetupTab(1);
+  }
+
+  backSetupTab() {
+    this.stepSetupTab(-1);
+  }
+
+  continueSummaryTab() {
+    this.stepSummaryTab(1);
+  }
+
+  backSummaryTab() {
+    this.stepSummaryTab(-1);
+  }
+
+  private stepMainTab(offset: number) {
+    const view: CompressedAirInventoryMainView = getSteppedView(COMPRESSED_AIR_INVENTORY_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    if (view) {
+      this.goToMainTab(view);
+    }
+  }
+
+  private stepSetupTab(offset: number) {
+    const view: CompressedAirInventorySetupView = getSteppedView(COMPRESSED_AIR_INVENTORY_SETUP_VIEWS, this.setupTab.getValue(), offset);
+    if (view) {
+      this.goToSetupTab(view);
+    }
+  }
+
+  private stepSummaryTab(offset: number) {
+    const view: CompressedAirInventorySummaryView = getSteppedView(COMPRESSED_AIR_INVENTORY_SUMMARY_VIEWS, this.summaryTab.getValue(), offset);
+    if (view) {
+      this.goToSummaryTab(view);
+    }
   }
 
   initInventoryData(): CompressedAirInventoryData {

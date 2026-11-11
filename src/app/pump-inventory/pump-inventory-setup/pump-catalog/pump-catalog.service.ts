@@ -11,11 +11,13 @@ export class PumpCatalogService {
   selectedDepartmentId: BehaviorSubject<string>;
   selectedPumpItem: BehaviorSubject<PumpItem>;
   showPumpProperties: BehaviorSubject<boolean>;
+  pumpTypeChanged: BehaviorSubject<number>;
   constructor(private pumpInventoryService: PumpInventoryService, private psatWarningService: PsatWarningService, private convertUnitsService: ConvertUnitsService
     ) {
     this.selectedDepartmentId = new BehaviorSubject<string>(undefined);
     this.selectedPumpItem = new BehaviorSubject<PumpItem>(undefined);
     this.showPumpProperties = new BehaviorSubject<boolean>(false);
+    this.pumpTypeChanged = new BehaviorSubject<number>(undefined);
   }
 
   getUpdatedSelectedPumpItem(): PumpItem {

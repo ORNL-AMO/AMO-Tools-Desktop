@@ -75,11 +75,16 @@ export interface RecycledFlowData {
 }
 
 
-export interface BlockCosts { 
-  name: string, 
+export interface BlockCosts {
+  name: string,
   processComponentType: ProcessFlowNodeType,
-  totalBlockCost: number, 
-  totalFlow?: number, 
+  totalBlockCost: number,
+  // * the full flow through this component (unaccounted flow included); must stay isolated from attributableFlow
+  // * since it's what totalBlockCost is derived from - the dollar cost of unaccounted flow must not be dropped.
+  totalFlow?: number,
+  // * totalFlow minus any unaccounted flow that has no downstream edge to attribute through; used as the
+  // * attribution denominator so unaccounted flow's cost is spread across known systems, not dropped.
+  attributableFlow?: number,
 }
 
 

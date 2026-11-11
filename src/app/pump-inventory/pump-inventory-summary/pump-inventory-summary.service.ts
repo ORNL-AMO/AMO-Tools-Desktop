@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
-import { FieldMeasurementsOptions, FluidPropertiesOptions, NameplateDataOptions, PumpInventoryData, PumpItem, PumpMotorPropertiesOptions, PumpProperties, PumpPropertiesOptions, PumpPropertyDisplayOptions, PumpStatusOptions, SystemPropertiesOptions } from '../pump-inventory';
+import { FieldMeasurementsOptions, FluidPropertiesOptions, NameplateDataOptions, PumpInventoryData, PumpItem, PumpMotorPropertiesOptions, PumpPropertiesOptions, PumpPropertyDisplayOptions, PumpStatusOptions, SystemPropertiesOptions } from '../pump-inventory';
 import { SettingsLabelPipe } from '../../shared/shared-pipes/settings-label.pipe';
+import { isPositiveDisplacementPump } from '../../psat/psatConstants';
 
 
 @Injectable()
@@ -18,7 +19,7 @@ export class PumpInventorySummaryService {
   }
 
 
-  getFields(displayOptions: PumpPropertyDisplayOptions, settings: Settings): Array<PumpField> {
+  getFields(displayOptions: PumpPropertyDisplayOptions, settings: Settings, pumps: Array<PumpItem>): Array<PumpField> {
     let fields: Array<PumpField> = [{
       display: 'Name',
       value: 'name',
@@ -29,24 +30,24 @@ export class PumpInventorySummaryService {
       group: 'nameplateData'
     }];
     //nameplate
-    let nameplateFields: Array<PumpField> = this.getNameplateDataFields(displayOptions.nameplateDataOptions, settings);
+    let nameplateFields: Array<PumpField> = this.getNameplateDataFields(displayOptions.nameplateDataOptions);
     fields = fields.concat(nameplateFields);
-    let pumpPropertiesFields: Array<PumpField> = this.getPumpPropertiesFields(displayOptions.pumpPropertiesOptions, settings);
+    let pumpPropertiesFields: Array<PumpField> = this.getPumpPropertiesFields(displayOptions.pumpPropertiesOptions, settings, pumps);
     fields = fields.concat(pumpPropertiesFields);
     let fluidPropertiesFields: Array<PumpField> = this.getFluidPropertiesFields(displayOptions.fluidPropertiesOptions, settings);
     fields = fields.concat(fluidPropertiesFields);
-    let fieldMeasurementFields: Array<PumpField> = this.getFieldMeasurementsFields(displayOptions.fieldMeasurementOptions, settings);
+    let fieldMeasurementFields: Array<PumpField> = this.getFieldMeasurementsFields(displayOptions.fieldMeasurementOptions, settings, pumps);
     fields = fields.concat(fieldMeasurementFields);
     let pumpMotorPropertiesFields: Array<PumpField> = this.getPumpMotorFields(displayOptions.pumpMotorPropertiesOptions, settings);
     fields = fields.concat(pumpMotorPropertiesFields);
-    let pumpStatusFields: Array<PumpField> = this.getPumpStatusFields(displayOptions.pumpStatusOptions, settings);
+    let pumpStatusFields: Array<PumpField> = this.getPumpStatusFields(displayOptions.pumpStatusOptions);
     fields = fields.concat(pumpStatusFields);
     let systemPropertiesFields: Array<PumpField> = this.getSystemPropertiesFields(displayOptions.systemPropertiesOptions, settings);
     fields = fields.concat(systemPropertiesFields);
     return fields;
   }
 
-  getNameplateDataFields(nameplateDataOptions: NameplateDataOptions, settings: Settings): Array<PumpField> {
+  getNameplateDataFields(nameplateDataOptions: NameplateDataOptions): Array<PumpField> {
     let fields: Array<PumpField> = [];
     if (nameplateDataOptions.manufacturer) {
       fields.push({ display: 'Manufacturer', value: 'manufacturer', group: 'nameplateData' });
@@ -60,9 +61,9 @@ export class PumpInventorySummaryService {
     return fields;
   }
 
-  getPumpPropertiesFields(pumpPropertiesOptions: PumpPropertiesOptions, settings: Settings): Array<PumpField> {
+  getPumpPropertiesFields(pumpPropertiesOptions: PumpPropertiesOptions, settings: Settings, pumps: Array<PumpItem>): Array<PumpField> {
 
-    let units = settings.unitsOfMeasure === 'Imperial'? PumpSummaryUnitsImperial.pumpEquipment : PumpSummaryUnitsMetric.pumpEquipment; 
+    let units = settings.unitsOfMeasure === 'Imperial'? PumpSummaryUnitsImperial.pumpEquipment : PumpSummaryUnitsMetric.pumpEquipment;
     let designFlowUnits = this.settingsLabelPipe.transform(settings.fanFlowRate);
     let fields: Array<PumpField> = [];
     
@@ -113,6 +114,9 @@ export class PumpInventorySummaryService {
     } 
     if (pumpPropertiesOptions.designHead) {
       fields.push({display: 'Design Head', value: 'designHead', group: 'pumpEquipment', unit: units.designHead});
+      if (this.hasPositiveDisplacementPump(pumps)) {
+        fields.push({display: 'Design Differential Pressure', value: 'designDifferentialPressure', group: 'pumpEquipment', unit: units.designDifferentialPressure});
+      }
     }
     if (pumpPropertiesOptions.designFlow) {
       fields.push({display: 'Design Flow', value: 'designFlow', group: 'pumpEquipment', unit: designFlowUnits});
@@ -138,7 +142,11 @@ export class PumpInventorySummaryService {
     return fields;
   }
 
-  getFieldMeasurementsFields(fieldMeasurementOptions: FieldMeasurementsOptions, settings: Settings): Array<PumpField> {
+  hasPositiveDisplacementPump(pumps: Array<PumpItem>): boolean {
+    return pumps.some(pump => isPositiveDisplacementPump(pump.pumpEquipment.pumpType));
+  }
+
+  getFieldMeasurementsFields(fieldMeasurementOptions: FieldMeasurementsOptions, settings: Settings, pumps: Array<PumpItem>): Array<PumpField> {
     let fields: Array<PumpField> = [];
     let units = settings.unitsOfMeasure === 'Imperial'? PumpSummaryUnitsImperial.fieldMeasurements : PumpSummaryUnitsMetric.fieldMeasurements; 
 
@@ -165,6 +173,9 @@ export class PumpInventorySummaryService {
     } 
     if (fieldMeasurementOptions.operatingHead) {
       fields.push({display: 'Operating Head', value: 'operatingHead', group: 'fieldMeasurements', unit: units.operatingHead});
+      if (this.hasPositiveDisplacementPump(pumps)) {
+        fields.push({display: 'Operating Differential Pressure', value: 'operatingDifferentialPressure', group: 'fieldMeasurements', unit: units.operatingDifferentialPressure});
+      }
     } 
     if (fieldMeasurementOptions.operatingHours) {
       fields.push({display: 'Operating Hours', value: 'operatingHours', group: 'fieldMeasurements'});
@@ -201,7 +212,7 @@ export class PumpInventorySummaryService {
       return fields;
     }
 
-  getPumpStatusFields(pumpStatusOptions: PumpStatusOptions, settings: Settings): Array<PumpField> {
+  getPumpStatusFields(pumpStatusOptions: PumpStatusOptions): Array<PumpField> {
     let fields: Array<PumpField> = [];
     if (pumpStatusOptions.status) {
       fields.push({ display: 'Status', value: 'status', group: 'pumpStatus' });
@@ -271,6 +282,7 @@ export const PumpSummaryUnitsImperial = {
       efficiency: '%',
       operatingFlowRate: 'gpm',
       operatingHead: 'ft',
+      operatingDifferentialPressure: 'psi',
       measuredPower: 'kW',
       measuredCurrent: 'A',
       measuredVoltage: 'V',
@@ -291,6 +303,7 @@ export const PumpSummaryUnitsImperial = {
       minFlowSize: 'gpm',
       pumpSize: 'ft',
       designHead: 'ft',
+      designDifferentialPressure: 'psi',
       designFlow: 'gpm',
       designEfficiency: '%',
   },
@@ -314,6 +327,7 @@ export const PumpSummaryUnitsMetric = {
       efficiency: '%',
       operatingFlowRate: 'm3/hr',
       operatingHead: 'm',
+      operatingDifferentialPressure: 'Pa',
       measuredPower: 'A',
       measuredCurrent: 'kW',
       measuredVoltage: 'V',
@@ -334,6 +348,7 @@ export const PumpSummaryUnitsMetric = {
       minFlowSize: 'm<sup>3</sup>/min',
       pumpSize: 'm',
       designHead: 'm',
+      designDifferentialPressure: 'Pa',
       designFlow: 'm<sup>3</sup>/h',
       designEfficiency: '%',
   },

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings, Contact, StreetAddress } from '../../shared/models/settings';
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
+import { ContactDbService, SavedContact } from '../../indexedDb/contact-db.service';
 
 @Component({
     selector: 'app-facility-info',
@@ -15,7 +16,10 @@ export class FacilityInfoComponent implements OnInit {
   close = new EventEmitter<boolean>();
 
   facilityForm: UntypedFormGroup;
-  constructor(private formBuilder: UntypedFormBuilder) { }
+  savedContacts: Array<SavedContact>;
+  constructor(private formBuilder: UntypedFormBuilder, private contactDbService: ContactDbService) {
+    this.savedContacts = this.contactDbService.allContacts;
+  }
 
   ngOnInit() {
     if (!this.settings.facilityInfo) {
@@ -33,7 +37,7 @@ export class FacilityInfoComponent implements OnInit {
         facilityEmail: [''],
         assessmentContactName: [''],
         assessmentPhoneNumber: [''],
-        assessmentEmail: [''],
+        assessmentEmail: [this.getDefaultSenderEmail()],
         date: [date]
       });
     }
@@ -70,14 +74,24 @@ export class FacilityInfoComponent implements OnInit {
         facilityEmail: [facilityContactInfo.email],
         assessmentContactName: [assessmentContact.contactName],
         assessmentPhoneNumber: [assessmentContact.phoneNumber],
-        assessmentEmail: [assessmentContact.email],
+        assessmentEmail: [assessmentContact.email || this.getDefaultSenderEmail()],
         date: [this.settings.facilityInfo.date]
       });
     }
 
   }
 
-  save() {
+  async save() {
+    let facilityContact: Contact = {
+      phoneNumber: this.facilityForm.controls.facilityPhoneNumber.value,
+      contactName: this.facilityForm.controls.facilityContactName.value,
+      email: this.facilityForm.controls.facilityEmail.value
+    };
+    let assessmentContact: Contact = {
+      phoneNumber: this.facilityForm.controls.assessmentPhoneNumber.value,
+      contactName: this.facilityForm.controls.assessmentContactName.value,
+      email: this.facilityForm.controls.assessmentEmail.value
+    };
     this.settings.facilityInfo = {
       companyName: this.facilityForm.controls.companyName.value,
       facilityName: this.facilityForm.controls.facilityName.value,
@@ -88,21 +102,38 @@ export class FacilityInfoComponent implements OnInit {
         country: this.facilityForm.controls.country.value,
         zip: this.facilityForm.controls.zip.value
       },
-      facilityContact: {
-        phoneNumber: this.facilityForm.controls.facilityPhoneNumber.value,
-        contactName: this.facilityForm.controls.facilityContactName.value,
-        email: this.facilityForm.controls.facilityEmail.value
-      },
-      assessmentContact: {
-        phoneNumber: this.facilityForm.controls.assessmentPhoneNumber.value,
-        contactName: this.facilityForm.controls.assessmentContactName.value,
-        email: this.facilityForm.controls.assessmentEmail.value
-      },
+      facilityContact,
+      assessmentContact,
       date: this.facilityForm.controls.date.value
     };
+
+    await this.contactDbService.saveIfNew(facilityContact);
+    await this.contactDbService.saveIfNew(assessmentContact);
     this.close.emit(true);
   }
 
+  useSavedContact(prefix: 'facility' | 'assessment', contactId: string) {
+    if (!contactId) {
+      this.facilityForm.patchValue({
+        [`${prefix}ContactName`]: '',
+        [`${prefix}PhoneNumber`]: '',
+        [`${prefix}Email`]: '',
+      });
+      return;
+    }
+
+    let contact: SavedContact = this.savedContacts.find(saved => saved.id === Number(contactId));
+    if (!contact) return;
+    this.facilityForm.patchValue({
+      [`${prefix}ContactName`]: contact.contactName,
+      [`${prefix}PhoneNumber`]: contact.phoneNumber,
+      [`${prefix}Email`]: contact.email,
+    });
+  }
+
+  getDefaultSenderEmail(): string {
+    return this.contactDbService.primaryContact?.email ?? '';
+  }
 
   getEmptyContact(): Contact {
     let contact: Contact = {

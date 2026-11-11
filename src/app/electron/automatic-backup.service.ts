@@ -15,6 +15,7 @@ import { GasLoadMaterialDbService } from '../indexedDb/gas-load-material-db.serv
 import { LiquidLoadMaterialDbService } from '../indexedDb/liquid-load-material-db.service';
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
 import { SolidLoadMaterialDbService } from '../indexedDb/solid-load-material-db.service';
+import { ContactDbService } from '../indexedDb/contact-db.service';
 import { DatePipe } from '@angular/common';
 
 @Injectable({
@@ -44,6 +45,7 @@ export class AutomaticBackupService {
     private solidLoadMaterialDbService: SolidLoadMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
+    private contactDbService: ContactDbService,
   ) {
     this.saving = new BehaviorSubject<boolean>(false);
   }
@@ -69,6 +71,7 @@ export class AutomaticBackupService {
           this.liquidLoadMaterialDbService.dbLiquidLoadChargeMaterials,
           this.solidLiquidMaterialDbService.dbSolidLiquidFlueGasMaterials,
           this.solidLoadMaterialDbService.dbSolidLoadChargeMaterials,
+          this.contactDbService.dbContacts,
         ]),
         debounce(obs => {
           let combinedChangesDelay = 3000;

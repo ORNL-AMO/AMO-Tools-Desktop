@@ -36,9 +36,10 @@ export class ShareDataModalComponent {
 
   hideModal() {
     this.shareDataModal.hide();
-    this.shareDataModal.onHidden.subscribe(val => {
-      this.coreService.showShareDataModal.next(false);
-    });
+  }
+
+  onModalHidden() {
+    this.coreService.showShareDataModal.next(false);
   }
 
   showEmailMeasurDataModal() {

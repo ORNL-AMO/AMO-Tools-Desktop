@@ -1,0 +1,371 @@
+/*
+  Layout platform (layout-*)
+
+  Shared, assessment-agnostic layout primitives. New and upgraded views build
+  their structure from these classes; component stylesheets only style content.
+
+  Rules:
+  - CSS owns layout. No JS height math, resize listeners or [ngStyle] heights
+    for structure. Charts may read their width to pick font and marker sizes.
+  - Media queries are for shell-level structure only (the medium tier switch).
+    Content inside a panel responds to the panel width via container queries.
+  - Do not combine Bootstrap layout classes (row, col-*, d-*-flex) with layout-*
+    elements, and do not restyle legacy class names here.
+  - This sheet is loaded after Bootstrap and the legacy sheets and is not in a
+    cascade layer. Layers are planned for the Bootstrap upgrade.
+
+  Breakpoint tiers (custom properties cannot be used in media queries):
+  - compact: max-width 575px  (phones)
+  - medium:  max-width 1024px (tablets, narrow windows; matches existing app breakpoint)
+  - wide:    above 1024px
+*/
+
+/* ---------- Tokens ---------- */
+:root {
+  --layout-space-1: 0.25rem;
+  --layout-space-2: 0.5rem;
+  --layout-space-3: 1rem;
+  --layout-space-4: 1.5rem;
+  --layout-space-5: 2rem;
+
+  --layout-radius: 0.25rem;
+  --layout-border-color: #dee2e6;
+  --layout-panel-bg: transparent;
+  --layout-surface: #fff;
+  --layout-muted-bg: #e9ecef;
+  --layout-text: #212529;
+
+  --layout-z-sticky: 10;
+
+  --layout-accent: var(--measur-brand);
+}
+
+/* ---------- Theme ---------- */
+/* Apply one theme class at the assessment root; primitives read --layout-accent. */
+.layout-theme-process-cooling {
+  --layout-accent: var(--process-cooling-assessment);
+}
+
+.layout-theme-water {
+  --layout-accent: var(--water-assessment);
+}
+
+.layout-theme-compressed-air {
+  --layout-accent: var(--compressed-air);
+}
+
+/* ---------- Shell ---------- */
+/* Full-viewport frame: fixed rows (banner, nav, footer) around one content region. */
+.layout-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.layout-shell > * {
+  flex: 0 0 auto;
+}
+
+.layout-shell > .layout-shell__content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* Routed component hosts sit beside their router-outlet and must pass the
+   height chain through. Add this class to the host of a routed component that
+   sits between the shell and a workspace. Do not use it inside a panel; panel
+   content keeps its natural height so the panel can scroll. */
+.layout-fill {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* ---------- Workspace ---------- */
+/* Main + aside split. Rendered by app-layout-workspace, which owns the switcher. */
+.layout-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-areas: "main aside";
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+.layout-workspace--weighted {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+}
+
+.layout-workspace--solo {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "main";
+}
+
+.layout-workspace__main {
+  grid-area: main;
+}
+
+.layout-workspace__aside {
+  grid-area: aside;
+}
+
+.layout-workspace__switcher {
+  display: none;
+}
+
+.layout-workspace__switch {
+  flex: 1 1 0;
+  padding: var(--layout-space-2) var(--layout-space-3);
+  border: none;
+  border-radius: var(--layout-radius);
+  background: transparent;
+  color: var(--layout-text);
+  cursor: pointer;
+  transition: background-color 0.1s ease-in-out;
+}
+
+.layout-workspace__switch[aria-selected="true"] {
+  background: var(--layout-surface);
+  box-shadow: inset 0 -2px 0 var(--layout-accent);
+}
+
+.layout-workspace__switch:focus-visible {
+  outline: 2px solid var(--layout-accent);
+  outline-offset: 1px;
+}
+
+@media screen and (max-width: 1024px) {
+  .layout-workspace:not(.layout-workspace--solo) {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-areas: "switcher" "panel";
+  }
+
+  .layout-workspace__switcher {
+    display: flex;
+    grid-area: switcher;
+    gap: var(--layout-space-1);
+    padding: var(--layout-space-1);
+    background: var(--layout-muted-bg);
+  }
+
+  .layout-workspace:not(.layout-workspace--solo) > .layout-workspace__main,
+  .layout-workspace:not(.layout-workspace--solo) > .layout-workspace__aside {
+    grid-area: panel;
+  }
+
+  .layout-workspace[data-active-panel="main"] > .layout-workspace__aside,
+  .layout-workspace[data-active-panel="aside"] > .layout-workspace__main {
+    display: none;
+  }
+}
+
+/* ---------- Panel ---------- */
+/* One scrolling region. It is the container that content queries respond to. */
+.layout-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  background: var(--layout-panel-bg);
+  container: layout-panel / inline-size;
+}
+
+/* scrollbar sizes match the legacy .scroll-item rule (two-panel.css) */
+.layout-panel::-webkit-scrollbar {
+  width: 0.5em;
+  height: 0.5rem;
+}
+
+.layout-panel::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.layout-panel::-webkit-scrollbar-thumb {
+  background-color: var(--layout-accent);
+}
+
+.layout-panel::-webkit-scrollbar-thumb:hover {
+  cursor: pointer;
+}
+
+/* Raised surface: white panel lifted above its neighbour with a soft shadow. */
+.layout-panel--raised {
+  background: var(--layout-surface);
+  box-shadow: 0 0 69px -1px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+.layout-panel__header {
+  position: sticky;
+  top: 0;
+  z-index: var(--layout-z-sticky);
+  background: var(--layout-surface);
+}
+
+/* ---------- Stack ---------- */
+.layout-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--layout-stack-gap, var(--layout-space-3));
+  min-width: 0;
+}
+
+/* ---------- Field row ---------- */
+/* Label beside input in wide panels, label above input in narrow panels.
+   The wide layout reproduces the legacy `.tab-content .form-group` float rows
+   exactly (same rules, same specificity), because where error and warning lines
+   wrap depends on their length in that layout and a grid cannot match it.
+   Only applies inside a layout panel. */
+.layout-panel .layout-field::after {
+  display: table;
+  content: "";
+  clear: both;
+}
+
+.layout-panel .layout-field .form-control,
+.layout-panel .layout-field label,
+.layout-panel .layout-field .form-check {
+  float: left;
+}
+
+.layout-panel .layout-field .form-check label {
+  float: none;
+}
+
+.layout-panel .layout-field label {
+  width: 50%;
+}
+
+.layout-panel .layout-field .form-control {
+  width: 50%;
+}
+
+@container layout-panel (max-width: 30rem) {
+  .layout-panel .layout-field .form-control,
+  .layout-panel .layout-field label,
+  .layout-panel .layout-field .form-check {
+    float: none;
+  }
+
+  .layout-panel .layout-field label,
+  .layout-panel .layout-field .form-control {
+    width: 100%;
+  }
+
+  /* inputs with a unit box: grow beside the unit (Bootstrap input-group sizing) */
+  .layout-panel .layout-field .input-group > .form-control {
+    width: 1%;
+  }
+}
+
+/* ---------- Cluster ---------- */
+/* Inline groups (buttons, toggles, selects) that wrap instead of overflowing. */
+.layout-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--layout-cluster-gap, var(--layout-space-2));
+  min-width: 0;
+}
+
+.layout-cluster > * {
+  min-width: 0;
+}
+
+/* ---------- Card grid ---------- */
+/* Fits as many columns as --layout-card-min allows; collapses to one in narrow panels. */
+.layout-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--layout-card-min, 18rem)), 1fr));
+  gap: var(--layout-cards-gap, var(--layout-space-3));
+  min-width: 0;
+}
+
+/* ---------- Data table ---------- */
+/* Wrap wide tables; only the wrapper scrolls sideways, never the page. */
+.layout-table {
+  max-width: 100%;
+  overflow-x: auto;
+  contain: inline-size;
+}
+
+.layout-table--sticky-first th:first-child,
+.layout-table--sticky-first td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--layout-surface);
+}
+
+/* ---------- Media ---------- */
+/* Maps and charts. Plotly and billboard redraw on window resize events;
+   app-layout-workspace fires one when it switches panels. */
+.layout-media {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: var(--layout-media-ratio, 16 / 9);
+}
+
+.layout-media--fill {
+  aspect-ratio: auto;
+  flex: 1 1 auto;
+  min-height: var(--layout-media-min-height, 300px);
+}
+
+/* ---------- Step nav ---------- */
+/* Tabs on wide screens, the existing prev/next pager at the medium tier.
+   Put these classes on wrappers around the tab and pager markup so legacy tab
+   classes cannot override the display toggle. Mark each step link in the pager
+   with layout-stepnav__step (and .active on the current one): at the compact tier
+   only the current step shows between the arrows. */
+.layout-stepnav__pager {
+  display: none;
+}
+
+@media screen and (max-width: 1024px) {
+  .layout-stepnav__tabs {
+    display: none;
+  }
+
+  .layout-stepnav__pager {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .layout-stepnav__pager .layout-stepnav__step:not(.active) {
+    display: none;
+  }
+}
+
+/* ---------- Tier visibility ---------- */
+/* Shell chrome that only exists on wide screens (e.g. the Back/Next footer the
+   pager replaces). Use instead of Bootstrap d-none d-lg-* so tiers line up. */
+@media screen and (max-width: 1024px) {
+  .layout-wide-only {
+    display: none;
+  }
+}
+
+/* ---------- Print ---------- */
+@media print {
+  .layout-panel {
+    overflow: visible;
+  }
+
+  .layout-workspace__switcher {
+    display: none;
+  }
+}

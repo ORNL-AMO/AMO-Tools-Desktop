@@ -6,7 +6,9 @@ import * as _ from 'lodash';
 import {
   TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt,
   CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, FlueGasTreasureHunt, WallLossTreasureHunt, OpportunitySummary, Treasure, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt, AssessmentOpportunity, BoilerBlowdownRateTreasureHunt,
-  PowerFactorCorrectionTreasureHunt, FanAffinityLawTreasureHunt
+    PowerFactorCorrectionTreasureHunt,
+    SteamLeakSurveyTreasureHunt,
+    FanAffinityLawTreasureHunt
 } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 
@@ -39,8 +41,8 @@ import { CoolingTowerFanTreasureHuntService } from '../../treasure-hunt-calculat
 import { CoolingTowerBasinTreasureHuntService } from '../../treasure-hunt-calculator-services/cooling-tower-basin-treasure-hunt.service';
 import { BoilerBlowdownRateTreasureHuntService } from '../../treasure-hunt-calculator-services/boiler-blowdown-rate-treasure-hunt.service';
 import { PowerFactorCorrectionTreasureHuntService } from '../../treasure-hunt-calculator-services/power-factor-correction-treasure-hunt.service';
+import { SteamLeakTreasureHuntService } from '../../treasure-hunt-calculator-services/steam-leak-treasure-hunt.service';
 import { FanAffinityLawTreasureHuntService } from '../../treasure-hunt-calculator-services/fan-affinity-law-treasure-hunt.service';
-
 @Injectable()
 export class SortCardsService {
 
@@ -74,6 +76,7 @@ export class SortCardsService {
     private coolingTowerBasinTreasureHuntService: CoolingTowerBasinTreasureHuntService,
     private boilerBlowdownRateTreasureHuntService: BoilerBlowdownRateTreasureHuntService,
     private powerFactorCorrectionTreasureHuntService: PowerFactorCorrectionTreasureHuntService,
+    private steamLeakTreasureHuntService: SteamLeakTreasureHuntService,
     private fanAffinityLawTreasureHuntService: FanAffinityLawTreasureHuntService
     ) { }
 
@@ -145,6 +148,7 @@ export class SortCardsService {
     let hasBoilerBlowdownRate: boolean = calculatorTypes.includes(Treasure.boilerBlowdownRate);
     let hasPowerFactorCorrection: boolean = calculatorTypes.includes(Treasure.powerFactorCorrection);
     let hasFanAffinityLaw: boolean = calculatorTypes.includes(Treasure.fanAffinityLaw);
+    let hasSteamLeakSurvey: boolean = calculatorTypes.includes(Treasure.steamLeak);
 
     let lightingReplacements: Array<LightingReplacementTreasureHunt> = [];
     if (allCalcTypes || hasLightingReplacement) {
@@ -327,6 +331,12 @@ export class SortCardsService {
       }
     }
 
+    let steamLeakOpportunities: Array<SteamLeakSurveyTreasureHunt> = [];
+    if (allCalcTypes || hasSteamLeakSurvey) {
+      if (treasureHunt.steamLeakSurveys && treasureHunt.steamLeakSurveys.length != 0) {
+        steamLeakOpportunities = this.sortSteamLeakSurveys(treasureHunt.steamLeakSurveys, sortBy, treasureHunt, settings);
+      }
+    }
     let filteredTreasureHunt: TreasureHunt = {
       name: treasureHunt.name,
       lightingReplacements: lightingReplacements,
@@ -343,6 +353,7 @@ export class SortCardsService {
       pipeInsulationReductions: pipeInsulationReductions,
       tankInsulationReductions: tankInsulationReductions,
       airLeakSurveys: airLeakSurveys,
+      steamLeakSurveys: steamLeakOpportunities,
       openingLosses: openingLosses,
       wallLosses: wallLosses,
       airHeatingOpportunities: airHeatingOpportunities,
@@ -612,6 +623,14 @@ sortAirHeatingOpportunities(items: Array<AirHeatingTreasureHunt>, sortBy: SortCa
     return items.filter(item => {
       let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
       let cardItem: OpportunityCardData = this.powerFactorCorrectionTreasureHuntService.getPowerFactorCorrectionCardData(item, opportunitySummary, 0, treasureHunt.currentEnergyUsage, settings);
+      return this.checkCardItemIncluded(cardItem, sortBy);
+    });
+  }
+
+  sortSteamLeakSurveys(items: Array<SteamLeakSurveyTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<SteamLeakSurveyTreasureHunt> {
+    return items.filter(item => {
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.steamLeakTreasureHuntService.getSteamLeakSurveyCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }

@@ -169,7 +169,7 @@ a {
 .sidebar-options {
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: flex-start;
   height: 100%;
 }
 

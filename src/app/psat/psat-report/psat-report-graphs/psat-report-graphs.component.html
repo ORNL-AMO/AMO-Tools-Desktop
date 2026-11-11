@@ -1,43 +1,62 @@
-<div class="d-flex flex-wrap" *ngIf="!printView">
-  <div class="d-flex col-12 col-lg-6 flex-column">
-    <div class="pl-2 pr-2">
-      <select name="selectedBaselineData" class="form-control mx-auto" id="selectedBaselineData"
-        [(ngModel)]="selectedBaselineData">
-        <option *ngFor="let dataOption of allChartData" [ngValue]="dataOption">{{dataOption.name}}</option>
-      </select>
+@if (!printView) {
+  <div class="d-flex flex-wrap">
+    <div class="d-flex col-12 col-lg-6 flex-column">
+      <div class="pl-2 pr-2">
+        <select name="selectedBaselineData" class="form-control mx-auto" id="selectedBaselineData"
+          [(ngModel)]="selectedBaselineData">
+          @for (dataOption of allChartData; track dataOption) {
+            <option [ngValue]="dataOption">{{dataOption.name}}</option>
+          }
+        </select>
+      </div>
+      @if (selectedBaselineData.isValid) {
+        <div class="p-2 pie-chart-container">
+          <app-plotly-pie-chart [valuesAndLabels]="selectedBaselineData.valuesAndLabels" [valuesUnit]="'kW'">
+          </app-plotly-pie-chart>
+        </div>
+      }
+      @if (!selectedBaselineData.isValid) {
+        <div class="alert-danger">
+          Invalid Baseline
+        </div>
+      }
     </div>
-    <div *ngIf="selectedBaselineData.isValid" class="p-2 pie-chart-container">
-      <app-plotly-pie-chart [valuesAndLabels]="selectedBaselineData.valuesAndLabels" [valuesUnit]="'kW'">
-      </app-plotly-pie-chart>
-    </div>
-    <div *ngIf="!selectedBaselineData.isValid" class="alert-danger">
-      Invalid Baseline
-    </div>
+    @if (selectedModificationData) {
+      <div class="d-flex col-12 col-lg-6 flex-column">
+        <div class="pl-2 pr-2">
+          <select name="selectedModificationData" class="form-control mx-auto" id="selectedModificationData"
+            [(ngModel)]="selectedModificationData">
+            @for (dataOption of allChartData; track dataOption) {
+              <option [ngValue]="dataOption">{{dataOption.name}}</option>
+            }
+          </select>
+        </div>
+        @if (selectedModificationData.isValid) {
+          <div class="p-2 pie-chart-container">
+            <app-plotly-pie-chart [valuesAndLabels]="selectedModificationData.valuesAndLabels" [valuesUnit]="'kW'">
+            </app-plotly-pie-chart>
+          </div>
+        }
+        @if (!selectedModificationData.isValid) {
+          <div class="alert-danger">
+            Invalid Baseline
+          </div>
+        }
+      </div>
+    }
+    @if (selectedModificationData && selectedModificationData.isValid) {
+      <div class="w-100">
+        <app-plotly-bar-chart [barChartDataArray]="[selectedBaselineData, selectedModificationData]"
+          [yAxisLabel]="barChartYAxisLabel" [yValueUnit]="'kW'" [hoverLabel]="'Power'">
+        </app-plotly-bar-chart>
+      </div>
+    }
   </div>
-  <div *ngIf="selectedModificationData" class="d-flex col-12 col-lg-6 flex-column">
-    <div class="pl-2 pr-2">
-      <select name="selectedModificationData" class="form-control mx-auto" id="selectedModificationData"
-        [(ngModel)]="selectedModificationData">
-        <option *ngFor="let dataOption of allChartData" [ngValue]="dataOption">{{dataOption.name}}</option>
-      </select>
-    </div>
-    <div *ngIf="selectedModificationData.isValid" class="p-2 pie-chart-container">
-      <app-plotly-pie-chart [valuesAndLabels]="selectedModificationData.valuesAndLabels" [valuesUnit]="'kW'">
-      </app-plotly-pie-chart>
-    </div>
+}
 
-    <div *ngIf="!selectedModificationData.isValid" class="alert-danger">
-      Invalid Baseline
-    </div>
-  </div>
-  <div *ngIf="selectedModificationData && selectedModificationData.isValid" class="w-100">
-    <app-plotly-bar-chart [barChartDataArray]="[selectedBaselineData, selectedModificationData]"
-      [yAxisLabel]="barChartYAxisLabel" [yValueUnit]="'kW'" [hoverLabel]="'Power'">
-    </app-plotly-bar-chart>
-  </div>
-</div>
-
-<div *ngIf="printView">
-  <app-psat-report-graphs-print [allChartData]="allChartData" [settings]="settings" [printSankey]="printSankey"
+@if (printView) {
+  <div>
+    <app-psat-report-graphs-print [allChartData]="allChartData" [settings]="settings" [printSankey]="printSankey"
     [printGraphs]="printGraphs" [psat]="psat"></app-psat-report-graphs-print>
-</div>
+  </div>
+}

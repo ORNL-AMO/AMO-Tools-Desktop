@@ -33,15 +33,15 @@ export class ApplyVariableSpeedControlComponent implements OnInit {
     const baselineValues = this.modificationService.getBaselineExploreOppsValues();
     this.baselineChilledWaterVariableFlow = baselineValues.applyVariableSpeedControls.chilledWaterVariableFlow;
     this.baselineCondenserWaterVariableFlow = baselineValues.applyVariableSpeedControls.condenserWaterVariableFlow;
-    this.isOpportunityDisabled = (this.isAirCooled && this.baselineChilledWaterVariableFlow) 
+    this.isOpportunityDisabled = (this.isAirCooled && this.baselineChilledWaterVariableFlow)
       || (!this.isAirCooled && (this.baselineCondenserWaterVariableFlow && this.baselineChilledWaterVariableFlow));
-    
+
     this.form = this.exploreOpportunitiesFormService.getApplyVariableSpeedControlForm(
       this.baselineChilledWaterVariableFlow,
       this.baselineCondenserWaterVariableFlow
     );
     this.observeFormChanges();
-    
+
     this.modificationService.selectedModification$.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe((modification: Modification) => {

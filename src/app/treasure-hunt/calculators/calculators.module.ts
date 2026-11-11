@@ -43,6 +43,7 @@ import { BoilerBlowdownRateModule } from '../../calculator/steam/boiler-blowdown
 import { AssessmentOpportunityHelpComponent } from './assessment-opportunity/assessment-opportunity-help/assessment-opportunity-help.component';
 import { PowerFactorCorrectionModule } from '../../calculator/utilities/power-factor-correction/power-factor-correction.module';
 import { AirLeakSurveyModule } from '../../calculator/compressed-air/air-leak-survey/air-leak-survey.module';
+import { SteamLeakSurveyModule } from '../../calculator/steam/steam-leak/steam-leak-survey.module';
 import { FanAffinityLawModule } from '../../calculator/fans/fan-affinity-law/fan-affinity-law.module';
 
 @NgModule({
@@ -90,6 +91,7 @@ import { FanAffinityLawModule } from '../../calculator/fans/fan-affinity-law/fan
     AssessmentIntegrationModule,
     BoilerBlowdownRateModule,
     PowerFactorCorrectionModule,
+    SteamLeakSurveyModule,
     FanAffinityLawModule
   ],
   providers: [

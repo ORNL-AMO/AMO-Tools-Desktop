@@ -7,7 +7,6 @@ import { O2EnrichmentService } from '../o2-enrichment.service';
 @Component({
     selector: 'app-o2-enrichment-copy-table',
     templateUrl: './o2-enrichment-copy-table.component.html',
-    styleUrls: ['./o2-enrichment-copy-table.component.css'],
     standalone: false
 })
 export class O2EnrichmentCopyTableComponent implements OnInit {

@@ -73,7 +73,7 @@
         <div class="actions pt-1 justify-content-end">
             <a (click)="goToInventoryItem('setup')">Inventory Setup</a>
             <a (click)="goToInventoryItem('summary')">Summary</a>
-            <a (click)="goToInventoryItem('analysis')">Anaylsis</a>
+            <a *ngIf="inventoryItem.motorInventoryData" (click)="goToInventoryItem('analysis')">Analysis</a>
         </div>
     </div>
 </div>

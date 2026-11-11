@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription, firstValueFrom } from 'rxjs';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Subscription, filter, firstValueFrom } from 'rxjs';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { InventoryItem } from '../shared/models/inventory/inventory';
@@ -36,6 +36,7 @@ export class PumpInventoryComponent implements OnInit {
   setupTab: string;
   mainTab: string;
   mainTabSub: Subscription;
+  routerEventsSub: Subscription;
   
   modalOpenSub: Subscription;
   isModalOpen: boolean;
@@ -47,6 +48,7 @@ export class PumpInventoryComponent implements OnInit {
   showExportModalSub: Subscription;
   constructor(private pumpInventoryService: PumpInventoryService, 
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private settingsDbService: SettingsDbService, 
     private inventoryDbService: InventoryDbService,
     private pumpCatalogService: PumpCatalogService, 
@@ -67,12 +69,18 @@ export class PumpInventoryComponent implements OnInit {
       this.pumpInventoryService.setIsValidInventory(this.pumpInventoryItem.pumpInventoryData);
       this.pumpInventoryService.pumpInventoryData.next(this.pumpInventoryItem.pumpInventoryData);
       this.pumpInventoryService.currentInventoryId = tmpItemId;
+      this.syncTabsFromRoute();
 
       let departmentId = this.activatedRoute.snapshot.queryParamMap.get('departmentId');
       let itemId = this.activatedRoute.snapshot.queryParamMap.get('itemId');
       if (departmentId && itemId) {
         this.redirectFromConnectedInventory(departmentId, itemId);
       }
+    });
+    this.routerEventsSub = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.syncTabsFromRoute();
     });
     this.mainTabSub = this.pumpInventoryService.mainTab.subscribe(val => {
       this.mainTab = val;
@@ -104,6 +112,7 @@ export class PumpInventoryComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.routerEventsSub.unsubscribe();
     this.setupTabSub.unsubscribe();
     this.mainTabSub.unsubscribe();
     this.pumpInventoryDataSub.unsubscribe();
@@ -133,6 +142,11 @@ export class PumpInventoryComponent implements OnInit {
     }
   }
 
+  syncTabsFromRoute() {
+    this.pumpInventoryService.syncTabsFromRoute(this.activatedRoute.snapshot);
+    this.pumpInventoryService.redirectInvalidSummary();
+  }
+
   async saveDbData() {
     let inventoryData: PumpInventoryData = this.pumpInventoryService.pumpInventoryData.getValue();
     this.pumpInventoryItem.modifiedDate = new Date();
@@ -146,25 +160,15 @@ export class PumpInventoryComponent implements OnInit {
   }
 
   continue() {
-    if (this.setupTab == 'plant-setup') {
-      this.pumpInventoryService.setupTab.next('department-setup');
-    } else if (this.setupTab == 'department-setup') {
-      this.pumpInventoryService.setupTab.next('pump-properties');
-    } else if (this.setupTab == 'pump-properties') {
-      this.pumpInventoryService.setupTab.next('pump-catalog');
-    } else if (this.setupTab == 'pump-catalog') {
-      this.pumpInventoryService.mainTab.next('summary');
+    if (this.setupTab == 'pump-catalog') {
+      this.pumpInventoryService.goToMainTab('summary');
+    } else {
+      this.pumpInventoryService.continueSetupTab();
     }
   }
 
   back(){
-    if (this.setupTab == 'department-setup') {
-      this.pumpInventoryService.setupTab.next('plant-setup');
-    } else if (this.setupTab == 'pump-properties') {
-      this.pumpInventoryService.setupTab.next('department-setup');
-    } else if (this.setupTab == 'pump-catalog') {
-      this.pumpInventoryService.setupTab.next('pump-properties');
-    }
+    this.pumpInventoryService.backSetupTab();
   }
 
   handleConnectedItemChanges() {
@@ -187,8 +191,6 @@ export class PumpInventoryComponent implements OnInit {
     let department: PumpInventoryDepartment = this.pumpInventoryItem.pumpInventoryData.departments.find(department => { return department.id == departmentId });
     let selectedItem: PumpItem = department.catalog.find(pumpItem => { return pumpItem.id ==  itemId});
     this.pumpCatalogService.selectedPumpItem.next(selectedItem);
-    this.pumpInventoryService.mainTab.next('setup');
-    this.pumpInventoryService.setupTab.next('pump-catalog');
   }
   
   closeExportModal(input: boolean){

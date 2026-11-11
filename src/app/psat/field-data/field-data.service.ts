@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { PsatInputs } from '../../shared/models/psat';
+import { isPositiveDisplacementPump } from '../psatConstants';
 
 @Injectable()
 export class FieldDataService {
@@ -21,9 +22,12 @@ export class FieldDataService {
         motorAmpsValidators = [Validators.required]
       }
     }
+    let headValidators: Array<ValidatorFn> = isPositiveDisplacementPump(psatInputs.pump_style)
+      ? [Validators.min(0.1)]
+      : [Validators.required, Validators.min(0.1)];
     let form: UntypedFormGroup = this.formBuilder.group({
       flowRate: [psatInputs.flow_rate, [Validators.required, Validators.min(0)]],
-      head: [psatInputs.head, [Validators.required, Validators.min(0.1)]],
+      head: [psatInputs.head, headValidators],
       loadEstimatedMethod: [psatInputs.load_estimation_method, loadEstimationMethodValidators],
       motorKW: [psatInputs.motor_field_power, motorKwValidators],
       motorAmps: [psatInputs.motor_field_current, motorAmpsValidators],

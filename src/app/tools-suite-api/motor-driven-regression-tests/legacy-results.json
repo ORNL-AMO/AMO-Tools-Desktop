@@ -1,0 +1,3011 @@
+{
+  "schemaVersion": 1,
+  "desktopCommit": "9b7ff3d7416ff8172ad3ab24fc01ab2ef29acbc9",
+  "suiteVersion": "1.2.6-beta.365.1",
+  "runtime": "Chrome Headless 147.0.0.0 / macOS",
+  "source": "Real Desktop production wrappers, Psat conversion/rounding, inventory services/actions; synthetic inputs only",
+  "scenarios": [
+    {
+      "id": "pump-existing-6-0-0",
+      "inputs": {
+        "cost_kw_hour": 0.05,
+        "differentialPressure": 0,
+        "drive": 0,
+        "efficiency": 95,
+        "efficiency_class": 3,
+        "fixed_speed": 1,
+        "flow_rate": 1840,
+        "fluidTemperature": 68,
+        "fluidType": "Water",
+        "head": 174.85,
+        "kinematic_viscosity": 1,
+        "line_frequency": 60,
+        "load_estimation_method": 0,
+        "margin": 0,
+        "motor_field_current": 125.857,
+        "motor_field_power": 80,
+        "motor_field_voltage": 480,
+        "motor_rated_fla": 225,
+        "motor_rated_power": 200,
+        "motor_rated_speed": 1780,
+        "motor_rated_voltage": 460,
+        "operating_hours": 8760,
+        "pump_rated_speed": 1780,
+        "pump_specified": 80,
+        "pump_style": 6,
+        "specific_gravity": 1,
+        "specifiedDriveEfficiency": 95,
+        "stages": 2
+      },
+      "units": "hp, electrical kW, A, efficiencies/PF in %, load fraction, MWh/year, $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 35040,
+          "annual_energy": 700.8,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 100,
+          "load_factor": 0.51,
+          "motor_current": 125.86,
+          "motor_efficiency": 94.36,
+          "motor_power": 80,
+          "motor_power_factor": 76.46,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.19,
+          "mover_shaft_power": 101.19,
+          "optimization_rating": 0,
+          "pump_efficiency": 80.26
+        },
+        "raw": {
+          "annual_cost": 35040,
+          "annual_energy": 700.8,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 100,
+          "load_factor": 0.5059385812802628,
+          "motor_current": 125.85671685039931,
+          "motor_efficiency": 94.35732315337191,
+          "motor_power": 80,
+          "motor_power_factor": 76.45602656178961,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.18747791246317,
+          "mover_shaft_power": 101.18747791246317,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 80.26203812559545
+        }
+      }
+    },
+    {
+      "id": "pump-existing-6-0-1",
+      "inputs": {
+        "cost_kw_hour": 0.05,
+        "differentialPressure": 0,
+        "drive": 0,
+        "efficiency": 95,
+        "efficiency_class": 3,
+        "fixed_speed": 1,
+        "flow_rate": 1840,
+        "fluidTemperature": 68,
+        "fluidType": "Water",
+        "head": 174.85,
+        "kinematic_viscosity": 1,
+        "line_frequency": 60,
+        "load_estimation_method": 1,
+        "margin": 0,
+        "motor_field_current": 125.857,
+        "motor_field_power": 80,
+        "motor_field_voltage": 480,
+        "motor_rated_fla": 225,
+        "motor_rated_power": 200,
+        "motor_rated_speed": 1780,
+        "motor_rated_voltage": 460,
+        "operating_hours": 8760,
+        "pump_rated_speed": 1780,
+        "pump_specified": 80,
+        "pump_style": 6,
+        "specific_gravity": 1,
+        "specifiedDriveEfficiency": 95,
+        "stages": 2
+      },
+      "units": "hp, electrical kW, A, efficiencies/PF in %, load fraction, MWh/year, $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 35041.05,
+          "annual_energy": 700.82,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 100,
+          "load_factor": 0.51,
+          "motor_current": 125.86,
+          "motor_efficiency": 94.36,
+          "motor_power": 80,
+          "motor_power_factor": 76.46,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.19,
+          "mover_shaft_power": 101.19,
+          "optimization_rating": 0,
+          "pump_efficiency": 80.26
+        },
+        "raw": {
+          "annual_cost": 35041.046635998544,
+          "annual_energy": 700.8209327199708,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 100,
+          "load_factor": 0.5059540899234473,
+          "motor_current": 125.857,
+          "motor_efficiency": 94.35739735405139,
+          "motor_power": 80.00238957990533,
+          "motor_power_factor": 76.45813827030487,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.19057993116283,
+          "mover_shaft_power": 101.19057993116283,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 80.2595776757857
+        }
+      }
+    },
+    {
+      "id": "pump-modified-6-0",
+      "inputs": {
+        "cost_kw_hour": 0.05,
+        "differentialPressure": 0,
+        "drive": 0,
+        "efficiency": 95,
+        "efficiency_class": 3,
+        "fixed_speed": 1,
+        "flow_rate": 1840,
+        "fluidTemperature": 68,
+        "fluidType": "Water",
+        "head": 174.85,
+        "kinematic_viscosity": 1,
+        "line_frequency": 60,
+        "load_estimation_method": 0,
+        "margin": 0,
+        "motor_field_current": 125.857,
+        "motor_field_power": 80,
+        "motor_field_voltage": 480,
+        "motor_rated_fla": 225,
+        "motor_rated_power": 200,
+        "motor_rated_speed": 1780,
+        "motor_rated_voltage": 460,
+        "operating_hours": 8760,
+        "pump_rated_speed": 1780,
+        "pump_specified": 80,
+        "pump_style": 6,
+        "specific_gravity": 1,
+        "specifiedDriveEfficiency": 95,
+        "stages": 2
+      },
+      "units": "hp, electrical kW, A, efficiencies/PF in %, load fraction, MWh/year, $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 35151.76,
+          "annual_energy": 703.04,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 100,
+          "load_factor": 0.51,
+          "motor_current": 126.59,
+          "motor_efficiency": 94.37,
+          "motor_power": 80.26,
+          "motor_power_factor": 76.26,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.52,
+          "mover_shaft_power": 101.52,
+          "optimization_rating": 0,
+          "pump_efficiency": 80
+        },
+        "raw": {
+          "annual_cost": 35151.75853856226,
+          "annual_energy": 703.035170771245,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 100,
+          "load_factor": 0.5075945756276853,
+          "motor_current": 126.5852583328729,
+          "motor_efficiency": 94.36524621307045,
+          "motor_power": 80.25515648073574,
+          "motor_power_factor": 76.25844563880703,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.51891512553706,
+          "mover_shaft_power": 101.51891512553706,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 80
+        }
+      }
+    },
+    {
+      "id": "pump-existing-6-1-0",
+      "inputs": {
+        "cost_kw_hour": 0.05,
+        "differentialPressure": 0,
+        "drive": 1,
+        "efficiency": 95,
+        "efficiency_class": 3,
+        "fixed_speed": 1,
+        "flow_rate": 1840,
+        "fluidTemperature": 68,
+        "fluidType": "Water",
+        "head": 174.85,
+        "kinematic_viscosity": 1,
+        "line_frequency": 60,
+        "load_estimation_method": 0,
+        "margin": 0,
+        "motor_field_current": 125.857,
+        "motor_field_power": 80,
+        "motor_field_voltage": 480,
+        "motor_rated_fla": 225,
+        "motor_rated_power": 200,
+        "motor_rated_speed": 1780,
+        "motor_rated_voltage": 460,
+        "operating_hours": 8760,
+        "pump_rated_speed": 1780,
+        "pump_specified": 80,
+        "pump_style": 6,
+        "specific_gravity": 1,
+        "specifiedDriveEfficiency": 95,
+        "stages": 2
+      },
+      "units": "hp, electrical kW, A, efficiencies/PF in %, load fraction, MWh/year, $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 35040,
+          "annual_energy": 700.8,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 95.91,
+          "load_factor": 0.51,
+          "motor_current": 125.86,
+          "motor_efficiency": 94.36,
+          "motor_power": 80,
+          "motor_power_factor": 76.46,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.19,
+          "mover_shaft_power": 97.05,
+          "optimization_rating": 0,
+          "pump_efficiency": 83.68
+        },
+        "raw": {
+          "annual_cost": 35040,
+          "annual_energy": 700.8,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 95.91088656815627,
+          "load_factor": 0.5059385812802628,
+          "motor_current": 125.85671685039931,
+          "motor_efficiency": 94.35732315337191,
+          "motor_power": 80,
+          "motor_power_factor": 76.45602656178961,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.18747791246317,
+          "mover_shaft_power": 97.04980716180073,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 83.68397060802849
+        }
+      }
+    },
+    {
+      "id": "pump-existing-6-1-1",
+      "inputs": {
+        "cost_kw_hour": 0.05,
+        "differentialPressure": 0,
+        "drive": 1,
+        "efficiency": 95,
+        "efficiency_class": 3,
+        "fixed_speed": 1,
+        "flow_rate": 1840,
+        "fluidTemperature": 68,
+        "fluidType": "Water",
+        "head": 174.85,
+        "kinematic_viscosity": 1,
+        "line_frequency": 60,
+        "load_estimation_method": 1,
+        "margin": 0,
+        "motor_field_current": 125.857,
+        "motor_field_power": 80,
+        "motor_field_voltage": 480,
+        "motor_rated_fla": 225,
+        "motor_rated_power": 200,
+        "motor_rated_speed": 1780,
+        "motor_rated_voltage": 460,
+        "operating_hours": 8760,
+        "pump_rated_speed": 1780,
+        "pump_specified": 80,
+        "pump_style": 6,
+        "specific_gravity": 1,
+        "specifiedDriveEfficiency": 95,
+        "stages": 2
+      },
+      "units": "hp, electrical kW, A, efficiencies/PF in %, load fraction, MWh/year, $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 35041.05,
+          "annual_energy": 700.82,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 95.91,
+          "load_factor": 0.51,
+          "motor_current": 125.86,
+          "motor_efficiency": 94.36,
+          "motor_power": 80,
+          "motor_power_factor": 76.46,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.19,
+          "mover_shaft_power": 97.05,
+          "optimization_rating": 0,
+          "pump_efficiency": 83.68
+        },
+        "raw": {
+          "annual_cost": 35041.046635998544,
+          "annual_energy": 700.8209327199708,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 95.91089226598922,
+          "load_factor": 0.5059540899234473,
+          "motor_current": 125.857,
+          "motor_efficiency": 94.35739735405139,
+          "motor_power": 80.00238957990533,
+          "motor_power_factor": 76.45813827030487,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.19057993116283,
+          "mover_shaft_power": 97.0527881011073,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 83.68140028684354
+        }
+      }
+    },
+    {
+      "id": "pump-modified-6-1",
+      "inputs": {
+        "cost_kw_hour": 0.05,
+        "differentialPressure": 0,
+        "drive": 1,
+        "efficiency": 95,
+        "efficiency_class": 3,
+        "fixed_speed": 1,
+        "flow_rate": 1840,
+        "fluidTemperature": 68,
+        "fluidType": "Water",
+        "head": 174.85,
+        "kinematic_viscosity": 1,
+        "line_frequency": 60,
+        "load_estimation_method": 0,
+        "margin": 0,
+        "motor_field_current": 125.857,
+        "motor_field_power": 80,
+        "motor_field_voltage": 480,
+        "motor_rated_fla": 225,
+        "motor_rated_power": 200,
+        "motor_rated_speed": 1780,
+        "motor_rated_voltage": 460,
+        "operating_hours": 8760,
+        "pump_rated_speed": 1780,
+        "pump_specified": 80,
+        "pump_style": 6,
+        "specific_gravity": 1,
+        "specifiedDriveEfficiency": 95,
+        "stages": 2
+      },
+      "units": "hp, electrical kW, A, efficiencies/PF in %, load fraction, MWh/year, $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 36609.17,
+          "annual_energy": 732.18,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 95.92,
+          "load_factor": 0.53,
+          "motor_current": 130.29,
+          "motor_efficiency": 94.46,
+          "motor_power": 83.58,
+          "motor_power_factor": 77.16,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 105.84,
+          "mover_shaft_power": 101.52,
+          "optimization_rating": 0,
+          "pump_efficiency": 80
+        },
+        "raw": {
+          "annual_cost": 36609.16852595071,
+          "annual_energy": 732.1833705190141,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 95.91914312546056,
+          "load_factor": 0.5291900647650285,
+          "motor_current": 130.28717240210938,
+          "motor_efficiency": 94.46359523933262,
+          "motor_power": 83.58257654326646,
+          "motor_power_factor": 77.16355560488667,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 105.83801295300573,
+          "mover_shaft_power": 101.51891512553706,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 80
+        }
+      }
+    },
+    {
+      "id": "pump-existing-6-4-0",
+      "inputs": {
+        "cost_kw_hour": 0.05,
+        "differentialPressure": 0,
+        "drive": 4,
+        "efficiency": 95,
+        "efficiency_class": 3,
+        "fixed_speed": 1,
+        "flow_rate": 1840,
+        "fluidTemperature": 68,
+        "fluidType": "Water",
+        "head": 174.85,
+        "kinematic_viscosity": 1,
+        "line_frequency": 60,
+        "load_estimation_method": 0,
+        "margin": 0,
+        "motor_field_current": 125.857,
+        "motor_field_power": 80,
+        "motor_field_voltage": 480,
+        "motor_rated_fla": 225,
+        "motor_rated_power": 200,
+        "motor_rated_speed": 1780,
+        "motor_rated_voltage": 460,
+        "operating_hours": 8760,
+        "pump_rated_speed": 1780,
+        "pump_specified": 80,
+        "pump_style": 6,
+        "specific_gravity": 1,
+        "specifiedDriveEfficiency": 95,
+        "stages": 2
+      },
+      "units": "hp, electrical kW, A, efficiencies/PF in %, load fraction, MWh/year, $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 35040,
+          "annual_energy": 700.8,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 95,
+          "load_factor": 0.51,
+          "motor_current": 125.86,
+          "motor_efficiency": 94.36,
+          "motor_power": 80,
+          "motor_power_factor": 76.46,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.19,
+          "mover_shaft_power": 96.13,
+          "optimization_rating": 0,
+          "pump_efficiency": 84.49
+        },
+        "raw": {
+          "annual_cost": 35040,
+          "annual_energy": 700.8,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 95,
+          "load_factor": 0.5059385812802628,
+          "motor_current": 125.85671685039931,
+          "motor_efficiency": 94.35732315337191,
+          "motor_power": 80,
+          "motor_power_factor": 76.45602656178961,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.18747791246317,
+          "mover_shaft_power": 96.12810401684,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 84.48635592167942
+        }
+      }
+    },
+    {
+      "id": "pump-existing-6-4-1",
+      "inputs": {
+        "cost_kw_hour": 0.05,
+        "differentialPressure": 0,
+        "drive": 4,
+        "efficiency": 95,
+        "efficiency_class": 3,
+        "fixed_speed": 1,
+        "flow_rate": 1840,
+        "fluidTemperature": 68,
+        "fluidType": "Water",
+        "head": 174.85,
+        "kinematic_viscosity": 1,
+        "line_frequency": 60,
+        "load_estimation_method": 1,
+        "margin": 0,
+        "motor_field_current": 125.857,
+        "motor_field_power": 80,
+        "motor_field_voltage": 480,
+        "motor_rated_fla": 225,
+        "motor_rated_power": 200,
+        "motor_rated_speed": 1780,
+        "motor_rated_voltage": 460,
+        "operating_hours": 8760,
+        "pump_rated_speed": 1780,
+        "pump_specified": 80,
+        "pump_style": 6,
+        "specific_gravity": 1,
+        "specifiedDriveEfficiency": 95,
+        "stages": 2
+      },
+      "units": "hp, electrical kW, A, efficiencies/PF in %, load fraction, MWh/year, $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 35041.05,
+          "annual_energy": 700.82,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 95,
+          "load_factor": 0.51,
+          "motor_current": 125.86,
+          "motor_efficiency": 94.36,
+          "motor_power": 80,
+          "motor_power_factor": 76.46,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.19,
+          "mover_shaft_power": 96.13,
+          "optimization_rating": 0,
+          "pump_efficiency": 84.48
+        },
+        "raw": {
+          "annual_cost": 35041.046635998544,
+          "annual_energy": 700.8209327199708,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 95,
+          "load_factor": 0.5059540899234473,
+          "motor_current": 125.857,
+          "motor_efficiency": 94.35739735405139,
+          "motor_power": 80.00238957990533,
+          "motor_power_factor": 76.45813827030487,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.19057993116283,
+          "mover_shaft_power": 96.13105093460469,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 84.48376597451127
+        }
+      }
+    },
+    {
+      "id": "pump-modified-6-4",
+      "inputs": {
+        "cost_kw_hour": 0.05,
+        "differentialPressure": 0,
+        "drive": 4,
+        "efficiency": 95,
+        "efficiency_class": 3,
+        "fixed_speed": 1,
+        "flow_rate": 1840,
+        "fluidTemperature": 68,
+        "fluidType": "Water",
+        "head": 174.85,
+        "kinematic_viscosity": 1,
+        "line_frequency": 60,
+        "load_estimation_method": 0,
+        "margin": 0,
+        "motor_field_current": 125.857,
+        "motor_field_power": 80,
+        "motor_field_voltage": 480,
+        "motor_rated_fla": 225,
+        "motor_rated_power": 200,
+        "motor_rated_speed": 1780,
+        "motor_rated_voltage": 460,
+        "operating_hours": 8760,
+        "pump_rated_speed": 1780,
+        "pump_specified": 80,
+        "pump_style": 6,
+        "specific_gravity": 1,
+        "specifiedDriveEfficiency": 95,
+        "stages": 2
+      },
+      "units": "hp, electrical kW, A, efficiencies/PF in %, load fraction, MWh/year, $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 36954.72,
+          "annual_energy": 739.09,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 95,
+          "load_factor": 0.53,
+          "motor_current": 131.17,
+          "motor_efficiency": 94.49,
+          "motor_power": 84.37,
+          "motor_power_factor": 77.37,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 106.86,
+          "mover_shaft_power": 101.52,
+          "optimization_rating": 0,
+          "pump_efficiency": 80
+        },
+        "raw": {
+          "annual_cost": 36954.720164775914,
+          "annual_energy": 739.0944032955183,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 95,
+          "load_factor": 0.5343100796080897,
+          "motor_current": 131.1678038317104,
+          "motor_efficiency": 94.48557374026795,
+          "motor_power": 84.37150722551578,
+          "motor_power_factor": 77.36894869523373,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 106.86201592161797,
+          "mover_shaft_power": 101.51891512553706,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 80
+        }
+      }
+    },
+    {
+      "id": "pump-existing-12-0-0",
+      "inputs": {
+        "cost_kw_hour": 0.05,
+        "differentialPressure": 50,
+        "drive": 0,
+        "efficiency": 95,
+        "efficiency_class": 3,
+        "fixed_speed": 1,
+        "flow_rate": 100,
+        "fluidTemperature": 68,
+        "fluidType": "Water",
+        "head": 999,
+        "kinematic_viscosity": 1,
+        "line_frequency": 60,
+        "load_estimation_method": 0,
+        "margin": 0,
+        "motor_field_current": 125.857,
+        "motor_field_power": 80,
+        "motor_field_voltage": 480,
+        "motor_rated_fla": 225,
+        "motor_rated_power": 200,
+        "motor_rated_speed": 1780,
+        "motor_rated_voltage": 460,
+        "operating_hours": 8760,
+        "pump_rated_speed": 1780,
+        "pump_specified": 80,
+        "pump_style": 12,
+        "specific_gravity": 1,
+        "specifiedDriveEfficiency": 95,
+        "stages": 2
+      },
+      "units": "hp, electrical kW, A, efficiencies/PF in %, load fraction, MWh/year, $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 35040,
+          "annual_energy": 700.8,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 100,
+          "load_factor": 0.51,
+          "motor_current": 125.86,
+          "motor_efficiency": 94.36,
+          "motor_power": 80,
+          "motor_power_factor": 76.46,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.19,
+          "mover_shaft_power": 101.19,
+          "optimization_rating": 0,
+          "pump_efficiency": 2.88
+        },
+        "raw": {
+          "annual_cost": 35040,
+          "annual_energy": 700.8,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 100,
+          "load_factor": 0.5059385812802628,
+          "motor_current": 125.85671685039931,
+          "motor_efficiency": 94.35732315337191,
+          "motor_power": 80,
+          "motor_power_factor": 76.45602656178961,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.18747791246317,
+          "mover_shaft_power": 101.18747791246317,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 2.882530348704754
+        }
+      }
+    },
+    {
+      "id": "pump-existing-12-0-1",
+      "inputs": {
+        "cost_kw_hour": 0.05,
+        "differentialPressure": 50,
+        "drive": 0,
+        "efficiency": 95,
+        "efficiency_class": 3,
+        "fixed_speed": 1,
+        "flow_rate": 100,
+        "fluidTemperature": 68,
+        "fluidType": "Water",
+        "head": 999,
+        "kinematic_viscosity": 1,
+        "line_frequency": 60,
+        "load_estimation_method": 1,
+        "margin": 0,
+        "motor_field_current": 125.857,
+        "motor_field_power": 80,
+        "motor_field_voltage": 480,
+        "motor_rated_fla": 225,
+        "motor_rated_power": 200,
+        "motor_rated_speed": 1780,
+        "motor_rated_voltage": 460,
+        "operating_hours": 8760,
+        "pump_rated_speed": 1780,
+        "pump_specified": 80,
+        "pump_style": 12,
+        "specific_gravity": 1,
+        "specifiedDriveEfficiency": 95,
+        "stages": 2
+      },
+      "units": "hp, electrical kW, A, efficiencies/PF in %, load fraction, MWh/year, $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 35041.05,
+          "annual_energy": 700.82,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 100,
+          "load_factor": 0.51,
+          "motor_current": 125.86,
+          "motor_efficiency": 94.36,
+          "motor_power": 80,
+          "motor_power_factor": 76.46,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.19,
+          "mover_shaft_power": 101.19,
+          "optimization_rating": 0,
+          "pump_efficiency": 2.88
+        },
+        "raw": {
+          "annual_cost": 35041.046635998544,
+          "annual_energy": 700.8209327199708,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 100,
+          "load_factor": 0.5059540899234473,
+          "motor_current": 125.857,
+          "motor_efficiency": 94.35739735405139,
+          "motor_power": 80.00238957990533,
+          "motor_power_factor": 76.45813827030487,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.19057993116283,
+          "mover_shaft_power": 101.19057993116283,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 2.8824419841252635
+        }
+      }
+    },
+    {
+      "id": "pump-modified-12-0",
+      "inputs": {
+        "cost_kw_hour": 0.05,
+        "differentialPressure": 50,
+        "drive": 0,
+        "efficiency": 95,
+        "efficiency_class": 3,
+        "fixed_speed": 1,
+        "flow_rate": 100,
+        "fluidTemperature": 68,
+        "fluidType": "Water",
+        "head": 999,
+        "kinematic_viscosity": 1,
+        "line_frequency": 60,
+        "load_estimation_method": 0,
+        "margin": 0,
+        "motor_field_current": 125.857,
+        "motor_field_power": 80,
+        "motor_field_voltage": 480,
+        "motor_rated_fla": 225,
+        "motor_rated_power": 200,
+        "motor_rated_speed": 1780,
+        "motor_rated_voltage": 460,
+        "operating_hours": 8760,
+        "pump_rated_speed": 1780,
+        "pump_specified": 80,
+        "pump_style": 12,
+        "specific_gravity": 1,
+        "specifiedDriveEfficiency": 95,
+        "stages": 2
+      },
+      "units": "hp, electrical kW, A, efficiencies/PF in %, load fraction, MWh/year, $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 2281.19,
+          "annual_energy": 45.62,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 100,
+          "load_factor": 0.02,
+          "motor_current": 65.47,
+          "motor_efficiency": 51.51,
+          "motor_power": 5.21,
+          "motor_power_factor": 9.57,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 3.65,
+          "mover_shaft_power": 3.65,
+          "optimization_rating": 0,
+          "pump_efficiency": 80
+        },
+        "raw": {
+          "annual_cost": 2281.190711635781,
+          "annual_energy": 45.62381423271562,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 100,
+          "load_factor": 0.01822974849947294,
+          "motor_current": 65.46694837479554,
+          "motor_efficiency": 51.509916186653015,
+          "motor_power": 5.208197971771189,
+          "motor_power_factor": 9.56893317812152,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 3.6459496998945884,
+          "mover_shaft_power": 3.6459496998945884,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 80
+        }
+      }
+    },
+    {
+      "id": "pump-existing-12-1-0",
+      "inputs": {
+        "cost_kw_hour": 0.05,
+        "differentialPressure": 50,
+        "drive": 1,
+        "efficiency": 95,
+        "efficiency_class": 3,
+        "fixed_speed": 1,
+        "flow_rate": 100,
+        "fluidTemperature": 68,
+        "fluidType": "Water",
+        "head": 999,
+        "kinematic_viscosity": 1,
+        "line_frequency": 60,
+        "load_estimation_method": 0,
+        "margin": 0,
+        "motor_field_current": 125.857,
+        "motor_field_power": 80,
+        "motor_field_voltage": 480,
+        "motor_rated_fla": 225,
+        "motor_rated_power": 200,
+        "motor_rated_speed": 1780,
+        "motor_rated_voltage": 460,
+        "operating_hours": 8760,
+        "pump_rated_speed": 1780,
+        "pump_specified": 80,
+        "pump_style": 12,
+        "specific_gravity": 1,
+        "specifiedDriveEfficiency": 95,
+        "stages": 2
+      },
+      "units": "hp, electrical kW, A, efficiencies/PF in %, load fraction, MWh/year, $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 35040,
+          "annual_energy": 700.8,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 95.91,
+          "load_factor": 0.51,
+          "motor_current": 125.86,
+          "motor_efficiency": 94.36,
+          "motor_power": 80,
+          "motor_power_factor": 76.46,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.19,
+          "mover_shaft_power": 97.05,
+          "optimization_rating": 0,
+          "pump_efficiency": 3.01
+        },
+        "raw": {
+          "annual_cost": 35040,
+          "annual_energy": 700.8,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 95.91088656815627,
+          "load_factor": 0.5059385812802628,
+          "motor_current": 125.85671685039931,
+          "motor_efficiency": 94.35732315337191,
+          "motor_power": 80,
+          "motor_power_factor": 76.45602656178961,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.18747791246317,
+          "mover_shaft_power": 97.04980716180073,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 3.0054256110502826
+        }
+      }
+    },
+    {
+      "id": "pump-existing-12-1-1",
+      "inputs": {
+        "cost_kw_hour": 0.05,
+        "differentialPressure": 50,
+        "drive": 1,
+        "efficiency": 95,
+        "efficiency_class": 3,
+        "fixed_speed": 1,
+        "flow_rate": 100,
+        "fluidTemperature": 68,
+        "fluidType": "Water",
+        "head": 999,
+        "kinematic_viscosity": 1,
+        "line_frequency": 60,
+        "load_estimation_method": 1,
+        "margin": 0,
+        "motor_field_current": 125.857,
+        "motor_field_power": 80,
+        "motor_field_voltage": 480,
+        "motor_rated_fla": 225,
+        "motor_rated_power": 200,
+        "motor_rated_speed": 1780,
+        "motor_rated_voltage": 460,
+        "operating_hours": 8760,
+        "pump_rated_speed": 1780,
+        "pump_specified": 80,
+        "pump_style": 12,
+        "specific_gravity": 1,
+        "specifiedDriveEfficiency": 95,
+        "stages": 2
+      },
+      "units": "hp, electrical kW, A, efficiencies/PF in %, load fraction, MWh/year, $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 35041.05,
+          "annual_energy": 700.82,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 95.91,
+          "load_factor": 0.51,
+          "motor_current": 125.86,
+          "motor_efficiency": 94.36,
+          "motor_power": 80,
+          "motor_power_factor": 76.46,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.19,
+          "mover_shaft_power": 97.05,
+          "optimization_rating": 0,
+          "pump_efficiency": 3.01
+        },
+        "raw": {
+          "annual_cost": 35041.046635998544,
+          "annual_energy": 700.8209327199708,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 95.91089226598922,
+          "load_factor": 0.5059540899234473,
+          "motor_current": 125.857,
+          "motor_efficiency": 94.35739735405139,
+          "motor_power": 80.00238957990533,
+          "motor_power_factor": 76.45813827030487,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.19057993116283,
+          "mover_shaft_power": 97.0527881011073,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 3.0053333005508915
+        }
+      }
+    },
+    {
+      "id": "pump-modified-12-1",
+      "inputs": {
+        "cost_kw_hour": 0.05,
+        "differentialPressure": 50,
+        "drive": 1,
+        "efficiency": 95,
+        "efficiency_class": 3,
+        "fixed_speed": 1,
+        "flow_rate": 100,
+        "fluidTemperature": 68,
+        "fluidType": "Water",
+        "head": 999,
+        "kinematic_viscosity": 1,
+        "line_frequency": 60,
+        "load_estimation_method": 0,
+        "margin": 0,
+        "motor_field_current": 125.857,
+        "motor_field_power": 80,
+        "motor_field_voltage": 480,
+        "motor_rated_fla": 225,
+        "motor_rated_power": 200,
+        "motor_rated_speed": 1780,
+        "motor_rated_voltage": 460,
+        "operating_hours": 8760,
+        "pump_rated_speed": 1780,
+        "pump_specified": 80,
+        "pump_style": 12,
+        "specific_gravity": 1,
+        "specifiedDriveEfficiency": 95,
+        "stages": 2
+      },
+      "units": "hp, electrical kW, A, efficiencies/PF in %, load fraction, MWh/year, $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 2361.97,
+          "annual_energy": 47.24,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 93.75,
+          "load_factor": 0.02,
+          "motor_current": 65.5,
+          "motor_efficiency": 53.55,
+          "motor_power": 5.39,
+          "motor_power_factor": 9.9,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 3.89,
+          "mover_shaft_power": 3.65,
+          "optimization_rating": 0,
+          "pump_efficiency": 80
+        },
+        "raw": {
+          "annual_cost": 2361.9723190058203,
+          "annual_energy": 47.2394463801164,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 93.74562201428624,
+          "load_factor": 0.01944597316415997,
+          "motor_current": 65.50342280786495,
+          "motor_efficiency": 53.55452566652291,
+          "motor_power": 5.392630865310091,
+          "motor_power_factor": 9.902271604885627,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 3.8891946328319937,
+          "mover_shaft_power": 3.6459496998945884,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 80
+        }
+      }
+    },
+    {
+      "id": "pump-existing-12-4-0",
+      "inputs": {
+        "cost_kw_hour": 0.05,
+        "differentialPressure": 50,
+        "drive": 4,
+        "efficiency": 95,
+        "efficiency_class": 3,
+        "fixed_speed": 1,
+        "flow_rate": 100,
+        "fluidTemperature": 68,
+        "fluidType": "Water",
+        "head": 999,
+        "kinematic_viscosity": 1,
+        "line_frequency": 60,
+        "load_estimation_method": 0,
+        "margin": 0,
+        "motor_field_current": 125.857,
+        "motor_field_power": 80,
+        "motor_field_voltage": 480,
+        "motor_rated_fla": 225,
+        "motor_rated_power": 200,
+        "motor_rated_speed": 1780,
+        "motor_rated_voltage": 460,
+        "operating_hours": 8760,
+        "pump_rated_speed": 1780,
+        "pump_specified": 80,
+        "pump_style": 12,
+        "specific_gravity": 1,
+        "specifiedDriveEfficiency": 95,
+        "stages": 2
+      },
+      "units": "hp, electrical kW, A, efficiencies/PF in %, load fraction, MWh/year, $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 35040,
+          "annual_energy": 700.8,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 95,
+          "load_factor": 0.51,
+          "motor_current": 125.86,
+          "motor_efficiency": 94.36,
+          "motor_power": 80,
+          "motor_power_factor": 76.46,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.19,
+          "mover_shaft_power": 96.13,
+          "optimization_rating": 0,
+          "pump_efficiency": 3.03
+        },
+        "raw": {
+          "annual_cost": 35040,
+          "annual_energy": 700.8,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 95,
+          "load_factor": 0.5059385812802628,
+          "motor_current": 125.85671685039931,
+          "motor_efficiency": 94.35732315337191,
+          "motor_power": 80,
+          "motor_power_factor": 76.45602656178961,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.18747791246317,
+          "mover_shaft_power": 96.12810401684,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 3.034242472320794
+        }
+      }
+    },
+    {
+      "id": "pump-existing-12-4-1",
+      "inputs": {
+        "cost_kw_hour": 0.05,
+        "differentialPressure": 50,
+        "drive": 4,
+        "efficiency": 95,
+        "efficiency_class": 3,
+        "fixed_speed": 1,
+        "flow_rate": 100,
+        "fluidTemperature": 68,
+        "fluidType": "Water",
+        "head": 999,
+        "kinematic_viscosity": 1,
+        "line_frequency": 60,
+        "load_estimation_method": 1,
+        "margin": 0,
+        "motor_field_current": 125.857,
+        "motor_field_power": 80,
+        "motor_field_voltage": 480,
+        "motor_rated_fla": 225,
+        "motor_rated_power": 200,
+        "motor_rated_speed": 1780,
+        "motor_rated_voltage": 460,
+        "operating_hours": 8760,
+        "pump_rated_speed": 1780,
+        "pump_specified": 80,
+        "pump_style": 12,
+        "specific_gravity": 1,
+        "specifiedDriveEfficiency": 95,
+        "stages": 2
+      },
+      "units": "hp, electrical kW, A, efficiencies/PF in %, load fraction, MWh/year, $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 35041.05,
+          "annual_energy": 700.82,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 95,
+          "load_factor": 0.51,
+          "motor_current": 125.86,
+          "motor_efficiency": 94.36,
+          "motor_power": 80,
+          "motor_power_factor": 76.46,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.19,
+          "mover_shaft_power": 96.13,
+          "optimization_rating": 0,
+          "pump_efficiency": 3.03
+        },
+        "raw": {
+          "annual_cost": 35041.046635998544,
+          "annual_energy": 700.8209327199708,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 95,
+          "load_factor": 0.5059540899234473,
+          "motor_current": 125.857,
+          "motor_efficiency": 94.35739735405139,
+          "motor_power": 80.00238957990533,
+          "motor_power_factor": 76.45813827030487,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 101.19057993116283,
+          "mover_shaft_power": 96.13105093460469,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 3.0341494569739615
+        }
+      }
+    },
+    {
+      "id": "pump-modified-12-4",
+      "inputs": {
+        "cost_kw_hour": 0.05,
+        "differentialPressure": 50,
+        "drive": 4,
+        "efficiency": 95,
+        "efficiency_class": 3,
+        "fixed_speed": 1,
+        "flow_rate": 100,
+        "fluidTemperature": 68,
+        "fluidType": "Water",
+        "head": 999,
+        "kinematic_viscosity": 1,
+        "line_frequency": 60,
+        "load_estimation_method": 0,
+        "margin": 0,
+        "motor_field_current": 125.857,
+        "motor_field_power": 80,
+        "motor_field_voltage": 480,
+        "motor_rated_fla": 225,
+        "motor_rated_power": 200,
+        "motor_rated_speed": 1780,
+        "motor_rated_voltage": 460,
+        "operating_hours": 8760,
+        "pump_rated_speed": 1780,
+        "pump_specified": 80,
+        "pump_style": 12,
+        "specific_gravity": 1,
+        "specifiedDriveEfficiency": 95,
+        "stages": 2
+      },
+      "units": "hp, electrical kW, A, efficiencies/PF in %, load fraction, MWh/year, $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 2344.92,
+          "annual_energy": 46.9,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 95,
+          "load_factor": 0.02,
+          "motor_current": 65.5,
+          "motor_efficiency": 53.12,
+          "motor_power": 5.35,
+          "motor_power_factor": 9.83,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 3.84,
+          "mover_shaft_power": 3.65,
+          "optimization_rating": 0,
+          "pump_efficiency": 80
+        },
+        "raw": {
+          "annual_cost": 2344.9180470488495,
+          "annual_energy": 46.89836094097699,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 95,
+          "load_factor": 0.019189208946813627,
+          "motor_current": 65.49572247951926,
+          "motor_efficiency": 53.122876343728755,
+          "motor_power": 5.353694171344405,
+          "motor_power_factor": 9.831929520127492,
+          "motor_rated_power": 200,
+          "motor_shaft_power": 3.837841789362725,
+          "mover_shaft_power": 3.6459496998945884,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 80
+        }
+      }
+    },
+    {
+      "id": "pump-metric-output",
+      "inputs": {
+        "input": {
+          "cost_kw_hour": 0.05,
+          "differentialPressure": 0,
+          "drive": 0,
+          "efficiency": 95,
+          "efficiency_class": 3,
+          "fixed_speed": 1,
+          "flow_rate": 1840,
+          "fluidTemperature": 68,
+          "fluidType": "Water",
+          "head": 174.85,
+          "kinematic_viscosity": 1,
+          "line_frequency": 60,
+          "load_estimation_method": 0,
+          "margin": 0,
+          "motor_field_current": 125.857,
+          "motor_field_power": 80,
+          "motor_field_voltage": 480,
+          "motor_rated_fla": 225,
+          "motor_rated_power": 200,
+          "motor_rated_speed": 1780,
+          "motor_rated_voltage": 460,
+          "operating_hours": 8760,
+          "pump_rated_speed": 1780,
+          "pump_specified": 80,
+          "pump_style": 6,
+          "specific_gravity": 1,
+          "specifiedDriveEfficiency": 95,
+          "stages": 2
+        },
+        "settings": {
+          "currency": "$",
+          "distanceMeasurement": "ft",
+          "flowMeasurement": "gpm",
+          "powerMeasurement": "kW",
+          "temperatureMeasurement": "F",
+          "unitsOfMeasure": "Metric"
+        }
+      },
+      "units": "shaft/rated power kW; MWh/year; $/year",
+      "result": {
+        "displayed": {
+          "annual_cost": 35040,
+          "annual_energy": 700.8,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": 0,
+          "drive_efficiency": 100,
+          "load_factor": 0.51,
+          "motor_current": 125.86,
+          "motor_efficiency": 94.36,
+          "motor_power": 80,
+          "motor_power_factor": 76.46,
+          "motor_rated_power": 149.14,
+          "motor_shaft_power": 75.46,
+          "mover_shaft_power": 75.46,
+          "optimization_rating": 0,
+          "pump_efficiency": 80.26
+        },
+        "raw": {
+          "annual_cost": 35040,
+          "annual_energy": 700.8,
+          "annual_savings_potential": 0,
+          "co2EmissionsOutput": {
+            "$value": "undefined"
+          },
+          "drive_efficiency": 100,
+          "load_factor": 0.5059385812802628,
+          "motor_current": 125.85671685039931,
+          "motor_efficiency": 94.35732315337191,
+          "motor_power": 80,
+          "motor_power_factor": 76.45602656178961,
+          "motor_rated_power": 149.14,
+          "motor_shaft_power": 75.45550227932378,
+          "mover_shaft_power": 75.45550227932378,
+          "optimization_rating": 0,
+          "percent_annual_savings": {
+            "$value": "undefined"
+          },
+          "pump_efficiency": 80.26203812559545
+        }
+      }
+    },
+    {
+      "id": "fan-existing-0-0",
+      "inputs": {
+        "airDensity": 1.02,
+        "compressibilityFactor": 0.988,
+        "drive": 0,
+        "efficiencyClass": 1,
+        "fanEfficiency": 80,
+        "fanSpeed": 1180,
+        "flowRate": 129691,
+        "fullLoadAmps": 683.2505707137,
+        "inletPressure": -16.36,
+        "lineFrequency": 60,
+        "loadEstimationMethod": 0,
+        "measuredAmps": 660,
+        "measuredPower": 460,
+        "measuredVoltage": 460,
+        "motorRatedPower": 600,
+        "motorRatedVoltage": 460,
+        "motorRpm": 1180,
+        "operatingHours": 8760,
+        "outletPressure": 1.1,
+        "sizeMargin": 1,
+        "specifiedDriveEfficiency": 95,
+        "specifiedEfficiency": 95,
+        "unitCost": 0.06,
+        "velocityPressure": 0
+      },
+      "units": "shaft hp; electrical kW; A; %; MWh/year; $/year",
+      "result": {
+        "annualCost": 241.77599999999998,
+        "annualEnergy": 4029.6,
+        "annualSavings": {
+          "$value": "undefined"
+        },
+        "co2EmissionsOutput": {
+          "$value": "undefined"
+        },
+        "driveEfficiency": 100,
+        "emissionsSavings": {
+          "$value": "undefined"
+        },
+        "energySavings": {
+          "$value": "undefined"
+        },
+        "estimatedFLA": 683.2505707136967,
+        "fanEfficiency": 59.53983150357984,
+        "fanEnergyIndex": 1.2478723235125322,
+        "fanShaftPower": 590.6221862629749,
+        "loadFactor": 0.9843700059691026,
+        "motorCurrent": 673.1011529438543,
+        "motorEfficiency": 95.7835110765607,
+        "motorPower": 460,
+        "motorPowerFactor": 85.77466650659333,
+        "motorRatedPower": 600,
+        "motorShaftPower": 590.6221862629749,
+        "percentSavings": {
+          "$value": "undefined"
+        },
+        "planeResults": {
+          "$value": "undefined"
+        },
+        "psychrometricResults": {
+          "$value": "undefined"
+        }
+      }
+    },
+    {
+      "id": "fan-existing-0-1",
+      "inputs": {
+        "airDensity": 1.02,
+        "compressibilityFactor": 0.988,
+        "drive": 0,
+        "efficiencyClass": 1,
+        "fanEfficiency": 80,
+        "fanSpeed": 1180,
+        "flowRate": 129691,
+        "fullLoadAmps": 683.2505707137,
+        "inletPressure": -16.36,
+        "lineFrequency": 60,
+        "loadEstimationMethod": 1,
+        "measuredAmps": 660,
+        "measuredPower": 460,
+        "measuredVoltage": 460,
+        "motorRatedPower": 600,
+        "motorRatedVoltage": 460,
+        "motorRpm": 1180,
+        "operatingHours": 8760,
+        "outletPressure": 1.1,
+        "sizeMargin": 1,
+        "specifiedDriveEfficiency": 95,
+        "specifiedEfficiency": 95,
+        "unitCost": 0.06,
+        "velocityPressure": 0
+      },
+      "units": "shaft hp; electrical kW; A; %; MWh/year; $/year",
+      "result": {
+        "annualCost": 236.7431546489654,
+        "annualEnergy": 3945.7192441494235,
+        "annualSavings": {
+          "$value": "undefined"
+        },
+        "co2EmissionsOutput": {
+          "$value": "undefined"
+        },
+        "driveEfficiency": 100,
+        "emissionsSavings": {
+          "$value": "undefined"
+        },
+        "energySavings": {
+          "$value": "undefined"
+        },
+        "estimatedFLA": 683.2505707136967,
+        "fanEfficiency": 60.79257870039858,
+        "fanEnergyIndex": 1.2744004334018635,
+        "fanShaftPower": 578.4512880376124,
+        "loadFactor": 0.964085258358038,
+        "motorCurrent": 660,
+        "motorEfficiency": 95.80397882792498,
+        "motorPower": 450.4245712499342,
+        "motorPowerFactor": 85.65637268141346,
+        "motorRatedPower": 600,
+        "motorShaftPower": 578.4512880376124,
+        "percentSavings": {
+          "$value": "undefined"
+        },
+        "planeResults": {
+          "$value": "undefined"
+        },
+        "psychrometricResults": {
+          "$value": "undefined"
+        }
+      }
+    },
+    {
+      "id": "fan-modified-0",
+      "inputs": {
+        "airDensity": 1.02,
+        "compressibilityFactor": 0.988,
+        "drive": 0,
+        "efficiencyClass": 1,
+        "fanEfficiency": 80,
+        "fanSpeed": 1180,
+        "flowRate": 129691,
+        "fullLoadAmps": 683.2505707137,
+        "inletPressure": -16.36,
+        "lineFrequency": 60,
+        "loadEstimationMethod": 0,
+        "measuredAmps": 660,
+        "measuredPower": 460,
+        "measuredVoltage": 460,
+        "motorRatedPower": 600,
+        "motorRatedVoltage": 460,
+        "motorRpm": 1180,
+        "operatingHours": 8760,
+        "outletPressure": 1.1,
+        "sizeMargin": 1,
+        "specifiedDriveEfficiency": 95,
+        "specifiedEfficiency": 95,
+        "unitCost": 0.06,
+        "velocityPressure": 0
+      },
+      "units": "shaft hp; electrical kW; A; %; MWh/year; $/year",
+      "result": {
+        "annualCost": 180.15161638366402,
+        "annualEnergy": 3002.526939727734,
+        "annualSavings": {
+          "$value": "undefined"
+        },
+        "co2EmissionsOutput": {
+          "$value": "undefined"
+        },
+        "driveEfficiency": 100,
+        "emissionsSavings": {
+          "$value": "undefined"
+        },
+        "energySavings": {
+          "$value": "undefined"
+        },
+        "estimatedFLA": 0,
+        "fanEfficiency": 80,
+        "fanEnergyIndex": 1.6747314564584963,
+        "fanShaftPower": 439.56931815466845,
+        "loadFactor": 0.7326155302577808,
+        "motorCurrent": 515.3536611134244,
+        "motorEfficiency": 95.67163237255797,
+        "motorPower": 342.75421686389654,
+        "motorPowerFactor": 83.47549092906212,
+        "motorRatedPower": 600,
+        "motorShaftPower": 439.56931815466845,
+        "percentSavings": {
+          "$value": "undefined"
+        },
+        "planeResults": {
+          "$value": "undefined"
+        },
+        "psychrometricResults": {
+          "$value": "undefined"
+        }
+      }
+    },
+    {
+      "id": "fan-existing-1-0",
+      "inputs": {
+        "airDensity": 1.02,
+        "compressibilityFactor": 0.988,
+        "drive": 1,
+        "efficiencyClass": 1,
+        "fanEfficiency": 80,
+        "fanSpeed": 1180,
+        "flowRate": 129691,
+        "fullLoadAmps": 683.2505707137,
+        "inletPressure": -16.36,
+        "lineFrequency": 60,
+        "loadEstimationMethod": 0,
+        "measuredAmps": 660,
+        "measuredPower": 460,
+        "measuredVoltage": 460,
+        "motorRatedPower": 600,
+        "motorRatedVoltage": 460,
+        "motorRpm": 1180,
+        "operatingHours": 8760,
+        "outletPressure": 1.1,
+        "sizeMargin": 1,
+        "specifiedDriveEfficiency": 95,
+        "specifiedEfficiency": 95,
+        "unitCost": 0.06,
+        "velocityPressure": 0
+      },
+      "units": "shaft hp; electrical kW; A; %; MWh/year; $/year",
+      "result": {
+        "annualCost": 241.77599999999998,
+        "annualEnergy": 4029.6,
+        "annualSavings": {
+          "$value": "undefined"
+        },
+        "co2EmissionsOutput": {
+          "$value": "undefined"
+        },
+        "driveEfficiency": 96.00369423419764,
+        "emissionsSavings": {
+          "$value": "undefined"
+        },
+        "energySavings": {
+          "$value": "undefined"
+        },
+        "estimatedFLA": 683.2505707136967,
+        "fanEfficiency": 62.01827125353585,
+        "fanEnergyIndex": 1.2478723235125322,
+        "fanShaftPower": 567.0191177792397,
+        "loadFactor": 0.9843700059691026,
+        "motorCurrent": 673.1011529438543,
+        "motorEfficiency": 95.7835110765607,
+        "motorPower": 460,
+        "motorPowerFactor": 85.77466650659333,
+        "motorRatedPower": 600,
+        "motorShaftPower": 590.6221862629749,
+        "percentSavings": {
+          "$value": "undefined"
+        },
+        "planeResults": {
+          "$value": "undefined"
+        },
+        "psychrometricResults": {
+          "$value": "undefined"
+        }
+      }
+    },
+    {
+      "id": "fan-existing-1-1",
+      "inputs": {
+        "airDensity": 1.02,
+        "compressibilityFactor": 0.988,
+        "drive": 1,
+        "efficiencyClass": 1,
+        "fanEfficiency": 80,
+        "fanSpeed": 1180,
+        "flowRate": 129691,
+        "fullLoadAmps": 683.2505707137,
+        "inletPressure": -16.36,
+        "lineFrequency": 60,
+        "loadEstimationMethod": 1,
+        "measuredAmps": 660,
+        "measuredPower": 460,
+        "measuredVoltage": 460,
+        "motorRatedPower": 600,
+        "motorRatedVoltage": 460,
+        "motorRpm": 1180,
+        "operatingHours": 8760,
+        "outletPressure": 1.1,
+        "sizeMargin": 1,
+        "specifiedDriveEfficiency": 95,
+        "specifiedEfficiency": 95,
+        "unitCost": 0.06,
+        "velocityPressure": 0
+      },
+      "units": "shaft hp; electrical kW; A; %; MWh/year; $/year",
+      "result": {
+        "annualCost": 236.7431546489654,
+        "annualEnergy": 3945.7192441494235,
+        "annualSavings": {
+          "$value": "undefined"
+        },
+        "co2EmissionsOutput": {
+          "$value": "undefined"
+        },
+        "driveEfficiency": 96.00369266381783,
+        "emissionsSavings": {
+          "$value": "undefined"
+        },
+        "energySavings": {
+          "$value": "undefined"
+        },
+        "estimatedFLA": 683.2505707136967,
+        "fanEfficiency": 63.32316707158314,
+        "fanEnergyIndex": 1.2744004334018635,
+        "fanShaftPower": 555.334596777525,
+        "loadFactor": 0.964085258358038,
+        "motorCurrent": 660,
+        "motorEfficiency": 95.80397882792498,
+        "motorPower": 450.4245712499342,
+        "motorPowerFactor": 85.65637268141346,
+        "motorRatedPower": 600,
+        "motorShaftPower": 578.4512880376124,
+        "percentSavings": {
+          "$value": "undefined"
+        },
+        "planeResults": {
+          "$value": "undefined"
+        },
+        "psychrometricResults": {
+          "$value": "undefined"
+        }
+      }
+    },
+    {
+      "id": "fan-modified-1",
+      "inputs": {
+        "airDensity": 1.02,
+        "compressibilityFactor": 0.988,
+        "drive": 1,
+        "efficiencyClass": 1,
+        "fanEfficiency": 80,
+        "fanSpeed": 1180,
+        "flowRate": 129691,
+        "fullLoadAmps": 683.2505707137,
+        "inletPressure": -16.36,
+        "lineFrequency": 60,
+        "loadEstimationMethod": 0,
+        "measuredAmps": 660,
+        "measuredPower": 460,
+        "measuredVoltage": 460,
+        "motorRatedPower": 600,
+        "motorRatedVoltage": 460,
+        "motorRpm": 1180,
+        "operatingHours": 8760,
+        "outletPressure": 1.1,
+        "sizeMargin": 1,
+        "specifiedDriveEfficiency": 95,
+        "specifiedEfficiency": 95,
+        "unitCost": 0.06,
+        "velocityPressure": 0
+      },
+      "units": "shaft hp; electrical kW; A; %; MWh/year; $/year",
+      "result": {
+        "annualCost": 187.55267036642488,
+        "annualEnergy": 3125.877839440415,
+        "annualSavings": {
+          "$value": "undefined"
+        },
+        "co2EmissionsOutput": {
+          "$value": "undefined"
+        },
+        "driveEfficiency": 96.00357153274852,
+        "emissionsSavings": {
+          "$value": "undefined"
+        },
+        "energySavings": {
+          "$value": "undefined"
+        },
+        "estimatedFLA": 0,
+        "fanEfficiency": 80,
+        "fanEnergyIndex": 1.6086445386254358,
+        "fanShaftPower": 439.56931815466845,
+        "loadFactor": 0.7631127869111333,
+        "motorCurrent": 533.9339824353181,
+        "motorEfficiency": 95.72177121467355,
+        "motorPower": 356.83536979913407,
+        "motorPowerFactor": 83.88066673085835,
+        "motorRatedPower": 600,
+        "motorShaftPower": 457.86767214668004,
+        "percentSavings": {
+          "$value": "undefined"
+        },
+        "planeResults": {
+          "$value": "undefined"
+        },
+        "psychrometricResults": {
+          "$value": "undefined"
+        }
+      }
+    },
+    {
+      "id": "fan-existing-4-0",
+      "inputs": {
+        "airDensity": 1.02,
+        "compressibilityFactor": 0.988,
+        "drive": 4,
+        "efficiencyClass": 1,
+        "fanEfficiency": 80,
+        "fanSpeed": 1180,
+        "flowRate": 129691,
+        "fullLoadAmps": 683.2505707137,
+        "inletPressure": -16.36,
+        "lineFrequency": 60,
+        "loadEstimationMethod": 0,
+        "measuredAmps": 660,
+        "measuredPower": 460,
+        "measuredVoltage": 460,
+        "motorRatedPower": 600,
+        "motorRatedVoltage": 460,
+        "motorRpm": 1180,
+        "operatingHours": 8760,
+        "outletPressure": 1.1,
+        "sizeMargin": 1,
+        "specifiedDriveEfficiency": 95,
+        "specifiedEfficiency": 95,
+        "unitCost": 0.06,
+        "velocityPressure": 0
+      },
+      "units": "shaft hp; electrical kW; A; %; MWh/year; $/year",
+      "result": {
+        "annualCost": 241.77599999999998,
+        "annualEnergy": 4029.6,
+        "annualSavings": {
+          "$value": "undefined"
+        },
+        "co2EmissionsOutput": {
+          "$value": "undefined"
+        },
+        "driveEfficiency": 95,
+        "emissionsSavings": {
+          "$value": "undefined"
+        },
+        "energySavings": {
+          "$value": "undefined"
+        },
+        "estimatedFLA": 683.2505707136967,
+        "fanEfficiency": 62.673506845873526,
+        "fanEnergyIndex": 1.2478723235125322,
+        "fanShaftPower": 561.0910769498261,
+        "loadFactor": 0.9843700059691026,
+        "motorCurrent": 673.1011529438543,
+        "motorEfficiency": 95.7835110765607,
+        "motorPower": 460,
+        "motorPowerFactor": 85.77466650659333,
+        "motorRatedPower": 600,
+        "motorShaftPower": 590.6221862629749,
+        "percentSavings": {
+          "$value": "undefined"
+        },
+        "planeResults": {
+          "$value": "undefined"
+        },
+        "psychrometricResults": {
+          "$value": "undefined"
+        }
+      }
+    },
+    {
+      "id": "fan-existing-4-1",
+      "inputs": {
+        "airDensity": 1.02,
+        "compressibilityFactor": 0.988,
+        "drive": 4,
+        "efficiencyClass": 1,
+        "fanEfficiency": 80,
+        "fanSpeed": 1180,
+        "flowRate": 129691,
+        "fullLoadAmps": 683.2505707137,
+        "inletPressure": -16.36,
+        "lineFrequency": 60,
+        "loadEstimationMethod": 1,
+        "measuredAmps": 660,
+        "measuredPower": 460,
+        "measuredVoltage": 460,
+        "motorRatedPower": 600,
+        "motorRatedVoltage": 460,
+        "motorRpm": 1180,
+        "operatingHours": 8760,
+        "outletPressure": 1.1,
+        "sizeMargin": 1,
+        "specifiedDriveEfficiency": 95,
+        "specifiedEfficiency": 95,
+        "unitCost": 0.06,
+        "velocityPressure": 0
+      },
+      "units": "shaft hp; electrical kW; A; %; MWh/year; $/year",
+      "result": {
+        "annualCost": 236.7431546489654,
+        "annualEnergy": 3945.7192441494235,
+        "annualSavings": {
+          "$value": "undefined"
+        },
+        "co2EmissionsOutput": {
+          "$value": "undefined"
+        },
+        "driveEfficiency": 95,
+        "emissionsSavings": {
+          "$value": "undefined"
+        },
+        "energySavings": {
+          "$value": "undefined"
+        },
+        "estimatedFLA": 683.2505707136967,
+        "fanEfficiency": 63.99218810568272,
+        "fanEnergyIndex": 1.2744004334018635,
+        "fanShaftPower": 549.5287236357317,
+        "loadFactor": 0.964085258358038,
+        "motorCurrent": 660,
+        "motorEfficiency": 95.80397882792498,
+        "motorPower": 450.4245712499342,
+        "motorPowerFactor": 85.65637268141346,
+        "motorRatedPower": 600,
+        "motorShaftPower": 578.4512880376124,
+        "percentSavings": {
+          "$value": "undefined"
+        },
+        "planeResults": {
+          "$value": "undefined"
+        },
+        "psychrometricResults": {
+          "$value": "undefined"
+        }
+      }
+    },
+    {
+      "id": "fan-modified-4",
+      "inputs": {
+        "airDensity": 1.02,
+        "compressibilityFactor": 0.988,
+        "drive": 4,
+        "efficiencyClass": 1,
+        "fanEfficiency": 80,
+        "fanSpeed": 1180,
+        "flowRate": 129691,
+        "fullLoadAmps": 683.2505707137,
+        "inletPressure": -16.36,
+        "lineFrequency": 60,
+        "loadEstimationMethod": 0,
+        "measuredAmps": 660,
+        "measuredPower": 460,
+        "measuredVoltage": 460,
+        "motorRatedPower": 600,
+        "motorRatedVoltage": 460,
+        "motorRpm": 1180,
+        "operatingHours": 8760,
+        "outletPressure": 1.1,
+        "sizeMargin": 1,
+        "specifiedDriveEfficiency": 95,
+        "specifiedEfficiency": 95,
+        "unitCost": 0.06,
+        "velocityPressure": 0
+      },
+      "units": "shaft hp; electrical kW; A; %; MWh/year; $/year",
+      "result": {
+        "annualCost": 189.51052119663538,
+        "annualEnergy": 3158.50868661059,
+        "annualSavings": {
+          "$value": "undefined"
+        },
+        "co2EmissionsOutput": {
+          "$value": "undefined"
+        },
+        "driveEfficiency": 95,
+        "emissionsSavings": {
+          "$value": "undefined"
+        },
+        "energySavings": {
+          "$value": "undefined"
+        },
+        "estimatedFLA": 0,
+        "fanEfficiency": 80,
+        "fanEnergyIndex": 1.5920254821974629,
+        "fanShaftPower": 439.56931815466845,
+        "loadFactor": 0.7711742423766114,
+        "motorCurrent": 538.8705934771663,
+        "motorEfficiency": 95.73363295688935,
+        "motorPower": 360.56035235280706,
+        "motorPowerFactor": 83.97983672171804,
+        "motorRatedPower": 600,
+        "motorShaftPower": 462.7045454259668,
+        "percentSavings": {
+          "$value": "undefined"
+        },
+        "planeResults": {
+          "$value": "undefined"
+        },
+        "psychrometricResults": {
+          "$value": "undefined"
+        }
+      }
+    },
+    {
+      "id": "fla-0",
+      "inputs": {
+        "efficiencyClass": 0,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "rpm": 1780,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 228.57,
+        "raw": 228.57271479101405
+      }
+    },
+    {
+      "id": "current-0-0",
+      "inputs": {
+        "efficiencyClass": 0,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 0,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 62.03,
+        "raw": 62.03310557374413
+      }
+    },
+    {
+      "id": "current-0-25",
+      "inputs": {
+        "efficiencyClass": 0,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 25,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 81.24,
+        "raw": 81.23980620274484
+      }
+    },
+    {
+      "id": "current-0-75",
+      "inputs": {
+        "efficiencyClass": 0,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 75,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 172.43,
+        "raw": 172.42835949866816
+      }
+    },
+    {
+      "id": "current-0-100",
+      "inputs": {
+        "efficiencyClass": 0,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 100,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 225,
+        "raw": 224.9999999999924
+      }
+    },
+    {
+      "id": "current-0-150",
+      "inputs": {
+        "efficiencyClass": 0,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 150,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 341.85,
+        "raw": 341.8533594986682
+      }
+    },
+    {
+      "id": "performance-0-0.25",
+      "inputs": {
+        "efficiencyClass": 0,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadFraction": 0.25,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current as % of supplied FLA; efficiency/PF %",
+      "result": {
+        "displayed": {
+          "current": 36.107,
+          "efficiency": 89.823,
+          "powerFactor": 64.156
+        },
+        "raw": {
+          "current": 36.10658053455326,
+          "efficiency": 89.82271908599107,
+          "powerFactor": 64.15570714673797
+        }
+      }
+    },
+    {
+      "id": "performance-0-0.75",
+      "inputs": {
+        "efficiencyClass": 0,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadFraction": 0.75,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current as % of supplied FLA; efficiency/PF %",
+      "result": {
+        "displayed": {
+          "current": 76.635,
+          "efficiency": 93.831,
+          "powerFactor": 86.807
+        },
+        "raw": {
+          "current": 76.63482644385252,
+          "efficiency": 93.83133726784841,
+          "powerFactor": 86.80705553051035
+        }
+      }
+    },
+    {
+      "id": "performance-0-1",
+      "inputs": {
+        "efficiencyClass": 0,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadFraction": 1,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current as % of supplied FLA; efficiency/PF %",
+      "result": {
+        "displayed": {
+          "current": 100,
+          "efficiency": 93.925,
+          "powerFactor": 88.611
+        },
+        "raw": {
+          "current": 99.99999999999662,
+          "efficiency": 93.92495096377206,
+          "powerFactor": 88.6108431517177
+        }
+      }
+    },
+    {
+      "id": "fla-1",
+      "inputs": {
+        "efficiencyClass": 1,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "rpm": 1780,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 225.8,
+        "raw": 225.800612262395
+      }
+    },
+    {
+      "id": "current-1-0",
+      "inputs": {
+        "efficiencyClass": 1,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 0,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 62.03,
+        "raw": 62.03310557374408
+      }
+    },
+    {
+      "id": "current-1-25",
+      "inputs": {
+        "efficiencyClass": 1,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 25,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 81.24,
+        "raw": 81.23980620274482
+      }
+    },
+    {
+      "id": "current-1-75",
+      "inputs": {
+        "efficiencyClass": 1,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 75,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 172.43,
+        "raw": 172.42835949866816
+      }
+    },
+    {
+      "id": "current-1-100",
+      "inputs": {
+        "efficiencyClass": 1,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 100,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 225,
+        "raw": 224.9999999999924
+      }
+    },
+    {
+      "id": "current-1-150",
+      "inputs": {
+        "efficiencyClass": 1,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 150,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 341.85,
+        "raw": 341.8533594986682
+      }
+    },
+    {
+      "id": "performance-1-0.25",
+      "inputs": {
+        "efficiencyClass": 1,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadFraction": 0.25,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current as % of supplied FLA; efficiency/PF %",
+      "result": {
+        "displayed": {
+          "current": 36.107,
+          "efficiency": 93.039,
+          "powerFactor": 61.938
+        },
+        "raw": {
+          "current": 36.10658053455325,
+          "efficiency": 93.03933838910918,
+          "powerFactor": 61.937672392983266
+        }
+      }
+    },
+    {
+      "id": "performance-1-0.75",
+      "inputs": {
+        "efficiencyClass": 1,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadFraction": 0.75,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current as % of supplied FLA; efficiency/PF %",
+      "result": {
+        "displayed": {
+          "current": 76.635,
+          "efficiency": 95.69,
+          "powerFactor": 85.121
+        },
+        "raw": {
+          "current": 76.63482644385252,
+          "efficiency": 95.69033995024706,
+          "powerFactor": 85.12063086981576
+        }
+      }
+    },
+    {
+      "id": "performance-1-1",
+      "inputs": {
+        "efficiencyClass": 1,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadFraction": 1,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current as % of supplied FLA; efficiency/PF %",
+      "result": {
+        "displayed": {
+          "current": 100,
+          "efficiency": 95.626,
+          "powerFactor": 87.035
+        },
+        "raw": {
+          "current": 99.99999999999662,
+          "efficiency": 95.62592450838135,
+          "powerFactor": 87.03465237770448
+        }
+      }
+    },
+    {
+      "id": "fla-2",
+      "inputs": {
+        "efficiencyClass": 2,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "rpm": 1780,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 224.04,
+        "raw": 224.0381281777037
+      }
+    },
+    {
+      "id": "current-2-0",
+      "inputs": {
+        "efficiencyClass": 2,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 0,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 62.03,
+        "raw": 62.033105573744045
+      }
+    },
+    {
+      "id": "current-2-25",
+      "inputs": {
+        "efficiencyClass": 2,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 25,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 81.24,
+        "raw": 81.23980620274496
+      }
+    },
+    {
+      "id": "current-2-75",
+      "inputs": {
+        "efficiencyClass": 2,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 75,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 172.43,
+        "raw": 172.4283594986548
+      }
+    },
+    {
+      "id": "current-2-100",
+      "inputs": {
+        "efficiencyClass": 2,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 100,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 225,
+        "raw": 225.00000000000026
+      }
+    },
+    {
+      "id": "current-2-150",
+      "inputs": {
+        "efficiencyClass": 2,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 150,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 341.85,
+        "raw": 341.8533594986683
+      }
+    },
+    {
+      "id": "performance-2-0.25",
+      "inputs": {
+        "efficiencyClass": 2,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadFraction": 0.25,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current as % of supplied FLA; efficiency/PF %",
+      "result": {
+        "displayed": {
+          "current": 36.107,
+          "efficiency": 93.516,
+          "powerFactor": 61.622
+        },
+        "raw": {
+          "current": 36.106580534553316,
+          "efficiency": 93.51618363917822,
+          "powerFactor": 61.62184807539891
+        }
+      }
+    },
+    {
+      "id": "performance-2-0.75",
+      "inputs": {
+        "efficiencyClass": 2,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadFraction": 0.75,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current as % of supplied FLA; efficiency/PF %",
+      "result": {
+        "displayed": {
+          "current": 76.635,
+          "efficiency": 96.451,
+          "powerFactor": 84.449
+        },
+        "raw": {
+          "current": 76.63482644384658,
+          "efficiency": 96.45106138957777,
+          "powerFactor": 84.44927393606622
+        }
+      }
+    },
+    {
+      "id": "performance-2-1",
+      "inputs": {
+        "efficiencyClass": 2,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadFraction": 1,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current as % of supplied FLA; efficiency/PF %",
+      "result": {
+        "displayed": {
+          "current": 100,
+          "efficiency": 96.121,
+          "powerFactor": 86.586
+        },
+        "raw": {
+          "current": 100.00000000000011,
+          "efficiency": 96.12112999181932,
+          "powerFactor": 86.5862594269504
+        }
+      }
+    },
+    {
+      "id": "fla-3",
+      "inputs": {
+        "efficiencyClass": 3,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "rpm": 1780,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 238.54,
+        "raw": 238.54090031558056
+      }
+    },
+    {
+      "id": "current-3-0",
+      "inputs": {
+        "efficiencyClass": 3,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 0,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 62.03,
+        "raw": 62.03310557374408
+      }
+    },
+    {
+      "id": "current-3-25",
+      "inputs": {
+        "efficiencyClass": 3,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 25,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 81.24,
+        "raw": 81.23980620274482
+      }
+    },
+    {
+      "id": "current-3-75",
+      "inputs": {
+        "efficiencyClass": 3,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 75,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 172.43,
+        "raw": 172.42835949866816
+      }
+    },
+    {
+      "id": "current-3-100",
+      "inputs": {
+        "efficiencyClass": 3,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 100,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 225,
+        "raw": 224.9999999999924
+      }
+    },
+    {
+      "id": "current-3-150",
+      "inputs": {
+        "efficiencyClass": 3,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 150,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "result": {
+        "displayed": 341.85,
+        "raw": 341.8533594986682
+      }
+    },
+    {
+      "id": "performance-3-0.25",
+      "inputs": {
+        "efficiencyClass": 3,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadFraction": 0.25,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current as % of supplied FLA; efficiency/PF %",
+      "result": {
+        "displayed": {
+          "current": 36.107,
+          "efficiency": 8756.559,
+          "powerFactor": 0.658
+        },
+        "raw": {
+          "current": 36.10658053455325,
+          "efficiency": 8756.558954142425,
+          "powerFactor": 0.6580941316084499
+        }
+      }
+    },
+    {
+      "id": "performance-3-0.75",
+      "inputs": {
+        "efficiencyClass": 3,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadFraction": 0.75,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current as % of supplied FLA; efficiency/PF %",
+      "result": {
+        "displayed": {
+          "current": 76.635,
+          "efficiency": 9006.063,
+          "powerFactor": 0.904
+        },
+        "raw": {
+          "current": 76.63482644385252,
+          "efficiency": 9006.062571210281,
+          "powerFactor": 0.9044154468513277
+        }
+      }
+    },
+    {
+      "id": "performance-3-1",
+      "inputs": {
+        "efficiencyClass": 3,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadFraction": 1,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current as % of supplied FLA; efficiency/PF %",
+      "result": {
+        "displayed": {
+          "current": 100,
+          "efficiency": 9000,
+          "powerFactor": 0.925
+        },
+        "raw": {
+          "current": 99.99999999999662,
+          "efficiency": 8999.999999999949,
+          "powerFactor": 0.9247521219870698
+        }
+      }
+    },
+    {
+      "id": "inventory-Imperial",
+      "inputs": {
+        "efficiencyPercent": 90,
+        "hz": 60,
+        "loadsPercent": [
+          25,
+          50,
+          75,
+          100
+        ],
+        "power": 200,
+        "rpm": 1780,
+        "settings": {
+          "currency": "$",
+          "distanceMeasurement": "ft",
+          "flowMeasurement": "gpm",
+          "powerMeasurement": "hp",
+          "temperatureMeasurement": "F",
+          "unitsOfMeasure": "Imperial"
+        },
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current A; efficiency/PF %; UI values already rounded",
+      "result": {
+        "currentAt75": 172.43,
+        "efficiencyAt75": 89.91,
+        "load": {
+          "ampsIdle": null,
+          "efficiency25": 85,
+          "efficiency50": 89,
+          "efficiency75": 90,
+          "powerFactor100": 92.48,
+          "powerFactor25": 67.8,
+          "powerFactor50": 84.27,
+          "powerFactor75": 90.5
+        },
+        "operations": {
+          "annualOperatingHours": null,
+          "averageLoadFactor": 75,
+          "currentAtLoad": 175,
+          "efficiencyAtAverageLoad": 90,
+          "location": null,
+          "powerFactorAtLoad": 89.17,
+          "utilizationFactor": null
+        }
+      }
+    },
+    {
+      "id": "inventory-Metric",
+      "inputs": {
+        "efficiencyPercent": 90,
+        "hz": 60,
+        "loadsPercent": [
+          25,
+          50,
+          75,
+          100
+        ],
+        "power": 149.14,
+        "rpm": 1780,
+        "settings": {
+          "currency": "$",
+          "distanceMeasurement": "ft",
+          "flowMeasurement": "gpm",
+          "powerMeasurement": "kW",
+          "temperatureMeasurement": "F",
+          "unitsOfMeasure": "Metric"
+        },
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current A; efficiency/PF %; UI values already rounded",
+      "result": {
+        "currentAt75": 172.43,
+        "efficiencyAt75": 89.91,
+        "load": {
+          "ampsIdle": null,
+          "efficiency25": 85,
+          "efficiency50": 89,
+          "efficiency75": 90,
+          "powerFactor100": 92.48,
+          "powerFactor25": 67.8,
+          "powerFactor50": 84.27,
+          "powerFactor75": 90.5
+        },
+        "operations": {
+          "annualOperatingHours": null,
+          "averageLoadFactor": 75,
+          "currentAtLoad": 175,
+          "efficiencyAtAverageLoad": 90,
+          "location": null,
+          "powerFactorAtLoad": 89.17,
+          "utilizationFactor": null
+        }
+      }
+    },
+    {
+      "id": "power-factor-0",
+      "inputs": {
+        "currentA": 60,
+        "efficiencyClass": 1,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 0,
+        "rpm": 1780,
+        "specifiedEfficiencyPercent": 90,
+        "volts": 460
+      },
+      "units": "%",
+      "result": {
+        "displayed": -62.1,
+        "raw": -62.09998759583456
+      }
+    },
+    {
+      "id": "power-factor-0.05",
+      "inputs": {
+        "currentA": 60,
+        "efficiencyClass": 1,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 0.05,
+        "rpm": 1780,
+        "specifiedEfficiencyPercent": 90,
+        "volts": 460
+      },
+      "units": "%",
+      "result": {
+        "displayed": -62.1,
+        "raw": -62.09998759583456
+      }
+    },
+    {
+      "id": "power-factor-0.1",
+      "inputs": {
+        "currentA": 60,
+        "efficiencyClass": 1,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 0.1,
+        "rpm": 1780,
+        "specifiedEfficiencyPercent": 90,
+        "volts": 460
+      },
+      "units": "%",
+      "result": {
+        "displayed": 0.35,
+        "raw": 0.3467820457451376
+      }
+    },
+    {
+      "id": "power-factor-75",
+      "inputs": {
+        "currentA": 60,
+        "efficiencyClass": 1,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 75,
+        "rpm": 1780,
+        "specifiedEfficiencyPercent": 90,
+        "volts": 460
+      },
+      "units": "%",
+      "result": {
+        "displayed": 260.09,
+        "raw": 260.0865343088532
+      }
+    },
+    {
+      "id": "performance-1-zero",
+      "inputs": {
+        "efficiencyClass": 1,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadFraction": 0,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current as % of supplied FLA; efficiency/PF %",
+      "result": {
+        "displayed": {
+          "current": 27.57,
+          "efficiency": 0,
+          "powerFactor": 4.517
+        },
+        "raw": {
+          "current": 27.570269143886257,
+          "efficiency": 0,
+          "powerFactor": 4.516902786746126
+        }
+      }
+    },
+    {
+      "id": "performance-3-zero",
+      "inputs": {
+        "efficiencyClass": 3,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadFraction": 0,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current as % of supplied FLA; efficiency/PF %",
+      "result": {
+        "displayed": {
+          "current": 27.57,
+          "efficiency": 0,
+          "powerFactor": -60.065
+        },
+        "raw": {
+          "current": 27.570269143886257,
+          "efficiency": {
+            "$number": "-0"
+          },
+          "powerFactor": -60.0646899955808
+        }
+      }
+    }
+  ]
+}
