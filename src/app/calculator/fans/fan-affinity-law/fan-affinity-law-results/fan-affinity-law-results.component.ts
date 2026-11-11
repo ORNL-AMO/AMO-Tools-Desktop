@@ -41,7 +41,7 @@ export class FanAffinityLawResultsComponent implements OnInit {
   // Which scenarios each intermediate/output field applies to, e.g. Desired Flow is the modification
   // target for VSD/Two-Speed control (with or without a fan size change) but not a fan-size-only change.
   private static readonly FIELD_SCENARIOS: { [field: string]: FanAffinityLawsScenario[] } = {
-    desiredFlow: ['vsd', 'twoSpeed', 'vsdChangeFanSize', 'twoSpeedChangeFanSize'],
+    desiredFlow: ['vsd', 'twoSpeed', 'vsdChangeFanSize', 'twoSpeedChangeFanSize', 'onOff', 'changeFanSize'],
     timeFactors: ['twoSpeed', 'twoSpeedChangeFanSize'],
     fanDiameterRatio: ['changeFanSize', 'vsdChangeFanSize', 'twoSpeedChangeFanSize'],
     newFanRatedFlow: ['vsdChangeFanSize', 'twoSpeedChangeFanSize'],
@@ -64,6 +64,10 @@ export class FanAffinityLawResultsComponent implements OnInit {
   // and when nothing is being modified ('none') New mirrors Current — same fallback order used for
   // newPower in FanAffinityLawService.getIntermediateValues().
   flowPercentNew(): number {
+    if (this.fanAffinityLawResults?.scenario === 'vsdChangeFanSize' ||
+        this.fanAffinityLawResults?.scenario === 'twoSpeedChangeFanSize') {
+      return this.fanAffinityLawResults.newFlowPercent;
+    }
     return this.fanAffinityLawResults?.desiredFlowPercent
       ?? this.fanAffinityLawResults?.newFlowPercent
       ?? this.fanAffinityLawResults?.baselineFlowPercent;

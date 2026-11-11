@@ -159,10 +159,8 @@
           <span class="alert-danger pull-right small"
             *ngIf="fanAffinityLawForm.controls.diameterFanNew.invalid && !fanAffinityLawForm.controls.diameterFanNew.pristine">
             <span *ngIf="fanAffinityLawForm.controls.diameterFanNew.errors.required">Value required.</span>
-            <span *ngIf="fanAffinityLawForm.controls.diameterFanNew.errors.min">Value can't be less than
-              {{fanAffinityLawForm.controls.diameterFanNew.errors.min.min}}.</span>
-            <span *ngIf="fanAffinityLawForm.controls.diameterFanNew.errors.max">Value can't be greater than the baseline Fan Diameter
-              ({{fanAffinityLawForm.controls.diameterFanNew.errors.max.max}}).</span>
+            <span *ngIf="fanAffinityLawForm.controls.diameterFanNew.errors.greaterThan != null">Value must be greater than
+              {{fanAffinityLawForm.controls.diameterFanNew.errors.greaterThan}}.</span>
           </span>
         </div>
 
