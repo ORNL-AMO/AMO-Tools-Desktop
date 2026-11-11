@@ -51,6 +51,8 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
 import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
+import { ProcessSteamUsageModalModule } from './header/process-steam-usage-modal/process-steam-usage-modal.module';
+import { ProcessSteamUsageService } from './header/process-steam-usage-modal/process-steam-usage.service';
 
 @NgModule({
   imports: [
@@ -84,7 +86,8 @@ import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-t
     UpdateUnitsModalModule,    
     ImportExportModule,
     SnackbarModule,
-    BannerTooltipsModule
+    BannerTooltipsModule,
+    ProcessSteamUsageModalModule
   ],
   declarations: [
     SsmtComponent,
@@ -111,7 +114,8 @@ import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-t
     HeaderService,
     TurbineService,
     CalculateLossesService,
-    ConvertSsmtService
+    ConvertSsmtService,
+    ProcessSteamUsageService
   ]
 })
 export class SsmtModule { }

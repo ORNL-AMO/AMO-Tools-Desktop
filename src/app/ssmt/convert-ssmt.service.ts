@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../shared/models/settings';
-import { SSMT, BoilerInput, PressureTurbine, CondensingTurbine, HeaderWithHighestPressure, HeaderNotHighestPressure } from '../shared/models/steam/ssmt';
+import { SSMT, BoilerInput, PressureTurbine, CondensingTurbine, HeaderWithHighestPressure, HeaderNotHighestPressure, ProcessSteamUsageData } from '../shared/models/steam/ssmt';
+import { ConvertValue } from '../shared/convert-units/ConvertValue';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { roundVal } from '../shared/helperFunctions';
 import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
 
 @Injectable()
@@ -134,7 +136,11 @@ export class ConvertSsmtService {
 
     }
     if (oldSettings.steamMassFlowMeasurement != newSettings.steamMassFlowMeasurement) {
-      header.processSteamUsage = this.convertValue(header.processSteamUsage, oldSettings.steamMassFlowMeasurement, newSettings.steamMassFlowMeasurement)
+      if (header.processSteamUsageData) {
+        header.processSteamUsage = this.convertProcessSteamUsageData(header.processSteamUsageData, oldSettings, newSettings);
+      } else {
+        header.processSteamUsage = this.convertValue(header.processSteamUsage, oldSettings.steamMassFlowMeasurement, newSettings.steamMassFlowMeasurement)
+      }
     }
     return header;
   }
@@ -148,9 +154,29 @@ export class ConvertSsmtService {
 
     }
     if (oldSettings.steamMassFlowMeasurement != newSettings.steamMassFlowMeasurement) {
-      header.processSteamUsage = this.convertValue(header.processSteamUsage, oldSettings.steamMassFlowMeasurement, newSettings.steamMassFlowMeasurement)
+      if (header.processSteamUsageData) {
+        header.processSteamUsage = this.convertProcessSteamUsageData(header.processSteamUsageData, oldSettings, newSettings);
+      } else {
+        header.processSteamUsage = this.convertValue(header.processSteamUsage, oldSettings.steamMassFlowMeasurement, newSettings.steamMassFlowMeasurement)
+      }
     }
     return header;
+  }
+
+  /**
+   * Converts calculator rows and returns the header total as their sum, so the locked header value keeps matching the calculator.
+   * Rows are rounded with roundVal(…, 4) rather than convertValue(), whose rounding keeps only 2 decimals and would
+   * zero out small leak/trap losses (e.g. 0.001 klb/hr).
+   */
+  private convertProcessSteamUsageData(data: ProcessSteamUsageData, oldSettings: Settings, newSettings: Settings): number {
+    let total = 0;
+    data.rows.forEach(row => {
+      if (row.steamUsage) {
+        row.steamUsage = roundVal(new ConvertValue(row.steamUsage, oldSettings.steamMassFlowMeasurement, newSettings.steamMassFlowMeasurement).convertedValue, 4);
+      }
+      total += row.steamUsage ?? 0;
+    });
+    return roundVal(total, 4);
   }
 
   convertExistingData(ssmt: SSMT , oldSettings: Settings, settings: Settings): SSMT {
