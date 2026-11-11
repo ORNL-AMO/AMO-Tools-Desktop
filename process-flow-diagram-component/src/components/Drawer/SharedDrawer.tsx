@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import DrawerToggleButton from './DrawerToggleButton';
 import { ParentContainerDimensions } from 'process-flow-lib';
-import { toggleDrawer, toggleMenuDrawer } from '../Diagram/diagramReducer';
+import { toggleDrawer, toggleMenuDrawer } from '../Diagram/uiSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { selectedDataColor } from '../Diagram/store';
 
@@ -92,12 +92,12 @@ const SharedDrawer = (props: SharedDrawerProps) => {
     let toggleDrawerOpen: () => void;
     let open: boolean;
     if (anchor === 'right') {
-        open = useAppSelector((state) => state.diagram.isDataDrawerOpen);
+        open = useAppSelector((state) => state.ui.isDataDrawerOpen);
         toggleDrawerOpen = () => {
             dispatch(toggleDrawer());
         };
     } else {
-        open = useAppSelector((state) => state.diagram.isMenuDrawerOpen);
+        open = useAppSelector((state) => state.ui.isMenuDrawerOpen);
         toggleDrawerOpen = () => {
             dispatch(toggleMenuDrawer());
         };

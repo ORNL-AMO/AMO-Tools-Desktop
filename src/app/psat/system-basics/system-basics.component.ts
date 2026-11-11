@@ -1,10 +1,9 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild, OnDestroy, SimpleChanges } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnDestroy, SimpleChanges } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { PSAT } from '../../shared/models/psat';
 import { SettingsService } from '../../settings/settings.service';
 import { Settings } from '../../shared/models/settings';
  
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { UntypedFormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PsatService } from '../psat.service';
@@ -29,10 +28,6 @@ export class SystemBasicsComponent implements OnDestroy {
   updateSettings = new EventEmitter<boolean>();
   @Output('updateAssessment')
   updateAssessment = new EventEmitter<PSAT>();
-  @Output('openModal')
-  openModal = new EventEmitter<boolean>();
-  @Output('closeModal')
-  closeModal = new EventEmitter<boolean>();
   @Output('openUpdateUnitsModal') 
   openUpdateUnitsModal = new EventEmitter<Settings>();
 
@@ -41,8 +36,6 @@ export class SystemBasicsComponent implements OnDestroy {
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
   connectedAssessmentState: IntegrationState;
-  @ViewChild('settingsModal', { static: false }) public settingsModal: ModalDirective;
-
   constructor(private settingsService: SettingsService, private settingsDbService: SettingsDbService, private psatService: PsatService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -135,16 +128,6 @@ export class SystemBasicsComponent implements OnDestroy {
     this.assessment.psat.existingDataUnits = this.settings.unitsOfMeasure;
     this.updateAssessment.emit(this.assessment.psat);
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
-  }
-
-  showSettingsModal() {
-    this.openModal.emit(true);
-    this.settingsModal.show();
-  }
-
-  hideSettingsModal() {
-    this.closeModal.emit(true);
-    this.settingsModal.hide();
   }
 
   startSavePolling() {

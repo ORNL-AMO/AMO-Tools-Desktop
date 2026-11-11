@@ -84,17 +84,18 @@ p {
 
 
 .resize-handle {
+    position: relative;
     height: 100%;
-  
+
     background-color: black;
     width: 5px;
-  
+
     /* position: absolute;
     top: 0;
     right: 0; */
-  
+
     cursor: ew-resize;
-  
+
     /* these prevent text selection while dragging */
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -102,9 +103,37 @@ p {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-  
+
     transition: background-color 0.2s ease-out, width 0.2s ease-out;
-  
+
+    /* grip that sticks out to the left, into the opportunities-form side */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 0;
+      width: 10px;
+      height: 44px;
+      transform: translateY(-50%);
+      background-color: inherit;
+      border-radius: 6px 0 0 6px;
+      transition: background-color 0.2s ease-out;
+    }
+
+    /* grip lines (hamburger-style), centered in the protruding part of the handle */
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 8px;
+      height: 1.5px;
+      border-radius: 1px;
+      background-color: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 -5px 0 rgba(255, 255, 255, 0.8), 0 5px 0 rgba(255, 255, 255, 0.8);
+      transform: translate(-50%, -50%);
+    }
+
     &:hover {
       /* width: 3px; */
       background-color: rgb(93, 159, 235);

@@ -17,8 +17,7 @@
             Learn step-by-step ways to identify opportunities, monitor progress, and improve efficiency in any facility.
             Some tools help facilities implement an energy management system and prepare to become ISO 50001 and
             Superior Energy Performance certified.
-            Based on older Department of Energy (DOE) tools, the Industrial Technologies office (ITO, formerlly the
-            Advanced Manufacturing Office, AMO)
+            Based on older Department of Energy (DOE) tools, the Industrial Technologies Office (ITO)
             has undertaken this effort to refactor the legacy tools into a modern environment.
             The suite includes 8 assessment modules (6 energy system, the treasure hunt, and the water balance modules),
             a Data Exploration Module, extensive help text, comprehensive reports, data visualization, and 80
@@ -44,71 +43,123 @@
 
           <label class="header-label">Here are the details of what's new in version {{versionNum}}:</label>
 
-          <label>Application</label>
-          <ul>
-            <li><b>Added:</b> Add SEO features, including: sitemap, meta tags, twitter tags</li>
-            <li><b>Fixed:</b> Fix checkmark icon visibility on copy table clipboard notification</li>
-            <li><b>Fixed:</b> Show full toast notification width on mobile screens</li>
-          </ul>
-
-          <ul>
-            <li><b>Added:</b> CA Reduction documentation added</li>
-            <li><b>Added:</b> Pneumatic Air Requirement Suite documentation added</li>
-            <li><b>Added:</b> Receiver Tank Suite documentation added</li>
-            <li><b>Added:</b> CA Operating Cost Suite documentation added</li>
-            <li><b>Added:</b> Pipe Sizing Calculator Suite documentation added</li>
-            <li><b>Added:</b> Bag Method documentation added</li>
-            <li><b>Enhanced:</b> Update CA Leak Survey to fit new suite calculations</li>
-            <li><b>Enhanced:</b> Improve Compressed Air - Leak Survey UX depicting selected leak to users</li>
-            <li><b>Enhanced:</b> Improve Receiver Tank calculator cycle time calculation</li>
-            <li><b>Fixed:</b> CA Inventory error on "Set Data from Existing Compressor"</li>
-            <li><b>Fixed:</b> Display Compressed Air Assessment EEM results with 0 savings</li>
-          </ul>
-
-          <label>Steam</label>
-          <ul>
-            <li><b>Added:</b> Insulated Pipe/Tank Suite documentation added</li>
-            <li><b>Fixed:</b> Fix missing SSMT Boiler steam pressure conversion</li>
-            <li><b>Fixed:</b> Steam modeler and SSMT Boiler validation updated</li>
-          </ul>
-
-          <label>Treasure Hunt</label>
-          <ul>
-            <li><b>Enhanced:</b> Improve presentation and clarity of Treasure Hunt cost savings errors</li>
-            <li><b>Enhanced:</b> Fix Treasure Hunt gauge threshold for 0-1% values</li>
-            <li><b>Fixed:</b> Update legacy Treasure Hunt opportunities for backwards compatibility</li>
-            <li><b>Fixed:</b> Fix Electricity Reduction documentation link</li>
-            <li><b>Fixed:</b> Show annual cost savings in Waste Heat for Absorption Chillers results panel</li>
-            <li><b>Fixed:</b> Enforce 1:1 baseline and modification instances and resolve flow rate reduction calculation</li>
-          </ul>
-
           <label>Water</label>
           <ul>
-            <li><b>Added:</b> Add mobile return action to Water Diagram unavailable display message</li>
-            <li><b>Fixed:</b> Remove Known Loss Outflow trailing 0 from Data Drawer Forms</li>
+            <li><b>Fixed:</b> Diagram data being lost or overwritten when the diagram was not saved by changing tabs, or when the app was refreshed before assessment data finished loading</li>
+            <li><b>Fixed:</b> Bug where diagram console showed errors but none were present on data entry tray</li>
+            <li><b>Enhanced:</b> Added route-based navigation for Water Assessment main tabs to improve analytics visibility</li>
           </ul>
-
-          <label>Process Cooling</label>
+          <label>Wastewater</label>
           <ul>
-            <li><b>New Feature:</b> A new module for conducting an energy assessment for a process cooling system</li>
-            <li><b>New Feature:</b> Enter data regarding pump, condenser, towers, and chillers</li>
-            <li><b>New Feature:</b> Pull in TMY weather data based on zip code</li>
-            <li><b>New Feature:</b> Specify operating and load schedules</li>
-            <li><b>New Feature:</b> Conduct "What-if" scenarios for key energy use parameters</li>
-            <li><b>New Feature:</b> Tables and graphs to understand energy use in system and performance of equipment</li>
-            <li><b>Coming Soon:</b> Dashboard and rollup support</li>
+            <li><b>Enhanced:</b> Added route-based navigation for Wastewater Assessment main tabs to improve analytics visibility</li>
+          </ul>
+          <label>Compressed Air</label>
+          <ul>
+            <li><b>Fixed:</b> Changed color of validation message for negative values for "Average System Pressure Reduction" and "Airflow Reduction" to yellow</li>
+            <li><b>Enhanced:</b> Explore Opportunities form now has a more prominent drag handle for resizing</li>
+            <li><b>Enhanced:</b> Updated compressor modeling to use the corrected engineering behavior in the latest MEASUR Tools Suite</li>
+            <li><b>Enhanced:</b> Verified route-based analytics coverage for Compressed Air Assessment main tabs</li>
+          </ul>
+          <label>Process Cooling Assessment</label>
+          <ul>
+            <li><b>Added:</b> Equipment notes throughout the Process Cooling Assessment</li>
+            <li><b>Fixed:</b> Issue regarding EEM to apply VSD to water pumps</li>
+            <li><b>Enhanced:</b> Verified route-based analytics coverage for Process Cooling Assessment main tabs</li>
+          </ul>
+          <label>Process Heating</label>
+          <ul>
+            <li><b>Fixed:</b> Bug where extended surface losses were not incorporated into the heat balance properly</li>
+          </ul>
+          <label>Pumps</label>
+          <ul>
+            <li><b>Enhanced:</b> Moved the Stages field up into the Pump section of Pump &amp; Fluid</li>
+            <li><b>Enhanced:</b> Added route-based navigation for PSAT main tabs to improve analytics visibility</li>
+          </ul>
+          <label>Pump Inventory</label>
+          <ul>
+            <li><b>Added:</b> Support for Positive Displacement Pumps</li>
+            <li><b>Enhanced:</b> Added route-based navigation for Pump Inventory main tabs to improve analytics visibility</li>
+          </ul>
+          <label>Motor Inventory</label>
+          <ul>
+            <li><b>Enhanced:</b> Added route-based navigation for Motor Inventory main tabs to improve analytics visibility</li>
+          </ul>
+          <label>Compressed Air Inventory</label>
+          <ul>
+            <li><b>Enhanced:</b> Added route-based navigation for Compressed Air Inventory main tabs to improve analytics visibility</li>
+          </ul>
+          <label>Treasure Hunt</label>
+          <ul>
+            <li><b>Enhanced:</b> Added route-based navigation for Treasure Hunt main tabs to improve analytics visibility</li>
+          </ul>
+          <label>Fans</label>
+          <ul>
+            <li><b>Enhanced:</b> Added route-based navigation for FSAT main tabs to improve analytics visibility</li>
+          </ul>
+          <label>Steam</label>
+          <ul>
+            <li><b>Enhanced:</b> Added route-based navigation for SSMT main tabs to improve analytics visibility</li>
+          </ul>
+          <label>Application</label>
+          <ul>
+            <li><b>Fixed:</b> Export Reports panel cutoff on small devices and media views</li>
+            <li><b>Fixed:</b> Privacy notice link now points to the current ORNL security and privacy notice</li>
+            <li><b>Enhanced:</b> Updated JUSTIFI export modal language (Non-Energy Benefits renamed to Multiple Benefits) and Knowledge Library link</li>
+            <li><b>Enhanced:</b> Updated the body text of emails sent from MEASUR</li>
           </ul>
 
           <!--  Include prev version -->
-          <label class="header-label">Here are the details of what's new in version 1.7.5:</label>
+          <label class="header-label">Here are the details of what's new in version 1.9.0:</label>
+
+          <label>Water</label>
+          <ul>
+            <li><b>Fixed:</b> True cost result support for diagram configurations containing multi-component losses and unaccounted flows</li>
+            <li><b>Fixed:</b> Intake and treatment cost attribution for configurations with chained/forked treatment losses (RO with misallocated wastewater treatment, treatment loss intake attribution)</li>
+            <li><b>Fixed:</b> Diagram flow validation reworked to remove false-positive errors and add missing checks (total-flow mismatch, known losses, discharge flow)</li>
+            <li><b>Fixed:</b> Diagram flow validation now checks against the flow decimal precision set in diagram options instead of full unrounded values</li>
+            <li><b>Enhanced:</b> Cascading flows now populates a downstream component's Total Outflow field when the cascade fills its last remaining flow</li>
+            <li><b>Added:</b> Flow value confidence states (Estimated, Metered, Calculated) with icon, color, and border indicators on diagram arrows and flow labels</li>
+            <li><b>Enhanced:</b> Water Reports upgraded to the new Export Report UI and report builder module</li>
+          </ul>
+          <label>Wastewater</label>
+          <ul>
+            <li><b>Enhanced:</b> Wastewater Reports upgraded to the new Export Report UI and report builder module</li>
+          </ul>
+          <label>Fans</label>
+          <ul>
+            <li><b>Enhanced:</b> FSAT/Fans Reports upgraded to the new Export Report UI and report builder module</li>
+          </ul>
+          <label>Compressed Air</label>
+          <ul>
+            <li><b>Enhanced:</b> Compressed Air Reports upgraded to the new Export Report UI and report builder module</li>
+            <li><b>Fixed:</b> Bag-method leak survey electricity and cost results no longer scaled 1000x, now use the same conversion path as other leak survey methods</li>
+          </ul>
           <label>Steam</label>
           <ul>
-            <li><b>Enhanced:</b> Improved validation regarding steam thermodynamic properties</li>
+            <li><b>Enhanced:</b> SSMT/Steam Reports upgraded to the new Export Report UI and report builder module</li>
           </ul>
-          <label>Calculators</label>
+          <label>Process Heating</label>
           <ul>
-            <li><b>Enhanced:</b> Steam Properties Calculator - Improved validation regarding steam thermodynamic properties</li>
-            <li><b>Enhanced:</b> Saturated Properties Calculator - Improved validation regarding steam thermodynamic properties</li>
+            <li><b>Enhanced:</b> Process Heating Reports upgraded to the new Export Report UI and report builder module</li>
+            <li><b>Fixed:</b> Sidebar name for the Orifice Meter Flow calculator</li>
+          </ul>
+          <label>Application</label>
+          <ul>
+            <li><b>Added:</b> Contact list on the Assessment Dashboard for storing sender/recipient contacts used when emailing files, with type-ahead when entering an email</li>
+            <li><b>Added:</b> Default Sender Email setting on the contact list to auto-populate the Assessor Email in Facility Info</li>
+          </ul>
+
+          <!--  Include prev version -->
+          <label class="header-label">Here are the details of what's new in version 1.8.5:</label>
+
+          <label>Steam</label>
+          <ul>
+            <li><b>Enhanced:</b> Added Steam Leak calculator to assessment calculators tab</li>
+          </ul>
+          <label>Treasure Hunt</label>
+          <ul>
+            <li><b>Fixed:</b> Import of Steam Leak opportunities does not preserve input data</li>
+            <li><b>Fixed:</b> Steam Leak opportunity cannot be deleted</li>
           </ul>
 
           <div class="modal-footer p-2 d-flex flex-row justify-content-end">

@@ -26,13 +26,16 @@ const ManageEdge = (props: ManageEdgeProps) => {
 
     return (
         <>
-            <Box display="flex" alignItems={'center'} sx={{ margin: '1rem' }}>
-                <FlowConnectionText source={source.data} 
-                    target={target.data} 
+            <Box display="flex" alignItems={'center'} sx={{ margin: '1rem', minWidth: 0, whiteSpace: 'normal' }}>
+                <FlowConnectionText source={source.data}
+                    target={target.data}
                     style={{
                         padding: '0.5rem 0.5rem',
-                        fontSize: '20px'
-                    }} 
+                        fontSize: '20px',
+                        overflowWrap: 'break-word',
+                        wordBreak: 'break-word',
+                        minWidth: 0
+                    }}
                         />
             </Box>
 
@@ -51,7 +54,7 @@ const ManageEdge = (props: ManageEdgeProps) => {
                 </Box>
 
                 <TabPanel value={selectedTab} index={0}>
-                        <CustomizeEdge edge={selectedEdge}></CustomizeEdge>
+                        <CustomizeEdge key={selectedEdge.id} edge={selectedEdge}></CustomizeEdge>
                         <Button sx={{ width: '100%', marginY: 2 }} variant="outlined" color="error" onClick={() => dispatch(deleteEdge(selectedEdge.id))}>Delete Selected Connection</Button>
                 </TabPanel>
             </Box>

@@ -461,56 +461,51 @@ export class ProcessCoolingSuiteApiService {
   private _getChillerOutput(processCoolingInstance: ProcessCooling, chillerInventoryItems: ChillerInventoryItem[]): ProcessCoolingChillerOutput[] {
     const chillerOutputInstance: ChillerOutput = processCoolingInstance.calculateChillerEnergy();
     const chillerOutput: ProcessCoolingChillerOutput[] = [];
-    const efficiencies: DoubleVector2D = chillerOutputInstance.efficiency;
-    const numChillers: number = efficiencies.size();
+    const numChillers: number = chillerOutputInstance.efficiency.size();
 
-    try {
       for (let i: number = 0; i < numChillers; i++) {
-        const efficiencyVector: DoubleVector = efficiencies.get(i);
-        let efficiency: number[];
-        try {
-          efficiency = this.suiteApiHelperService.extractWASMArray(efficiencyVector);
-        } finally {
-          efficiencyVector.delete();
-        }
-        const hours: Array<number> = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.hours.get(i));
-        const energy: Array<number> = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.energy.get(i));
-        const power: Array<number> = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.power.get(i));
+      const efficiency = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.efficiency.get(i));
+      const hours: Array<number> = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.hours.get(i));
+      const energy: Array<number> = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.energy.get(i));
+      const power: Array<number> = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.power.get(i));
 
-        const defaultLoads: Array<number> = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-        let loadPercents: DoubleVector = this.suiteApiHelperService.returnDoubleVector(defaultLoads);
-        let curveLoadPercents: Array<number> = defaultLoads;
-        if (chillerInventoryItems[i].isCustomChiller) {
-          curveLoadPercents = [0, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 100];
-        }
-        const suiteCurveLoadPercents: DoubleVector = this.suiteApiHelperService.returnDoubleVector(curveLoadPercents);
-
-        // * used to visualize performance curve
-        const curveEfficiencyAtLoadWasm = processCoolingInstance.getChillerARIEnergyEfficiency(i, suiteCurveLoadPercents, false);
-        const curveEfficiencyAtLoad = this.suiteApiHelperService.extractWASMArray(curveEfficiencyAtLoadWasm);
-
-        const chillerResult: ProcessCoolingChillerOutput = {
-          id: this.chillerInputResultMap[i]?.id ?? `chiller-${i + 1}`,
-          name: this.chillerInputResultMap[i]?.name ?? `Chiller ${i + 1}`,
-          ariEfficiencyProfile: curveEfficiencyAtLoad,
-          loadPercents: curveLoadPercents,
-          efficiency: efficiency,
-          hours: hours,
-          power: power,
-          energy: energy,
-          totalHours: hours.reduce((a, b) => a + b, 0),
-          totalEnergy: energy.reduce((a, b) => a + b, 0)
-        };
-        chillerOutput.push(chillerResult);
-        suiteCurveLoadPercents.delete();
-        loadPercents.delete();
-        curveEfficiencyAtLoadWasm.delete();
+      const defaultLoads: Array<number> = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+      let loadPercents: DoubleVector = this.suiteApiHelperService.returnDoubleVector(defaultLoads);
+      let curveLoadPercents: Array<number> = defaultLoads;
+      if (chillerInventoryItems[i].isCustomChiller) {
+        curveLoadPercents = [0, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 100];
       }
+      const suiteCurveLoadPercents: DoubleVector = this.suiteApiHelperService.returnDoubleVector(curveLoadPercents);
 
-    } finally {
-      efficiencies.delete();
-      chillerOutputInstance.delete();
+      // * used to visualize factored performance curve
+      const curveEfficiencyAtLoadWasmFactored = processCoolingInstance.getChillerARIEnergyEfficiency(i, suiteCurveLoadPercents, true);
+      const curveEfficiencyAtLoadFactored = this.suiteApiHelperService.extractWASMArray(curveEfficiencyAtLoadWasmFactored);
+
+      // * used to visualize performance curve
+      const curveEfficiencyAtLoadWasm = processCoolingInstance.getChillerARIEnergyEfficiency(i, suiteCurveLoadPercents, false);
+      const curveEfficiencyAtLoad = this.suiteApiHelperService.extractWASMArray(curveEfficiencyAtLoadWasm);
+
+      const chillerResult: ProcessCoolingChillerOutput = {
+        id: this.chillerInputResultMap[i]?.id ?? `chiller-${i + 1}`,
+        name: this.chillerInputResultMap[i]?.name ?? `Chiller ${i + 1}`,
+        ariEfficiencyProfileFactored: curveEfficiencyAtLoadFactored,
+        ariEfficiencyProfile: curveEfficiencyAtLoad,
+        loadPercents: curveLoadPercents,
+        efficiency: efficiency,
+        hours: hours,
+        power: power,
+        energy: energy,
+        totalHours: hours.reduce((a, b) => a + b, 0),
+        totalEnergy: energy.reduce((a, b) => a + b, 0)
+      };
+      chillerOutput.push(chillerResult);
+      suiteCurveLoadPercents.delete();
+      loadPercents.delete();
+      curveEfficiencyAtLoadWasmFactored.delete();
+      curveEfficiencyAtLoadWasm.delete();
     }
+
+    chillerOutputInstance.delete();
     return chillerOutput;
   }
 

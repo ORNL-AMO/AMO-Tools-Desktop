@@ -1,0 +1,947 @@
+{
+  "coverageTags": [
+    "insufficient-capacity",
+    "interval:24",
+    "zero-savings",
+    "synthetic"
+  ],
+  "display": {
+    "baseline": {
+      "annualEnergy": "3,340,188",
+      "emissions": "1,618",
+      "energyCost": "334,019",
+      "operatingCost": "334,019",
+      "peakAirflow": "5,500",
+      "peakDemand": "381.3"
+    },
+    "modifications": [
+      {
+        "annualEnergy": "3,340,188",
+        "costSavings": "0",
+        "energyCostSavings": "0",
+        "energySavings": "0",
+        "modificationId": "ca-real-025-modification-01",
+        "paybackMonths": "0",
+        "peakAirflow": "2,200",
+        "peakDemand": "381.3",
+        "peakDemandCostSavings": "0",
+        "percentSavings": "0 %"
+      }
+    ]
+  },
+  "errorClass": "NonFiniteResultError",
+  "failureStage": "output-validation",
+  "fixtureId": "ca-synthetic-005",
+  "nonFinitePaths": [
+    "$.output.modifications[0].dayTypes[0].allSavingsResults.paybackPeriod",
+    "$.output.modifications[0].dayTypes[0].flowReallocationSavings.paybackPeriod"
+  ],
+  "output": {
+    "baseline": {
+      "compressorSummaries": [
+        [
+          {
+            "dayType": {
+              "dayTypeId": "ca-real-025-day-type-01",
+              "hasValidData": true,
+              "name": "Day Type 1",
+              "numberOfDays": 365,
+              "profileDataType": "percentCapacity"
+            },
+            "ratedIsentropicEfficiency": 78.8273,
+            "ratedSpecificPower": 16.8636,
+            "specificPowerAvgLoad": 6.9327
+          }
+        ]
+      ],
+      "dayTypes": [
+        {
+          "dayType": {
+            "dayTypeId": "ca-real-025-day-type-01",
+            "hasValidData": true,
+            "name": "Day Type 1",
+            "numberOfDays": 365,
+            "profileDataType": "percentCapacity"
+          },
+          "emissionsOutput": 1617.6530484000002,
+          "profileSummary": [
+            {
+              "adjustedIsentropicEfficiency": {
+                "$special": "undefined"
+              },
+              "automaticShutdownTimer": {
+                "$special": "undefined"
+              },
+              "avgAirflow": 5500,
+              "avgPercentCapacity": 250,
+              "avgPercentPower": 100,
+              "avgPower": 381.3,
+              "compressorId": "ca-real-025-compressor-01",
+              "dayTypeId": "ca-real-025-day-type-01",
+              "fullLoadCapacity": 2200,
+              "fullLoadPressure": 105,
+              "isCompressorReplaced": {
+                "$special": "undefined"
+              },
+              "profileSummaryData": [
+                {
+                  "airflow": 5500,
+                  "amps": 320,
+                  "order": 1,
+                  "percentCapacity": 250,
+                  "percentPower": 100,
+                  "percentSystemCapacity": 250,
+                  "percentSystemPower": 100,
+                  "power": 381.3,
+                  "powerFactor": 0.87,
+                  "timeInterval": 0,
+                  "volts": 480
+                }
+              ]
+            }
+          ],
+          "profileSummaryTotals": [
+            {
+              "airflow": 5500,
+              "auxiliaryPower": 0,
+              "percentCapacity": 250,
+              "percentPower": 100,
+              "power": 381.3,
+              "timeInterval": 0,
+              "totalPower": 381.3
+            }
+          ],
+          "ratedTotals": {
+            "fullLoadCapacity": 2200,
+            "fullLoadPower": 381.3
+          },
+          "result": {
+            "annualEmissionOutput": 1617.6530484000002,
+            "averageAirFlow": 5500,
+            "averageAirFlowPercentCapacity": 250,
+            "cost": 334018.80000000005,
+            "dayTypeId": "ca-real-025-day-type-01",
+            "demandCost": 0,
+            "energyUse": 3340188.0000000005,
+            "loadFactorPercent": 100,
+            "maxAirFlow": 5500,
+            "name": "Day Type 1",
+            "operatingDays": 365,
+            "peakDemand": 381.3,
+            "totalAnnualOperatingCost": 334018.80000000005,
+            "totalOperatingHours": 8760
+          },
+          "savings": {
+            "cost": 334018.80000000005,
+            "power": 3340188.0000000005
+          }
+        }
+      ],
+      "results": {
+        "dayTypeResults": [
+          {
+            "annualEmissionOutput": 1617.6530484000002,
+            "averageAirFlow": 5500,
+            "averageAirFlowPercentCapacity": 250,
+            "cost": 334018.80000000005,
+            "dayTypeId": "ca-real-025-day-type-01",
+            "demandCost": 0,
+            "energyUse": 3340188.0000000005,
+            "loadFactorPercent": 100,
+            "maxAirFlow": 5500,
+            "name": "Day Type 1",
+            "operatingDays": 365,
+            "peakDemand": 381.3,
+            "totalAnnualOperatingCost": 334018.80000000005,
+            "totalOperatingHours": 8760
+          }
+        ],
+        "total": {
+          "annualEmissionOutput": 1617.6530484000002,
+          "averageAirFlow": 5500,
+          "averageAirFlowPercentCapacity": 250,
+          "cost": 334018.80000000005,
+          "demandCost": 0,
+          "energyUse": 3340188.0000000005,
+          "loadFactorPercent": 100,
+          "maxAirFlow": 5500,
+          "name": "System Totals",
+          "operatingDays": 365,
+          "peakDemand": 381.3,
+          "totalAnnualOperatingCost": 334018.80000000005,
+          "totalOperatingHours": 8760
+        }
+      }
+    },
+    "modifications": [
+      {
+        "combined": {
+          "addReceiverVolumeProfileSummary": {
+            "$special": "undefined"
+          },
+          "addReceiverVolumeSavings": {
+            "adjustedResults": {
+              "cost": 0,
+              "power": 0
+            },
+            "baselineResults": {
+              "cost": 0,
+              "power": 0
+            },
+            "dayTypeId": {
+              "$special": "undefined"
+            },
+            "implementationCost": 0,
+            "paybackPeriod": 0,
+            "salvageValue": 0,
+            "savings": {
+              "cost": 0,
+              "percentSavings": 0,
+              "power": 0
+            }
+          },
+          "adjustCascadingSetPointsProfileSummary": {
+            "$special": "undefined"
+          },
+          "adjustCascadingSetPointsSavings": {
+            "adjustedResults": {
+              "cost": 0,
+              "power": 0
+            },
+            "baselineResults": {
+              "cost": 0,
+              "power": 0
+            },
+            "dayTypeId": {
+              "$special": "undefined"
+            },
+            "implementationCost": 0,
+            "paybackPeriod": 0,
+            "salvageValue": 0,
+            "savings": {
+              "cost": 0,
+              "percentSavings": 0,
+              "power": 0
+            }
+          },
+          "adjustedCompressors": [],
+          "adjustedProfileSummary": [],
+          "allSavingsResults": {
+            "adjustedResults": {
+              "annualEmissionOutput": 1617.6530484000002,
+              "cost": 334018.80000000005,
+              "power": 3340188.0000000005
+            },
+            "baselineResults": {
+              "annualEmissionOutput": 1617.6530484000002,
+              "cost": 334018.80000000005,
+              "power": 3340188.0000000005
+            },
+            "dayTypeId": {
+              "$special": "undefined"
+            },
+            "implementationCost": 0,
+            "paybackPeriod": 0,
+            "salvageValue": 0,
+            "savings": {
+              "annualEmissionOutput": 0,
+              "annualEmissionOutputSavings": 0,
+              "cost": 0,
+              "percentSavings": 0,
+              "power": 0
+            }
+          },
+          "annualEmissionOutput": 1617.6530484000002,
+          "auxiliaryPowerUsage": {
+            "cost": 0,
+            "energyUse": 0
+          },
+          "averageAirFlow": {
+            "$special": "undefined"
+          },
+          "dayTypeId": {
+            "$special": "undefined"
+          },
+          "dayTypeName": {
+            "$special": "undefined"
+          },
+          "flowAllocationProfileSummary": {
+            "$special": "undefined"
+          },
+          "flowReallocationSavings": {
+            "adjustedResults": {
+              "cost": 0,
+              "power": 0
+            },
+            "baselineResults": {
+              "cost": 0,
+              "power": 0
+            },
+            "dayTypeId": {
+              "$special": "undefined"
+            },
+            "implementationCost": 0,
+            "paybackPeriod": 0,
+            "salvageValue": 0,
+            "savings": {
+              "cost": 0,
+              "percentSavings": 0,
+              "power": 0
+            }
+          },
+          "improveEndUseEfficiencyProfileSummary": {
+            "$special": "undefined"
+          },
+          "improveEndUseEfficiencySavings": {
+            "adjustedResults": {
+              "cost": 0,
+              "power": 0
+            },
+            "baselineResults": {
+              "cost": 0,
+              "power": 0
+            },
+            "dayTypeId": {
+              "$special": "undefined"
+            },
+            "implementationCost": 0,
+            "paybackPeriod": 0,
+            "salvageValue": 0,
+            "savings": {
+              "cost": 0,
+              "percentSavings": 0,
+              "power": 0
+            }
+          },
+          "maxAirFlow": 2200,
+          "peakDemand": 381.3,
+          "peakDemandCost": 0,
+          "peakDemandCostSavings": 0,
+          "profileSummaryTotals": [],
+          "reduceAirLeaksProfileSummary": {
+            "$special": "undefined"
+          },
+          "reduceAirLeaksSavings": {
+            "adjustedResults": {
+              "cost": 0,
+              "power": 0
+            },
+            "baselineResults": {
+              "cost": 0,
+              "power": 0
+            },
+            "dayTypeId": {
+              "$special": "undefined"
+            },
+            "implementationCost": 0,
+            "paybackPeriod": 0,
+            "salvageValue": 0,
+            "savings": {
+              "cost": 0,
+              "percentSavings": 0,
+              "power": 0
+            }
+          },
+          "reduceRunTimeProfileSummary": {
+            "$special": "undefined"
+          },
+          "reduceRunTimeSavings": {
+            "adjustedResults": {
+              "cost": 0,
+              "power": 0
+            },
+            "baselineResults": {
+              "cost": 0,
+              "power": 0
+            },
+            "dayTypeId": {
+              "$special": "undefined"
+            },
+            "implementationCost": 0,
+            "paybackPeriod": 0,
+            "salvageValue": 0,
+            "savings": {
+              "cost": 0,
+              "percentSavings": 0,
+              "power": 0
+            }
+          },
+          "reduceSystemAirPressureProfileSummary": {
+            "$special": "undefined"
+          },
+          "reduceSystemAirPressureSavings": {
+            "adjustedResults": {
+              "cost": 0,
+              "power": 0
+            },
+            "baselineResults": {
+              "cost": 0,
+              "power": 0
+            },
+            "dayTypeId": {
+              "$special": "undefined"
+            },
+            "implementationCost": 0,
+            "paybackPeriod": 0,
+            "salvageValue": 0,
+            "savings": {
+              "cost": 0,
+              "percentSavings": 0,
+              "power": 0
+            }
+          },
+          "replaceCompressorsProfileSummary": {
+            "$special": "undefined"
+          },
+          "replaceCompressorsSavings": {
+            "adjustedResults": {
+              "cost": 0,
+              "power": 0
+            },
+            "baselineResults": {
+              "cost": 0,
+              "power": 0
+            },
+            "dayTypeId": {
+              "$special": "undefined"
+            },
+            "implementationCost": 0,
+            "paybackPeriod": 0,
+            "salvageValue": 0,
+            "savings": {
+              "cost": 0,
+              "percentSavings": 0,
+              "power": 0
+            }
+          },
+          "totalAnnualOperatingCost": 334018.80000000005,
+          "useAutomaticSequencerProfileSummary": {
+            "$special": "undefined"
+          },
+          "useAutomaticSequencerSavings": {
+            "adjustedResults": {
+              "cost": 0,
+              "power": 0
+            },
+            "baselineResults": {
+              "cost": 0,
+              "power": 0
+            },
+            "dayTypeId": {
+              "$special": "undefined"
+            },
+            "implementationCost": 0,
+            "paybackPeriod": 0,
+            "salvageValue": 0,
+            "savings": {
+              "cost": 0,
+              "percentSavings": 0,
+              "power": 0
+            }
+          }
+        },
+        "compressorSummaries": [
+          [
+            {
+              "dayType": {
+                "dayTypeId": "ca-real-025-day-type-01",
+                "hasValidData": true,
+                "name": "Day Type 1",
+                "numberOfDays": 365,
+                "profileDataType": "percentCapacity"
+              },
+              "ratedIsentropicEfficiency": 78.8273,
+              "ratedSpecificPower": 16.8636,
+              "specificPowerAvgLoad": 17.3318
+            }
+          ]
+        ],
+        "dayTypes": [
+          {
+            "addReceiverVolumeProfileSummary": [],
+            "addReceiverVolumeSavings": {
+              "adjustedResults": {
+                "cost": 0,
+                "power": 0
+              },
+              "baselineResults": {
+                "cost": 0,
+                "power": 0
+              },
+              "dayTypeId": {
+                "$special": "undefined"
+              },
+              "implementationCost": 0,
+              "paybackPeriod": 0,
+              "salvageValue": 0,
+              "savings": {
+                "cost": 0,
+                "percentSavings": 0,
+                "power": 0
+              }
+            },
+            "adjustCascadingSetPointsProfileSummary": [],
+            "adjustCascadingSetPointsSavings": {
+              "adjustedResults": {
+                "cost": 0,
+                "power": 0
+              },
+              "baselineResults": {
+                "cost": 0,
+                "power": 0
+              },
+              "dayTypeId": {
+                "$special": "undefined"
+              },
+              "implementationCost": 0,
+              "paybackPeriod": 0,
+              "salvageValue": 0,
+              "savings": {
+                "cost": 0,
+                "percentSavings": 0,
+                "power": 0
+              }
+            },
+            "adjustedCompressors": [
+              {
+                "centrifugalSpecifics": {
+                  "maxFullLoadCapacity": null,
+                  "maxFullLoadPressure": null,
+                  "minFullLoadCapacity": null,
+                  "minFullLoadPressure": null,
+                  "surgeAirflow": null
+                },
+                "color": {
+                  "$special": "undefined"
+                },
+                "compressorControls": {
+                  "automaticShutdown": true,
+                  "controlType": 4,
+                  "numberOfUnloadSteps": 2,
+                  "unloadPointCapacity": 100,
+                  "unloadSumpPressure": 15
+                },
+                "description": "",
+                "designDetails": {
+                  "blowdownTime": 40,
+                  "designEfficiency": 95,
+                  "inputPressure": 14.5,
+                  "maxFullFlowPressure": 110,
+                  "modulatingPressureRange": null,
+                  "noLoadPowerFM": null,
+                  "noLoadPowerUL": 20,
+                  "serviceFactor": 1.15
+                },
+                "isReplacementCompressor": {
+                  "$special": "undefined"
+                },
+                "itemId": "ca-real-025-compressor-01",
+                "modifiedDate": "2000-01-01T00:00:00.000Z",
+                "name": "Compressor 1",
+                "nameplateData": {
+                  "compressorType": 2,
+                  "fullLoadAmps": 495,
+                  "fullLoadOperatingPressure": 100,
+                  "fullLoadRatedCapacity": 2200,
+                  "motorPower": 450,
+                  "ploytropicCompressorExponent": 1.4,
+                  "ratedLoadPower": null,
+                  "totalPackageInputPower": 371
+                },
+                "performancePoints": {
+                  "blowoff": {
+                    "airflow": {
+                      "$special": "undefined"
+                    },
+                    "dischargePressure": {
+                      "$special": "undefined"
+                    },
+                    "isDefaultAirFlow": true,
+                    "isDefaultPower": true,
+                    "isDefaultPressure": true,
+                    "power": {
+                      "$special": "undefined"
+                    }
+                  },
+                  "fullLoad": {
+                    "airflow": 2200,
+                    "dischargePressure": 105,
+                    "isDefaultAirFlow": false,
+                    "isDefaultPower": true,
+                    "isDefaultPressure": false,
+                    "power": 381.3
+                  },
+                  "maxFullFlow": {
+                    "airflow": 2184,
+                    "dischargePressure": 115,
+                    "isDefaultAirFlow": true,
+                    "isDefaultPower": true,
+                    "isDefaultPressure": false,
+                    "power": 400.9
+                  },
+                  "midTurndown": {
+                    "airflow": {
+                      "$special": "undefined"
+                    },
+                    "dischargePressure": {
+                      "$special": "undefined"
+                    },
+                    "isDefaultAirFlow": true,
+                    "isDefaultPower": true,
+                    "isDefaultPressure": true,
+                    "power": {
+                      "$special": "undefined"
+                    }
+                  },
+                  "noLoad": {
+                    "airflow": 0,
+                    "dischargePressure": 15,
+                    "isDefaultAirFlow": true,
+                    "isDefaultPower": true,
+                    "isDefaultPressure": true,
+                    "power": 75.9
+                  },
+                  "turndown": {
+                    "airflow": {
+                      "$special": "undefined"
+                    },
+                    "dischargePressure": {
+                      "$special": "undefined"
+                    },
+                    "isDefaultAirFlow": true,
+                    "isDefaultPower": true,
+                    "isDefaultPressure": true,
+                    "power": {
+                      "$special": "undefined"
+                    }
+                  },
+                  "unloadPoint": {
+                    "airflow": {
+                      "$special": "undefined"
+                    },
+                    "dischargePressure": {
+                      "$special": "undefined"
+                    },
+                    "isDefaultAirFlow": true,
+                    "isDefaultPower": true,
+                    "isDefaultPressure": true,
+                    "power": {
+                      "$special": "undefined"
+                    }
+                  }
+                },
+                "showBlowoffPoint": false,
+                "showMaxFullFlow": true,
+                "showMidTurndown": false,
+                "showNoLoadPoint": true,
+                "showTurndown": false
+              }
+            ],
+            "adjustedProfileSummary": [
+              {
+                "adjustedIsentropicEfficiency": {
+                  "$special": "undefined"
+                },
+                "automaticShutdownTimer": {
+                  "$special": "undefined"
+                },
+                "avgAirflow": 2200,
+                "avgPercentCapacity": 100,
+                "avgPercentPower": 100,
+                "avgPower": 381.3,
+                "compressorId": "ca-real-025-compressor-01",
+                "dayTypeId": "ca-real-025-day-type-01",
+                "fullLoadCapacity": 2200,
+                "fullLoadPressure": 105,
+                "isCompressorReplaced": {
+                  "$special": "undefined"
+                },
+                "profileSummaryData": [
+                  {
+                    "airflow": 2200,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 100,
+                    "percentSystemCapacity": 100,
+                    "percentSystemPower": 100,
+                    "power": 381.3,
+                    "timeInterval": 0
+                  }
+                ]
+              }
+            ],
+            "allSavingsResults": {
+              "adjustedResults": {
+                "annualEmissionOutput": 1617.6530484000002,
+                "annualEmissionOutputSavings": 0,
+                "cost": 334018.80000000005,
+                "percentSavings": 0,
+                "power": 3340188.0000000005
+              },
+              "annualEmissionOutput": 0,
+              "annualEmissionOutputSavings": 0,
+              "baselineResults": {
+                "annualEmissionOutput": 0,
+                "annualEmissionOutputSavings": 0,
+                "cost": 334018.80000000005,
+                "percentSavings": 0,
+                "power": 3340188.0000000005
+              },
+              "cost": 0,
+              "dayTypeId": "ca-real-025-day-type-01",
+              "implementationCost": 0,
+              "paybackPeriod": {
+                "$special": "NaN"
+              },
+              "percentSavings": 0,
+              "power": 0,
+              "salvageValue": 0,
+              "savings": {
+                "annualEmissionOutput": 0,
+                "annualEmissionOutputSavings": 0,
+                "cost": 0,
+                "percentSavings": 0,
+                "power": 0
+              }
+            },
+            "annualEmissionOutput": 1617.6530484000002,
+            "auxiliaryPowerUsage": {
+              "cost": 0,
+              "energyUse": 0
+            },
+            "averageAirFlow": 2200,
+            "dayTypeId": "ca-real-025-day-type-01",
+            "dayTypeName": "Day Type 1",
+            "flowAllocationProfileSummary": [
+              {
+                "adjustedIsentropicEfficiency": {
+                  "$special": "undefined"
+                },
+                "automaticShutdownTimer": {
+                  "$special": "undefined"
+                },
+                "avgAirflow": 5500,
+                "avgPercentCapacity": 250,
+                "avgPercentPower": 100,
+                "avgPower": 381.3,
+                "compressorId": "ca-real-025-compressor-01",
+                "dayTypeId": "ca-real-025-day-type-01",
+                "fullLoadCapacity": 2200,
+                "fullLoadPressure": 105,
+                "isCompressorReplaced": {
+                  "$special": "undefined"
+                },
+                "profileSummaryData": [
+                  {
+                    "airflow": 2200,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 100,
+                    "percentSystemCapacity": 100,
+                    "percentSystemPower": 100,
+                    "power": 381.3,
+                    "timeInterval": 0
+                  }
+                ]
+              }
+            ],
+            "flowReallocationSavings": {
+              "adjustedResults": {
+                "annualEmissionOutput": 0,
+                "annualEmissionOutputSavings": 0,
+                "cost": 334018.80000000005,
+                "percentSavings": 0,
+                "power": 3340188.0000000005
+              },
+              "annualEmissionOutput": 0,
+              "annualEmissionOutputSavings": 0,
+              "baselineResults": {
+                "annualEmissionOutput": 0,
+                "annualEmissionOutputSavings": 0,
+                "cost": 334018.80000000005,
+                "percentSavings": 0,
+                "power": 3340188.0000000005
+              },
+              "cost": 0,
+              "dayTypeId": "ca-real-025-day-type-01",
+              "implementationCost": 0,
+              "paybackPeriod": {
+                "$special": "NaN"
+              },
+              "percentSavings": 0,
+              "power": 0,
+              "salvageValue": 0,
+              "savings": {
+                "annualEmissionOutput": 0,
+                "annualEmissionOutputSavings": 0,
+                "cost": 0,
+                "percentSavings": 0,
+                "power": 0
+              }
+            },
+            "improveEndUseEfficiencyProfileSummary": [],
+            "improveEndUseEfficiencySavings": {
+              "adjustedResults": {
+                "cost": 0,
+                "power": 0
+              },
+              "baselineResults": {
+                "cost": 0,
+                "power": 0
+              },
+              "dayTypeId": {
+                "$special": "undefined"
+              },
+              "implementationCost": 0,
+              "paybackPeriod": 0,
+              "salvageValue": 0,
+              "savings": {
+                "cost": 0,
+                "percentSavings": 0,
+                "power": 0
+              }
+            },
+            "maxAirFlow": 2200,
+            "peakDemand": 381.3,
+            "peakDemandCost": 0,
+            "peakDemandCostSavings": 0,
+            "profileSummaryTotals": [
+              {
+                "airflow": 2200,
+                "auxiliaryPower": 0,
+                "percentCapacity": 100,
+                "percentPower": 100,
+                "power": 381.3,
+                "timeInterval": 0,
+                "totalPower": 381.3
+              }
+            ],
+            "reduceAirLeaksProfileSummary": [],
+            "reduceAirLeaksSavings": {
+              "adjustedResults": {
+                "cost": 0,
+                "power": 0
+              },
+              "baselineResults": {
+                "cost": 0,
+                "power": 0
+              },
+              "dayTypeId": {
+                "$special": "undefined"
+              },
+              "implementationCost": 0,
+              "paybackPeriod": 0,
+              "salvageValue": 0,
+              "savings": {
+                "cost": 0,
+                "percentSavings": 0,
+                "power": 0
+              }
+            },
+            "reduceRunTimeProfileSummary": [],
+            "reduceRunTimeSavings": {
+              "adjustedResults": {
+                "cost": 0,
+                "power": 0
+              },
+              "baselineResults": {
+                "cost": 0,
+                "power": 0
+              },
+              "dayTypeId": {
+                "$special": "undefined"
+              },
+              "implementationCost": 0,
+              "paybackPeriod": 0,
+              "salvageValue": 0,
+              "savings": {
+                "cost": 0,
+                "percentSavings": 0,
+                "power": 0
+              }
+            },
+            "reduceSystemAirPressureProfileSummary": [],
+            "reduceSystemAirPressureSavings": {
+              "adjustedResults": {
+                "cost": 0,
+                "power": 0
+              },
+              "baselineResults": {
+                "cost": 0,
+                "power": 0
+              },
+              "dayTypeId": {
+                "$special": "undefined"
+              },
+              "implementationCost": 0,
+              "paybackPeriod": 0,
+              "salvageValue": 0,
+              "savings": {
+                "cost": 0,
+                "percentSavings": 0,
+                "power": 0
+              }
+            },
+            "replaceCompressorsProfileSummary": [],
+            "replaceCompressorsSavings": {
+              "adjustedResults": {
+                "cost": 0,
+                "power": 0
+              },
+              "baselineResults": {
+                "cost": 0,
+                "power": 0
+              },
+              "dayTypeId": {
+                "$special": "undefined"
+              },
+              "implementationCost": 0,
+              "paybackPeriod": 0,
+              "salvageValue": 0,
+              "savings": {
+                "cost": 0,
+                "percentSavings": 0,
+                "power": 0
+              }
+            },
+            "totalAnnualOperatingCost": 334018.80000000005,
+            "useAutomaticSequencerProfileSummary": [],
+            "useAutomaticSequencerSavings": {
+              "adjustedResults": {
+                "cost": 0,
+                "power": 0
+              },
+              "baselineResults": {
+                "cost": 0,
+                "power": 0
+              },
+              "dayTypeId": {
+                "$special": "undefined"
+              },
+              "implementationCost": 0,
+              "paybackPeriod": 0,
+              "salvageValue": 0,
+              "savings": {
+                "cost": 0,
+                "percentSavings": 0,
+                "power": 0
+              }
+            }
+          }
+        ],
+        "modificationId": "ca-real-025-modification-01",
+        "name": "Modification 1",
+        "totals": {
+          "totalBaselineCost": 334018.80000000005,
+          "totalBaselinePower": 3340188.0000000005,
+          "totalCostSavings": 0,
+          "totalModificationCost": 334018.80000000005,
+          "totalModificationPower": 3340188.0000000005,
+          "totalPowerSavings": 0
+        }
+      }
+    ]
+  },
+  "source": "synthetic",
+  "status": "known-failure"
+}

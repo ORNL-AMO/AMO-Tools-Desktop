@@ -1,5 +1,4 @@
 import { DecimalPipe } from '@angular/common';
-import { type MeasurToolsSuite } from 'measur-tools-suite';
 import baseline from './legacy-results.json';
 import allowed from './expected-differences.json';
 import { resultDifferences } from './compare';
@@ -85,8 +84,7 @@ describe('Motor-driven Desktop result preservation', () => {
 
   it('keeps the near-zero threshold in fractional load and supplies nameplate data', () => {
     const { pumps, tools } = services;
-    const suite: MeasurToolsSuite = tools.ToolsSuiteModule;
-    const spy = spyOn(suite, 'calculateMotorPowerFactor').and.callThrough();
+    const spy = spyOn(tools.ToolsSuiteModule, 'calculateMotorPowerFactor').and.callThrough();
     pumps.motorPowerFactor(200, 0.05, 60, 90, 460, 50, 1450, 3, 90);
     const input = spy.calls.mostRecent().args[0];
     expect(input.lineFrequency).toBe(tools.ToolsSuiteModule.LineFrequency.FREQ50);

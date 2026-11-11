@@ -17,11 +17,10 @@ describe('AirLeakSurveyService', () => {
 
   beforeEach(() => {
     convertAirleakService = jasmine.createSpyObj('ConvertAirLeakService', [
-      'convertInputs', 'convertCompressorSpecificPower', 'convertBagMethodResult', 'convertResult',
+      'convertInputs', 'convertCompressorSpecificPower', 'convertResult',
       'convertExample', 'convertImperialFacilityCompressorData',
     ]);
     convertAirleakService.convertCompressorSpecificPower.and.callFake((value: number) => value);
-    convertAirleakService.convertBagMethodResult.and.callFake((value: AirLeakSurveyResult) => value);
     convertAirleakService.convertResult.and.callFake((value: AirLeakSurveyResult) => value);
     convertAirleakService.convertExample.and.callFake((value: AirLeakSurveyInput) => value);
     convertAirleakService.convertImperialFacilityCompressorData.and.callFake((value: any) => value);
@@ -102,6 +101,35 @@ describe('AirLeakSurveyService', () => {
     expect(output.modificationTotal).toEqual({ totalFlowRate: 5, annualTotalFlowRate: 50, annualTotalElectricity: 500, annualTotalElectricityCost: 50 });
     expect(output.savings).toEqual({ totalFlowRate: 10, annualTotalFlowRate: 100, annualTotalElectricity: 1000, annualTotalElectricityCost: 100 });
     expect(output.individualLeaks.length).toBe(2);
+  });
+
+  it('routes bag-method survey results through the normal conversion path', () => {
+    service.settings = settings;
+    const bagLeak = {
+      ...getLeak('Bag Leak', true),
+      measurementMethod: LeakMeasurementMethod.Bag
+    };
+    standaloneService.airLeakSurvey.and.returnValue({
+      totalFlowRate: 72,
+      annualTotalFlowRate: 37843200,
+      annualTotalElectricity: 100915.2,
+      annualTotalElectricityCost: 12109.824
+    });
+
+    const output = service.getResults(settings, getInput([bagLeak], 1, 100));
+
+    expect(convertAirleakService.convertResult).toHaveBeenCalledTimes(1);
+    expect(convertAirleakService.convertResult).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        name: 'Bag Leak',
+        selected: true,
+        annualTotalElectricity: 100915.2,
+        annualTotalElectricityCost: 12109.824
+      }),
+      settings
+    );
+    expect(output.baselineTotal.annualTotalElectricity).toBe(100915.2);
+    expect(output.baselineTotal.annualTotalElectricityCost).toBe(12109.824);
   });
 
   it('returns zero totals when leak array is empty', () => {

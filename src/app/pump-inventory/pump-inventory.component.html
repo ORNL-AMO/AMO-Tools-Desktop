@@ -11,7 +11,7 @@
     <div *ngIf="mainTab == 'setup'" #footer id="pumpInventoryFooter" class="footer d-lg-block d-none hide-print">
         <div class="d-flex w-100 justify-content-between">
             <button class="btn btn-default" (click)="back()" [disabled]="setupTab == 'plant-setup'">Back</button>
-            <button class="btn btn-primary" (click)="continue()">Next</button>
+            <button class="btn btn-primary" (click)="continue()" [disabled]="setupTab == 'pump-catalog' && !pumpInventoryItem.pumpInventoryData.isValid">Next</button>
         </div>
     </div>
 </div>

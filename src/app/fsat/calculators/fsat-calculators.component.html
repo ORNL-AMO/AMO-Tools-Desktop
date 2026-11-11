@@ -1,0 +1,20 @@
+@if (fsat && assessment && settings) {
+  <div class="assessment-tab-container tab-content" [ngStyle]="{'height.px': containerHeight}">
+    @if (calcTab == 'fan-efficiency') {
+      <app-fan-efficiency [inAssessment]="true" [assessment]="assessment"
+        [fsat]="fsat" [settings]="settings"></app-fan-efficiency>
+    }
+    @if (calcTab == 'motor-performance') {
+      <app-motor-performance [settings]="settings" [inAssessment]="true"
+        [assessment]="assessment" [fsat]="fsat"></app-motor-performance>
+    }
+    @if (calcTab == 'nema-energy-efficiency') {
+      <app-nema-energy-efficiency [inAssessment]="true"
+        [assessment]="assessment" [settings]="settings" [fsat]="fsat"></app-nema-energy-efficiency>
+    }
+    @if (calcTab == 'fan-curve') {
+      <app-system-and-equipment-curve [settings]="settings" [equipmentType]="'fan'"
+        [assessment]="assessment"></app-system-and-equipment-curve>
+    }
+  </div>
+}

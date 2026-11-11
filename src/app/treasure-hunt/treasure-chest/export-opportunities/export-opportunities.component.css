@@ -13,3 +13,35 @@
 .btn{
     padding: 6px;
 }
+
+.export-footer .form-group label,
+.export-footer .form-group .form-control{
+    float: none;
+    width: auto;
+    white-space: nowrap;
+}
+
+.export-footer .export-controls,
+.export-footer .form-group,
+.export-footer .form-control{
+    min-width: 0;
+}
+
+.export-footer input[type="checkbox"]{
+    width: 19.5px;
+    height: 19.5px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 575.98px){
+    .export-footer .export-controls{
+        order: -1;
+        width: 100%;
+    }
+}
+
+@media (min-width: 576px){
+    .export-modal{
+        max-width: 50%;
+    }
+}

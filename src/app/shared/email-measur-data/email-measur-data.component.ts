@@ -1,7 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn, FormControl } from '@angular/forms';
-import { EmailMeasurDataService, EmailSentStatus } from './email-measur-data.service';
+import { EmailMeasurDataService, EmailSentStatus, MeasurItemAttachment } from './email-measur-data.service';
 import { Subscription } from 'rxjs';
+import { ContactDbService, SavedContact } from '../../indexedDb/contact-db.service';
+import { ExportOpportunitiesService } from '../../treasure-hunt/treasure-chest/export-opportunities.service';
+import { OpportunityCounts } from '../../treasure-hunt/treasure-chest/opportunity-export-sections';
+import { TreasureHunt } from '../models/treasure-hunt';
 @Component({
     selector: 'app-email-measur-data',
     templateUrl: './email-measur-data.component.html',
@@ -14,31 +18,84 @@ export class EmailMeasurDataComponent {
   @Output('formStatus')
   formStatus = new EventEmitter<boolean>();
   showPreview: boolean = false;
-  
+
   emailDataForm: FormGroup;
   emailSender: string = 'MEASUR user';
   emailSentStatus: EmailSentStatus;
   emailSentStatusSubscription: Subscription;
-  constructor(private fb: FormBuilder, private emailMeasurDataService: EmailMeasurDataService) { }
+  emailToValueChangesSubscription: Subscription;
+
+  currentEmailToken: string = '';
+  canAddCurrentEmailAsContact: boolean = false;
+  showContactAddedBanner: boolean = false;
+  showIncludeUnselected: boolean = false;
+  isOpportunities: boolean = false;
+  treasureHunt: TreasureHunt;
+  opportunityCounts: OpportunityCounts;
+  showOpportunitiesPreview: boolean = false;
+  private contactAddedBannerTimeout: any;
+
+  constructor(private fb: FormBuilder, private emailMeasurDataService: EmailMeasurDataService, private contactDbService: ContactDbService,
+    private exportOpportunitiesService: ExportOpportunitiesService) { }
 
   ngOnInit() {
+    const primaryContact: SavedContact = this.contactDbService.primaryContact;
+    const recipientEmails: string = this.contactDbService.allContacts
+      .filter(contact => !contact.isPrimary && contact.email)
+      .map(contact => contact.email)
+      .join(', ');
     this.emailDataForm = this.fb.group({
-      emailTo: ['', [Validators.required, this.multipleEmailsValidator()]],
-      emailSender: ['', [Validators.email]],
+      emailTo: [recipientEmails, [Validators.required, this.multipleEmailsValidator()]],
+      emailSender: [primaryContact?.email ?? '', [Validators.email]],
       emailAttachmentName: [
         this.emailMeasurDataService.measurItemAttachment.itemName,
         [Validators.required, this.invalidCharactersValidator()]
-      ]
+      ],
+      includeUnselected: [false]
     });
+    const attachment: MeasurItemAttachment = this.emailMeasurDataService.measurItemAttachment;
+    this.isOpportunities = attachment.itemType === 'opportunities';
+    if (this.isOpportunities) {
+      this.treasureHunt = attachment.itemData;
+      this.opportunityCounts = this.exportOpportunitiesService.getOpportunityCounts(this.treasureHunt);
+      this.showIncludeUnselected = this.exportOpportunitiesService.hasUnselectedOpportunities(this.treasureHunt);
+    }
+    this.save();
 
     this.emailSentStatusSubscription = this.emailMeasurDataService.emailSentStatus.subscribe(sentStatus => {
       this.emailSentStatus = sentStatus;
     });
+
+    this.emailToValueChangesSubscription = this.emailDataForm.controls.emailTo.valueChanges.subscribe((value: string) => this.onEmailToChange(value));
   }
 
   ngOnDestroy() {
     this.emailSentStatusSubscription.unsubscribe();
+    this.emailToValueChangesSubscription.unsubscribe();
     this.emailMeasurDataService.emailSentStatus.next(undefined);
+    clearTimeout(this.contactAddedBannerTimeout);
+  }
+
+  getLastToken(value: string): string {
+    const tokens = (value ?? '').split(',');
+    return tokens[tokens.length - 1].trim();
+  }
+
+  onEmailToChange(value: string) {
+    this.currentEmailToken = this.getLastToken(value);
+    const isValidEmail = !!this.currentEmailToken && Validators.email(new FormControl(this.currentEmailToken)) === null;
+    const matchesExistingContact = this.contactDbService.allContacts.some(contact =>
+      contact.email?.trim().toLowerCase() === this.currentEmailToken.toLowerCase());
+    this.canAddCurrentEmailAsContact = isValidEmail && !matchesExistingContact;
+  }
+
+  async addCurrentEmailToContacts() {
+    if (!this.canAddCurrentEmailAsContact) return;
+    await this.contactDbService.saveIfNew({ contactName: '', phoneNumber: undefined, email: this.currentEmailToken });
+    this.canAddCurrentEmailAsContact = false;
+    this.showContactAddedBanner = true;
+    clearTimeout(this.contactAddedBannerTimeout);
+    this.contactAddedBannerTimeout = setTimeout(() => this.showContactAddedBanner = false, 4000);
   }
 
   save() {
@@ -53,6 +110,10 @@ export class EmailMeasurDataComponent {
 
   togglePreview() {
     this.showPreview = !this.showPreview;
+  }
+
+  toggleOpportunitiesPreview() {
+    this.showOpportunitiesPreview = !this.showOpportunitiesPreview;
   }
 
   multipleEmailsValidator(): ValidatorFn {
@@ -80,5 +141,9 @@ export class EmailMeasurDataComponent {
 
   get emailAttachmentName() {
     return this.emailDataForm.get('emailAttachmentName');
+  }
+
+  get includedOpportunityCount(): number {
+    return this.exportOpportunitiesService.getIncludedOpportunityCount(this.opportunityCounts, this.emailDataForm.controls.includeUnselected.value);
   }
 }

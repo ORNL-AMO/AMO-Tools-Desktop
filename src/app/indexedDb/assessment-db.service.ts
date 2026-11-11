@@ -8,6 +8,8 @@ import { UpdateDataService } from '../shared/helper-services/update-data.service
 import { environment } from '../../environments/environment';
 import { CalculatorDbService } from './calculator-db.service';
 import { Calculator } from '../shared/models/calculators';
+import { DiagramIdbService } from './diagram-idb.service';
+import { Diagram } from '../shared/models/diagram';
 declare const packageJson;
 
 @Injectable()
@@ -18,7 +20,8 @@ export class AssessmentDbService {
   storeName: string = AssessmentStoreMeta.store;
 
   constructor(
-    private dbService: NgxIndexedDBService, private updateDataService: UpdateDataService, private calculatorDbService: CalculatorDbService) {
+    private dbService: NgxIndexedDBService, private updateDataService: UpdateDataService, private calculatorDbService: CalculatorDbService,
+    private diagramIdbService: DiagramIdbService) {
       this.dbAssessments = new BehaviorSubject<Array<Assessment>>([]);
   }
   
@@ -31,22 +34,53 @@ export class AssessmentDbService {
     this.dbAssessments.next(this.allAssessments);
   }
 
+  /**
+   * Replaces one assessment in the cache with a copy of the saved object, without re-reading the whole store.
+   * Copied so cache consumers never share an object with the assessment a component is editing.
+   */
+  upsertInCache(assessment: Assessment) {
+    const cachedAssessment: Assessment = _.cloneDeep(assessment);
+    const assessments: Assessment[] = this.allAssessments ?? [];
+    const cachedIndex: number = assessments.findIndex((cached: Assessment) => cached.id === assessment.id);
+    const updatedAssessments: Assessment[] = [...assessments];
+    if (cachedIndex === -1) {
+      updatedAssessments.push(cachedAssessment);
+    } else {
+      updatedAssessments[cachedIndex] = cachedAssessment;
+    }
+    this.allAssessments = updatedAssessments;
+    this.dbAssessments.next(this.allAssessments);
+  }
+
   getAllAssessments(): Observable<Assessment[]> {
     return this.dbService.getAll(this.storeName).pipe(
       mergeMap(async (assessments: Array<Assessment>) => {
         for await (let assessment of assessments) {
           if (assessment.appVersion !== environment.version) {
             this.updateDataService.updateAssessmentVersion(assessment);
-            await firstValueFrom(this.updateWithObservable(assessment));
             let assessmentCalculators: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
             let updatedAssessmentCalculators = this.updateDataService.updateAssessmentCalculatorVersion(assessmentCalculators);
             if (updatedAssessmentCalculators) {
               this.calculatorDbService.saveAssessmentCalculator(assessment, updatedAssessmentCalculators);
             }
+            await Promise.all([
+              firstValueFrom(this.updateWithObservable(assessment)),
+              this.updateWaterDiagramIfPresent(assessment)
+            ]);
           }
         }
         return assessments;
       }));
+  }
+
+  private async updateWaterDiagramIfPresent(assessment: Assessment): Promise<void> {
+    if (assessment.type === 'Water' && assessment.diagramId) {
+      const diagram: Diagram = await firstValueFrom(this.diagramIdbService.getByIdAsync(assessment.diagramId));
+      if (diagram) {
+        this.updateDataService.updateWaterDiagram(diagram);
+        await firstValueFrom(this.diagramIdbService.updateWithObservable(diagram));
+      }
+    }
   }
 
   findById(id: number): Assessment {

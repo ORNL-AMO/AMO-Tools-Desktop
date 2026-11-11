@@ -40,9 +40,11 @@ import { SystemInformationFormService } from './system-information/system-inform
 import { AlertBadgeComponent } from '../shared/alert-badge/alert-badge.component';
 import { FormControlErrorsComponent } from '../shared/form-control-errors.component';
 import { InputUnitComponent } from '../shared/input-unit.component';
+import { LayoutWorkspaceComponent } from '../shared/layout-workspace/layout-workspace.component';
 import { OperationsComponent } from './system-information/operations/operations.component';
 import { ProcessCoolingAssessmentResolver } from './routing/process-cooling-assessment-resolver.resolver';
 import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
+import { AssessmentNotesComponent } from './results-panel/assessment-notes/assessment-notes.component';
 import { InventoryTableComponent } from './results-panel/inventory-table/inventory-table.component';
 import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
 import { SystemInformationHelpComponent } from './results-panel/help-panel/system-information-help/system-information-help.component';
@@ -312,7 +314,8 @@ const ROUTES: Route[] = [
     UseFreeCoolingComponent,
     ReplaceChillerRefrigerantComponent,
     VsdInventoryTableComponent,
-    RefrigerantInventoryTableComponent
+    RefrigerantInventoryTableComponent,
+    AssessmentNotesComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),
@@ -336,6 +339,7 @@ const ROUTES: Route[] = [
     FormControlErrorsComponent,
     InputUnitComponent,
     AlertInfoContainerComponent,
+    LayoutWorkspaceComponent,
     PercentGraphModule,
     ReportTableCellPipe,
     ReportBuilderModule

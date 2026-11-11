@@ -32,6 +32,7 @@ export interface PsatInputs {
   pump_rated_speed?: number;
   drive?: number;
   specifiedDriveEfficiency?: number;
+  differentialPressure?: number;
   kinematic_viscosity?: number;
   specific_gravity?: number;
   stages?: number;
@@ -48,8 +49,6 @@ export interface PsatInputs {
   operating_hours: number;
   flow_rate?: number;
   head?: number;
-  /** Optional pump differential pressure, units psi; existing head-based records may omit it. */
-  differentialPressure?: number;
   motor_field_power?: number;
   motor_field_current?: number;
   motor_field_voltage?: number;
@@ -82,6 +81,7 @@ export interface PsatOutputs {
   optimization_rating?: number;
   percent_annual_savings?: number;
   co2EmissionsOutput?: number;
+  paybackPeriod?: number;
 }
 
 export interface PsatOutputsExistingOptimal {

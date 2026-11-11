@@ -49,12 +49,3 @@ tr > th:not(:first-child){
 .savings-graph-row{
     background-color: #D6DBDF;
 }
-
-.hidden-copy-table {
-    z-index: -10;
-    position: fixed;
-    opacity: 0;
-    top: -1000px;
-    height: 0;
-    width: 0;
-}

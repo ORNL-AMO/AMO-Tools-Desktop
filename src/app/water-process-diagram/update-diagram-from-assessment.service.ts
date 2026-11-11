@@ -5,7 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import * as _ from 'lodash';
 import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { WaterAssessment, WaterDiagram, WaterProcessComponent, WaterProcessComponentType, ProcessFlowPart, getNewNode, DiagramWaterSystemFlows, UserDiagramOptions, getEdgeFromConnection, EdgeFlowData, getAssessmentWaterSystemFlowEdges, WaterSystemFlowsTotals, WaterUsingSystem } from 'process-flow-lib';
+import { WaterAssessment, WaterDiagram, WaterProcessComponent, WaterProcessComponentType, ProcessFlowPart, getNewNode, DiagramWaterSystemFlows, UserDiagramOptions, getEdgeFromConnection, EdgeFlowData, getAssessmentWaterSystemFlowEdges, WaterSystemFlowsTotals, WaterUsingSystem, getDefaultFlowConfidence, getDefaultFlowTotalTouched } from 'process-flow-lib';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Diagram, IntegratedAssessmentDiagram } from '../shared/models/diagram';
 import { Assessment } from '../shared/models/assessment';
@@ -16,25 +16,6 @@ export class UpdateDiagramFromAssessmentService {
   constructor(private diagramIdbService: DiagramIdbService,
     private settingsDbService: SettingsDbService,
     private assessmentIdbService: AssessmentDbService) { }
-
-  async syncDiagramToAssessment(diagram: Diagram, 
-    integratedDiagram: IntegratedAssessmentDiagram) {
-    if (diagram.assessmentId !== undefined) {
-      let integratedAssessment: Assessment;
-      if (integratedDiagram) {
-        integratedAssessment = integratedDiagram.assessment;
-      } else {
-        integratedAssessment = this.assessmentIdbService.findById(diagram.assessmentId);
-      }
-
-      if (integratedAssessment && diagram.modifiedDate < integratedAssessment.modifiedDate) {
-        this.updateDiagramFromAssessment(diagram, integratedAssessment.water);
-        let assessmentSettings: Settings = this.settingsDbService.getByAssessmentId(integratedAssessment);
-        this.setDiagramSettingsFromAssessment(integratedAssessment, assessmentSettings, diagram);
-        await firstValueFrom(this.diagramIdbService.updateWithObservable(diagram));
-      }
-    }
-  }
 
   getDiagramFromAssessment(assessment: Assessment): Diagram {
     let diagram = this.diagramIdbService.findById(assessment.diagramId);
@@ -64,6 +45,29 @@ export class UpdateDiagramFromAssessmentService {
     this.filterDeletedEdges(diagram.waterDiagram, waterAssessment, assessmentNodes);
 
     diagram.waterDiagram.flowDiagramData.nodes = assessmentNodes;
+  }
+
+  /**
+   * Adds nodes for assessment components that have no node yet, without removing or changing existing nodes.
+   * Returns whether any node was added.
+   */
+  addMissingNodesFromAssessment(diagram: Diagram, waterAssessment: WaterAssessment): boolean {
+    const componentGroups: [WaterProcessComponentType, WaterProcessComponent[]][] = [
+      ['water-intake', waterAssessment.intakeSources],
+      ['water-discharge', waterAssessment.dischargeOutlets],
+      ['water-using-system', waterAssessment.waterUsingSystems],
+      ['water-treatment', waterAssessment.waterTreatments],
+      ['waste-water-treatment', waterAssessment.wasteWaterTreatments],
+      ['known-loss', waterAssessment.knownLosses],
+    ];
+    const flowDiagramData = diagram.waterDiagram.flowDiagramData;
+    const addedNodes: Node[] = [];
+    componentGroups.forEach(([componentType, components]) => {
+      const componentTypeNodes: Node[] = flowDiagramData.nodes.filter(node => node.data.processComponentType === componentType);
+      this.addNewDiagramNodes(componentTypeNodes, components, addedNodes);
+    });
+    flowDiagramData.nodes = flowDiagramData.nodes.concat(addedNodes);
+    return addedNodes.length > 0;
   }
 
   setDiagramSettingsFromAssessment(integratedAssessment: Assessment, settings: Settings, diagram: Diagram) {
@@ -120,7 +124,12 @@ export class UpdateDiagramFromAssessmentService {
     return componentTypeNodes.filter((node: Node) => {
       let existingComponentIndex: number = assessmentComponents.findIndex(component =>  component.diagramNodeId === node.data.diagramNodeId);
       if (existingComponentIndex !== -1) {
-        node.data = assessmentComponents[existingComponentIndex];
+        const incoming: WaterProcessComponent = assessmentComponents[existingComponentIndex];
+        node.data = {
+          ...incoming,
+          flowConfidence: node.data.flowConfidence ?? incoming.flowConfidence ?? getDefaultFlowConfidence(),
+          flowTotalTouched: node.data.flowTotalTouched ?? incoming.flowTotalTouched ?? getDefaultFlowTotalTouched(),
+        };
         return node;
       }
     });

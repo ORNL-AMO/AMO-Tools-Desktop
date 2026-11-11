@@ -1,0 +1,41 @@
+@if (fsat && assessment && settings) {
+  <div class="assessment-container tab-content">
+    <div class="assessment-panel-container lookup-form modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
+      [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}">
+      @if (stepTab == 'baseline') {
+        <app-system-basics [settings]="settings" [assessment]="assessment"
+          (emitSave)="saveSettings($event)" (emitSaveFsat)="saveFsat($event)"
+          (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
+      }
+
+      @if (stepTab == 'fan-operations') {
+        <app-operations [settings]="settings" [inSetup]="true" [selected]="true"
+          [fsatOperations]="fsat.fsatOperations" [baseline]="true" (emitSave)="saveFsatOperations($event)" [fsat]="fsat">
+        </app-operations>
+      }
+
+      @if (stepTab == 'fan-setup') {
+        <app-fan-setup [containerHeight]="containerHeight" [settings]="settings"
+          [inSetup]="true" [selected]="true" [fanSetup]="fsat.fanSetup" [fsat]="fsat" [baseline]="true"
+          (emitSave)="saveFanSetup($event)"></app-fan-setup>
+        <app-fsat-fluid [inSetup]="true" [selected]="true"
+          [baseGasDensity]="fsat.baseGasDensity" (emitSave)="saveGasDensity($event)" [settings]="settings"
+          [baseline]="true" [fsat]="fsat"></app-fsat-fluid>
+      }
+      @if (stepTab == 'fan-motor') {
+        <app-fan-motor [settings]="settings" [inSetup]="true" [selected]="true"
+          [fanMotor]="fsat.fanMotor" [baseline]="true" (emitSave)="saveFanMotor($event)" [fieldData]="fsat.fieldData"
+          [fsat]="fsat"></app-fan-motor>
+      }
+      @if (stepTab == 'fan-field-data') {
+        <app-fan-field-data [settings]="settings" [inSetup]="true" [selected]="true"
+          [fieldData]="fsat.fieldData" [baseline]="true" (emitSave)="saveFieldData($event)" [fsat]="fsat">
+        </app-fan-field-data>
+      }
+    </div>
+    <div class="assessment-panel-container scroll-item" [ngClass]="{'pl-0': stepTab == 'fan-field-data', 'small-screen-tab': smallScreenTab === 'details'}" [ngStyle]="{'height.px': containerHeight}">
+      <app-help-panel [modificationIndex]="modificationIndex" [settings]="settings" [inSetup]="true" [fsat]="fsat">
+      </app-help-panel>
+    </div>
+  </div>
+}

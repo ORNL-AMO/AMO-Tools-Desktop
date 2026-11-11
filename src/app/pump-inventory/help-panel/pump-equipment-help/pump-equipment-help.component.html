@@ -1,25 +1,28 @@
 <hr class="my-1 hr-spacer">
 <div class="my-2">
-    <h6>
-        Pump Equipment
-        <br>
-        <small class="text-muted">
-            <!-- Enter information for a potential motor replacemnt, used in the batch analysis. -->
-            <hr>
-        </small>
-    </h6>
-</div>
-<div class="my-2" *ngIf="focusedField == 'numStages'">
   <h6>
-    Stages
+    Pump Equipment
     <br>
     <small class="text-muted">
-      The number of pump stages. This value is used to calculate pump specific speed.
+      <!-- Enter information for a potential motor replacemnt, used in the batch analysis. -->
       <hr>
     </small>
   </h6>
 </div>
-<div class="my-2" *ngIf="focusedField == 'pumpType'">
+@if (focusedField == 'numStages') {
+  <div class="my-2">
+    <h6>
+      Stages
+      <br>
+      <small class="text-muted">
+        The number of pump stages. This value is used to calculate pump specific speed.
+        <hr>
+      </small>
+    </h6>
+  </div>
+}
+@if (focusedField == 'pumpType') {
+  <div class="my-2">
     <h6>
       Pump Type
       <br>
@@ -125,12 +128,14 @@
       </small>
     </h6>
   </div>
+}
 
-  <!-- Pump rpm? -->
+<!-- Pump rpm? -->
 
-  
 
-  <div class="my-2" *ngIf="focusedField == 'minFlowSize'">
+
+@if (focusedField == 'minFlowSize') {
+  <div class="my-2">
     <h6>
       Minimum Flow Rate
       <br>
@@ -140,3 +145,18 @@
       </small>
     </h6>
   </div>
+}
+
+@if (focusedField == 'designDifferentialPressure') {
+  <div class="my-2">
+    <h6>
+      Design Differential Pressure
+      <br>
+      <small class="text-muted">
+        Rated differential pressure (discharge minus suction) of a positive displacement pump at its design point, in psi or Pa,
+        typically found on the manufacturer's data sheet or nameplate. Used in place of design head for positive displacement pumps.
+        <br> This value is for reference only and is not used in results calculations. Enter the measured value as Operating Differential Pressure in Field Measurements.
+      </small>
+    </h6>
+  </div>
+}

@@ -6,10 +6,10 @@ import { Directory } from '../../shared/models/directory';
 import { SettingsService } from '../../settings/settings.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
-import { Subscription } from 'rxjs';
-import { PrintOptions } from '../../shared/models/printing';
-import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
+import { Observable } from 'rxjs';
 import { PhastValidService } from '../phast-valid.service';
+import { ReportDocument, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
+import { PhastReportAdapter, PHAST_SECTION_GROUPS } from './phast-report.adapter';
 
 @Component({
   selector: 'app-phast-report',
@@ -41,24 +41,20 @@ export class PhastReportComponent implements OnInit {
   currentTab: string = 'energy-used';
   assessmentDirectories: Array<Directory>;
   createdDate: Date;
-  showPrintView: boolean = false;
-  showPrintMenu: boolean = false;
-  showPrintDiv: boolean = false;
 
-  selectAll: boolean = false;
   reportContainerHeight: number;
-  showPrintMenuSub: Subscription;
-  printOptions: PrintOptions;
-  showPrintViewSub: Subscription;
   tabsCollapsed: boolean = true;
+
+  reportDocument$: Observable<ReportDocument>;
+  readonly sectionGroups: ReportSectionGroup[] = PHAST_SECTION_GROUPS;
+
   constructor(private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
-    private printOptionsMenuService: PrintOptionsMenuService,
     private phastValidService: PhastValidService,
-    private settingsService: SettingsService) { }
+    private settingsService: SettingsService,
+    private reportAdapter: PhastReportAdapter) { }
 
   ngOnInit() {
-    // this.initPrintLogic();
     this.createdDate = new Date();
     if (this.settings) {
       if (!this.settings.energyResultUnit) {
@@ -85,25 +81,7 @@ export class PhastReportComponent implements OnInit {
 
     this.setPhastValidity();
 
-    if (!this.inRollup) {
-      this.showPrintMenuSub = this.printOptionsMenuService.showPrintMenu.subscribe(val => {
-        this.showPrintMenu = val;
-      });
-    }
-
-    this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
-      this.printOptions = this.printOptionsMenuService.printOptions.getValue();
-      this.showPrintDiv = val;
-      if (val == true) {
-        //use delay to show loading before print payload starts
-        setTimeout(() => {
-          this.showPrintView = val;
-        }, 20)
-      } else {
-        this.showPrintView = val;
-      }
-    })
-
+    this.reportDocument$ = this.reportAdapter.buildDocument(this.assessment);
   }
 
 
@@ -117,13 +95,6 @@ export class PhastReportComponent implements OnInit {
     setTimeout(() => {
       this.getContainerHeight();
     }, 100);
-  }
-
-  ngOnDestroy() {
-    if (this.showPrintMenuSub) {
-      this.showPrintMenuSub.unsubscribe();
-    }
-    this.showPrintViewSub.unsubscribe();
   }
 
   getContainerHeight() {
@@ -169,11 +140,6 @@ export class PhastReportComponent implements OnInit {
     }
   }
 
-  print() {
-    this.printOptionsMenuService.printContext.next('phast');
-    this.printOptionsMenuService.showPrintMenu.next(true);
-    this.collapseTabs();
-  }
   collapseTabs() {
     this.tabsCollapsed = !this.tabsCollapsed;
   }

@@ -43,8 +43,21 @@ export const pumpTypesConstant: Array<{ value: number, display: string }> = [
         value: 10,
         display: 'Large End Suction',
     },
-    // When user selects below they need a way to provide the optimal efficiency
-    // 'Specified Optimal Efficiency'
+];
+
+export const positiveDisplacementPumpType: number = 12;
+
+export function isPositiveDisplacementPump(pumpType: number): boolean {
+    return pumpType === positiveDisplacementPumpType;
+}
+
+// Positive Displacement is inventory-facing only (no differentialPressure input exists in standalone PSAT or the pump calculators).
+export const inventoryPumpTypesConstant: Array<{ value: number, display: string }> = [
+    ...pumpTypesConstant,
+    {
+        value: positiveDisplacementPumpType,
+        display: 'Positive Displacement',
+    }
 ];
 
 export const driveConstants: Array<{ value: number, display: string, enumVal?: any }> = [

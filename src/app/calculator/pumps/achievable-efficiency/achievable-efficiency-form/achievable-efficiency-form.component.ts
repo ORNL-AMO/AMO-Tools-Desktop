@@ -30,8 +30,6 @@ export class AchievableEfficiencyFormComponent implements OnInit {
 
   ngOnInit() {
     this.pumpTypes = JSON.parse(JSON.stringify(pumpTypesConstant));
-    //remove specified efficiency
-    this.pumpTypes.pop();
     this.checkWarnings();
   }
 

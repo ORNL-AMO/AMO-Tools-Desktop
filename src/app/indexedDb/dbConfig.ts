@@ -383,10 +383,20 @@ export const LightingFixtureMaterialStoreMeta = {
   ]
 };
 
+export const ContactStoreMeta = {
+  store: 'contacts',
+  storeConfig: { keyPath: 'id', autoIncrement: true },
+  storeSchema: [
+    { name: 'contactName', keypath: 'contactName', options: { unique: false } },
+    { name: 'phoneNumber', keypath: 'phoneNumber', options: { unique: false } },
+    { name: 'email', keypath: 'email', options: { unique: false } },
+  ]
+};
+
 
 export const dbConfig: DBConfig = {
   name: 'CrudDB',
-  version: 10,
+  version: 11,
   objectStoresMeta: [
     ApplicationInstanceDataStoreMeta,
     AssessmentStoreMeta,
@@ -405,6 +415,7 @@ export const dbConfig: DBConfig = {
     FlueGasMaterialStoreMeta,
     SolidLiquidFlueGasMaterialStoreMeta,
     DiagramStoreMeta,
-    LightingFixtureMaterialStoreMeta
+    LightingFixtureMaterialStoreMeta,
+    ContactStoreMeta
   ]
 };

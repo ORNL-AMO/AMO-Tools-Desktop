@@ -78,11 +78,13 @@ export class CalculateLossesService {
 
       ssmtLosses.fuelEnergy = resultsCpy.boilerOutput.fuelEnergy;
       ssmtLosses.makeupWaterEnergy = this.calculateMakeupWaterEnergy(resultsCpy.makeupWater, settings);
-      ssmtLosses.allProcessUsageUsefulEnergy = this.calculateUsefulProcessUsage(resultsCpy, inputCpy.headerInput.numberOfHeaders)*inputCpy.operationsInput.operatingHoursPerYear;
-      ssmtLosses.totalProcessLosses = this.calculateTotalProcessLoss(ssmtLosses)*inputCpy.operationsInput.operatingHoursPerYear;
-      ssmtLosses.totalVentLosses = this.calculateTotalVentLoss(ssmtLosses)*inputCpy.operationsInput.operatingHoursPerYear;
-      ssmtLosses.totalOtherLosses = this.calculateTotalOtherLosses(ssmtLosses)*inputCpy.operationsInput.operatingHoursPerYear;
-      ssmtLosses.totalTurbineLosses = this.calculateTotalTurbineLosses(ssmtLosses)*inputCpy.operationsInput.operatingHoursPerYear;
+      // * use hourly scale like the rest of SSMTLosses outside the report, annual (/yr) inside it
+      let annualMultiplier: number = inReport ? inputCpy.operationsInput.operatingHoursPerYear : 1;
+      ssmtLosses.allProcessUsageUsefulEnergy = this.calculateUsefulProcessUsage(resultsCpy, inputCpy.headerInput.numberOfHeaders) * annualMultiplier;
+      ssmtLosses.totalProcessLosses = this.calculateTotalProcessLoss(ssmtLosses) * annualMultiplier;
+      ssmtLosses.totalVentLosses = this.calculateTotalVentLoss(ssmtLosses) * annualMultiplier;
+      ssmtLosses.totalOtherLosses = this.calculateTotalOtherLosses(ssmtLosses) * annualMultiplier;
+      ssmtLosses.totalTurbineLosses = this.calculateTotalTurbineLosses(ssmtLosses) * annualMultiplier;
       ssmtLosses.returnedSteamAndCondensate = this.calculateReturnedSteamAndCondensate(resultsCpy.deaeratorOutput, ssmtLosses, settings);
     }
     return ssmtLosses;

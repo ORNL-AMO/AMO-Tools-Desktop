@@ -1,5 +1,5 @@
 <div bsModal #shareDataModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="shareDataModal"
-    aria-hidden="true" [config]="{backdrop: 'static'}">
+    aria-hidden="true" [config]="{backdrop: 'static'}" (onHidden)="onModalHidden()">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header p-2">

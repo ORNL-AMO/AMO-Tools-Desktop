@@ -110,6 +110,19 @@
             </tr>
 
             <tr>
+              <td [ngClass]="{'indicate-report-field-different':sendBlowdownToDeaeratorDiff[0] == true}">
+                Send Blowdown Flash Steam to Deaerator?
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':sendBlowdownToDeaeratorDiff[0] == true}">
+                {{baselineInputData.boilerInput.sendBlowdownToDeaerator ? 'Yes' : 'No'}}
+              </td>
+              <td *ngFor="let mod of modificationInputData"
+                [ngClass]="{'indicate-report-field-different': checkDiff(!!baselineInputData.boilerInput.sendBlowdownToDeaerator, !!mod.inputData.boilerInput.sendBlowdownToDeaerator, 'sendBlowdownToDeaeratorDiff', 0)}">
+                {{mod.inputData.boilerInput.sendBlowdownToDeaerator ? 'Yes' : 'No'}}
+              </td>
+            </tr>
+
+            <tr>
               <td [ngClass]="{'indicate-report-field-different':preheatMakeupWaterDiff[0] == true}">
                 Preheat Make-up Water?
               </td>

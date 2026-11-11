@@ -24,8 +24,6 @@ export class SsmtWaterfallComponent implements OnInit {
   settings: Settings;
   @Input()
   xAxisRange: number;
-  @Input()
-  printView: boolean;
 
   @ViewChild('ssmtWaterfall', { static: false }) ssmtWaterfall: ElementRef;
 
@@ -38,21 +36,13 @@ export class SsmtWaterfallComponent implements OnInit {
 
   ngAfterViewInit() {
     if (this.ssmt.valid.isValid) {
-      if (!this.printView) {
-        this.createChart();
-      } else {
-        this.createPrintChart();
-      }
+      this.createChart();
     }
   }
 
   ngOnChanges() {
-    if (this.ssmt.valid.isValid) {
-      if (this.ssmtWaterfall && !this.printView) {
-        this.createChart();
-      } else if (this.ssmtWaterfall && this.printView) {
-        this.createPrintChart();
-      }
+    if (this.ssmt.valid.isValid && this.ssmtWaterfall) {
+      this.createChart();
     }
   }
 
@@ -127,68 +117,6 @@ export class SsmtWaterfallComponent implements OnInit {
     }
     let labelsAndValues: Array<{ value: number, label: string, stackTraceValue: number, color: string }> = this.reportGraphsService.getWaterfallLabelsAndValues(ssmtLosses);
     return labelsAndValues
-  }
-
-  createPrintChart() {
-    let labelsAndValues: Array<{ value: number, label: string, stackTraceValue: number, color: string }> = this.getSsmtWatefallData(this.ssmt);
-    let stackTraces = {
-      x: labelsAndValues.map(val => { return val.stackTraceValue }),
-      y: labelsAndValues.map(val => { return val.label }),
-      hoverinfo: 'none',
-      // hovertemplate: '%{y:$,.0f}<extra></extra>',
-      // name: "Projected Costs",
-      type: "bar",
-      marker: {
-        color: 'rgba(0,0,0,0)',
-        width: .8
-      },
-      orientation: 'h'
-    };
-
-    let texttemplate = '<b>%{label}:</b><br> %{value:,.2f}' + ' ' + this.settings.steamEnergyMeasurement + '/hr';
-    let energyTraces = {
-      x: labelsAndValues.map(val => { return val.value }),
-      y: labelsAndValues.map(val => { return val.label }),
-      hoverinfo: 'none',
-      // hovertemplate: '%{x:,.0f}<extra></extra>',
-      textposition: 'auto',
-      insidetextorientation: "horizontal",
-      texttemplate: texttemplate,
-      name: "Energy Usage",
-      type: "bar",
-      marker: {
-        color: labelsAndValues.map(val => { return val.color }),
-        width: .8
-      },
-      orientation: 'h'
-    };
-
-    var data = [stackTraces, energyTraces];
-    var layout = {
-      width: 1100,
-      barmode: 'stack',
-      showlegend: false,
-      font: {
-        size: 12,
-      },
-      yaxis: {
-        fixedrange: true
-      },
-      xaxis: {
-        range: [0, this.xAxisRange + 50],
-        automargin: true
-      },
-      margin: { t: 30, b: 40, r: 50, l: 150 },
-      clickmode: 'none',
-      dragmode: false
-    };
-    var configOptions = {
-      modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
-      displaylogo: false,
-      displayModeBar: false
-    };
-
-    this.plotlyService.newPlot(this.ssmtWaterfall.nativeElement, data, layout, defaultPlotlyConfig(configOptions));
   }
 
 }

@@ -5,7 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { StandaloneService } from '../../standalone.service';
 import { ConvertAirLeakService } from './convert-air-leak.service';
 import { AirLeakSurveyFormService } from './air-leak-survey-form/air-leak-survey-form.service';
-import { exampleLeakInputs, LeakMeasurementMethod } from '../compressed-air-constants';
+import { exampleLeakInputs } from '../compressed-air-constants';
 import { copyObject } from '../../../shared/helperFunctions';
 
 @Injectable()
@@ -138,10 +138,7 @@ export class AirLeakSurveyService {
         leakResult.leakDescription = leak.leakDescription;
         leakResult.selected = leak.selected;
 
-        const convertedResult =
-          leak.measurementMethod === LeakMeasurementMethod.Bag
-            ? this.convertAirleakService.convertBagMethodResult(leakResult, settings)
-            : this.convertAirleakService.convertResult(leakResult, settings);
+        const convertedResult = this.convertAirleakService.convertResult(leakResult, settings);
 
         if (!leak?.selected) {
           cumulativeModificationResults.annualTotalElectricity += convertedResult.annualTotalElectricity;

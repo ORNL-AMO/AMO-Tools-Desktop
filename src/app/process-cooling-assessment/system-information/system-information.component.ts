@@ -17,9 +17,7 @@ export class SystemInformationComponent {
   private readonly processCoolingService = inject(ProcessCoolingAssessmentService);
   private readonly destroyRef = inject(DestroyRef);
   isSystemInformationValid: boolean = false;
-  smallScreenPanelTab: string = 'help';
 
-  isModalOpen: boolean = false;
   setupSubView: Signal<string> = this.processCoolingUiService.setupSubView;
 
   SYSTEM_INFORMATION_VIEW_LINKS = SYSTEM_INFORMATION_VIEW_LINKS;
@@ -54,7 +52,7 @@ export class SystemInformationComponent {
     });
   }
 
-  next() {
+  continue() {
     this.processCoolingUiService.continue();
   }
 

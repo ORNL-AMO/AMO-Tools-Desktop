@@ -152,6 +152,8 @@ export class LightingFixturesMaterialComponent implements OnInit {
     async addMaterial() {
         if (this.canAdd) {
             this.canAdd = false;
+            this.newMaterial.category = 'Custom';
+            this.newMaterial.type = this.newMaterial.name;
             await firstValueFrom(this.lightingFixtureServiceDbService.addWithObservable(this.newMaterial));
             let materials = await firstValueFrom(this.lightingFixtureServiceDbService.getAllWithObservable());
             this.lightingFixtureServiceDbService.dbLightingFixtureMaterials.next(materials);
@@ -161,6 +163,8 @@ export class LightingFixturesMaterialComponent implements OnInit {
 
     async updateMaterial() {
         this.newMaterial.id = this.idbEditMaterialId;
+        this.newMaterial.category = 'Custom';
+        this.newMaterial.type = this.newMaterial.name;
         await firstValueFrom(this.lightingFixtureServiceDbService.updateWithObservable(this.newMaterial));
         let materials = await firstValueFrom(this.lightingFixtureServiceDbService.getAllWithObservable());
         this.lightingFixtureServiceDbService.dbLightingFixtureMaterials.next(materials);
@@ -190,7 +194,7 @@ export class LightingFixturesMaterialComponent implements OnInit {
 
     onFixtureTypeChange(selectedFixture: any) {
         if (selectedFixture) {
-            this.newMaterial.name = selectedFixture.type ?? '';
+            this.newMaterial.name = selectedFixture.type ? selectedFixture.type + ' (mod)' : '';
             this.newMaterial.lampsPerFixture = selectedFixture.lampsPerFixture ?? 0;
             this.newMaterial.wattsPerLamp = selectedFixture.wattsPerLamp ?? 0;
             this.newMaterial.lumensPerLamp = selectedFixture.lumensPerLamp ?? 0;

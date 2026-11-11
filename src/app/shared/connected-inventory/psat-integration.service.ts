@@ -19,6 +19,7 @@ import { MotorInventoryDepartment, MotorItem } from '../../motor-inventory/motor
 import { ConvertMotorInventoryService } from '../../motor-inventory/convert-motor-inventory.service';
 import { PumpMotorIntegrationService } from './pump-motor-integration.service';
 import { copyObject } from '../helperFunctions';
+import { isPositiveDisplacementPump } from '../../psat/psatConstants';
 
 @Injectable()
 export class PsatIntegrationService {
@@ -56,7 +57,8 @@ export class PsatIntegrationService {
 
     let pumpInventoryOptions: Array<InventoryOption> = pumpInventories.map(inventory => {
       let catalogItemOptions = inventory.pumpInventoryData.departments.map(department => {
-        let orderedCatalog = (_.orderBy(department.catalog, (item) => item.pumpMotor.motorRatedPower, ['asc']));
+        let connectableCatalog = department.catalog.filter(item => !isPositiveDisplacementPump(item.pumpEquipment.pumpType));
+        let orderedCatalog = (_.orderBy(connectableCatalog, (item) => item.pumpMotor.motorRatedPower, ['asc']));
         return {
           department: department.name,
           catalog: orderedCatalog
@@ -85,7 +87,12 @@ export class PsatIntegrationService {
     let selectedPumpItem: PumpItem = this.getConnectedPumpItem(connectedInventoryData.connectedItem);
     let psat: PSAT = assessmentPsat;
 
-    if (selectedPumpItem.validPump && !selectedPumpItem.validPump.isValid) {
+    if (isPositiveDisplacementPump(selectedPumpItem.pumpEquipment.pumpType)) {
+      connectedAssessmentState.connectedAssessmentStatus = 'invalid';
+      connectedAssessmentState.msgHTML = `<b>${selectedPumpItem.name}</b> is a Positive Displacement pump, which cannot be connected to a PSAT assessment.`;
+      connectedInventoryData.canConnect = false;
+      this.integrationStateService.connectedAssessmentState.next(connectedAssessmentState);
+    } else if (selectedPumpItem.validPump && !selectedPumpItem.validPump.isValid) {
       connectedAssessmentState.connectedAssessmentStatus = 'invalid';
       connectedAssessmentState.msgHTML = `<b>${selectedPumpItem.name}</b> is invalid. Verify pump catalog data and try again.`;
       connectedInventoryData.canConnect = false;

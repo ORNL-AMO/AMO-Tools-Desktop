@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { MOTOR_INVENTORY_MAIN_VIEWS, MotorInventoryMainView } from './motor-inventory.routing';
+import { getMergedRouteData, getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 import { MotorItem, MotorInventoryDepartment, MotorInventoryData, MotorPropertyDisplayOptions, FilterInventorySummary } from './motor-inventory';
 import { Settings } from '../shared/models/settings';
 import * as _ from 'lodash';
 @Injectable()
 export class MotorInventoryService {
 
-  mainTab: BehaviorSubject<string>;
+  mainTab: BehaviorSubject<MotorInventoryMainView>;
   setupTab: BehaviorSubject<string>;
   summaryTab: BehaviorSubject<string>;
   motorInventoryData: BehaviorSubject<MotorInventoryData>;
@@ -17,9 +20,10 @@ export class MotorInventoryService {
   helpPanelTab: BehaviorSubject<string>;
   filterInventorySummary: BehaviorSubject<FilterInventorySummary>;
   showExportModal: BehaviorSubject<boolean>;
-  constructor() {
+  currentInventoryId: number;
+  constructor(private router: Router) {
     this.setupTab = new BehaviorSubject<string>('plant-setup');
-    this.mainTab = new BehaviorSubject<string>('setup');
+    this.mainTab = new BehaviorSubject<MotorInventoryMainView>('setup');
     let inventoryData: MotorInventoryData = this.initInventoryData();
     this.motorInventoryData = new BehaviorSubject<MotorInventoryData>(inventoryData);
     this.focusedField = new BehaviorSubject<string>('default');
@@ -35,6 +39,39 @@ export class MotorInventoryService {
       ratedPower: new Array(),
       ratedVoltage: new Array()
     });
+  }
+
+  /**
+   * Pushes the main tab value found in the route data into `mainTab`.
+   * @param snapshot snapshot to walk down through its `firstChild` chain
+   */
+  syncMainTabFromRoute(snapshot: ActivatedRouteSnapshot) {
+    const data = getMergedRouteData<MotorInventoryMainView>(snapshot);
+    if (data.mainView && data.mainView !== this.mainTab.getValue()) {
+      this.mainTab.next(data.mainView);
+    }
+  }
+
+  /**
+   * @param view one of `MOTOR_INVENTORY_MAIN_VIEWS`
+   */
+  goToMainTab(view: MotorInventoryMainView) {
+    this.router.navigate(['/motor-inventory', this.currentInventoryId, view]);
+  }
+
+  continueMainTab() {
+    this.stepMainTab(1);
+  }
+
+  backMainTab() {
+    this.stepMainTab(-1);
+  }
+
+  private stepMainTab(offset: number) {
+    const view: MotorInventoryMainView = getSteppedView(MOTOR_INVENTORY_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    if (view) {
+      this.goToMainTab(view);
+    }
   }
 
   updateMotorItem(selectedMotor: MotorItem) {

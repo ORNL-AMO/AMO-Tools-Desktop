@@ -3,7 +3,7 @@ import { PumpField, PumpInventorySummaryService } from '../pump-inventory-summar
 import { BehaviorSubject } from 'rxjs';
 import { PumpInventoryData, PumpItem } from '../../pump-inventory';
 import * as _ from 'lodash';
-import { motorEfficiencyConstants, priorityTypes, pumpTypesConstant, statusTypes } from '../../../psat/psatConstants';
+import { inventoryPumpTypesConstant, isPositiveDisplacementPump, motorEfficiencyConstants, priorityTypes, statusTypes } from '../../../psat/psatConstants';
 import { pumpInventoryDriveConstants, pumpInventoryShaftOrientations, pumpInventoryShaftSealTypes } from '../../pump-inventory.service';
 
 @Injectable()
@@ -17,15 +17,36 @@ export class PumpSummaryGraphsService {
 
   getBinData(pumpInventoryData: PumpInventoryData, pumpField: PumpField): { xData: Array<any>, yData: Array<number> } {
     let pumps: Array<PumpItem> = this.pumpInventorySummaryService.getAllPumps(pumpInventoryData);
-    let fieldCount: _.Dictionary<number> = _.countBy(pumps, (pump) => { return pump[pumpField.group][pumpField.value] });
+    if (pumpField.value === 'designHead' || pumpField.value === 'operatingHead') {
+      pumps = pumps.filter(pump => !isPositiveDisplacementPump(pump.pumpEquipment.pumpType));
+    } else if (pumpField.value === 'designDifferentialPressure' || pumpField.value === 'operatingDifferentialPressure') {
+      pumps = pumps.filter(pump => isPositiveDisplacementPump(pump.pumpEquipment.pumpType));
+    }
+    let fieldCount: _.Dictionary<number> = _.countBy(pumps, (pump) => { return this.getFieldValue(pump, pumpField); });
     let xData: Array<any> = new Array();
     let yData: Array<any> = new Array();
-    Object.keys(fieldCount).forEach((fieldValue: string, index: number) => {
+    Object.keys(fieldCount).forEach((fieldValue: string) => {
       let label: string = this.getLabel(fieldValue, pumpField);
       xData.push(label);
       yData.push(fieldCount[fieldValue]);
     });
     return { xData: xData, yData: yData };
+  }
+
+  getFieldValue(pump: PumpItem, pumpField: PumpField): any {
+    if (pumpField.value === 'designHead') {
+      return isPositiveDisplacementPump(pump.pumpEquipment.pumpType) ? undefined : pump.pumpEquipment.designHead;
+    }
+    if (pumpField.value === 'designDifferentialPressure') {
+      return isPositiveDisplacementPump(pump.pumpEquipment.pumpType) ? pump.pumpEquipment.designDifferentialPressure : undefined;
+    }
+    if (pumpField.value === 'operatingHead') {
+      return isPositiveDisplacementPump(pump.pumpEquipment.pumpType) ? undefined : pump.fieldMeasurements.operatingHead;
+    }
+    if (pumpField.value === 'operatingDifferentialPressure') {
+      return isPositiveDisplacementPump(pump.pumpEquipment.pumpType) ? pump.fieldMeasurements.operatingDifferentialPressure : undefined;
+    }
+    return pump[pumpField.group][pumpField.value];
   }
 
   getLabel(key: string, pumpField: PumpField): string {
@@ -45,7 +66,7 @@ export class PumpSummaryGraphsService {
         label = 'N/A';
       }
     } else if (pumpField.value == 'pumpType') {
-      let pumpType = pumpTypesConstant.find(constant => { return constant.value == Number(key) });
+      let pumpType = inventoryPumpTypesConstant.find(constant => { return constant.value == Number(key) });
       if (pumpType) {
         label = pumpType.display;
       } else {

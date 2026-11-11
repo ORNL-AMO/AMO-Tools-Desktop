@@ -1,7 +1,7 @@
 import * as React from 'react';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { Box } from '@mui/material';
-import { checkDiagramNodeErrors, CustomEdgeData, DiagramCalculatedData, DiagramSettings, DischargeOutlet, getComponentTypeTotalCost, getHeatEnergyCost, getInSystemTreatmentCost, getIsDiagramValid, getMotorEnergyCost, getNodeTotalInflow, getNodeTotalOutflow, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, NodeErrors, ProcessFlowPart, setWaterUsingSystemFlows, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
+import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, DischargeOutlet, getComponentTypeTotalCost, getHeatEnergyCost, getInSystemTreatmentCost, getIsDiagramValid, getMotorEnergyCost, getNodeTotalInflow, getNodeTotalOutflow, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, DiagramFlowErrors, ProcessFlowPart, setWaterUsingSystemFlows, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
 import { selectDischargeOutletNodes, selectEdges, selectIntakeSourceNodes, selectNodes, selectNodesAsWaterUsingSystems, selectWasteTreatmentNodes, selectWaterTreatmentNodes } from '../Diagram/store';
 import { useAppSelector } from '../../hooks/state';
 import { Node, Edge } from '@xyflow/react';
@@ -21,8 +21,7 @@ const DiagramResults = () => {
   const settings: DiagramSettings = useAppSelector((state) => state.diagram.settings);
   const calculatedData: DiagramCalculatedData = useAppSelector((state) => state.diagram.calculatedData);
   
-  const validationErrors: NodeErrors = useAppSelector((state) => state.diagram.nodeErrors);
-  const nodeErrors: NodeErrors = checkDiagramNodeErrors(nodes, edges, settings);
+  const validationErrors: DiagramFlowErrors = useAppSelector((state) => state.diagram.diagramFlowErrors);
   const isDiagramValid = getIsDiagramValid(validationErrors);
 
   setWaterUsingSystemFlows(waterUsingSystems, edges);
@@ -71,7 +70,9 @@ const DiagramResults = () => {
     return total + getMotorEnergyCost(motorEnergy, settings.electricityCost, settings.unitsOfMeasure);
   }, 0);
 
-  const systemHeatEnergyData: HeatEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.heatEnergy).filter((heatEnergy: HeatEnergy) => heatEnergy !== undefined);
+  const systemHeatEnergyData: HeatEnergy[] = waterUsingSystems
+    .filter((system: WaterUsingSystem) => system.heatEnergy !== undefined)
+    .map((system: WaterUsingSystem) => ({ ...system.heatEnergy, systemWaterUse: getNodeTotalInflow(system, calculatedData) }));
   const heatEnergyCosts = systemHeatEnergyData.reduce((total, heatEnergy) => {
     const unitCost = heatEnergy.heatingFuelType === 0? settings.electricityCost : settings.fuelCost;
     return total + getHeatEnergyCost(heatEnergy, unitCost, settings.unitsOfMeasure);

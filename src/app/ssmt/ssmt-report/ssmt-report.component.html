@@ -10,32 +10,11 @@
       <h5>{{settings.createdDate| date:'short'}}</h5>
     </div>
 
-    <!-- <p class="report-notes">{{reportNotes}}</p> -->
   </div>
 
   <div #reportHeader class="report-header d-none d-lg-block" [ngClass]="{'hide-print': !inRollup}">
     <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
 
-    <!-- Assessment view -->
-    <div *ngIf="assessment && !inRollup" class="row">
-      <div class="col-12 p-2">
-        <div class="d-flex justify-content-between">
-          <div class="d-flex">
-            <div class="mt-auto ml-3">
-              <ng-container class="ml-3 pl-2" *ngFor="let directory of assessmentDirectories">
-                {{directory.name}} /
-              </ng-container>
-              {{assessment.name}}
-            </div>
-            <span class="ml-3 mt-auto date-modified">Last Modified {{assessment.modifiedDate |
-              date:'short'}}</span>
-          </div>
-          <div>
-            <button class="mt-0 mr-3 btn btn-secondary hide-print" (click)="print()">Print</button>
-          </div>
-        </div>
-      </div>
-    </div>
     <!-- Rollup view -->
     <div *ngIf="assessment && inRollup" class="row assessment-name">
       <div class="col-12">
@@ -58,22 +37,9 @@
   </div>
   <!-- End .report-header -->
 
-  <div *ngIf="showPrintDiv && !inRollup" class="hide-print print-div row justify-content-center">
-    <div class="col-12 print-col">
-      <h4>Building Print View</h4>
-      <h5>One Moment Please</h5>
-      <span class="fa fa-print"></span>
-      <div class="spinner">
-        <div class="bounce1"></div>
-        <div class="bounce2"></div>
-        <div class="bounce3"></div>
-      </div>
-    </div>
-  </div>
-
   <div class="report-data" *ngIf="assessment.ssmt.setupDone">
 
-    <div class="d-none d-lg-flex">
+    <div class="d-none d-lg-flex tabs-bar-row">
       <ul #reportBtns class="tabs primary hide-print">
         <li (click)="setTab('executiveSummary')" [ngClass]="{'active': currentTab == 'executiveSummary'}">
           <a>Executive Summary</a>
@@ -90,19 +56,22 @@
         <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
           <a>Report Graphs</a>
         </li>
-        <!-- <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
+        <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
           <a>Sankey</a>
-        </li> -->
+        </li>
         <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
           <a>Input Summary</a>
         </li>
         <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
           <a>Facility Info</a>
         </li>
-        <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
-          <a>Sankey</a>
-        </li>
       </ul>
+      <app-export-button
+        class="ml-auto align-self-center mr-2"
+        [document]="reportDocument$"
+        [assessmentName]="assessment.name"
+        [sectionGroups]="sectionGroups">
+      </app-export-button>
     </div>
 
     <div class="d-flex d-lg-none flex-column">
@@ -141,41 +110,40 @@
           [ngClass]="{'active': currentTab == 'reportSankey', 'collapse': tabsCollapsed}">
           <a>Sankey</a>
         </div>
-        <div (click)="print()" class="hide-print" [ngClass]="{'collapse': tabsCollapsed}">
-          <a>Print</a>
-        </div>
       </div>
+      <app-export-button class="mx-2 mb-2" [document]="reportDocument$" [assessmentName]="assessment.name" [sectionGroups]="sectionGroups">
+      </app-export-button>
     </div>
 
-    <div class="results scroll-item print-height"
-      *ngIf="(currentTab == 'facilityInfo' || showPrintView) && dataCalculated"
+    <div class="results scroll-item"
+      *ngIf="currentTab == 'facilityInfo' && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
     </div>
-    <div class="results scroll-item print-height print-break-before"
-      *ngIf="((currentTab == 'executiveSummary' && !showPrintView) || (showPrintView && printOptions.printExecutiveSummary)) && dataCalculated"
+    <div class="results scroll-item"
+      *ngIf="currentTab == 'executiveSummary' && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-executive-summary [settings]="settings" [baselineOutput]="baselineOutput"
         [modificationOutputs]="modificationOutputs" [tableCellWidth]="tableCellWidth" [inRollup]="inRollup"
-        [assessment]="assessment" [printView]="printOptions.printExecutiveSummary" [ssmt]="assessment.ssmt">
+        [assessment]="assessment" [ssmt]="assessment.ssmt">
       </app-executive-summary>
     </div>
-    <div class="results scroll-item print-height"
-      *ngIf="((currentTab == 'energySummary' && !showPrintView) || (showPrintView && printOptions.printEnergySummary)) && dataCalculated"
+    <div class="results scroll-item"
+      *ngIf="currentTab == 'energySummary' && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-energy-summary [settings]="settings" [baselineOutput]="baselineOutput"
         [modificationOutputs]="modificationOutputs" [tableCellWidth]="tableCellWidth" [inRollup]="inRollup"
         [assessment]="assessment"></app-energy-summary>
     </div>
-    <div class="results scroll-item print-height print-break-before"
-      *ngIf="((currentTab == 'losses' && !showPrintView) || (showPrintView && printOptions.printLossesSummary)) && dataCalculated"
+    <div class="results scroll-item"
+      *ngIf="currentTab == 'losses' && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-losses-summary [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses"
         [settings]="settings" [numberOfHeaders]="baselineInputData.headerInput.numberOfHeaders"
         [tableCellWidth]="tableCellWidth" [inRollup]="inRollup" [assessment]="assessment"></app-losses-summary>
     </div>
     <div class="results scroll-item report-diagrams hide-print"
-      *ngIf="((currentTab == 'diagram' && !showPrintView) || (showPrintView && printOptions.printReportDiagram)) && dataCalculated"
+      *ngIf="currentTab == 'diagram' && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}" [ngClass]="{'report-diagrams': inRollup}">
       <app-report-diagram [baselineOutput]="baselineOutput" [inputData]="baselineInputData" [settings]="settings"
         [modificationOutputs]="modificationOutputs" [assessment]="assessment"
@@ -189,26 +157,25 @@
         </span>
       </div>
     </div>
-    <div class="results scroll-item print-height"
-      *ngIf="((currentTab == 'reportGraphs' && !showPrintView) || (showPrintView && printOptions.printReportGraphs)) && dataCalculated"
+    <div class="results scroll-item"
+      *ngIf="currentTab == 'reportGraphs' && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-report-graphs [settings]="settings" [ssmt]="assessment.ssmt" [baselineLosses]="baselineLosses"
-        [modificationLosses]="modificationLosses" [printView]="showPrintView"
-        [printGraphs]="printOptions.printReportGraphs">
+        [modificationLosses]="modificationLosses">
       </app-report-graphs>
     </div>
-    <div class="results scroll-item print-height"
-      *ngIf="((currentTab == 'reportSankey' && !showPrintView) || (showPrintView && printOptions.printReportSankey)) && dataCalculated"
+    <div class="results scroll-item"
+      *ngIf="currentTab == 'reportSankey' && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-ssmt-report-sankey [settings]="settings" [assessment]="assessment" [baselineOutput]="baselineOutput"
         [modificationOutputs]="modificationOutputs">
       </app-ssmt-report-sankey>
     </div>
-    <div class="results scroll-item input-data print-height print-break-before"
-      *ngIf="((currentTab == 'inputData' && !showPrintView) || (showPrintView && printOptions.printInputData)) && dataCalculated"
+    <div class="results scroll-item input-data"
+      *ngIf="currentTab == 'inputData' && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-input-summary [settings]="settings" [baselineInputData]="baselineInputData"
-        [modificationInputData]="modificationInputData" [printView]="printOptions.printInputData"
+        [modificationInputData]="modificationInputData"
         [modificationOutputs]="modificationOutputs"></app-input-summary>
     </div>
 
@@ -233,6 +200,3 @@
 
 
 </div>
-
-<!--PRINT MENU-->
-<app-print-options-menu *ngIf="showPrintMenu"></app-print-options-menu>

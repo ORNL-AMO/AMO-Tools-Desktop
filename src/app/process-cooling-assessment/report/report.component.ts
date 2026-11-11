@@ -12,7 +12,7 @@ import { Assessment } from '../../shared/models/assessment';
   standalone: false,
   templateUrl: './report.component.html',
   styleUrl: './report.component.css',
-  host: { style: 'height: 100%; display: flex; flex-direction: column; overflow: hidden;' }
+  host: { class: 'layout-fill' }
 })
 export class ReportComponent {
   private readonly processCoolingUiService = inject(ProcessCoolingUiService);

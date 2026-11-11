@@ -7,7 +7,7 @@ import { EstimateSystemContext, EstimateSystemState, WaterAssessmentModuleConsum
 import HoursPerYearInputField from './HoursPerYearInputField';
 import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/Validation';
 import { adaptEstimatedFlowResults, EstimatedFlowResults, getDefaultResultRows, getEstimatedFlowResultRows, getInitialValuesFromForm } from './SystemEstimationFormUtils';
-import { applyEstimatedFlowResults, modalOpenChange } from '../../Diagram/diagramReducer';
+import { applyEstimatedFlowResults } from '../../Diagram/diagramReducer';
 import { CoolingTowerResults, CoolingTower, calculateCoolingTowerResults, convertAnnualFlowResult } from 'process-flow-lib';
 import { TwoCellResultRow, TwoCellResultTable } from '../../StyledMUI/ResultTables';
 import FormActionGroupButtons from '../FormActionGroupButtons';
@@ -48,10 +48,9 @@ const CoolingTowerForm = (props: CoolingTowerProps) => {
             blowdownConductivity: values.blowdownConductivity,
         }
 
-        const coolingTowerResults: CoolingTowerResults = calculateCoolingTowerResults(coolingTower, coolingTower.hoursPerYear, props.WaterAssessmentModule);
+        const coolingTowerResults: CoolingTowerResults = calculateCoolingTowerResults(coolingTower, coolingTower.hoursPerYear, props.WaterAssessmentModule, settings.unitsOfMeasure);
         coolingTowerResults.grossWaterUse = convertAnnualFlowResult(coolingTowerResults.grossWaterUse, settings);
         coolingTowerResults.evaporationLoss = convertAnnualFlowResult(coolingTowerResults.evaporationLoss, settings);
-        coolingTowerResults.cycleOfConcentration = convertAnnualFlowResult(coolingTowerResults.cycleOfConcentration, settings);
         coolingTowerResults.makeupWater = convertAnnualFlowResult(coolingTowerResults.makeupWater, settings);
         coolingTowerResults.blowdownLoss = convertAnnualFlowResult(coolingTowerResults.blowdownLoss, settings);
 

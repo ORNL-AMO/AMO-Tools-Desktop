@@ -7,9 +7,9 @@ import { SSMTOutput, SSMTLosses } from '../../shared/models/steam/steam-outputs'
 import { CalculateLossesService } from '../calculate-losses.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SsmtService } from '../ssmt.service';
-import { Subscription } from 'rxjs';
-import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
-import { PrintOptions } from '../../shared/models/printing';
+import { Observable } from 'rxjs';
+import { ReportDocument, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
+import { SsmtReportAdapter, SSMT_SECTION_GROUPS } from './ssmt-report.adapter';
 
 @Component({
   selector: 'app-ssmt-report',
@@ -32,14 +32,8 @@ export class SsmtReportComponent implements OnInit {
   @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
   reportContainerHeight: number;
+
   currentTab: string = 'executiveSummary';
-
-  showPrintView: boolean = false;
-  showPrintViewSub: Subscription;
-  showPrintMenu: boolean = false;
-  showPrintMenuSub: Subscription;
-  showPrintDiv: boolean = false;
-
   baselineOutput: SSMTOutput;
   baselineInputData: SSMTInputs;
   baselineLosses: SSMTLosses;
@@ -49,11 +43,13 @@ export class SsmtReportComponent implements OnInit {
   modificationLosses: Array<{ name: string, outputData: SSMTLosses, valid: SsmtValid }>;
   tableCellWidth: number;
   assessmentDirectories: Directory[];
-  printOptions: PrintOptions;
   tabsCollapsed: boolean = true;
 
+  reportDocument$: Observable<ReportDocument>;
+  readonly sectionGroups: ReportSectionGroup[] = SSMT_SECTION_GROUPS;
+
   constructor(private ssmtService: SsmtService, private calculateLossesService: CalculateLossesService,
-    private directoryDbService: DirectoryDbService, private printOptionsMenuService: PrintOptionsMenuService) { }
+    private directoryDbService: DirectoryDbService, private reportAdapter: SsmtReportAdapter) { }
 
   ngOnInit() {
     if (this.assessment.ssmt.setupDone) {
@@ -76,6 +72,8 @@ export class SsmtReportComponent implements OnInit {
               let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateModificationModel(modification.ssmt, this.settings, this.baselineOutput);
               if (modification.ssmt.valid.isValid) {
                 resultData.outputData = this.calculateResultsWithMarginalCosts(modification.ssmt, resultData.outputData, this.baselineOutput);
+                resultData.outputData.paybackPeriod = this.ssmtService.getPaybackPeriod(
+                  resultData.outputData.operationsOutput.totalOperatingCost, this.baselineOutput.operationsOutput.totalOperatingCost, modification.ssmt.operatingCosts?.implementationCosts);
                 modification.ssmt.outputData = resultData.outputData;
                 this.modificationOutputs.push({ name: modification.ssmt.name, outputData: resultData.outputData, valid: modification.ssmt.valid });
                 this.modificationInputData.push({ name: modification.ssmt.name, inputData: resultData.inputData, valid: modification.ssmt.valid });
@@ -100,25 +98,7 @@ export class SsmtReportComponent implements OnInit {
       this.getDirectoryList(this.assessment.directoryId);
     }
 
-    if (!this.inRollup) {
-      this.showPrintMenuSub = this.printOptionsMenuService.showPrintMenu.subscribe(val => {
-        this.showPrintMenu = val;
-      });
-    }
-
-    this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
-      this.printOptions = this.printOptionsMenuService.printOptions.getValue();
-      this.showPrintDiv = val;
-      if (val == true) {
-        //use delay to show loading before print payload starts
-        setTimeout(() => {
-          this.showPrintView = val;
-        }, 20)
-      } else {
-        this.showPrintView = val;
-      }
-    })
-
+    this.reportDocument$ = this.reportAdapter.buildDocument(this.assessment);
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes.containerHeight && !changes.containerHeight.firstChange) {
@@ -130,13 +110,6 @@ export class SsmtReportComponent implements OnInit {
     setTimeout(() => {
       this.getContainerHeight();
     }, 100);
-  }
-
-  ngOnDestroy() {
-    if (this.showPrintMenuSub) {
-      this.showPrintMenuSub.unsubscribe();
-    }
-    this.showPrintViewSub.unsubscribe();
   }
 
   getContainerHeight() {
@@ -163,12 +136,6 @@ export class SsmtReportComponent implements OnInit {
         this.getDirectoryList(results.parentDirectoryId);
       }
     }
-  }
-
-  print() {
-    this.printOptionsMenuService.printContext.next('ssmt');
-    this.printOptionsMenuService.showPrintMenu.next(true);
-    this.collapseTabs();
   }
 
   calculateResultsWithMarginalCosts(ssmt: SSMT, outputData: SSMTOutput, baselineResults?: SSMTOutput): SSMTOutput {

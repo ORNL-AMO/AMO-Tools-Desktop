@@ -2,7 +2,7 @@ import { Backdrop, Box, Button, Fade, Modal, Typography, useTheme } from "@mui/m
 import React from "react";
 import { selectIsModalOpen } from "../Diagram/store";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
-import { modalOpenChange } from "../Diagram/diagramReducer";
+import { modalOpenChange } from "../Diagram/uiSlice";
 import EstimateWaterSystem from "./WaterSystemEstimation/EstimateWaterSystem";
 
 const style = {

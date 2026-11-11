@@ -27,8 +27,10 @@
 .vscode/extensions.json
 
 .prompts/
-.claude/
-CLAUDE.md
+.claude/*
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/suite-coordination/
 
 # misc
 /docker
@@ -41,6 +43,7 @@ testem.log
 /typings
 /db/*.db
 scripts/download-stats
+scripts/local/
 /docker
 
 # e2e

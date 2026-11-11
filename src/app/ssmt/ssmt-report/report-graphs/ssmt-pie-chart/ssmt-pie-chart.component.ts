@@ -18,8 +18,6 @@ export class SsmtPieChartComponent implements OnInit {
   graphType: string;
   @Input()
   settings: Settings;
-  @Input()
-  printView: boolean;
 
   @ViewChild('ssmtPieChart', { static: false }) ssmtPieChart: ElementRef;
   noData: boolean;
@@ -30,21 +28,13 @@ export class SsmtPieChartComponent implements OnInit {
   }
   ngAfterViewInit() {
     if (this.ssmt.valid.isValid) {
-      if (!this.printView) {
-        this.createChart();
-      } else {
-        this.createPrintChart();
-      }
+      this.createChart();
     }
   }
 
   ngOnChanges() {
-    if (this.ssmt.valid.isValid) {
-      if (this.ssmtPieChart && !this.printView) {
-        this.createChart();
-      } else if (this.ssmtPieChart && this.printView) {
-        this.createPrintChart();
-      }
+    if (this.ssmt.valid.isValid && this.ssmtPieChart) {
+      this.createChart();
     }
   }
 
@@ -93,59 +83,6 @@ export class SsmtPieChartComponent implements OnInit {
         displaylogo: false,
         displayModeBar: true,
         responsive: true
-      };
-      this.plotlyService.newPlot(this.ssmtPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
-    } else {
-      this.noData = true;
-      this.cd.detectChanges();
-    }
-  }
-
-  createPrintChart(){
-    let valuesAndLabels: Array<{ value: number, label: string }>;
-    let texttemplate: string;
-    if (this.graphType == 'processUsage') {
-      valuesAndLabels = this.reportGraphsService.getProcessUsageValuesAndLabels(this.ssmt);
-      texttemplate = '<b>%{label}:</b><br> %{value:,.2f}' + ' ' + this.settings.steamEnergyMeasurement + '/hr';
-
-    } else if (this.graphType == 'powerGeneration') {
-      valuesAndLabels = this.reportGraphsService.getGenerationValuesAndLabels(this.ssmt);
-      texttemplate = '<b>%{label}:</b><br> %{value:,.2f}' + ' ' + this.settings.steamPowerMeasurement;
-    }
-    if (valuesAndLabels.length != 0) {
-      this.noData = false;
-      this.cd.detectChanges();
-      var data = [{
-        values: valuesAndLabels.map(val => { return val.value }),
-        labels: valuesAndLabels.map(val => { return val.label }),
-        marker: {
-          colors: graphColors
-        },
-        type: 'pie',
-        textposition: 'auto',
-        insidetextorientation: "horizontal",
-        // automargin: true,
-        // textinfo: 'label+value',
-        hoverformat: '.2r',
-        texttemplate: texttemplate,
-        // text: valuesAndLabels.values.map(y => { return (y).toFixed(2) }),
-        hoverinfo: 'label+percent',
-        // direction: "clockwise",
-        // rotation: 90
-      }];
-      var layout = {
-        width: 500,
-        font: {
-          size: 14,
-        },
-        showlegend: false,
-        margin: { t: 50, b: 110, l: 125, r: 125 },
-      };
-
-      var modebarBtns = {
-        modeBarButtonsToRemove: ['hoverClosestPie'],
-        displaylogo: false,
-        displayModeBar: false
       };
       this.plotlyService.newPlot(this.ssmtPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
     } else {

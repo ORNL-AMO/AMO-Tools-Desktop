@@ -4,10 +4,12 @@ import { MotorInventoryService } from '../motor-inventory.service';
 import { MotorCatalogService } from '../motor-inventory-setup/motor-catalog/motor-catalog.service';
 import { MotorInventoryData } from '../motor-inventory';
 import { InventoryItem } from '../../shared/models/inventory/inventory';
-import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import _ from 'lodash';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
+import { MotorInventoryMainView } from '../motor-inventory.routing';
 
 @Component({
     selector: 'app-motor-inventory-banner',
@@ -34,7 +36,7 @@ export class MotorInventoryBannerComponent implements OnInit {
   showMotorProperties: BehaviorSubject<boolean>;
   constructor(private motorInventoryService: MotorInventoryService, 
     private emailMeasurDataService: EmailMeasurDataService,
-    private dashboardService: DashboardService, private motorCatalogService: MotorCatalogService, private securityAndPrivacyService: SecurityAndPrivacyService ) { }
+    private dashboardService: DashboardService, private motorCatalogService: MotorCatalogService, private modalDialogService: ModalDialogService ) { }
 
   ngOnInit(): void {
     this.mainTabSub = this.motorInventoryService.mainTab.subscribe(val => {
@@ -60,15 +62,15 @@ export class MotorInventoryBannerComponent implements OnInit {
     this.summaryTabSub = this.motorInventoryService.summaryTab.subscribe(val => {
       this.summaryTab = val;
     });
-
-    this.motorInventoryService.setupTab.next('plant-setup');
-    let nextID: string = this.motorInventoryData.departments[0].id;
-    this.motorCatalogService.selectedDepartmentId.next(nextID);  
   }
 
   showSecurityAndPrivacyModal() {
-    this.securityAndPrivacyService.modalOpen.next(true);
-    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+    // Collapse banner to prevent it from reopening the modal on mobile when dismissed
+    this.bannerCollapsed = true;
+    this.modalDialogService.openModal(
+      SecurityAndPrivacyItemComponent,
+      SecurityAndPrivacyItemComponent.getDialogConfig()
+    );
   }
 
   ngOnDestroy() {
@@ -104,8 +106,8 @@ export class MotorInventoryBannerComponent implements OnInit {
   }
 
 
-  setMainTab(str: string) {
-    this.motorInventoryService.mainTab.next(str);
+  setMainTab(str: MotorInventoryMainView) {
+    this.motorInventoryService.goToMainTab(str);
     this.collapseBanner();
   }
 
@@ -119,19 +121,11 @@ export class MotorInventoryBannerComponent implements OnInit {
   }
 
   back(){
-    if (this.mainTab == 'analysis') {
-      this.motorInventoryService.mainTab.next('summary');
-    } else if (this.mainTab == 'summary') {
-      this.motorInventoryService.mainTab.next('setup');
-    } 
+    this.motorInventoryService.backMainTab();
   }
 
   continue() {
-    if (this.mainTab == 'setup') {
-      this.motorInventoryService.mainTab.next('summary');
-    } else if (this.mainTab == 'summary') {
-      this.motorInventoryService.mainTab.next('analysis');
-    } 
+    this.motorInventoryService.continueMainTab();
   }
 
   backSetupTabs(){

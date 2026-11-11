@@ -800,7 +800,7 @@ export class PhastService {
 
   sumExtendedSurface(losses: ExtendedSurface[], settings: Settings): number {
     let sum = 0;
-    losses.forEach(loss => {
+    losses.forEach((loss, index) => {
       let tmpWallLoss: WallLoss = {
         surfaceArea: loss.surfaceArea,
         ambientTemperature: loss.ambientTemperature,
@@ -808,7 +808,8 @@ export class PhastService {
         windVelocity: 5,
         surfaceEmissivity: loss.surfaceEmissivity,
         conditionFactor: 1,
-        correctionFactor: 1
+        correctionFactor: 1,
+        name: loss.name || 'Loss #' + (index + 1)
       };
       let tmpForm = this.wallFormService.getWallLossForm(tmpWallLoss);
       if (tmpForm.status === 'VALID') {
@@ -897,8 +898,8 @@ export class PhastService {
 
   sumWallLosses(losses: WallLoss[], settings: Settings): number {
     let sum = 0;
-    losses.forEach(loss => {
-      let tmpForm = this.wallFormService.getWallLossForm(loss);
+    losses.forEach((loss, index) => {
+      let tmpForm = this.wallFormService.getWallLossForm({ ...loss, name: loss.name || 'Loss #' + (index + 1) });
       if (tmpForm.status === 'VALID') {
         sum += this.wallLosses(loss, settings);
       }

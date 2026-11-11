@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OpportunitySheetService } from '../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
-import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, TreasureHuntOpportunity, TreasureHuntResults, OpportunitySheetResult, TreasureHuntOpportunityResults, Treasure, FlueGasTreasureHunt, WallLossTreasureHunt, LeakageLossTreasureHunt, WasteHeatTreasureHunt, OpeningLossTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt, AssessmentOpportunity, BoilerBlowdownRateTreasureHunt, PowerFactorCorrectionTreasureHunt, FanAffinityLawTreasureHunt, OpportunityUtilityType } from '../../shared/models/treasure-hunt';
+import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, SteamLeakSurveyTreasureHunt, TreasureHuntOpportunity, TreasureHuntResults, OpportunitySheetResult, TreasureHuntOpportunityResults, Treasure, FlueGasTreasureHunt, WallLossTreasureHunt, LeakageLossTreasureHunt, WasteHeatTreasureHunt, OpeningLossTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt, AssessmentOpportunity, BoilerBlowdownRateTreasureHunt, PowerFactorCorrectionTreasureHunt, OpportunityUtilityType, FanAffinityLawTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { processEquipmentOptions } from '../calculators/opportunity-sheet/general-details-form/processEquipmentOptions';
 import { AirLeakTreasureHuntService } from '../treasure-hunt-calculator-services/air-leak-treasure-hunt.service';
@@ -31,6 +31,7 @@ import { CoolingTowerBasinTreasureHuntService } from '../treasure-hunt-calculato
 import { AssessmentOpportunityService } from '../treasure-hunt-calculator-services/assessment-opportunity.service';
 import { BoilerBlowdownRateTreasureHuntService } from '../treasure-hunt-calculator-services/boiler-blowdown-rate-treasure-hunt.service';
 import { PowerFactorCorrectionTreasureHuntService } from '../treasure-hunt-calculator-services/power-factor-correction-treasure-hunt.service';
+import { SteamLeakTreasureHuntService } from '../treasure-hunt-calculator-services/steam-leak-treasure-hunt.service';
 import { FanAffinityLawTreasureHuntService } from '../treasure-hunt-calculator-services/fan-affinity-law-treasure-hunt.service';
 
 @Injectable()
@@ -65,6 +66,7 @@ export class OpportunitySummaryService {
     private assessmentOpportunityService: AssessmentOpportunityService,
     private boilerBlowdownRateTreasureHuntService: BoilerBlowdownRateTreasureHuntService,
     private powerFactorCorrectionTreasureHuntService: PowerFactorCorrectionTreasureHuntService,
+    private steamLeakTreasureHuntService: SteamLeakTreasureHuntService,
     private fanAffinityLawTreasureHuntService: FanAffinityLawTreasureHuntService
     ) { }
 
@@ -82,6 +84,7 @@ export class OpportunitySummaryService {
     opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.pipeInsulationReductions, opportunitySummaries, settings);
     opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.tankInsulationReductions, opportunitySummaries, settings);
     opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.airLeakSurveys, opportunitySummaries, settings);
+    opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.steamLeakSurveys, opportunitySummaries, settings);
     opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.wallLosses, opportunitySummaries, settings);
     opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.flueGasLosses, opportunitySummaries, settings);
     opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.airHeatingOpportunities, opportunitySummaries, settings);
@@ -218,6 +221,10 @@ export class OpportunitySummaryService {
       let airLeakSurveyOpportunity = treasureHuntOpportunity as AirLeakSurveyTreasureHunt;
       treasureHuntOpportunityResults = this.airLeakTreasureHuntService.getTreasureHuntOpportunityResults(airLeakSurveyOpportunity, settings);
 
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.steamLeak) {
+      let steamLeakSurveyOpportunity = treasureHuntOpportunity as SteamLeakSurveyTreasureHunt;
+      treasureHuntOpportunityResults = this.steamLeakTreasureHuntService.getTreasureHuntOpportunityResults(steamLeakSurveyOpportunity, settings);
+
     } else if (treasureHuntOpportunity.opportunityType === Treasure.tankInsulation) {
       let tankInsulationOpportunity = treasureHuntOpportunity as TankInsulationReductionTreasureHunt;
       treasureHuntOpportunityResults = this.tankInsulationTreasureHuntService.getTreasureHuntOpportunityResults(tankInsulationOpportunity, settings);
@@ -323,6 +330,9 @@ export class OpportunitySummaryService {
     } else if (treasureHuntOpportunity.opportunityType === Treasure.fanAffinityLaw) {
       let fanAffinityLawTreasureHunt = treasureHuntOpportunity as FanAffinityLawTreasureHunt;
       treasureHuntOpportunityResults = this.fanAffinityLawTreasureHuntService.getTreasureHuntOpportunityResults(fanAffinityLawTreasureHunt, settings);
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.steamLeak) {
+      let steamLeakTreasureHunt = treasureHuntOpportunity as SteamLeakSurveyTreasureHunt;
+      treasureHuntOpportunityResults = this.steamLeakTreasureHuntService.getTreasureHuntOpportunityResults(steamLeakTreasureHunt, settings);
     }
 
     if (!treasureHuntOpportunityResults) {

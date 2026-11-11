@@ -120,7 +120,7 @@ export class ImportExportService {
   }
 
   openMailTo() {
-    let subject = "AMO Tools Feedback";
+    let subject = "MEASUR Feedback";
     let bodyMsg = "We appreciate your feedback. Please attach any screen shots or your current data set that you would like us to review.";
     let mailToString: string = 'mailto:measur-help@ornl.gov?subject=' + subject + '&body=' + bodyMsg;
     let doc = this.windowRefService.getDoc();

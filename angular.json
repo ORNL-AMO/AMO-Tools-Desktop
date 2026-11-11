@@ -11,9 +11,7 @@
         "build": {
           "builder": "@angular-builders/custom-esbuild:application",
           "options": {
-            "plugins": [
-              "./esbuild.plugins.js"
-            ],
+            "plugins": ["./esbuild.plugins.js"],
             "allowedCommonJsDependencies": [
               "lodash",
               "regression",
@@ -75,7 +73,8 @@
               "src/assets/styles/pagination.css",
               "src/assets/styles/welcome-screen.css",
               "src/assets/styles/process-cooling-assessment-shared.css",
-              "src/assets/styles/compressed-air.css"
+              "src/assets/styles/compressed-air.css",
+              "src/assets/styles/layout-platform.css"
             ],
             "scripts": [
               "node_modules/plotly.js-dist/plotly.js"
@@ -187,15 +186,20 @@
             ],
             "assets": [
               "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/measur-tools-suite/bin/",
+                "output": "."
+              },
               "src/favicon.ico",
               "src/robots.txt",
               "src/sitemap.xml",
-              "src/manifest.webmanifest",
               {
-                "glob": "client.*",
-                "input": "node_modules/measur-tools-suite/bin",
-                "output": "/"
-              }
+                "glob": "**/*",
+                "input": "./node_modules/measur-tools-suite/bin/",
+                "output": "."
+              },
+              "src/manifest.webmanifest"
             ]
           }
         },

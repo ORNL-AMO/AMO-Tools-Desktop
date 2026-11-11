@@ -2,10 +2,13 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { FsatService } from '../fsat.service';
 import { Subscription } from 'rxjs';
-import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
+import { FSAT_SETUP_GATED_VIEWS, FsatMainView } from '../routing/fsat-main-views';
+import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
   selector: 'app-fsat-banner',
@@ -22,7 +25,7 @@ export class FsatBannerComponent implements OnInit {
   bannerCollapsed: boolean = true;
   constructor(private fsatService: FsatService,
     private emailMeasurDataService: EmailMeasurDataService,
-    private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService,
+    private dashboardService: DashboardService, private modalDialogService: ModalDialogService,
     private coreService: CoreService) { }
 
   ngOnInit() {
@@ -35,18 +38,24 @@ export class FsatBannerComponent implements OnInit {
     this.mainTabSubscription.unsubscribe();
   }
 
-  changeTab(str: string) {
-    if (str === 'baseline' || str === 'calculators') {
-      this.fsatService.mainTab.next(str);
-    } else if (this.assessment.fsat.setupDone) {
-      this.fsatService.mainTab.next(str);
+  canOpenMainTab(view: FsatMainView): boolean {
+    return isMainTabAllowed(FSAT_SETUP_GATED_VIEWS, view, this.assessment.fsat.setupDone);
+  }
+
+  changeTab(str: FsatMainView) {
+    if (this.canOpenMainTab(str)) {
+      this.fsatService.goToMainTab(str);
     }
     this.collapseBanner();
   }
 
   showSecurityAndPrivacyModal() {
-    this.securityAndPrivacyService.modalOpen.next(true);
-    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+    // Collapse banner to prevent it from reopening the modal on mobile when dismissed
+    this.bannerCollapsed = true;
+    this.modalDialogService.openModal(
+      SecurityAndPrivacyItemComponent,
+      SecurityAndPrivacyItemComponent.getDialogConfig()
+    );
   }
 
   collapseBanner() {
@@ -59,31 +68,11 @@ export class FsatBannerComponent implements OnInit {
   }
 
   back() {
-    if (this.mainTab == 'calculators') {
-      this.fsatService.mainTab.next('sankey');
-    } else if (this.mainTab == 'sankey') {
-      this.fsatService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.fsatService.mainTab.next('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.fsatService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.fsatService.mainTab.next('baseline');
-    }
+    this.fsatService.backMainTab();
   }
 
   continue() {
-    if (this.mainTab == 'baseline') {
-      this.fsatService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.fsatService.mainTab.next('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.fsatService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.fsatService.mainTab.next('sankey');
-    } else if (this.mainTab == 'sankey') {
-      this.fsatService.mainTab.next('calculators');
-    }
+    this.fsatService.continueMainTab();
   }
 
   openExportModal() {

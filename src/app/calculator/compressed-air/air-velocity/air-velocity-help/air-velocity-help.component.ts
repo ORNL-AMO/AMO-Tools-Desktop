@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-air-velocity-help',
@@ -12,6 +13,7 @@ export class AirVelocityHelpComponent implements OnInit {
   currentField: string;
   @Input()
   settings: Settings;
+  docsLink: string = environment.measurDocsUrl;
 
   constructor() { }
 

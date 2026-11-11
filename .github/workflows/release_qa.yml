@@ -3,6 +3,10 @@ name: "Release: QA"
 on:
   workflow_dispatch:
 
+permissions:
+  actions: read
+  contents: read
+
 jobs:
   call_build:
     if: github.ref_name != 'develop' || github.ref_name != 'master'

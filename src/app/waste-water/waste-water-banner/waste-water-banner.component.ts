@@ -3,10 +3,13 @@ import { Subscription } from 'rxjs';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { Assessment } from '../../shared/models/assessment';
 import { WasteWaterData } from '../../shared/models/waste-water';
-import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
 import { WasteWaterService } from '../waste-water.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
+import { WASTE_WATER_SETUP_GATED_VIEWS, WasteWaterMainView } from '../routing/waste-water.routing';
+import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
   selector: 'app-waste-water-banner',
@@ -31,7 +34,7 @@ export class WasteWaterBannerComponent implements OnInit {
 
   constructor(private wasteWaterService: WasteWaterService,
     private emailMeasurDataService: EmailMeasurDataService,
-    private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService,
+    private dashboardService: DashboardService, private modalDialogService: ModalDialogService,
     private coreService: CoreService) { }
 
   ngOnInit(): void {
@@ -62,17 +65,25 @@ export class WasteWaterBannerComponent implements OnInit {
   }
 
   showSecurityAndPrivacyModal() {
-    this.securityAndPrivacyService.modalOpen.next(true);
-    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+    // Collapse banner to prevent it from reopening the modal on mobile when dismissed
+    this.bannerCollapsed = true;
+    this.modalDialogService.openModal(
+      SecurityAndPrivacyItemComponent,
+      SecurityAndPrivacyItemComponent.getDialogConfig()
+    );
   }
 
   navigateHome() {
     this.dashboardService.navigateWithSidebarOptions('/landing-screen', { shouldCollapse: false });
   }
 
-  changeTab(str: string) {
-    if (str == 'baseline' || this.isBaselineValid) {
-      this.wasteWaterService.mainTab.next(str);
+  canOpenMainTab(view: WasteWaterMainView): boolean {
+    return isMainTabAllowed(WASTE_WATER_SETUP_GATED_VIEWS, view, this.isBaselineValid);
+  }
+
+  changeTab(str: WasteWaterMainView) {
+    if (this.canOpenMainTab(str)) {
+      this.wasteWaterService.goToMainTab(str);
     }
     this.collapseBanner();
   }
@@ -93,31 +104,11 @@ export class WasteWaterBannerComponent implements OnInit {
   }
 
   back() {
-    if (this.mainTab == 'calculators') {
-      this.wasteWaterService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.wasteWaterService.mainTab.next('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.wasteWaterService.mainTab.next('analysis');
-    } else if (this.mainTab == 'analysis') {
-      this.wasteWaterService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.wasteWaterService.mainTab.next('baseline');
-    }
+    this.wasteWaterService.backMainTab();
   }
 
   continue() {
-    if (this.mainTab == 'baseline') {
-      this.wasteWaterService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.wasteWaterService.mainTab.next('analysis');
-    } else if (this.mainTab == 'analysis') {
-      this.wasteWaterService.mainTab.next('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.wasteWaterService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.wasteWaterService.mainTab.next('calculators');
-    }
+    this.wasteWaterService.continueMainTab();
   }
 
   collapseTabs() {

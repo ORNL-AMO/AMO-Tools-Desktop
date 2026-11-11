@@ -15,6 +15,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
 import { SolidLoadMaterialDbService } from '../indexedDb/solid-load-material-db.service';
 import { WallLossesSurfaceDbService } from '../indexedDb/wall-losses-surface-db.service';
+import { LightingFixtureServiceDbService } from '../indexedDb/lighting-fixture-db.service';
 import { Directory } from './models/directory';
 import { Assessment } from './models/assessment';
 import { InventoryItem } from './models/inventory/inventory';
@@ -58,6 +59,7 @@ export class ImportBackupService {
     private flueGasMaterialDbService: FlueGasMaterialDbService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private atmosphereDbService: AtmosphereDbService,
+    private lightingFixtureServiceDbService: LightingFixtureServiceDbService,
     private inventoryDbService: InventoryDbService,
     private manageAppDataService: ManageAppDataService,
     private diagramDbService: DiagramIdbService,
@@ -269,6 +271,12 @@ export class ImportBackupService {
       material.selected = false;
       delete material.id;
       await this.solidLiquidMaterialDbService.addMaterial(material);
+    };
+
+    for await (let material of measurBackupFile.lightingFixtureMaterials ?? []) {
+      material.selected = false;
+      delete material.id;
+      await firstValueFrom(this.lightingFixtureServiceDbService.addWithObservable(material));
     };
   }
 

@@ -3,6 +3,13 @@ import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { SSMT, SsmtValid } from '../../../shared/models/steam/ssmt';
 import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
+import { SankeyScenarioOption } from '../../../shared/sankey/sankey-scenario-picker/sankey-scenario-picker.component';
+
+export interface SsmtSankeyScenario {
+  scenario: SSMT;
+  costSavings: number;
+  isBaseline: boolean;
+}
 
 @Component({
     selector: 'app-ssmt-report-sankey',
@@ -20,44 +27,35 @@ baselineOutput: SSMTOutput;
 @Input()
 modificationOutputs: Array<{ name: string, outputData: SSMTOutput, valid: SsmtValid }>;
 
-  ssmt1CostSavings: number;
-  ssmt2CostSavings: number;
-  ssmt1: SSMT;
-  ssmt2: SSMT;
-  ssmt1Baseline: boolean = true;
-  ssmt2Baseline: boolean = false;
+  ssmtOptions: Array<SankeyScenarioOption>;
+  sankeyScenarios: Array<SsmtSankeyScenario>;
   constructor() { }
 
   ngOnInit() {
-    this.ssmt1 = this.assessment.ssmt;
-    this.setSsmt1();
-    if (this.assessment.ssmt.modifications.length != 0) {
-      this.ssmt2 = this.assessment.ssmt.modifications[0].ssmt;
-      this.setSsmt2();
-    }
+    const ssmts = [this.assessment.ssmt, ...(this.assessment.ssmt.modifications ?? []).map(modification => modification.ssmt)];
+    this.ssmtOptions = ssmts.map(ssmt => ({ name: ssmt.name, value: ssmt }));
+    this.sankeyScenarios = ssmts.map(ssmt => ({ scenario: ssmt, costSavings: this.getCostSavings(ssmt), isBaseline: ssmt === this.assessment.ssmt }));
   }
 
-  setSsmt1() {
-    this.ssmt1Baseline = this.assessment.ssmt.name == this.ssmt1.name? true : false;
-    let selectedSSMTCost: number = this.getSelectedSSMTCost(this.ssmt1.name);
-    this.ssmt1CostSavings = this.baselineOutput.operationsOutput.totalOperatingCost - selectedSSMTCost;
-
+  setSsmt(sankeyScenario: SsmtSankeyScenario, selectedSsmt: SSMT) {
+    sankeyScenario.scenario = selectedSsmt;
+    sankeyScenario.isBaseline = selectedSsmt === this.assessment.ssmt;
+    sankeyScenario.costSavings = this.getCostSavings(selectedSsmt);
   }
 
-  setSsmt2() {
-    this.ssmt2Baseline = this.assessment.ssmt.name == this.ssmt2.name? true : false
-    let selectedSSMTCost: number = this.getSelectedSSMTCost(this.ssmt2.name);
-    this.ssmt2CostSavings = this.baselineOutput.operationsOutput.totalOperatingCost - selectedSSMTCost;
+  getCostSavings(selectedSsmt: SSMT): number {
+    let selectedSSMTCost: number = this.getSelectedSSMTCost(selectedSsmt.name);
+    return selectedSSMTCost != null ? this.baselineOutput.operationsOutput.totalOperatingCost - selectedSSMTCost : undefined;
   }
 
-  getSelectedSSMTCost(selectedName: string) {
+  getSelectedSSMTCost(selectedName: string): number {
     let cost = this.baselineOutput.operationsOutput.totalOperatingCost;
     if (selectedName != this.assessment.ssmt.name) {
-      this.modificationOutputs.forEach(mod => {
-        if (mod.name == selectedName) {
-          cost = mod.outputData.operationsOutput.totalOperatingCost;
-        }
-      })
+      const selectedMod = this.modificationOutputs.find(mod => mod.name == selectedName);
+      if (!selectedMod?.outputData?.operationsOutput) {
+        return undefined;
+      }
+      cost = selectedMod.outputData.operationsOutput.totalOperatingCost;
     }
     return cost;
   }
