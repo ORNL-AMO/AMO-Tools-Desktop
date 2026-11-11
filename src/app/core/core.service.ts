@@ -88,7 +88,8 @@ export class CoreService {
     }
   }
 
-  async loadExampleDirectory() {
+  /** @returns False when the example data failed to load; part of it may already have been saved. */
+  async loadExampleDirectory(): Promise<boolean> {
     try {
       console.log('load example');
       const response = await fetch('assets/example-data/ExamplesData.json');
@@ -98,8 +99,10 @@ export class CoreService {
       const text = await response.text();
       let backupData: ImportExportData = JSON.parse(text);
       await this.importService.importData(backupData, 1)
+      return true;
     } catch (err) {
       console.log(err);
+      return false;
     }
   }
 

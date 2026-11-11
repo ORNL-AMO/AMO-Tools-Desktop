@@ -186,6 +186,7 @@ export class ImportService {
       await firstValueFrom(this.settingsDbService.addWithObservable(item.settings));
       if (item.calculator) {
         item.calculator.directoryId = newDirectoryId;
+        item.calculator.assessmentId = addedAssessment.id;
         delete item.calculator.id;
         await firstValueFrom(this.calculatorDbService.addWithObservable(item.calculator));
       }
