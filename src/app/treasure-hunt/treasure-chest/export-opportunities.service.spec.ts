@@ -35,7 +35,8 @@ describe('ExportOpportunitiesService', () => {
     it('exports and counts fan opportunities through the shared section list', () => {
       const selected = {selected: true, opportunityType: Treasure.fanAffinityLaw} as FanAffinityLawTreasureHunt;
       const unselected = {...selected, selected: false};
-      const treasureHunt: TreasureHunt = {fanAffinityLawOpportunities: [selected, unselected]};
+      const treasureHunt: TreasureHunt = {name: 'Fan export', setupDone: true,
+        fanAffinityLawOpportunities: [selected, unselected]};
       expect(service.setImportExportData(treasureHunt).fanAffinityLawOpportunities).toEqual([selected]);
       expect(service.setImportExportData(treasureHunt, true).fanAffinityLawOpportunities).toEqual([selected, unselected]);
       expect(service.getOpportunityCounts(treasureHunt)).toEqual({selected: 1, total: 2});
