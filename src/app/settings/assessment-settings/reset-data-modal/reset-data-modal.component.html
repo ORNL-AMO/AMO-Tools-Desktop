@@ -1,80 +1,152 @@
-<div bsModal #resetSystemSettingsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="resetSystemSettingsModalLabel"
-    aria-hidden="true" [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Reset System Settings</h3>
-                <button class="close" (click)="hideResetSystemSettingsModal()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body pt-0">
-                <div *ngIf="!deleting">
-                        <div class="alert alert-danger px-2 small text-left mb-3">
-                            <ul class="m-2 pl-3">
-                                <li>All selected options will be restored to the factory default state. <span class="bold">This cannot be undone</span></li>
-                                <li><span class="bold">Reset All Data</span> and <span class="bold">Reset Application Settings</span> will delete settings related to automatic backup.</li>
-                            </ul>
+<div class="modal-header">
+    <h3 id="resetDataModalTitle">Reset System Settings</h3>
+    @if (status !== 'running' || resetAllBlocked) {
+        <button type="button" class="close" aria-label="Close" (click)="close()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    }
+</div>
+
+<div class="modal-body reset-data-modal">
+    @switch (status) {
+        @case ('selecting') {
+            <div class="alert alert-info backup-note">
+                <div>
+                    Resetting cannot be undone. Before you start, you can save a copy of your data from
+                    <a href="javascript:void(0)" (click)="openDataBackupPage()">Data Storage and Backup</a>.
+                    @if (isAutomaticBackupOn !== undefined) {
+                        <div class="small backup-status">
+                            Automatic backup is <span class="bold">{{ isAutomaticBackupOn ? 'on' : 'off' }}</span>.
                         </div>
-                    <div class="row toggle-btn" (click)="toggleResetSystemSettingsOption('reset-all')">
-                        <div class="col-2">
-                            <app-animated-checkmark [active]="resetAll"></app-animated-checkmark>
-                        </div>
-                        <div class="col-8 bold-bottom-divider">
-                            Reset All Data
-                        </div>
-                    </div>
-                    <div class="row toggle-btn pad-top-10" (click)="toggleResetSystemSettingsOption('app-settings')">
-                        <div class="col-2">
-                            <app-animated-checkmark [active]="resetAppSettings"></app-animated-checkmark>
-                        </div>
-                        <div class="col-8 bottom-divider">
-                            Reset Application Settings
-                        </div>
-                    </div>
-                    <div class="row toggle-btn pad-top-10" (click)="toggleResetSystemSettingsOption('example-items')">
-                        <div class="col-2">
-                            <app-animated-checkmark [active]="resetExampleItems"></app-animated-checkmark>
-                        </div>
-                        <div class="col-8 bottom-divider">
-                            Reset Example Items
-                        </div>
-                    </div>
-                    <div class="row toggle-btn pad-top-10" (click)="toggleResetSystemSettingsOption('user-assessments')">
-                        <div class="col-2">
-                            <app-animated-checkmark [active]="resetUserAssessments"></app-animated-checkmark>
-                        </div>
-                        <div class="col-8 bottom-divider">
-                            Delete User Items
-                            <div class="small">Assessments, inventories, diagrams, calculators and your folders. Examples are kept.</div>
-                        </div>
-                    </div>
-                    <div class="row toggle-btn pad-top-10" (click)="toggleResetSystemSettingsOption('custom-materials')">
-                        <div class="col-2">
-                            <app-animated-checkmark [active]="resetCustomMaterials"></app-animated-checkmark>
-                        </div>
-                        <div class="col-8 bottom-divider">
-                            Delete Custom Materials
-                        </div>
-                    </div>
-                </div>
-                <div class="row justify-content-center" *ngIf="deleting">
-                    <div class="col-10">
-                        <div class="main-content text-center">
-                            <div class="spinner">
-                                <div class="bounce1"></div>
-                                <div class="bounce2"></div>
-                                <div class="bounce3"></div>
-                            </div>
-                            <h1>Resetting Data...</h1>
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger pull-right" (click)="resetSystemSettingsAccept()" [disabled]="!resetCustomMaterials && !resetUserAssessments && !resetExampleItems && !resetAppSettings" data-dismiss="modal">Accept</button>
-                <button type="button" class="btn btn-secondary pull-left" (click)="hideResetSystemSettingsModal()" data-dismiss="modal">Cancel</button>
+
+            <p class="small text-muted mb-2">Choose what to reset:</p>
+            <!-- Same order as the original modal: Reset All first, then the four options. -->
+            <button type="button" class="reset-option reset-all-option" [class.selected]="resetAll" [attr.aria-pressed]="resetAll"
+                (click)="toggleResetSystemSettingsOption('reset-all')">
+                <app-animated-checkmark [active]="resetAll"></app-animated-checkmark>
+                <span class="reset-option-text">
+                    <span class="reset-option-title">Reset All Data</span>
+                    <span class="reset-option-description">Deletes everything, including backup settings and contacts, then restarts MEASUR.</span>
+                </span>
+            </button>
+
+            <ul class="reset-options">
+                @for (step of displayedSteps; track step.option) {
+                    <li>
+                        <button type="button" class="reset-option" [class.selected]="isSelected(step.option)"
+                            [attr.aria-pressed]="isSelected(step.option)" (click)="toggleResetSystemSettingsOption(step.option)">
+                            <app-animated-checkmark [active]="isSelected(step.option)"></app-animated-checkmark>
+                            <span class="reset-option-text">
+                                <span class="reset-option-title">{{ step.title }}</span>
+                                <span class="reset-option-description">{{ step.description }}</span>
+                            </span>
+                        </button>
+                    </li>
+                }
+            </ul>
+        }
+
+        @case ('running') {
+            <div class="reset-progress" aria-live="polite">
+                <p class="reset-progress-label">{{ progressLabel }}</p>
+                <app-progress-bar [percent]="progressPercent" [status]="progressBarStatus"></app-progress-bar>
+                @if (resetAllBlocked) {
+                    <p class="reset-blocked mt-2 mb-0">
+                        MEASUR is open in another tab or window, so the data can't be deleted yet.
+                        Close the other tabs or windows and the reset will finish and restart MEASUR.
+                        You can close this window in the meantime.
+                    </p>
+                } @else {
+                    <p class="small text-muted mt-2 mb-0">Please keep MEASUR open until the reset finishes.</p>
+                }
             </div>
-        </div>
-    </div>
+        }
+
+        @case ('succeeded') {
+            <div class="reset-progress" aria-live="polite">
+                <app-progress-bar [percent]="100" status="complete" label="Reset complete"></app-progress-bar>
+                <ul class="reset-step-results">
+                    @for (step of completedSteps; track step.option) {
+                        <li class="step-done">
+                            <span class="step-icon fa fa-check" aria-hidden="true"></span>
+                            <span>{{ step.doneLabel }}</span>
+                        </li>
+                    }
+                </ul>
+                <p class="small text-muted mb-0">Closing in {{ closeCountdownSeconds }} s.</p>
+            </div>
+        }
+
+        @case ('failed') {
+            <div class="reset-progress" role="alert">
+                <app-progress-bar [percent]="progressPercent" status="error" [label]="progressLabel"></app-progress-bar>
+                <ul class="reset-step-results">
+                    @for (step of completedSteps; track step.option) {
+                        <li class="step-done">
+                            <span class="step-icon fa fa-check" aria-hidden="true"></span>
+                            <span>{{ step.doneLabel }}</span>
+                        </li>
+                    }
+                    <li class="step-failed">
+                        <span class="step-icon fa fa-exclamation-circle" aria-hidden="true"></span>
+                        <span>{{ failedStep?.title }}: failed</span>
+                    </li>
+                    @for (step of stepsNotRun; track step.option) {
+                        <li class="step-not-run">
+                            <span class="step-icon fa fa-minus" aria-hidden="true"></span>
+                            <span>{{ step.title }}: not run</span>
+                        </li>
+                    }
+                </ul>
+                <!-- Own panel class, not .alert-danger: the app-wide .alert-danger rule centers text and strips padding. -->
+                <div class="failure-guidance">
+                    <p class="failure-guidance-title">What to do</p>
+                    <ol>
+                        <li>{{ failedStep?.failureGuidance }}</li>
+                        <li>
+                            Select <span class="bold">Try again</span>. If it fails again,
+                            @if (electronService.isElectron) { restart MEASUR } @else { reload the page }
+                            and run the reset again.
+                        </li>
+                        <li>
+                            To get data back, restore a backup from
+                            <a href="javascript:void(0)" (click)="openDataBackupPage()">Data Storage and Backup</a>.
+                        </li>
+                        <li>
+                            If the problem continues, send a bug report to
+                            <a href="mailto:measur-help@ornl.gov">measur-help&#64;ornl.gov</a> (MEASUR {{ appVersion }}).
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<div class="modal-footer">
+    @switch (status) {
+        @case ('selecting') {
+            <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
+            <button type="button" class="btn btn-danger" [disabled]="selectedOptions.size === 0" (click)="resetSystemSettingsAccept()">
+                {{ resetButtonLabel }}
+            </button>
+        }
+        @case ('running') {
+            @if (resetAllBlocked) {
+                <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+            } @else {
+                <button type="button" class="btn btn-secondary" disabled>Resetting...</button>
+            }
+        }
+        @case ('succeeded') {
+            <button type="button" class="btn btn-primary" (click)="close()">Close now</button>
+        }
+        @case ('failed') {
+            <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+            <button type="button" class="btn btn-danger" (click)="retryFailedSteps()">Try again</button>
+        }
+    }
 </div>

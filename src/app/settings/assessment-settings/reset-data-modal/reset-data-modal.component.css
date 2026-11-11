@@ -1,0 +1,196 @@
+/* Fills the dialog pane (see .reset-data-modal-dialog in app.css) so the body can scroll between a fixed header and footer. */
+:host {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.modal-header {
+    align-items: center;
+    padding: 0 0 .75rem;
+}
+
+.modal-body {
+    padding: 1rem 0;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    justify-content: space-between;
+    padding: .75rem 0 0;
+}
+
+.modal-footer .btn:only-child {
+    margin-left: auto;
+}
+
+/* Backup note */
+.backup-note {
+    font-size: .875rem;
+    margin-bottom: 1rem;
+}
+
+.backup-status {
+    margin-top: .25rem;
+}
+
+/* Option rows */
+.reset-options {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 .75rem;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+}
+
+.reset-options li + li {
+    border-top: 1px solid #dee2e6;
+}
+
+.reset-option {
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+    width: 100%;
+    padding: .625rem .75rem;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+}
+
+.reset-option:hover {
+    background-color: #f5f7f6;
+}
+
+.reset-option:focus-visible {
+    outline: 2px solid var(--measur-brand);
+    outline-offset: -2px;
+}
+
+.reset-option.selected {
+    background-color: #eef5f1;
+}
+
+.reset-option-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.reset-option-title {
+    font-weight: 600;
+    font-size: .9rem;
+}
+
+.reset-option-description {
+    font-size: .8rem;
+    color: #6c757d;
+}
+
+/* Red alert background (same as the failure panel) whether selected or not, so the destructive option always stands apart. */
+.reset-all-option,
+.reset-all-option.selected {
+    background-color: #f8d7da;
+    border: 1px solid #f1aeb5;
+    border-radius: .25rem;
+    margin-bottom: .75rem;
+}
+
+.reset-all-option:hover {
+    background-color: #f5c2c7;
+}
+
+.reset-all-option .reset-option-title {
+    color: #b02a37;
+}
+
+.reset-all-option:focus-visible {
+    outline-color: #b02a37;
+}
+
+/* Progress and results */
+.reset-progress {
+    padding: .5rem 0;
+}
+
+.reset-progress-label {
+    font-weight: 600;
+    margin-bottom: .5rem;
+}
+
+.reset-step-results {
+    list-style: none;
+    padding: 0;
+    margin: .75rem 0;
+    font-size: .875rem;
+    text-align: left;
+}
+
+.reset-step-results li {
+    display: flex;
+    align-items: baseline;
+    gap: .5rem;
+    padding: .125rem 0;
+}
+
+/* Fixed size and width so icons line up; the app-wide .fa-times rule would otherwise make icons 33px. */
+.step-icon {
+    flex: 0 0 1rem;
+    font-size: .875rem;
+    text-align: center;
+}
+
+.step-done .step-icon {
+    color: var(--measur-brand);
+}
+
+.step-failed {
+    color: #b02a37;
+    font-weight: 600;
+}
+
+.step-not-run {
+    color: #6c757d;
+}
+
+.failure-guidance {
+    font-size: .875rem;
+    text-align: left;
+    color: #58151c;
+    background-color: #f8d7da;
+    border: 1px solid #f1aeb5;
+    border-left: 4px solid #b02a37;
+    border-radius: .25rem;
+    padding: .75rem 1rem;
+}
+
+.failure-guidance-title {
+    font-weight: 600;
+    margin-bottom: .375rem;
+}
+
+.failure-guidance ol {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.failure-guidance li + li {
+    margin-top: .25rem;
+}
+
+.failure-guidance a {
+    color: #58151c;
+    text-decoration: underline;
+}
+
+.reset-blocked {
+    font-size: .875rem;
+    color: #664d03;
+    background-color: #fff3cd;
+    border-left: 4px solid #e0a800;
+    border-radius: .25rem;
+    padding: .5rem .75rem;
+}

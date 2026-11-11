@@ -23,6 +23,7 @@ import { WallLossesSurfaceDbService } from '../../../indexedDb/wall-losses-surfa
 import { LightingFixtureServiceDbService } from '../../../indexedDb/lighting-fixture-db.service';
 import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { CoreService } from '../../../core/core.service';
+import { dbConfig } from '../../../indexedDb/dbConfig';
 
 /** The "All Assessments" folder. The app creates it first, so it always has id 1. */
 export const ROOT_DIRECTORY_ID = 1;
@@ -96,11 +97,13 @@ export class ResetDataService {
    * The new examples are loaded before anything is deleted. If the load fails, whatever part of it was saved is removed,
    * so existing data is left as it was.
    * User content saved inside the old Examples folder is moved to "All Assessments" rather than deleted.
+   * @param onProgress Called with the fraction of this step done (0 to 1) as each phase finishes.
    * @throws Error when the example data could not be loaded.
    */
-  async restoreExampleItems(): Promise<void> {
+  async restoreExampleItems(onProgress?: (fractionDone: number) => void): Promise<void> {
     const storedBefore: StoredData = await this.getStoredData();
     const oldExampleDirectory: Directory | undefined = storedBefore.directories.find(directory => directory.isExample);
+    onProgress?.(0.1);
 
     const loaded: boolean = await this.coreService.loadExampleDirectory();
     const directoriesAfterLoad: Array<Directory> = await firstValueFrom(this.directoryDbService.getAllDirectories());
@@ -109,11 +112,15 @@ export class ResetDataService {
       await this.discardPartialExampleLoad(newExampleDirectory);
       throw new Error('Example items could not be loaded. Existing examples were not changed.');
     }
+    // Loading the example file is the slowest phase of this step, so it gets most of the bar.
+    onProgress?.(0.8);
 
     if (oldExampleDirectory) {
       await this.moveUserContentToRoot(storedBefore, oldExampleDirectory.id);
+      onProgress?.(0.9);
       await this.deleteRows(this.getExampleDataIds(storedBefore, oldExampleDirectory.id));
     }
+    onProgress?.(1);
   }
 
   /**
@@ -136,6 +143,24 @@ export class ResetDataService {
     await this.solidLoadMaterialDbService.deleteAllCustomMaterials();
     await this.wallLossesSurfaceDbService.deleteAllCustomMaterials();
     await this.lightingFixtureDbService.deleteAllCustomMaterials();
+  }
+
+  /**
+   * Deletes the whole MEASUR database ("Reset All Data") and resets user feature flags. The caller restarts the app afterwards.
+   * Uses IndexedDB directly because ngx-indexed-db's deleteDatabase throws inside its onblocked handler,
+   * so a blocked delete would never settle and the caller could not tell the user why.
+   * @param onBlocked Called when another open connection (e.g. MEASUR in a second tab) holds the delete back.
+   *   The request stays queued and finishes on its own once those connections close.
+   * @returns Resolves when the database is deleted.
+   */
+  deleteAllData(onBlocked: () => void): Promise<void> {
+    this.featureFlagService.restoreUserFlagsToDefault();
+    return new Promise<void>((resolve, reject) => {
+      const request: IDBOpenDBRequest = indexedDB.deleteDatabase(dbConfig.name);
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(request.error);
+      request.onblocked = () => onBlocked();
+    });
   }
 
   /**
