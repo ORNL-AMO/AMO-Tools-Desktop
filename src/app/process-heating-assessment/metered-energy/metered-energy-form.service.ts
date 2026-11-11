@@ -65,6 +65,14 @@ function emptyElectricity(): MeteredEnergyElectricity {
 }
 
 /**
+ * Legacy saves fuel inputs without `userDefinedMeteredEnergy` until it is toggled, and omits a flow rate
+ * that was never entered, which it calculates as 0; this module always saves the toggle.
+ */
+function isLegacyFuel(fuel: MeteredEnergyFuel | undefined): boolean {
+  return !!fuel && fuel.userDefinedMeteredEnergy === undefined;
+}
+
+/**
  * @returns fuel energy over the collection period, in MMBtu (imperial) or GJ (metric)
  */
 export function calculateMeteredFuelEnergy(flowRate: number | null, heatingValue: number | null, collectionTime: number | null): number | null {
@@ -198,7 +206,7 @@ export class MeteredEnergyFormService {
       fuelDescription: this.fb.nonNullable.control<FuelDescription>((fuel?.fuelDescription as FuelDescription) ?? 'gas'),
       fuelType: this.fb.control<number | null>(fuel?.fuelType ?? null),
       heatingValue: this.fb.control<number | null>(fuel?.heatingValue ?? null, ENERGY_INPUT_VALIDATORS),
-      fuelFlowRateInput: this.fb.control<number | null>(fuel?.fuelFlowRateInput ?? null, ENERGY_INPUT_VALIDATORS),
+      fuelFlowRateInput: this.fb.control<number | null>(fuel?.fuelFlowRateInput ?? (isLegacyFuel(fuel) ? 0 : null), ENERGY_INPUT_VALIDATORS),
       userDefinedMeteredEnergy: this.fb.nonNullable.control(!!fuel?.userDefinedMeteredEnergy),
       fuelEnergy: this.fb.control<number | null>(fuel?.fuelEnergy ?? null, ENERGY_INPUT_VALIDATORS),
       collectionTime: this.fb.control<number | null>(fuel?.collectionTime ?? null, ENERGY_INPUT_VALIDATORS),

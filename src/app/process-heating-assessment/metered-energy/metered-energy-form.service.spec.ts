@@ -119,6 +119,17 @@ describe('MeteredEnergyFormService', () => {
       saved.meteredEnergySteam.collectionTime = undefined;
       expect(service.isValid(saved, FUEL_ONLY)).toBeFalse();
     });
+
+    it('treats a flow rate legacy never saved as 0, but keeps a flow rate cleared in this module required', () => {
+      const legacyFuel = { fuelDescription: 'gas', fuelType: 0, heatingValue: 0, collectionTime: 0, electricityUsed: 0, electricityCollectionTime: 0, fuelEnergy: 0, operatingHours: 0 };
+      const saved: MeteredEnergy = { fuel: true, steam: false, electricity: false, meteredEnergyFuel: legacyFuel } as MeteredEnergy;
+
+      expect(service.isValid(saved, FUEL_ONLY)).toBeTrue();
+      expect(service.getForm(saved, FUEL_ONLY).controls.meteredEnergyFuel.controls.fuelFlowRateInput.value).toBe(0);
+
+      saved.meteredEnergyFuel = { ...legacyFuel, userDefinedMeteredEnergy: false };
+      expect(service.isValid(saved, FUEL_ONLY)).toBeFalse();
+    });
   });
 
   describe('toMeteredEnergy', () => {
