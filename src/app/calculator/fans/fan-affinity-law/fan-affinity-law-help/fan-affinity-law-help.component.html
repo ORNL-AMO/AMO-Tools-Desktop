@@ -42,8 +42,20 @@
       <small class="text-muted">
         <br>
         Mechanical power delivered to the fan at the baseline operating point, after motor and drive losses.
-        Enter delivered power in hp for imperial settings or kW for metric settings. This is not nameplate
+        Enter delivered power in kW. This is not nameplate
         power or electrical input power. Review older entries that used nameplate or full-speed rated power.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'nameplatePower'">
+    <h6>
+      Nameplate Power
+      <small class="text-muted">
+        <br>
+        Motor nameplate power, in {{settings.unitsOfMeasure == 'Imperial' ? 'hp' : 'kW'}}. Delivered motor power will be estimated based on flow and
+        system efficiencies.
         <hr>
       </small>
     </h6>
@@ -79,9 +91,8 @@
       Actual Flow
       <small class="text-muted">
         <br>
-        The total flow delivered to the end-use from the fan after avoidable losses such as from dampers are
-        taken into account. Can be assumed equal to Rated Flow if unknown. Value cannot be equal to or less than
-        0.
+        Flow the fan delivers at the baseline operating point. An On/Off fan runs at full speed while on, so
+        Actual Flow equals Rated Flow.
         <hr>
       </small>
     </h6>

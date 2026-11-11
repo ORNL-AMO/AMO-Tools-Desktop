@@ -8,6 +8,7 @@ import { ToolsSuiteApiService } from './tools-suite-api.service';
 import { FanAffinityLawService } from '../calculator/fans/fan-affinity-law/fan-affinity-law.service';
 import { FanAffinityLawHelpComponent } from '../calculator/fans/fan-affinity-law/fan-affinity-law-help/fan-affinity-law-help.component';
 import { FanAffinityLawResultsComponent } from '../calculator/fans/fan-affinity-law/fan-affinity-law-results/fan-affinity-law-results.component';
+import { FanAffinityLawFormComponent } from '../calculator/fans/fan-affinity-law/fan-affinity-law-form/fan-affinity-law-form.component';
 import { FanAffinityLawTreasureHuntService } from '../treasure-hunt/treasure-hunt-calculator-services/fan-affinity-law-treasure-hunt.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { FanAffinityLawsInput, FanAffinityLawsOutput } from '../shared/models/standalone';
@@ -27,7 +28,7 @@ describe('Fan affinity Desktop integration with the published beta', () => {
     return { hoursOperation: 6240, electricalRate: 0.07, efficiencyMotor: 96, efficiencyDrive: 97,
       powerMotor: 10, ratedFlow: 30000, actualFlow: 27000, motorControlTypeCurrent: 1,
       motorControlTypeNew: 1, flowMode: 0, desiredFlowVolume: 16500, desiredFlowPercent: 55,
-      changeFanSize: false, diameterFan: 36, diameterFanNew: 36, ...overrides };
+      changeFanSize: false, diameterFan: 36, diameterFanNew: 36, estimateMotorPower: false, nameplatePower: 0, ...overrides };
   }
 
   function metricFlows(data: FanAffinityLawsInput): FanAffinityLawsInput {
@@ -117,7 +118,7 @@ describe('Fan affinity Desktop integration with the published beta', () => {
 
   it('agrees across imperial/metric and percentage/volume inputs without rewriting storage', () => {
     const us = input({powerMotor: 30, motorControlTypeCurrent: 2, motorControlTypeNew: 1});
-    const si = metricFlows(us); si.powerMotor = convert.value(us.powerMotor).from('hp').to('kW');
+    const si = metricFlows(us); si.powerMotor = us.powerMotor;
     const a = service.getResults(us, imperial); const b = service.getResults(si, metric);
     expect(b.annualEnergyBaseline).toBeCloseTo(a.annualEnergyBaseline, 8);
     expect(b.annualEnergyNew).toBeCloseTo(a.annualEnergyNew, 8);
@@ -191,6 +192,85 @@ describe('Fan affinity Desktop integration with the published beta', () => {
     expect(converted.annualEnergyBaseline).toBeCloseTo(original.annualEnergyBaseline, -1);
     expect(service.getObjFromForm(service.getFormFromObj(saved))).toEqual(saved);
     expect(saved.powerMotor).toBe(30);
+  });
+
+  it('matches Test 5: On/Off to Two-Speed with a larger fan, showing Current and New time rows', () => {
+    const result = service.getResults(input({hoursOperation: 4830, electricalRate: 0.08, powerMotor: 22.37,
+      efficiencyMotor: 97, efficiencyDrive: 96, ratedFlow: 60000, actualFlow: 60000, motorControlTypeCurrent: 0,
+      motorControlTypeNew: 1, flowMode: 1, desiredFlowVolume: 40000, changeFanSize: true, diameterFan: 36, diameterFanNew: 38}), imperial);
+    expect(result.newFlowPercent).toBeCloseTo(56.7, 1);
+    expect(result.timeAbove50Percent).toBeCloseTo(13.4, 1);
+    expect(result.timeAt50Percent).toBeCloseTo(86.6, 1);
+    expect(result.timeAt0Percent).toBeCloseTo(0, 10);
+    expect(result.baselinePower).toBeCloseTo(24.02, 2);
+    expect(result.newPower).toBeCloseTo(7.62, 2);
+    expect(result.annualCostSavings).toBeCloseTo(6339, 0);
+    // Current time rows show whenever either side is Two-Speed; an On/Off baseline runs at full speed
+    expect(result.baselineTimeAbove50Percent).toBeCloseTo(100, 10);
+    expect(result.baselineTimeAt50Percent).toBeCloseTo(0, 10);
+    expect(result.baselineTimeAt0Percent).toBeCloseTo(0, 10);
+  });
+
+  it('estimates delivered Motor Power from Nameplate Power for each baseline control', () => {
+    const estimate = (overrides: Partial<FanAffinityLawsInput>, settings: Settings): number => {
+      const form = service.getFormFromObj(input({estimateMotorPower: true, ...overrides}));
+      service.setEstimatedMotorPower(form, settings);
+      return form.controls.powerMotor.value;
+    };
+    expect(estimate({nameplatePower: 1250, motorControlTypeCurrent: 2, actualFlow: 7040}, imperial)).toBeCloseTo(11.22, 2);
+    expect(estimate({nameplatePower: 15, motorControlTypeCurrent: 1, actualFlow: 27000}, imperial)).toBeCloseTo(8.59, 2);
+    expect(estimate({nameplatePower: 15, motorControlTypeCurrent: 0, actualFlow: 30000}, metric)).toBeCloseTo(15 * 0.97 * 0.96, 10);
+  });
+
+  it('keeps the metered Motor Power until the estimate is usable and requires Nameplate Power only in Estimate mode', () => {
+    const form = service.getFormFromObj(input({powerMotor: 50, estimateMotorPower: true, nameplatePower: 0}));
+    service.setEstimatedMotorPower(form, imperial);
+    expect(form.controls.powerMotor.value).toBe(50);
+    expect(form.controls.nameplatePower.errors?.greaterThan).toBe(0);
+    expect(form.valid).toBeFalse();
+    form.controls.nameplatePower.setValue(15); form.controls.ratedFlow.setValue(0);
+    service.setEstimatedMotorPower(form, imperial);
+    expect(form.controls.powerMotor.value).toBe(50);
+    expect(service.getFormFromObj(input({nameplatePower: 0})).controls.nameplatePower.errors).toBeNull();
+  });
+
+  it('flags the Section 4 and 5 validation cases', () => {
+    const errors = (overrides: Partial<FanAffinityLawsInput>, field: string) =>
+      service.getFormFromObj(input(overrides)).controls[field].errors;
+    expect(errors({flowMode: 1, desiredFlowVolume: -10}, 'desiredFlowVolume')?.min).toBeDefined();
+    expect(errors({flowMode: 1, desiredFlowVolume: 31000}, 'desiredFlowVolume')?.max?.max).toBe(30000);
+    expect(errors({ratedFlow: 0}, 'ratedFlow')?.greaterThan).toBe(0);
+    expect(errors({actualFlow: 31000}, 'actualFlow')?.max?.max).toBe(30000);
+    expect(errors({actualFlow: 0, motorControlTypeCurrent: 2}, 'actualFlow')?.greaterThan).toBe(0);
+    expect(errors({actualFlow: 0, motorControlTypeCurrent: 1}, 'actualFlow')?.greaterThan).toBe(0);
+    expect(errors({efficiencyMotor: 0}, 'efficiencyMotor')?.greaterThan).toBe(0);
+    expect(errors({efficiencyDrive: 0}, 'efficiencyDrive')?.greaterThan).toBe(0);
+    expect(errors({powerMotor: 0}, 'powerMotor')?.greaterThan).toBe(0);
+    expect(errors({estimateMotorPower: true, nameplatePower: 0}, 'nameplatePower')?.greaterThan).toBe(0);
+    expect(errors({changeFanSize: true, diameterFanNew: 32, flowMode: 1, desiredFlowVolume: 30000}, 'desiredFlowVolume')?.max?.max)
+      .toBeCloseTo(30000 * Math.pow(32 / 36, 3), 8);
+    const noChange = input({motorControlTypeCurrent: 0, actualFlow: 30000, motorControlTypeNew: 3, changeFanSize: false});
+    expect(service.getFormFromObj(noChange).controls.motorControlTypeNew.hasError('noAdjustment')).toBeTrue();
+    expect(service.getResults(noChange, imperial).annualCostSavings).toBe(0);
+  });
+
+  it("names the new fan's rated flow as the Flow Rate limit only once both diameters are set", () => {
+    const view = new FanAffinityLawFormComponent(service);
+    view.fanAffinityLawForm = service.getFormFromObj(input({changeFanSize: true, diameterFanNew: 32}));
+    expect(view.flowLimitIsNewFan()).toBeTrue();
+    view.fanAffinityLawForm.controls.diameterFanNew.setValue(0);
+    expect(view.flowLimitIsNewFan()).toBeFalse();
+    view.fanAffinityLawForm.controls.changeFanSize.setValue(false);
+    expect(view.flowLimitIsNewFan()).toBeFalse();
+  });
+
+  it('converts Nameplate Power between hp and kW while Motor Power stays kW', () => {
+    const treasure = new FanAffinityLawTreasureHuntService(service, convert);
+    const si = treasure.convertFanAffinityLawInput(input({nameplatePower: 15, powerMotor: 20}), imperial, metric);
+    expect(si.nameplatePower).toBeCloseTo(convert.value(15).from('hp').to('kW'), 3);
+    expect(si.powerMotor).toBe(20);
+    const us = treasure.convertFanAffinityLawInput({...si}, metric, imperial);
+    expect(us.nameplatePower).toBeCloseTo(15, 2);
   });
 
   it('offers the documentation link independently of field help and describes delivered power', () => {

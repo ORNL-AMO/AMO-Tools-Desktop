@@ -38,7 +38,9 @@ export class FanAffinityLawService {
       diameterFan: 0,
       changeFanSize: false,
       diameterFanNew: 0,
-      efficiencyDrive: 100
+      efficiencyDrive: 100,
+      estimateMotorPower: false,
+      nameplatePower: 0
     };
     return obj;
   }
@@ -60,7 +62,9 @@ export class FanAffinityLawService {
       diameterFan: [inputObj.diameterFan],
       changeFanSize: [inputObj.changeFanSize, control => typeof control.value === 'boolean' ? null : { selection: true }],
       diameterFanNew: [inputObj.diameterFanNew],
-      efficiencyDrive: [inputObj.efficiencyDrive, [...this.numericValidators(), Validators.max(100)]]
+      efficiencyDrive: [inputObj.efficiencyDrive, [...this.numericValidators(), Validators.max(100)]],
+      estimateMotorPower: [inputObj.estimateMotorPower ?? false],
+      nameplatePower: [inputObj.nameplatePower ?? 0]
     });
     return this.setValidators(form, modificationExists);
   }
@@ -94,11 +98,44 @@ export class FanAffinityLawService {
       form.controls.diameterFan.clearValidators();
       form.controls.diameterFanNew.clearValidators();
     }
-    for (const name of ['actualFlow', 'flowMode', 'desiredFlowVolume', 'desiredFlowPercent', 'diameterFan', 'diameterFanNew']) {
+    // Nameplate Power is only used in Estimate Motor Power mode
+    if (form.controls.estimateMotorPower.value) {
+      form.controls.nameplatePower.setValidators(this.numericValidators());
+    } else {
+      form.controls.nameplatePower.clearValidators();
+    }
+    for (const name of ['actualFlow', 'flowMode', 'desiredFlowVolume', 'desiredFlowPercent', 'diameterFan', 'diameterFanNew', 'nameplatePower']) {
       form.controls[name].updateValueAndValidity({ emitEvent: false });
     }
     this.setNoAdjustmentValidator(form, modificationExists);
     return form;
+  }
+
+  // Estimate Motor Power: delivered fan power from the motor nameplate, scaled by the Current control's
+  // flow factor (On/Off: 1, VSD: flow cubed, Two-Speed: time factor) and the drive and motor efficiencies.
+  setEstimatedMotorPower(form: UntypedFormGroup, settings: Settings) {
+    if (!form.controls.estimateMotorPower.value) {
+      return;
+    }
+    const nameplateKw: number = settings.unitsOfMeasure == 'Imperial'
+      ? this.convertUnitsService.value(form.controls.nameplatePower.value).from('hp').to('kW')
+      : form.controls.nameplatePower.value;
+    const flowFraction: number = form.controls.actualFlow.value / form.controls.ratedFlow.value;
+    let controlFactor: number = 1;
+    if (form.controls.motorControlTypeCurrent.value === 2) {
+      controlFactor = Math.pow(flowFraction, 3);
+    } else if (form.controls.motorControlTypeCurrent.value === 1) {
+      controlFactor = this.fanAffinityLawApiService.get50PercentTimeFactor(flowFraction).factor;
+    }
+    const powerMotor: number = nameplateKw * controlFactor
+      * (form.controls.efficiencyDrive.value / 100) * (form.controls.efficiencyMotor.value / 100);
+    // Keep the existing Motor Power until the inputs give a usable estimate (e.g. Nameplate Power still 0),
+    // so switching to Estimate doesn't wipe a metered value; the Nameplate Power error blocks the calculation.
+    if (!Number.isFinite(powerMotor) || powerMotor <= 0) {
+      return;
+    }
+    form.controls.powerMotor.patchValue(powerMotor, { emitEvent: false });
+    form.controls.powerMotor.updateValueAndValidity();
   }
 
   getMaxDesiredFlowVolume(form: UntypedFormGroup): number {
@@ -182,7 +219,8 @@ export class FanAffinityLawService {
       values.newFlowPercent = modifiedFraction * 100;
       if (!controlledFlow) { values.newFlowPercent = ratio * ratio * ratio * 100; }
     }
-    if (inputs.motorControlTypeCurrent === 1) {
+    // Time rows show for Current and New whenever either side runs Two-Speed; Current uses actualFlow / ratedFlow.
+    if (inputs.motorControlTypeCurrent === 1 || inputs.motorControlTypeNew === 1) {
       const times: FanAffinityLawsTimeFactors = this.fanAffinityLawApiService.get50PercentTimeFactor(baselineFlowPercent / 100);
       values.baselineTimeAbove50Percent = times.timeAbove50Percent * 100;
       values.baselineTimeAt50Percent = times.timeAt50Percent * 100;
@@ -210,11 +248,10 @@ export class FanAffinityLawService {
   }
 
   // form/display values are stored in the current settings unit system; the wasm calculation
-  // expects powerMotor in kW, and ratedFlow/actualFlow/desiredFlowVolume/diameterFan/diameterFanNew in ft3/min & in
+  // expects ratedFlow/actualFlow/desiredFlowVolume/diameterFan/diameterFanNew in ft3/min & in.
+  // powerMotor is entered in kW in both unit systems, so it needs no conversion.
   convertInputs(inputs: FanAffinityLawsInput, settings: Settings): FanAffinityLawsInput {
-    if (settings.unitsOfMeasure == 'Imperial') {
-      inputs.powerMotor = this.convertUnitsService.value(inputs.powerMotor).from('hp').to('kW');
-    } else {
+    if (settings.unitsOfMeasure != 'Imperial') {
       inputs.ratedFlow = this.convertUnitsService.value(inputs.ratedFlow).from('m3/s').to('ft3/min');
       inputs.actualFlow = this.convertUnitsService.value(inputs.actualFlow).from('m3/s').to('ft3/min');
       inputs.desiredFlowVolume = this.convertUnitsService.value((inputs.desiredFlowVolume ?? 0)).from('m3/s').to('ft3/min');
@@ -225,7 +262,7 @@ export class FanAffinityLawService {
   }
 
   generateExample(settings: Settings): FanAffinityLawsInput {
-    let powerMotor: number = 100;
+    let powerMotor: number = 74.57;
     let ratedFlow: number = 10000;
     let actualFlow: number = 10000;
     let desiredFlowVolume: number = 8000;
@@ -233,8 +270,6 @@ export class FanAffinityLawService {
     let diameterFanNew: number = 36;
 
     if (settings.unitsOfMeasure != 'Imperial') {
-      powerMotor = this.convertUnitsService.value(powerMotor).from('hp').to('kW');
-      powerMotor = Number(powerMotor.toFixed(3));
       ratedFlow = this.convertUnitsService.value(ratedFlow).from('ft3/min').to('m3/s');
       ratedFlow = Number(ratedFlow.toFixed(3));
       actualFlow = this.convertUnitsService.value(actualFlow).from('ft3/min').to('m3/s');
@@ -262,7 +297,9 @@ export class FanAffinityLawService {
       diameterFan: diameterFan,
       changeFanSize: false,
       diameterFanNew: diameterFanNew,
-      efficiencyDrive: 95
+      efficiencyDrive: 95,
+      estimateMotorPower: false,
+      nameplatePower: 0
     };
     return exampleData;
   }

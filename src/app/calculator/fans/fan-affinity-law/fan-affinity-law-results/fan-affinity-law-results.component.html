@@ -30,19 +30,19 @@
     </tr>
     <tr *ngIf="showField('desiredFlow')">
       <td>Flow Volume</td>
-      <td class="text-center">{{fanAffinityLawResults?.baselineFlowVolume | number:'1.0-2'}}
+      <td class="text-center">{{fanAffinityLawResults?.baselineFlowVolume | number:flowVolumeDigits()}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> CFM</span>
         <span *ngIf="settings.unitsOfMeasure != 'Imperial'"> m<sup>3</sup>/s</span>
       </td>
       <td class="text-center">
         <span *ngIf="!modificationExists">&mdash;</span>
-        <span *ngIf="modificationExists">{{fanAffinityLawResults?.desiredFlowVolume | number:'1.0-2'}}</span>
+        <span *ngIf="modificationExists">{{fanAffinityLawResults?.desiredFlowVolume | number:flowVolumeDigits()}}</span>
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> CFM</span>
         <span *ngIf="settings.unitsOfMeasure != 'Imperial'"> m<sup>3</sup>/s</span>
       </td>
     </tr>
     <tr *ngIf="showTimeFactors()">
-      <td>Time At 0 Percent</td>
+      <td>Time off</td>
       <td class="text-center">
         <span *ngIf="fanAffinityLawResults?.baselineTimeAt0Percent === undefined">&mdash;</span>
         <span *ngIf="fanAffinityLawResults?.baselineTimeAt0Percent !== undefined">{{fanAffinityLawResults?.baselineTimeAt0Percent | number:'1.1-1'}}
@@ -57,7 +57,7 @@
       </td>
     </tr>
     <tr *ngIf="showTimeFactors()">
-      <td>Time At 50 Percent</td>
+      <td>Time at 50%</td>
       <td class="text-center">
         <span *ngIf="fanAffinityLawResults?.baselineTimeAt50Percent === undefined">&mdash;</span>
         <span *ngIf="fanAffinityLawResults?.baselineTimeAt50Percent !== undefined">{{fanAffinityLawResults?.baselineTimeAt50Percent | number:'1.1-1'}}
@@ -72,7 +72,7 @@
       </td>
     </tr>
     <tr *ngIf="showTimeFactors()">
-      <td>Time Above 50 Percent</td>
+      <td>Time at Full Speed</td>
       <td class="text-center">
         <span *ngIf="fanAffinityLawResults?.baselineTimeAbove50Percent === undefined">&mdash;</span>
         <span *ngIf="fanAffinityLawResults?.baselineTimeAbove50Percent !== undefined">{{fanAffinityLawResults?.baselineTimeAbove50Percent | number:'1.1-1'}}

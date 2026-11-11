@@ -876,6 +876,9 @@ export interface FanAffinityLawsInput {
   changeFanSize: boolean;
   diameterFanNew: number;
   efficiencyDrive: number;
+  // Estimate Motor Power mode: powerMotor is calculated from nameplatePower (hp imperial, kW metric)
+  estimateMotorPower?: boolean;
+  nameplatePower?: number;
 }
 
 export type FanAffinityLawsScenario = 'vsd' | 'twoSpeed' | 'changeFanSize' | 'vsdChangeFanSize' | 'twoSpeedChangeFanSize' | 'onOff' | 'none';

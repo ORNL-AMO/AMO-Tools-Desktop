@@ -53,6 +53,12 @@ export class FanAffinityLawResultsComponent implements OnInit {
       && FanAffinityLawResultsComponent.FIELD_SCENARIOS[field].includes(this.fanAffinityLawResults?.scenario);
   }
 
+  // Metric Current and New Flow Volume share a fixed 2-decimal format so the columns match
+  // (e.g. 3.80 vs 2.01 instead of 3.8 vs 2).
+  flowVolumeDigits(): string {
+    return this.settings.unitsOfMeasure == 'Imperial' ? '1.0-2' : '1.2-2';
+  }
+
   // Time Above/At 0/At 50 Percent apply to whichever side (Current or New) actually runs Two-Speed
   // control, so the row can be relevant for the baseline even when the modification isn't Two-Speed.
   showTimeFactors(): boolean {

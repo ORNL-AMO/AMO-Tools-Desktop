@@ -96,14 +96,16 @@ export class FanAffinityLawTreasureHuntService {
   }
 
   convertFanAffinityLawInput(fanAffinityLawInput: FanAffinityLawsInput, oldSettings: Settings, newSettings: Settings): FanAffinityLawsInput {
-    fanAffinityLawInput.powerMotor = this.convertUnitsService.convertPowerValue(fanAffinityLawInput.powerMotor, oldSettings, newSettings);
+    // powerMotor is always kW, so it isn't converted; nameplatePower is hp (imperial) or kW (metric)
+    if (fanAffinityLawInput.nameplatePower && oldSettings.unitsOfMeasure !== newSettings.unitsOfMeasure) {
+      fanAffinityLawInput.nameplatePower = this.roundVal(this.convertUnitsService.convertPowerValue(fanAffinityLawInput.nameplatePower, oldSettings, newSettings), 3);
+    }
     fanAffinityLawInput.ratedFlow = this.convertFlow(fanAffinityLawInput.ratedFlow, oldSettings, newSettings);
     fanAffinityLawInput.actualFlow = this.convertFlow(fanAffinityLawInput.actualFlow, oldSettings, newSettings);
     fanAffinityLawInput.desiredFlowVolume = this.convertFlow(fanAffinityLawInput.desiredFlowVolume, oldSettings, newSettings);
     fanAffinityLawInput.diameterFan = this.convertUnitsService.convertInAndCmValue(fanAffinityLawInput.diameterFan, oldSettings, newSettings);
     fanAffinityLawInput.diameterFanNew = this.convertUnitsService.convertInAndCmValue(fanAffinityLawInput.diameterFanNew, oldSettings, newSettings);
 
-    fanAffinityLawInput.powerMotor = this.roundVal(fanAffinityLawInput.powerMotor, 3);
     fanAffinityLawInput.ratedFlow = this.roundVal(fanAffinityLawInput.ratedFlow, 3);
     fanAffinityLawInput.actualFlow = this.roundVal(fanAffinityLawInput.actualFlow, 3);
     fanAffinityLawInput.desiredFlowVolume = this.roundVal(fanAffinityLawInput.desiredFlowVolume, 3);

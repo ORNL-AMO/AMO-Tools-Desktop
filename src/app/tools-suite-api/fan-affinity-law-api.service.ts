@@ -14,6 +14,7 @@ import { ToolsSuiteApiService } from './tools-suite-api.service';
 export class FanAffinityLawApiService {
   constructor(private toolsSuiteApiService: ToolsSuiteApiService) {}
 
+  // suite inputs and results are plain objects, so nothing needs delete()
   calculate(inputData: FanAffinityLawsInput): FanAffinityLawsOutput {
     const suite: MeasurToolsSuite = this.toolsSuiteApiService.ToolsSuiteModule;
     const input: SuiteFanAffinityLawsInput = this.buildInput(inputData, suite);

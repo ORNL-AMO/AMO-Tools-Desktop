@@ -33,10 +33,11 @@
           </span>
         </div>
 
-        <div class="form-group" *ngIf="fanAffinityLawForm.controls.motorControlTypeCurrent.value !== 0">
+        <div class="form-group">
           <label class="small" for="actualFlow">Actual Flow</label>
           <div class="input-group">
             <input class="form-control" type="number" name="actualFlow" id="actualFlow" formControlName="actualFlow"
+              [readonly]="fanAffinityLawForm.controls.motorControlTypeCurrent.value === 0"
               (input)="emitCalculate()" (focus)="focusField('actualFlow')" onfocus="this.select();">
             <span class="input-group-addon units">
               <span *ngIf="settings.unitsOfMeasure == 'Imperial'">CFM</span>
@@ -48,13 +49,9 @@
             <span *ngIf="fanAffinityLawForm.controls.actualFlow.errors.required">Value required.</span>
             <span *ngIf="fanAffinityLawForm.controls.actualFlow.errors.greaterThan != null">Value must be greater than
               {{fanAffinityLawForm.controls.actualFlow.errors.greaterThan}}.</span>
-            <span *ngIf="fanAffinityLawForm.controls.actualFlow.errors.max">Actual Flow can't exceed Rated Flow
-              ({{fanAffinityLawForm.controls.actualFlow.errors.max.max | number:'1.0-2'}}).</span>
+            <span *ngIf="fanAffinityLawForm.controls.actualFlow.errors.max">Actual Flow cannot exceed Rated Flow</span>
           </span>
         </div>
-        <p class="small text-muted" *ngIf="fanAffinityLawForm.controls.motorControlTypeCurrent.value === 0">
-          Actual Flow doesn't apply to On/Off control &mdash; an On/Off fan always draws full rated power while running.
-        </p>
 
         <div class="form-group" *ngIf="fanAffinityLawForm.controls.changeFanSize.value">
           <label class="small" for="diameterFan">Fan Diameter</label>
@@ -73,6 +70,75 @@
               {{fanAffinityLawForm.controls.diameterFan.errors.greaterThan}}.</span>
           </span>
         </div>
+
+        <div class="form-group">
+          <label class="small" for="efficiencyDrive">Drive Efficiency</label>
+          <div class="input-group">
+            <input class="form-control" type="number" name="efficiencyDrive" id="efficiencyDrive"
+              formControlName="efficiencyDrive" (input)="emitCalculate()" (focus)="focusField('efficiencyDrive')"
+              onfocus="this.select();">
+            <span class="units input-group-addon">%</span>
+          </div>
+          <span class="alert-danger pull-right small"
+            *ngIf="fanAffinityLawForm.controls.efficiencyDrive.invalid && !fanAffinityLawForm.controls.efficiencyDrive.pristine">
+            <span *ngIf="fanAffinityLawForm.controls.efficiencyDrive.errors.required">Value required.</span>
+            <span *ngIf="fanAffinityLawForm.controls.efficiencyDrive.errors.max">Value can't be greater than
+              {{fanAffinityLawForm.controls.efficiencyDrive.errors.max.max}}.</span>
+            <span *ngIf="fanAffinityLawForm.controls.efficiencyDrive.errors.greaterThan != null">Value must be greater than
+              {{fanAffinityLawForm.controls.efficiencyDrive.errors.greaterThan}}.</span>
+          </span>
+        </div>
+
+        <div class="form-group" *ngIf="!fanAffinityLawForm.controls.estimateMotorPower.value">
+          <label class="small" for="powerMotor">Motor Power</label>
+          <div class="input-group">
+            <input class="form-control" type="number" name="powerMotor" id="powerMotor" formControlName="powerMotor"
+              (input)="emitCalculate()" (focus)="focusField('powerMotor')" onfocus="this.select();">
+            <span class="input-group-addon units">kW</span>
+          </div>
+          <span class="alert-danger pull-right small"
+            *ngIf="fanAffinityLawForm.controls.powerMotor.invalid && !fanAffinityLawForm.controls.powerMotor.pristine">
+            <span *ngIf="fanAffinityLawForm.controls.powerMotor.errors.required">Value required.</span>
+            <span *ngIf="fanAffinityLawForm.controls.powerMotor.errors.greaterThan != null">Value must be greater than
+              {{fanAffinityLawForm.controls.powerMotor.errors.greaterThan}}.</span>
+          </span>
+          <div>
+            <a class="small click-link" (click)="toggleEstimateMotorPower()">Estimate Motor Power</a>
+          </div>
+        </div>
+
+        <ng-container *ngIf="fanAffinityLawForm.controls.estimateMotorPower.value">
+          <div class="form-group">
+            <label class="small" for="nameplatePower">Nameplate Power</label>
+            <div class="input-group">
+              <input class="form-control" type="number" name="nameplatePower" id="nameplatePower"
+                formControlName="nameplatePower" (input)="emitCalculate()" (focus)="focusField('nameplatePower')"
+                onfocus="this.select();">
+              <span class="input-group-addon units">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>
+              </span>
+            </div>
+            <span class="alert-danger pull-right small"
+              *ngIf="fanAffinityLawForm.controls.nameplatePower.invalid && !fanAffinityLawForm.controls.nameplatePower.pristine">
+              <span *ngIf="fanAffinityLawForm.controls.nameplatePower.errors.required">Value required.</span>
+              <span *ngIf="fanAffinityLawForm.controls.nameplatePower.errors.greaterThan != null">Value must be greater than
+                {{fanAffinityLawForm.controls.nameplatePower.errors.greaterThan}}.</span>
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label class="small" for="powerMotorEstimate">Motor Power</label>
+            <div class="input-group">
+              <input class="form-control" type="text" name="powerMotorEstimate" id="powerMotorEstimate" readonly
+                [value]="fanAffinityLawForm.controls.powerMotor.value | number:'1.0-2'" (focus)="focusField('powerMotor')">
+              <span class="input-group-addon units">kW</span>
+            </div>
+            <div>
+              <a class="small click-link" (click)="toggleEstimateMotorPower()">Metered Motor Power</a>
+            </div>
+          </div>
+        </ng-container>
       </div>
     </ng-container>
 
@@ -88,7 +154,7 @@
             </select>
           </div>
           <span class="alert-danger pull-right small" *ngIf="fanAffinityLawForm.controls.motorControlTypeNew.errors?.noAdjustment">
-            No adjustment to fan system configuration selected.
+            No changes to baseline selected. Change motor control or fan size to calculate savings.
           </span>
         </div>
 
@@ -117,11 +183,9 @@
             <span class="alert-danger pull-right small"
               *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.invalid && !fanAffinityLawForm.controls.desiredFlowVolume.pristine">
               <span *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.errors.required">Value required.</span>
-              <span *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.errors.min">Value can't be less than
-                {{fanAffinityLawForm.controls.desiredFlowVolume.errors.min.min}}.</span>
+              <span *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.errors.min">Flow Rate cannot be negative</span>
               <span *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.errors.max">
-                Flow Rate can't exceed the {{fanAffinityLawForm.controls.changeFanSize.value ? "new fan's " : ''}}rated flow
-                ({{fanAffinityLawForm.controls.desiredFlowVolume.errors.max.max | number:'1.0-2'}}).</span>
+                {{flowLimitIsNewFan() ? "Flow Rate cannot exceed the new fan's rated flow" : 'Flow Rate cannot exceed Rated Flow'}}</span>
             </span>
           </div>
 
@@ -137,10 +201,8 @@
               *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.invalid && !fanAffinityLawForm.controls.desiredFlowPercent.pristine">
               <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.required">Value required.</span>
               <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.max">
-                Flow Rate can't exceed the {{fanAffinityLawForm.controls.changeFanSize.value ? "new fan's " : ''}}rated flow
-                ({{fanAffinityLawForm.controls.desiredFlowPercent.errors.max.max | number:'1.0-1'}}%).</span>
-              <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.min">Value can't be less than
-                {{fanAffinityLawForm.controls.desiredFlowPercent.errors.min.min}}.</span>
+                {{flowLimitIsNewFan() ? "Flow Rate cannot exceed the new fan's rated flow" : 'Flow Rate cannot exceed Rated Flow'}}</span>
+              <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.min">Flow Rate cannot be negative</span>
             </span>
           </div>
         </ng-container>

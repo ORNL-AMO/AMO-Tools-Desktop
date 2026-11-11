@@ -114,6 +114,7 @@ export class FanAffinityLawComponent implements OnInit {
   }
 
   async getResults() {
+    this.fanAffinityLawService.setEstimatedMotorPower(this.fanAffinityLawForm, this.settings);
     let inputs: FanAffinityLawsInput = this.fanAffinityLawService.getObjFromForm(this.fanAffinityLawForm, this.modificationExists);
     this.fanAffinityLawService.setNoAdjustmentValidator(this.fanAffinityLawForm, this.modificationExists);
     if (this.fanAffinityLawForm.valid) {
