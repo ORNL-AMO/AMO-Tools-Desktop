@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { InventorySelectOptions, ConnectedInventoryData, ConnectedItem, InventoryType } from '../integrations';
+import { InventorySelectOptions, ConnectedInventoryData, ConnectedItem, InventoryType, CatalogItemOptions } from '../integrations';
 import { IntegrationStateService } from '../integration-state.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
@@ -166,6 +166,10 @@ export class InventoryIntegrationComponent {
     this.inventoryIntegrationForm.controls.selectedCatalogItem.disable();
     this.inventoryIntegrationForm.controls.selectedCatalogItem.updateValueAndValidity();
     this.setPlaceholderOption();
+  }
+
+  getDisabledReason(option: CatalogItemOptions, item: { id: string }): string {
+    return option.disabledItems?.find(disabledItem => disabledItem.id === item.id)?.reason;
   }
 
   setCatalogItemOptionsFromInventory() {

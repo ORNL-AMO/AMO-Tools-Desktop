@@ -35,7 +35,8 @@
     <!-- averageLoadFactor -->
     <div class="form-group" *ngIf="displayOptions.averageLoadFactor">
         <label for="averageLoadFactor"><span class="fa fa-asterisk"></span>Average Load Factor
-            <a class="form-text small click-link" (click)="showLoadFactorModal()">Calculate Load Factor</a>
+            <a class="form-text small click-link" (click)="showLoadFactorModal()"
+                [ngClass]="{'disabled': disableThreePhaseEstimates}">Calculate Load Factor</a>
         </label>
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('averageLoadFactor')" (input)="save()"
@@ -69,7 +70,7 @@
         <label for="efficiencyAtAverageLoad"><span class="fa fa-asterisk"></span>Efficiency at Average Load
             <span class="form-text">
                 <a class="small click-link" (click)="calculateEfficiency()"
-                    [ngClass]="{'disabled': disableEstimateEfficiency}">Estimate Efficiency</a>
+                    [ngClass]="{'disabled': disableEstimateEfficiency || disableThreePhaseEstimates}">Estimate Efficiency</a>
                 <span class="fa fa-question-circle" (click)="focusHelp('efficiencyAtAverageLoad')"></span>
             </span>
         </label>
@@ -90,7 +91,7 @@
         <label for="currentAtLoad">Current at Load
             <span class="form-text">
                 <a class="small click-link" (click)="calculateCurrent()"
-                    [ngClass]="{'disabled': disableEstimateCurrent}">Estimate Current</a>
+                    [ngClass]="{'disabled': disableEstimateCurrent || disableThreePhaseEstimates}">Estimate Current</a>
                 <span class="fa fa-question-circle" (click)="focusHelp('currentAtLoad')"></span>
             </span>
         </label>
@@ -105,11 +106,11 @@
         </span>
     </div>
     <!-- powerFactorAtLoad -->
-    <div class="form-group" *ngIf="displayOptions.powerFactorAtLoad">
+    <div class="form-group" *ngIf="displayOptions.powerFactorAtLoad && motorSupply != 'dc'">
         <label for="powerFactorAtLoad">Power Factor at Load
             <span class="form-text">
                 <a class="small click-link" (click)="calculatePowerFactor()"
-                    [ngClass]="{'disabled': disableEstimateLoadFactor}">Estimate Power Factor</a>
+                    [ngClass]="{'disabled': disableEstimateLoadFactor || disableThreePhaseEstimates}">Estimate Power Factor</a>
                 <span class="fa fa-question-circle" (click)="focusHelp('powerFactorAtLoad')"></span>
             </span>
         </label>

@@ -40,7 +40,6 @@ export class ManualSpecificationPropertiesComponent implements OnInit {
     this.manualSpecificationOptions.statorSlots = this.manualSpecificationOptions.displayManualSpecifications;
     this.manualSpecificationOptions.ampsLockedRotor = this.manualSpecificationOptions.displayManualSpecifications;
      this.manualSpecificationOptions.poles = this.manualSpecificationOptions.displayManualSpecifications;
-    this.manualSpecificationOptions.currentType = this.manualSpecificationOptions.displayManualSpecifications;
     this.save();
   }
 
@@ -53,7 +52,6 @@ export class ManualSpecificationPropertiesComponent implements OnInit {
       this.manualSpecificationOptions.statorSlots ||
       this.manualSpecificationOptions.ampsLockedRotor ||
       this.manualSpecificationOptions.poles ||
-      this.manualSpecificationOptions.currentType || 
       this.manualSpecificationOptions.ratedSpeed
     );
   }

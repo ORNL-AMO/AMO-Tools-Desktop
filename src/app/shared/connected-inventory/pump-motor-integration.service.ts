@@ -13,6 +13,7 @@ import { ConvertMotorInventoryService } from '../../motor-inventory/convert-moto
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { copyObject } from '../helperFunctions';
 import { Assessment } from '../models/assessment';
+import { getMotorSupplyType, getNonThreePhaseMotors } from '../../motor-inventory/motor-inventory-setup/motor-catalog/motor-supply';
 
 @Injectable()
 export class PumpMotorIntegrationService {
@@ -31,7 +32,8 @@ export class PumpMotorIntegrationService {
       let catalogItemOptions = inventory.motorInventoryData.departments.map(department => {
         return {
           department: department.name,
-          catalog: department.catalog
+          catalog: department.catalog,
+          disabledItems: getNonThreePhaseMotors(department.catalog)
         }
       });
       return {
@@ -46,6 +48,10 @@ export class PumpMotorIntegrationService {
 
   async setPumpConnectedItem(selectedPump: PumpItem, connectedInventoryData: ConnectedInventoryData, currentSettings: Settings) {
     let selectedMotorItem: MotorItem = this.getConnectedMotorItem(connectedInventoryData.connectedItem, currentSettings);
+    if (selectedMotorItem && getMotorSupplyType(selectedMotorItem) != 'threePhase') {
+      connectedInventoryData.canConnect = false;
+      return;
+    }
     let integrationState: IntegrationState = {
       status: undefined,
       msgHTML: undefined,
