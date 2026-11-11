@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { environment } from '../../../../environments/environment';
 
 import { FieldDataHelpComponent } from './field-data-help.component';
 import { HelpPanelService } from '../help-panel.service';
@@ -119,8 +120,33 @@ describe('FieldDataHelpComponent', () => {
   });
 
   describe('template visibility', () => {
-    it('renders no help block when currentField does not match any known field', () => {
-      expect(fixture.nativeElement.querySelectorAll('.my-2').length).toBe(0);
+    // Field help has a heading; always-visible documentation links share the
+    // spacing class but are independent of the selected field.
+    it('keeps calculation documentation links available with and without a selected field', () => {
+      const expectedPaths = [
+        'group__motor__power__calculator',
+        'group__motor__shaft__power__calculator',
+        'group__mover__shaft__power__calculator',
+        'group__optimal__motor__shaft__power__calculator',
+        'group__optimal__motor__power__calculator',
+      ];
+
+      for (const field of ['unrecognized-field', 'flowRate']) {
+        helpPanelService.currentField.next(field);
+        fixture.detectChanges();
+
+        const links: HTMLAnchorElement[] = Array.from(fixture.nativeElement.querySelectorAll('.my-2 > a[target="_blank"]'));
+        expect(links.map(link => link.getAttribute('href')))
+          .toEqual(expectedPaths.map(path => environment.measurDocsUrl + path));
+        links.forEach(link => {
+          expect(link.relList.contains('noopener')).toBeTrue();
+          expect(link.relList.contains('noreferrer')).toBeTrue();
+        });
+      }
+    });
+
+    it('renders no field help block when currentField does not match any known field', () => {
+      expect(fixture.nativeElement.querySelectorAll('.my-2 > h6').length).toBe(0);
     });
 
     FIELD_BRANCHES.forEach(({ field, heading }) => {
@@ -128,8 +154,8 @@ describe('FieldDataHelpComponent', () => {
         helpPanelService.currentField.next(field);
         fixture.detectChanges();
 
-        expect(fixture.nativeElement.querySelectorAll('.my-2').length).toBe(1);
-        expect(fixture.nativeElement.textContent).toContain(heading);
+        expect(fixture.nativeElement.querySelectorAll('.my-2 > h6').length).toBe(1);
+        expect(fixture.nativeElement.querySelector('.my-2 > h6').parentElement.textContent).toContain(heading);
       });
     });
 
@@ -146,7 +172,7 @@ describe('FieldDataHelpComponent', () => {
       helpPanelService.currentField.next('measuredVoltage');
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelectorAll('.my-2').length).toBe(1);
+      expect(fixture.nativeElement.querySelectorAll('.my-2 > h6').length).toBe(1);
       expect(fixture.nativeElement.textContent).toContain('Measured Voltage');
       expect(fixture.nativeElement.textContent).not.toContain('For what-if modifications');
     });
@@ -155,7 +181,7 @@ describe('FieldDataHelpComponent', () => {
       helpPanelService.currentField.next('modMeasuredVoltage');
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelectorAll('.my-2').length).toBe(1);
+      expect(fixture.nativeElement.querySelectorAll('.my-2 > h6').length).toBe(1);
       expect(fixture.nativeElement.textContent).toContain('Measured Voltage');
       expect(fixture.nativeElement.textContent).toContain('For what-if modifications');
     });
