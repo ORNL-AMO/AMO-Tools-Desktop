@@ -1,7 +1,7 @@
 import { LightingReplacementData } from "./lighting";
 import { OperatingHours } from "./operations";
 import { ReplaceExistingData, MotorDriveInputs } from "./calculators";
-import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData, SteamReductionData, PipeInsulationReductionInput, TankInsulationReductionInput, AirLeakSurveyInput, SteamLeakSurveyInput } from "./standalone";
+import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData, SteamReductionData, PipeInsulationReductionInput, TankInsulationReductionInput, AirLeakSurveyInput, SteamLeakSurveyInput, DryerOperatingCostInput } from "./standalone";
 import { WallLoss } from "./phast/losses/wallLoss";
 import { FlueGas } from "./phast/losses/flueGas";
 import { EnergyData } from "./phast/losses/chargeMaterial";
@@ -56,6 +56,7 @@ export interface TreasureHunt {
     boilerBlowdownRateOpportunities?: Array<BoilerBlowdownRateTreasureHunt>;
     steamLeakSurveys?: Array<SteamLeakSurveyTreasureHunt>;
     powerFactorCorrectionOpportunities?: Array<PowerFactorCorrectionTreasureHunt>;
+    compressedAirDryerOpportunities?: Array<CompressedAirDryerTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     existingDataUnits?: string;
@@ -297,6 +298,16 @@ export const opportunities: OpportunityForFiltering[] = [
         description: 'Used to quantify the energy savings associated with reducing compressed air leaks.'
     },
     {
+        iconString: 'assets/images/calculator-icons/utilities-icons/compressed-air-pressure-reduction-icon.png',
+        iconClass: 'ca-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img',
+        iconCalcType: 'compressed Air',
+        opportunityType: 'compressed-air-dryer',
+        utilityType: ['All', 'Electricity', 'Compressed Air', 'Water'],
+        name: 'Compressed Air Dryer',
+        description: 'This calculator estimates the annual operating cost of a compressed air dryer based on dryer type, operating conditions, and utility rates.'
+    },
+    {
         iconString: 'assets/images/calculator-icons/utilities-icons/water-reduction-icon.png',
         iconClass: 'calc-icon',
         imageSizeClass: 'calc-img',
@@ -411,6 +422,7 @@ export enum Treasure {
     assessmentOpportunity ='assessment-opportunity',
     boilerBlowdownRate = 'boiler-blowdown-rate',
     powerFactorCorrection = 'power-factor-correction',
+    compressedAirDryer = 'compressed-air-dryer'
 }
 
 export interface FilterOption {
@@ -730,6 +742,13 @@ export interface PowerFactorCorrectionTreasureHunt extends TreasureHuntOpportuni
     selected?: boolean;
 }
 
+export interface CompressedAirDryerTreasureHunt extends TreasureHuntOpportunity {
+    baseline: DryerOperatingCostInput;
+    modification?: DryerOperatingCostInput;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
 
 
 export interface EnergySourceData {
@@ -959,4 +978,5 @@ export interface ImportExportOpportunities {
     boilerBlowdownRateOpportunities?: Array<BoilerBlowdownRateTreasureHunt>;
     steamLeakSurveys?: Array<SteamLeakSurveyTreasureHunt>;
     powerFactorCorrectionOpportunities?: Array<PowerFactorCorrectionTreasureHunt>;
+    compressedAirDryerOpportunities?: Array<CompressedAirDryerTreasureHunt>;
 }

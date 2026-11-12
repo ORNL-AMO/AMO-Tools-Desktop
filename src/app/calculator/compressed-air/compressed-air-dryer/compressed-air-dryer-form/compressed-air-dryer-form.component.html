@@ -1,0 +1,447 @@
+<div class="mb-4 p-2 form-card">
+  <form [formGroup]="form" #formElement>
+
+    <div class="form-section">
+
+      <div class="form-group">
+        <label class="small" for="{{'dryerType_' + idString}}">Dryer Type</label>
+        <select class="form-control" id="{{'dryerType_' + idString}}" formControlName="dryerType"
+          (change)="changeDryerType()" (focus)="focusField('dryerType')">
+          @for (option of dryerTypeOptions; track option.value) {
+            <option [ngValue]="option.value">{{option.label}}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'annualOperatingHours_' + idString}}">Annual Operating Hours</label>
+        <div class="input-group">
+          <span class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+          </span>
+          <input class="form-control" type="number" id="{{'annualOperatingHours_' + idString}}" formControlName="annualOperatingHours"
+            (input)="onFormChange()" (focus)="focusField('annualOperatingHours')" onfocus="this.select();">
+          <span class="units input-group-addon">hrs/yr</span>
+        </div>
+        @if (form.controls.annualOperatingHours.invalid && !form.controls.annualOperatingHours.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (form.controls.annualOperatingHours.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.annualOperatingHours.errors.min) {
+              <span>Value can't be less than {{form.controls.annualOperatingHours.errors.min.min}}.</span>
+            }
+            @if (form.controls.annualOperatingHours.errors.max) {
+              <span>Value can't be greater than {{form.controls.annualOperatingHours.errors.max.max}}.</span>
+            }
+          </span>
+        }
+      </div>
+    </div>
+
+    <div class="form-section">
+      <label class="group-label w-100 bold">Operating Conditions</label>
+
+      <div class="form-group">
+        <label class="small" for="{{'flowRate_' + idString}}">Flow Rate</label>
+        <div class="input-group">
+          <input class="form-control" type="number" id="{{'flowRate_' + idString}}" formControlName="flowRate"
+            (input)="changeFlowRate()" (focus)="focusField('flowRate')" onfocus="this.select();">
+          <span class="units input-group-addon">
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>SCFM</span>
+            } @else {
+              <span>m3/min</span>
+            }
+          </span>
+        </div>
+        @if (form.controls.flowRate.invalid && !form.controls.flowRate.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (form.controls.flowRate.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.flowRate.errors.min) {
+              <span>Value can't be less than {{form.controls.flowRate.errors.min.min}}.</span>
+            }
+            @if (form.controls.flowRate.errors.max) {
+              <span>Value can't be greater than {{form.controls.flowRate.errors.max.max}}.</span>
+            }
+          </span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'pressure_' + idString}}">Pressure</label>
+        <div class="input-group">
+          <input class="form-control" type="number" id="{{'pressure_' + idString}}" formControlName="pressure"
+            (input)="onFormChange()" (focus)="focusField('pressure')" onfocus="this.select();">
+          <span class="units input-group-addon">
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>psig</span>
+            } @else {
+              <span>barg</span>
+            }
+          </span>
+        </div>
+        @if (form.controls.pressure.invalid && !form.controls.pressure.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (form.controls.pressure.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.pressure.errors.min) {
+              <span>Value can't be less than {{form.controls.pressure.errors.min.min}}.</span>
+            }
+            @if (form.controls.pressure.errors.max) {
+              <span>Value can't be greater than {{form.controls.pressure.errors.max.max}}.</span>
+            }
+          </span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'temperature_' + idString}}">Temperature</label>
+        <div class="input-group">
+          <input class="form-control" type="number" id="{{'temperature_' + idString}}" formControlName="temperature"
+            (input)="onFormChange()" (focus)="focusField('temperature')" onfocus="this.select();">
+          <span class="units input-group-addon">
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>F</span>
+            } @else {
+              <span>C</span>
+            }
+          </span>
+        </div>
+        @if (form.controls.temperature.invalid && !form.controls.temperature.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (form.controls.temperature.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.temperature.errors.min) {
+              <span>Value can't be less than {{form.controls.temperature.errors.min.min}}.</span>
+            }
+            @if (form.controls.temperature.errors.max) {
+              <span>Value can't be greater than {{form.controls.temperature.errors.max.max}}.</span>
+            }
+          </span>
+        }
+      </div>
+    </div>
+
+    <div class="form-section">
+      <label class="group-label w-100 bold">Cost of Utilities</label>
+
+      <div class="form-group">
+        <label class="small" for="{{'costOfElectricity_' + idString}}">Electricity</label>
+        <div class="input-group">
+          <input class="form-control" type="number" id="{{'costOfElectricity_' + idString}}" formControlName="costOfElectricity"
+            (input)="onFormChange()" (focus)="focusField('costOfElectricity')" onfocus="this.select();">
+          <span class="units input-group-addon">$/kWh</span>
+        </div>
+        @if (form.controls.costOfElectricity.invalid && !form.controls.costOfElectricity.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (form.controls.costOfElectricity.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.costOfElectricity.errors.min) {
+              <span>Value can't be less than {{form.controls.costOfElectricity.errors.min.min}}.</span>
+            }
+            @if (form.controls.costOfElectricity.errors.max) {
+              <span>Value can't be greater than {{form.controls.costOfElectricity.errors.max.max}}.</span>
+            }
+          </span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'costOfCompressedAir_' + idString}}">Compressed Air Rate</label>
+        <div class="input-group">
+          <input class="form-control" type="number" id="{{'costOfCompressedAir_' + idString}}" formControlName="costOfCompressedAir"
+            (input)="onFormChange()" (focus)="focusField('costOfCompressedAir')" onfocus="this.select();">
+          <span class="units input-group-addon">
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>$/1000 SCF</span>
+            } @else {
+              <span>$/1000 m3</span>
+            }
+          </span>
+        </div>
+        @if (form.controls.costOfCompressedAir.invalid && !form.controls.costOfCompressedAir.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (form.controls.costOfCompressedAir.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.costOfCompressedAir.errors.min) {
+              <span>Value can't be less than {{form.controls.costOfCompressedAir.errors.min.min}}.</span>
+            }
+            @if (form.controls.costOfCompressedAir.errors.max) {
+              <span>Value can't be greater than {{form.controls.costOfCompressedAir.errors.max.max}}.</span>
+            }
+          </span>
+        }
+        @if (minimumPurgeAirRateWarning !== null) {
+          <span class="alert-warning pull-right small">{{minimumPurgeAirRateWarning}}</span>
+        }
+      </div>
+
+      @if (typeConfig.showCoolingWater) {
+        <div class="form-group">
+          <label class="small" for="{{'costOfCoolingWater_' + idString}}">Cooling Water Rate</label>
+          <div class="input-group">
+            <input class="form-control" type="number" id="{{'costOfCoolingWater_' + idString}}" formControlName="costOfCoolingWater"
+              (input)="onFormChange()" (focus)="focusField('costOfCoolingWater')" onfocus="this.select();">
+            <span class="units input-group-addon">
+              @if (settings.unitsOfMeasure == 'Imperial') {
+                <span>$/1000 gal</span>
+              } @else {
+                <span>$/1000 L</span>
+              }
+            </span>
+          </div>
+          @if (form.controls.costOfCoolingWater.invalid && !form.controls.costOfCoolingWater.pristine) {
+            <span class="alert-danger pull-right small">
+              @if (form.controls.costOfCoolingWater.errors.required) {
+                <span>Value required.</span>
+              }
+              @if (form.controls.costOfCoolingWater.errors.min) {
+                <span>Value can't be less than {{form.controls.costOfCoolingWater.errors.min.min}}.</span>
+              }
+              @if (form.controls.costOfCoolingWater.errors.max) {
+                <span>Value can't be greater than {{form.controls.costOfCoolingWater.errors.max.max}}.</span>
+              }
+            </span>
+          }
+        </div>
+      }
+    </div>
+
+    @if (form.controls.purgeInputMode.enabled) {
+      <div class="form-section">
+        <label class="group-label w-100 bold">Purge</label>
+        <div class="form-group">
+          <label class="small" for="{{'purgeInputMode_' + idString}}">Purge Input</label>
+          <select class="form-control" id="{{'purgeInputMode_' + idString}}" formControlName="purgeInputMode"
+            (change)="changePurgeMode()" (focus)="focusField('purgeInputMode')">
+            <option [ngValue]="purgeInputMode.PercentOfDryerCapacity">Percent of Dryer Capacity</option>
+            <option [ngValue]="purgeInputMode.DirectFlow">Direct Flow</option>
+          </select>
+        </div>
+        @if (form.controls.purgeRate.enabled) {
+          <div class="form-group">
+            <label class="small" for="{{'purgeRate_' + idString}}">Purge Rate</label>
+            <div class="input-group">
+              <input class="form-control" type="number" id="{{'purgeRate_' + idString}}" formControlName="purgeRate"
+                (input)="onFormChange()" (focus)="focusField('purgeRate')" onfocus="this.select();">
+              <span class="units input-group-addon">%</span>
+            </div>
+            @if (form.controls.purgeRate.invalid && !form.controls.purgeRate.pristine) {
+              <span class="alert-danger pull-right small">
+                @if (form.controls.purgeRate.errors.required) {
+                  <span>Value required.</span>
+                }
+                @if (form.controls.purgeRate.errors.greaterThan != undefined) {
+                  <span>Value must be greater than {{form.controls.purgeRate.errors.greaterThan}}.</span>
+                }
+                @if (form.controls.purgeRate.errors.max) {
+                  <span>Value can't be greater than {{form.controls.purgeRate.errors.max.max}}.</span>
+                }
+              </span>
+            }
+          </div>
+        }
+        @if (form.controls.purgeFlowRate.enabled) {
+          <div class="form-group">
+            <label class="small" for="{{'purgeFlowRate_' + idString}}">Purge Flow</label>
+            <div class="input-group">
+              <input class="form-control" type="number" id="{{'purgeFlowRate_' + idString}}" formControlName="purgeFlowRate"
+                (input)="onFormChange()" (focus)="focusField('purgeFlowRate')" onfocus="this.select();">
+              <span class="units input-group-addon">
+                @if (settings.unitsOfMeasure == 'Imperial') {
+                  <span>SCFM</span>
+                } @else {
+                  <span>m3/min</span>
+                }
+              </span>
+            </div>
+            @if (form.controls.purgeFlowRate.invalid && !form.controls.purgeFlowRate.pristine) {
+              <span class="alert-danger pull-right small">
+                @if (form.controls.purgeFlowRate.errors.required) {
+                  <span>Value required.</span>
+                }
+                @if (form.controls.purgeFlowRate.errors.greaterThan != undefined) {
+                  <span>Value must be greater than {{form.controls.purgeFlowRate.errors.greaterThan}}.</span>
+                }
+                @if (form.controls.purgeFlowRate.errors.max) {
+                  <span>Value can't be greater than {{form.controls.purgeFlowRate.errors.max.max}} {{settings.unitsOfMeasure == 'Imperial' ? 'SCFM' : 'm3/min'}}.</span>
+                }
+              </span>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    @if (typeConfig.heater !== 'hidden') {
+      <div class="form-section">
+        <label class="group-label w-100 bold">Heater</label>
+        @if (form.controls.heaterMode.enabled) {
+          <div class="form-group">
+            <label class="small" for="{{'heaterMode_' + idString}}">Heater Sizing</label>
+            <select class="form-control" id="{{'heaterMode_' + idString}}" formControlName="heaterMode"
+              (change)="changeMode('heaterPower')" (focus)="focusField('heaterMode')">
+              <option [ngValue]="'auto'">Automatic</option>
+              <option [ngValue]="'manual'">Manual</option>
+            </select>
+          </div>
+        }
+        @if (typeConfig.heater === 'automatic') {
+          <p class="small text-muted">Heater power is calculated automatically and shown in the results.</p>
+        }
+        @if (form.controls.heaterPower.enabled) {
+          <div class="form-group">
+            <label class="small" for="{{'heaterPower_' + idString}}">Heater Power</label>
+            <div class="input-group">
+              <input class="form-control" type="number" id="{{'heaterPower_' + idString}}" formControlName="heaterPower"
+                (input)="onFormChange()" (focus)="focusField('heaterPower')" onfocus="this.select();">
+              <span class="units input-group-addon">kW</span>
+            </div>
+            @if (form.controls.heaterPower.invalid && !form.controls.heaterPower.pristine) {
+              <span class="alert-danger pull-right small">
+                @if (form.controls.heaterPower.errors.required) {
+                  <span>Value required.</span>
+                }
+                @if (form.controls.heaterPower.errors.greaterThan != undefined) {
+                  <span>Value must be greater than {{form.controls.heaterPower.errors.greaterThan}}.</span>
+                }
+                @if (form.controls.heaterPower.errors.max) {
+                  <span>Value can't be greater than {{form.controls.heaterPower.errors.max.max}}.</span>
+                }
+              </span>
+            }
+          </div>
+        }
+        @if (form.controls.heatingHoursPerDay.enabled) {
+          <div class="form-group">
+            <label class="small" for="{{'heatingHoursPerDay_' + idString}}">Hrs Heating Per 24 Hours</label>
+            <div class="input-group">
+              <input class="form-control" type="number" id="{{'heatingHoursPerDay_' + idString}}" formControlName="heatingHoursPerDay"
+                (input)="onFormChange()" (focus)="focusField('heatingHoursPerDay')" onfocus="this.select();">
+              <span class="units input-group-addon">hrs/24 hrs</span>
+            </div>
+            @if (form.controls.heatingHoursPerDay.invalid && !form.controls.heatingHoursPerDay.pristine) {
+              <span class="alert-danger pull-right small">
+                @if (form.controls.heatingHoursPerDay.errors.required) {
+                  <span>Value required.</span>
+                }
+                @if (form.controls.heatingHoursPerDay.errors.min) {
+                  <span>Value can't be less than {{form.controls.heatingHoursPerDay.errors.min.min}}.</span>
+                }
+                @if (form.controls.heatingHoursPerDay.errors.max) {
+                  <span>Value can't be greater than {{form.controls.heatingHoursPerDay.errors.max.max}}.</span>
+                }
+              </span>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    @if (form.controls.motorMode.enabled) {
+      <div class="form-section">
+        <label class="group-label w-100 bold">Motor</label>
+        <div class="form-group">
+          <label class="small" for="{{'motorMode_' + idString}}">Motor Sizing</label>
+          <select class="form-control" id="{{'motorMode_' + idString}}" formControlName="motorMode"
+            (change)="changeMode('motorPower')" (focus)="focusField('motorMode')">
+            <option [ngValue]="'auto'">Automatic</option>
+            <option [ngValue]="'manual'">Manual</option>
+          </select>
+        </div>
+        @if (form.controls.motorPower.enabled) {
+          <div class="form-group">
+            <label class="small" for="{{'motorPower_' + idString}}">Motor Power</label>
+            <div class="input-group">
+              <input class="form-control" type="number" id="{{'motorPower_' + idString}}" formControlName="motorPower"
+                (input)="onFormChange()" (focus)="focusField('motorPower')" onfocus="this.select();">
+              <span class="units input-group-addon">
+                @if (settings.unitsOfMeasure == 'Imperial') {
+                  <span>hp</span>
+                } @else {
+                  <span>kW</span>
+                }
+              </span>
+            </div>
+            @if (form.controls.motorPower.invalid && !form.controls.motorPower.pristine) {
+              <span class="alert-danger pull-right small">
+                @if (form.controls.motorPower.errors.required) {
+                  <span>Value required.</span>
+                }
+                @if (form.controls.motorPower.errors.greaterThan != undefined) {
+                  <span>Value must be greater than {{form.controls.motorPower.errors.greaterThan}}.</span>
+                }
+                @if (form.controls.motorPower.errors.max) {
+                  <span>Value can't be greater than {{form.controls.motorPower.errors.max.max}}.</span>
+                }
+              </span>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    @if (form.controls.designDDCPercentage.enabled) {
+      <div class="form-section">
+        <label class="group-label w-100 bold">Regeneration</label>
+        <div class="form-group">
+          <label class="small" for="{{'designDDCPercentage_' + idString}}">Design DDC</label>
+          <div class="input-group">
+            <input class="form-control" type="number" id="{{'designDDCPercentage_' + idString}}" formControlName="designDDCPercentage"
+              (input)="onFormChange()" (focus)="focusField('designDDCPercentage')" onfocus="this.select();">
+            <span class="units input-group-addon">%</span>
+          </div>
+          @if (form.controls.designDDCPercentage.invalid && !form.controls.designDDCPercentage.pristine) {
+            <span class="alert-danger pull-right small">
+              @if (form.controls.designDDCPercentage.errors.required) {
+                <span>Value required.</span>
+              }
+              @if (form.controls.designDDCPercentage.errors.greaterThan != undefined) {
+                <span>Value must be greater than {{form.controls.designDDCPercentage.errors.greaterThan}}.</span>
+              }
+              @if (form.controls.designDDCPercentage.errors.max) {
+                <span>Value can't be greater than {{form.controls.designDDCPercentage.errors.max.max}}.</span>
+              }
+            </span>
+          }
+        </div>
+        <div class="form-group">
+          <label class="small" for="{{'regenerationCycleLength_' + idString}}">Regeneration Half-Cycle Length</label>
+          <div class="input-group">
+            <input class="form-control" type="number" id="{{'regenerationCycleLength_' + idString}}" formControlName="regenerationCycleLength"
+              (input)="onFormChange()" (focus)="focusField('regenerationCycleLength')" onfocus="this.select();">
+            <span class="units input-group-addon">hrs</span>
+          </div>
+          @if (form.controls.regenerationCycleLength.invalid && !form.controls.regenerationCycleLength.pristine) {
+            <span class="alert-danger pull-right small">
+              @if (form.controls.regenerationCycleLength.errors.required) {
+                <span>Value required.</span>
+              }
+              @if (form.controls.regenerationCycleLength.errors.greaterThan != undefined) {
+                <span>Value must be greater than {{form.controls.regenerationCycleLength.errors.greaterThan}}.</span>
+              }
+              @if (form.controls.regenerationCycleLength.errors.max) {
+                <span>Value can't be greater than {{form.controls.regenerationCycleLength.errors.max.max}}.</span>
+              }
+            </span>
+          }
+        </div>
+      </div>
+    }
+
+  </form>
+</div>
+
+@if (showOperatingHoursModal) {
+  <app-operating-hours-modal (emitClose)="closeOperatingHoursModal()"
+    (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+    [operatingHours]="operatingHours">
+  </app-operating-hours-modal>
+}

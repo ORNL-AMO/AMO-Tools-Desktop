@@ -15,6 +15,7 @@ import { CompressedAirReductionModule } from './compressed-air-reduction/compres
 import { CompressedAirPressureReductionModule } from './compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 import { AirFlowConversionModule } from './air-flow-conversion/air-flow-conversion.module';
 import { BleedTestModule } from './bleed-test/bleed-test.module';
+import { CompressedAirDryerModule } from './compressed-air-dryer/compressed-air-dryer.module';
 
 @NgModule({
   imports: [
@@ -32,13 +33,15 @@ import { BleedTestModule } from './bleed-test/bleed-test.module';
     SystemCapacityModule,
     CompressedAirReductionModule,
     CompressedAirPressureReductionModule,
+    CompressedAirDryerModule,
     RouterModule
   ],
   declarations: [
     CompressedAirListComponent,
   ],
   exports: [
-    CompressedAirListComponent
+    CompressedAirListComponent,
+    CompressedAirDryerModule,
   ]
 })
 export class CompressedAirModule { }
