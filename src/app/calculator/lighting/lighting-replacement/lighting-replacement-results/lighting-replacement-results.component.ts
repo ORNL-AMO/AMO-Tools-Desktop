@@ -17,9 +17,9 @@ export class LightingReplacementResultsComponent implements OnInit {
   @Input()
   modificationElectricityCost: number;
   @Input()
-  baselineData: LightingReplacementData;
+  baselineData: Array<LightingReplacementData>;
   @Input()
-  modificationData: LightingReplacementData;
+  modificationData: Array<LightingReplacementData>;
 
 
   @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;

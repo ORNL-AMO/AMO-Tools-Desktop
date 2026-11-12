@@ -1,18 +1,26 @@
 <div class="mb-4 p-2 form-card">
   <form [formGroup]="form" #formElement>
 
-    <label *ngIf="!isEditingName" class="group-label w-100 bold">
-      <span (click)="editFixtureName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
-      <span>{{form.controls.name.value}}</span>
-      <span class="fa fa-times-circle-o pull-right large" (click)="removeFixture(index)"></span>
-    </label>
-    <label *ngIf="isEditingName" class="group-label w-100">
-      <span class="fa fa-save pr-2 btn-edit-name" (click)="doneEditingName()"></span>
-      <input type="text" id="equipmentName" formControlName="name" onfocus="this.select();" (input)="calculate()">
-      <span class="alert-danger small ml-2" *ngIf="form.controls.name.invalid && !form.controls.name.pristine">
-        <span *ngIf="form.controls.name.errors.required">Please enter a name.</span>
-      </span>
-    </label>
+    @if (!isEditingName) {
+      <label class="group-label w-100 bold">
+        <span (click)="editFixtureName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
+        <span>{{form.controls.name.value}}</span>
+        <span class="fa fa-times-circle-o pull-right large" (click)="removeFixture(index)"></span>
+      </label>
+    }
+    @if (isEditingName) {
+      <label class="group-label w-100">
+        <span class="fa fa-save pr-2 btn-edit-name" (click)="doneEditingName()"></span>
+        <input type="text" id="equipmentName" formControlName="name" onfocus="this.select();" (input)="calculate()">
+        @if (form.controls.name.invalid && !form.controls.name.pristine) {
+          <span class="alert-danger small ml-2">
+            @if (form.controls.name.errors.required) {
+              <span>Please enter a name.</span>
+            }
+          </span>
+        }
+      </label>
+    }
 
     <div class="form-section">
       <div class="form-group">
@@ -26,14 +34,22 @@
             (focus)="focusField('hoursPerYear')">
           <span class="input-group-addon units">hrs/yr</span>
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.hoursPerYear.invalid && !form.controls.hoursPerYear.pristine">
-          <span *ngIf="form.controls.hoursPerYear.errors.required">Value required.</span>
-          <span *ngIf="form.controls.hoursPerYear.errors.max">Value can't be greater than
-            {{form.controls.hoursPerYear.errors.max.max}}.</span>
-          <span *ngIf="form.controls.hoursPerYear.errors.min">Value can't be less than
-            {{form.controls.hoursPerYear.errors.min.min}}.</span>
-        </span>
+        @if (form.controls.hoursPerYear.invalid && !form.controls.hoursPerYear.pristine) {
+          <span class="alert-danger pull-right small"
+            >
+            @if (form.controls.hoursPerYear.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.hoursPerYear.errors.max) {
+              <span>Value can't be greater than
+                {{form.controls.hoursPerYear.errors.max.max}}.</span>
+            }
+            @if (form.controls.hoursPerYear.errors.min) {
+              <span>Value can't be less than
+                {{form.controls.hoursPerYear.errors.min.min}}.</span>
+            }
+          </span>
+        }
       </div>
     </div>
 
@@ -41,33 +57,41 @@
 
       <div class="form-group">
         <label for="{{'category_'+idString}}">Fixture Category
-            <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal(false)">Add Custom Fixture</a>
+          <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal(false)">Add Custom Fixture</a>
         </label>
         <select name="type" class="form-control" id="{{'category_'+idString}}" formControlName="category"
           (change)="setCategory()" (focus)="focusField('category')">
-          <option *ngFor="let fixtureCategory of lightingFixtureCategories" [ngValue]="fixtureCategory.category">
-            {{fixtureCategory.label}}</option>
+          @for (fixtureCategory of lightingFixtureCategories; track fixtureCategory) {
+            <option [ngValue]="fixtureCategory.category">
+              {{fixtureCategory.label}}</option>
+          }
         </select>
       </div>
 
-      <div class="form-group" *ngIf="fixtureTypes && fixtureTypes.length > 0">
-        <label for="{{'type_'+idString}}">Fixture type
-        </label>
-        <select name="type" class="form-control" id="{{'type_'+idString}}" formControlName="type"
-          (change)="setProperties()" (focus)="focusField('type')"
-          [ngClass]="{'indicate-different': indicateFixtureTypeDiff}">
-          <option *ngFor="let fixtureType of fixtureTypes" [ngValue]="fixtureType.type">
-            {{fixtureType.type}}</option>
-        </select>
-      </div>
-
-      <div class="form-group help-text" *ngIf="fixtureTypes && fixtureTypes.length > 0 && form.controls.lampLife.value">
-        <label>Lamp Life
-        </label>
-        <div class="input-group">
-          {{form.controls.lampLife.value | number}} hrs
+      @if (fixtureTypes && fixtureTypes.length > 0) {
+        <div class="form-group">
+          <label for="{{'type_'+idString}}">Fixture type
+          </label>
+          <select name="type" class="form-control" id="{{'type_'+idString}}" formControlName="type"
+            (change)="setProperties()" (focus)="focusField('type')"
+            [ngClass]="{'indicate-different': indicateFixtureTypeDiff}">
+            @for (fixtureType of fixtureTypes; track fixtureType) {
+              <option [ngValue]="fixtureType.type">
+                {{fixtureType.type}}</option>
+            }
+          </select>
         </div>
-      </div>
+      }
+
+      @if (fixtureTypes && fixtureTypes.length > 0 && form.controls.lampLife.value) {
+        <div class="form-group help-text">
+          <label>Lamp Life
+          </label>
+          <div class="input-group">
+            {{form.controls.lampLife.value | number}} hrs
+          </div>
+        </div>
+      }
 
 
       <div class="form-group">
@@ -79,12 +103,18 @@
           <span class="input-group-addon units">W/lamp</span>
         </div>
 
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.wattsPerLamp.invalid && !form.controls.wattsPerLamp.pristine">
-          <span *ngIf="form.controls.wattsPerLamp.errors.required">Value required.</span>
-          <span *ngIf="form.controls.wattsPerLamp.errors.min">Value can't be less than
-            {{form.controls.wattsPerLamp.errors.min.min}}.</span>
-        </span>
+        @if (form.controls.wattsPerLamp.invalid && !form.controls.wattsPerLamp.pristine) {
+          <span class="alert-danger pull-right small"
+            >
+            @if (form.controls.wattsPerLamp.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.wattsPerLamp.errors.min) {
+              <span>Value can't be less than
+                {{form.controls.wattsPerLamp.errors.min.min}}.</span>
+            }
+          </span>
+        }
       </div>
 
       <div class="form-group">
@@ -95,14 +125,22 @@
             (focus)="focusField('ballastFactor')">
         </div>
 
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.ballastFactor.invalid && !form.controls.ballastFactor.pristine">
-          <span *ngIf="form.controls.ballastFactor.errors.required">Value required.</span>
-          <span *ngIf="form.controls.ballastFactor.errors.min">Value can't be less than
-            {{form.controls.ballastFactor.errors.min.min}}.</span>
-          <span *ngIf="form.controls.ballastFactor.errors.max">Value can't be greater than
-            {{form.controls.ballastFactor.errors.max.max}}.</span>
-        </span>
+        @if (form.controls.ballastFactor.invalid && !form.controls.ballastFactor.pristine) {
+          <span class="alert-danger pull-right small"
+            >
+            @if (form.controls.ballastFactor.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.ballastFactor.errors.min) {
+              <span>Value can't be less than
+                {{form.controls.ballastFactor.errors.min.min}}.</span>
+            }
+            @if (form.controls.ballastFactor.errors.max) {
+              <span>Value can't be greater than
+                {{form.controls.ballastFactor.errors.max.max}}.</span>
+            }
+          </span>
+        }
       </div>
 
 
@@ -114,12 +152,18 @@
         <input name="lampsPerFixture" formControlName="lampsPerFixture" type="number" step="any" class="form-control"
           id="{{'lampsPerFixture_'+idString}}" (input)="calculate()" onfocus="this.select();"
           (focus)="focusField('lampsPerFixture')" [ngClass]="{'indicate-different': indicateLampsPerFixtureDiff}">
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.lampsPerFixture.invalid && !form.controls.lampsPerFixture.pristine">
-          <span *ngIf="form.controls.lampsPerFixture.errors.required">Value required.</span>
-          <span *ngIf="form.controls.lampsPerFixture.errors.min">Value can't be less than
-            {{form.controls.lampsPerFixture.errors.min.min}}.</span>
-        </span>
+        @if (form.controls.lampsPerFixture.invalid && !form.controls.lampsPerFixture.pristine) {
+          <span class="alert-danger pull-right small"
+            >
+            @if (form.controls.lampsPerFixture.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.lampsPerFixture.errors.min) {
+              <span>Value can't be less than
+                {{form.controls.lampsPerFixture.errors.min.min}}.</span>
+            }
+          </span>
+        }
       </div>
 
       <div class="form-group">
@@ -127,69 +171,107 @@
         <input name="numberOfFixtures" formControlName="numberOfFixtures" type="number" step="any" class="form-control"
           id="{{'numberOfFixtures_'+idString}}" (input)="calculate()" onfocus="this.select();"
           (focus)="focusField('numberOfFixtures')">
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.numberOfFixtures.invalid && !form.controls.numberOfFixtures.pristine">
-          <span *ngIf="form.controls.numberOfFixtures.errors.required">Value required.</span>
-          <span *ngIf="form.controls.numberOfFixtures.errors.min">Value can't be less than
-            {{form.controls.numberOfFixtures.errors.min.min}}.</span>
-        </span>
+        @if (form.controls.numberOfFixtures.invalid && !form.controls.numberOfFixtures.pristine) {
+          <span class="alert-danger pull-right small"
+            >
+            @if (form.controls.numberOfFixtures.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.numberOfFixtures.errors.min) {
+              <span>Value can't be less than
+                {{form.controls.numberOfFixtures.errors.min.min}}.</span>
+            }
+          </span>
+        }
       </div>
       <div class="w-100 text-center">
-        <a class="click-link small" *ngIf="displayDetails == false" (click)="showDetails()">Show Lighting Level
-          Details +</a>
-        <a class="click-link small" *ngIf="displayDetails == true" (click)="hideDetails()">Hide Lighting Level
-          Details -</a>
+        @if (displayDetails == false) {
+          <a class="click-link small" (click)="showDetails()">Show Lighting Level
+            Details +</a>
+        }
+        @if (displayDetails == true) {
+          <a class="click-link small" (click)="hideDetails()">Hide Lighting Level
+            Details -</a>
+        }
       </div>
       <!--show/hide-->
-      <div class="form-group" *ngIf="displayDetails == true">
-        <label for="{{'lumensPerLamp_'+idString}}">Lumens Per Lamp</label>
-        <div class="input-group" [ngClass]="{'indicate-different': indicateLumensPerLampDiff}">
-          <input name="lumensPerLamp" formControlName="lumensPerLamp" type="number" step="any" class="form-control"
-            id="{{'lumensPerLamp_'+idString}}" (input)="calculate()" onfocus="this.select();"
-            (focus)="focusField('lumensPerLamp')">
-          <span class="input-group-addon units">lm/lamp</span>
+      @if (displayDetails == true) {
+        <div class="form-group">
+          <label for="{{'lumensPerLamp_'+idString}}">Lumens Per Lamp</label>
+          <div class="input-group" [ngClass]="{'indicate-different': indicateLumensPerLampDiff}">
+            <input name="lumensPerLamp" formControlName="lumensPerLamp" type="number" step="any" class="form-control"
+              id="{{'lumensPerLamp_'+idString}}" (input)="calculate()" onfocus="this.select();"
+              (focus)="focusField('lumensPerLamp')">
+            <span class="input-group-addon units">lm/lamp</span>
+          </div>
+          @if (form.controls.lumensPerLamp.invalid && !form.controls.lumensPerLamp.pristine) {
+            <span class="alert-danger pull-right small"
+              >
+              @if (form.controls.lumensPerLamp.errors.required) {
+                <span>Value required.</span>
+              }
+              @if (form.controls.lumensPerLamp.errors.min) {
+                <span>Value can't be less than
+                  {{form.controls.lumensPerLamp.errors.min.min}}.</span>
+              }
+            </span>
+          }
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.lumensPerLamp.invalid && !form.controls.lumensPerLamp.pristine">
-          <span *ngIf="form.controls.lumensPerLamp.errors.required">Value required.</span>
-          <span *ngIf="form.controls.lumensPerLamp.errors.min">Value can't be less than
-            {{form.controls.lumensPerLamp.errors.min.min}}.</span>
-        </span>
-      </div>
+      }
 
-      <div class="form-group" *ngIf="displayDetails == true">
-        <label for="{{'coefficientOfUtilization_'+idString}}">Coeffient of Utilization</label>
-        <div class="input-group" [ngClass]="{'indicate-different': indicateCoefficientOfUtilizationDiff}">
-          <input name="coefficientOfUtilization" formControlName="coefficientOfUtilization" type="number" step="any"
-            class="form-control" id="{{'coefficientOfUtilization_'+idString}}" (input)="calculate()"
-            onfocus="this.select();" (focus)="focusField('coefficientOfUtilization')">
+      @if (displayDetails == true) {
+        <div class="form-group">
+          <label for="{{'coefficientOfUtilization_'+idString}}">Coeffient of Utilization</label>
+          <div class="input-group" [ngClass]="{'indicate-different': indicateCoefficientOfUtilizationDiff}">
+            <input name="coefficientOfUtilization" formControlName="coefficientOfUtilization" type="number" step="any"
+              class="form-control" id="{{'coefficientOfUtilization_'+idString}}" (input)="calculate()"
+              onfocus="this.select();" (focus)="focusField('coefficientOfUtilization')">
+          </div>
+          @if (form.controls.coefficientOfUtilization.invalid && !form.controls.coefficientOfUtilization.pristine) {
+            <span class="alert-danger pull-right small"
+              >
+              @if (form.controls.coefficientOfUtilization.errors.required) {
+                <span>Value required.</span>
+              }
+              @if (form.controls.coefficientOfUtilization.errors.min) {
+                <span>Value can't be less than
+                  {{form.controls.coefficientOfUtilization.errors.min.min}}.</span>
+              }
+              @if (form.controls.coefficientOfUtilization.errors.max) {
+                <span>Value can't be greater than
+                  {{form.controls.coefficientOfUtilization.errors.max.max}}.</span>
+              }
+            </span>
+          }
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.coefficientOfUtilization.invalid && !form.controls.coefficientOfUtilization.pristine">
-          <span *ngIf="form.controls.coefficientOfUtilization.errors.required">Value required.</span>
-          <span *ngIf="form.controls.coefficientOfUtilization.errors.min">Value can't be less than
-            {{form.controls.coefficientOfUtilization.errors.min.min}}.</span>
-          <span *ngIf="form.controls.coefficientOfUtilization.errors.max">Value can't be greater than
-            {{form.controls.coefficientOfUtilization.errors.max.max}}.</span>
-        </span>
-      </div>
+      }
 
-      <div class="form-group" *ngIf="displayDetails == true">
-        <label for="{{'lumenDegradationFactor_'+idString}}">Lumen Degredation Factor</label>
-        <div class="input-group" [ngClass]="{'indicate-different': indicateLumenDegradationFactorDiff}">
-          <input name="lumenDegradationFactor" formControlName="lumenDegradationFactor" type="number" step="any"
-            class="form-control" id="{{'lumenDegradationFactor_'+idString}}" (input)="calculate()"
-            onfocus="this.select();" (focus)="focusField('lumenDegradationFactor')">
+      @if (displayDetails == true) {
+        <div class="form-group">
+          <label for="{{'lumenDegradationFactor_'+idString}}">Lumen Degredation Factor</label>
+          <div class="input-group" [ngClass]="{'indicate-different': indicateLumenDegradationFactorDiff}">
+            <input name="lumenDegradationFactor" formControlName="lumenDegradationFactor" type="number" step="any"
+              class="form-control" id="{{'lumenDegradationFactor_'+idString}}" (input)="calculate()"
+              onfocus="this.select();" (focus)="focusField('lumenDegradationFactor')">
+          </div>
+          @if (form.controls.lumenDegradationFactor.invalid && !form.controls.lumenDegradationFactor.pristine) {
+            <span class="alert-danger pull-right small"
+              >
+              @if (form.controls.lumenDegradationFactor.errors.required) {
+                <span>Value required.</span>
+              }
+              @if (form.controls.lumenDegradationFactor.errors.min) {
+                <span>Value can't be less than
+                  {{form.controls.lumenDegradationFactor.errors.min.min}}.</span>
+              }
+              @if (form.controls.lumenDegradationFactor.errors.max) {
+                <span>Value can't be greater than
+                  {{form.controls.lumenDegradationFactor.errors.max.max}}.</span>
+              }
+            </span>
+          }
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.lumenDegradationFactor.invalid && !form.controls.lumenDegradationFactor.pristine">
-          <span *ngIf="form.controls.lumenDegradationFactor.errors.required">Value required.</span>
-          <span *ngIf="form.controls.lumenDegradationFactor.errors.min">Value can't be less than
-            {{form.controls.lumenDegradationFactor.errors.min.min}}.</span>
-          <span *ngIf="form.controls.lumenDegradationFactor.errors.max">Value can't be greater than
-            {{form.controls.lumenDegradationFactor.errors.max.max}}.</span>
-        </span>
-      </div>
+      }
 
     </div>
   </form>
@@ -199,15 +281,19 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div>
-        <app-lighting-fixtures-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
-          [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial"></app-lighting-fixtures-material>
+        @if (showModal) {
+          <app-lighting-fixtures-material (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+            [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial"></app-lighting-fixtures-material>
+        }
       </div>
     </div>
   </div>
 </div>
 
 
-<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
-  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
-  [operatingHours]="lightingReplacementService.operatingHours">
-</app-operating-hours-modal>
+@if (showOperatingHoursModal) {
+  <app-operating-hours-modal (emitClose)="closeOperatingHoursModal()"
+    (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+    [operatingHours]="lightingReplacementService.operatingHours">
+  </app-operating-hours-modal>
+}

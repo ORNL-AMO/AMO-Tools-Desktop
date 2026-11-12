@@ -9,19 +9,21 @@
         <h3>Lighting Replacement</h3>
       </div>
     </div>
-    <div class="d-flex pr-2 pl-2" *ngIf="inTreasureHunt">
-      <div class="d-none d-lg-flex help-holder">
-        <p class="help-text treasure-hunt-help">Click the save icon to add the
-          treasure to your chest! Click cancel to discard the opportunity and return
-          to method selection.</p>
+    @if (inTreasureHunt) {
+      <div class="d-flex pr-2 pl-2">
+        <div class="d-none d-lg-flex help-holder">
+          <p class="help-text treasure-hunt-help">Click the save icon to add the
+            treasure to your chest! Click cancel to discard the opportunity and return
+            to method selection.</p>
+        </div>
+        <div class="pl-2 pr-2 border-right border-left action-item" (click)="save()">
+          <span class="fa fa-save"></span>
+        </div>
+        <div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
+          <span class="fa fa-times"></span>
+        </div>
       </div>
-      <div class="pl-2 pr-2 border-right border-left action-item" (click)="save()">
-        <span class="fa fa-save"></span>
-      </div>
-      <div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
-        <span class="fa fa-times"></span>
-      </div>
-    </div>
+    }
   </div>
 
   <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
@@ -55,12 +57,14 @@
           </div>
         </div>
 
-        <div *ngFor="let data of baselineData; let index = index;">
-          <app-lighting-replacement-form [data]="data" [isBaseline]="true" [index]="index"
-            (emitCalculate)="updateBaselineData($event, index)" (emitFocusField)="focusField($event)"
-            (emitRemoveFixture)="removeBaselineFixture($event)" [selected]="baselineSelected">
-          </app-lighting-replacement-form>
-        </div>
+        @for (data of baselineData; track data; let index = $index) {
+          <div>
+            <app-lighting-replacement-form [data]="data" [isBaseline]="true" [index]="index"
+              (emitCalculate)="updateBaselineData($event, index)" (emitFocusField)="focusField($event)"
+              (emitRemoveFixture)="removeBaselineFixture($event)" [selected]="baselineSelected">
+            </app-lighting-replacement-form>
+          </div>
+        }
 
         <div class="w-100 justify-content-center btn-group btn-group-sm">
           <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
@@ -76,7 +80,7 @@
 
     <div class="calculator-panel-container" [ngClass]="{'small-screen-tab': smallScreenTab === 'modification'}"
       (click)="setModificationSelected()" [ngStyle]="{'height.px': containerHeight}">
-      <ng-container *ngIf="modificationExists">
+      @if (modificationExists) {
         <div class="header mr-2 ml-2">
           <h3>Modification</h3>
           <a class="click-link pull-right small add-fixture" (click)="addModificationFixture()">+Add Fixture</a>
@@ -90,28 +94,31 @@
               <span class="input-group-addon units">$/kWh</span>
             </div>
           </div>
+          @for (data of modificationData; track data; let index = $index) {
+            <div>
+              <app-lighting-replacement-form [data]="data" [index]="index" [isBaseline]="false"
+                (emitCalculate)="updateModificationData($event, index)" (emitFocusField)="focusField($event)"
+                (emitRemoveFixture)="removeModificationFixture($event)" [selected]="!baselineSelected" [settings]="settings">
+              </app-lighting-replacement-form>
+            </div>
+          }
+        </div>
+      }
 
-          <div *ngFor="let data of modificationData; let index = index;">
-            <app-lighting-replacement-form [data]="data" [index]="index" [isBaseline]="false"
-              (emitCalculate)="updateModificationData($event, index)" (emitFocusField)="focusField($event)"
-              (emitRemoveFixture)="removeModificationFixture($event)" [selected]="!baselineSelected" [settings]="settings">
-            </app-lighting-replacement-form>
+      @if (!modificationExists) {
+        <div>
+          <div class="header mr-2 ml-2">
+            <h3>Modification</h3>
+          </div>
+          <div class="p-3 no-data">
+            <h3>
+              Once you have set up your baseline..
+            </h3>
+            <button type="button" class="btn btn-primary" (click)="createModification()">Add Modified Condition</button>
+            <p>Data will be copied from your current baseline condition.</p>
           </div>
         </div>
-      </ng-container>
-
-      <div *ngIf="!modificationExists">
-        <div class="header mr-2 ml-2">
-          <h3>Modification</h3>
-        </div>
-        <div class="p-3 no-data">
-          <h3>
-            Once you have set up your baseline..
-          </h3>
-          <button type="button" class="btn btn-primary" (click)="createModification()">Add Modified Condition</button>
-          <p>Data will be copied from your current baseline condition.</p>
-        </div>
-      </div>
+      }
     </div>
 
     <div class="calculator-panel-container help-panel" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}"
@@ -131,12 +138,16 @@
         </div>
 
         <div class="p-2">
-          <app-lighting-replacement-results *ngIf="tabSelect == 'results'"
-            [lightingReplacementResults]="lightingReplacementResults" [modificationExists]="modificationExists"
-            [baselineData]="baselineData" [modificationData]="modificationData">
-          </app-lighting-replacement-results>
-          <app-lighting-replacement-help *ngIf="tabSelect == 'help'" [currentField]="currentField">
-          </app-lighting-replacement-help>
+          @if (tabSelect == 'results') {
+            <app-lighting-replacement-results
+              [lightingReplacementResults]="lightingReplacementResults" [modificationExists]="modificationExists"
+              [baselineData]="baselineData" [modificationData]="modificationData">
+            </app-lighting-replacement-results>
+          }
+          @if (tabSelect == 'help') {
+            <app-lighting-replacement-help [currentField]="currentField">
+            </app-lighting-replacement-help>
+          }
         </div>
       </div>
     </div>
