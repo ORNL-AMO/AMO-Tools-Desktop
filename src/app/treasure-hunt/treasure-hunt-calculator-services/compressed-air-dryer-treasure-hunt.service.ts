@@ -58,7 +58,7 @@ export class CompressedAirDryerTreasureHuntService {
       energySavings: 0,
       baselineCost: baselineOutput.totalCostPerYear,
       modificationCost: modificationOutput.totalCostPerYear,
-      utilityType: 'Mixed',
+      utilityType: 'Compressed Air',
     }
 
     return treasureHuntOpportunityResults;
@@ -73,8 +73,6 @@ export class CompressedAirDryerTreasureHuntService {
       }
     }
 
-    let currentCosts: number = currentEnergyUsage.electricityCosts + currentEnergyUsage.compressedAirCosts + currentEnergyUsage.waterCosts;
-
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
@@ -85,12 +83,12 @@ export class CompressedAirDryerTreasureHuntService {
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
         energyUnit: '',
-        label: 'Mixed'
+        label: 'Compressed Air'
       }],
-      utilityType: ['Electricity', 'Compressed Air', 'Water'],
+      utilityType: ['Compressed Air'],
       percentSavings: [{
-        percent: currentCosts > 0 ? (opportunitySummary.costSavings / currentCosts) * 100 : 0,
-        label: 'Mixed',
+        percent: currentEnergyUsage.compressedAirCosts > 0 ? (opportunitySummary.costSavings / currentEnergyUsage.compressedAirCosts) * 100 : 0,
+        label: 'Compressed Air',
         baselineCost: opportunitySummary.baselineCost,
         modificationCost: opportunitySummary.modificationCost,
       }],
