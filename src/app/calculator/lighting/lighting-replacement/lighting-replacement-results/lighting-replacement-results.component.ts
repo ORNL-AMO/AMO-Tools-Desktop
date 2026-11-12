@@ -36,11 +36,10 @@ export class LightingReplacementResultsComponent implements OnInit {
   ngOnInit() { }
 
   updateTable0String() {
-    this.table0String = 
-    this.copyTable0.nativeElement.innerText + '\n' +
-    this.copyTable1.nativeElement.innerText + '\n' +
-    this.copyTable2.nativeElement.innerText + '\n' +
-    this.copyTable3.nativeElement.innerText;
+    this.table0String = [this.copyTable0, this.copyTable1, this.copyTable2, this.copyTable3]
+      .filter(table => table)
+      .map(table => table.nativeElement.innerText)
+      .join('\n');
   }
 
   // updateTable1String() {

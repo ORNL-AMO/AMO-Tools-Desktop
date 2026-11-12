@@ -136,5 +136,14 @@ describe('LightingReplacementResultsComponent', () => {
       expect(component.table0String).toContain('Modified Fixture A');
       expect(component.table0String).toContain('Electricity Savings');
     });
+
+    it('combines the baseline, totals, and savings tables when no modification exists', () => {
+      render(false);
+      expect(() => component.updateTable0String()).not.toThrow();
+      expect(component.table0String).toContain('Baseline Fixture A');
+      expect(component.table0String).not.toContain('Modified Fixture A');
+      expect(component.table0String).toContain('Total Annual Cost');
+      expect(component.table0String).toContain('Electricity Savings');
+    });
   });
 });
