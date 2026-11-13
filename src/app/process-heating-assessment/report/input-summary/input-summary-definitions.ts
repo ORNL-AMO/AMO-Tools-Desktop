@@ -3,6 +3,8 @@ import { GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMateria
 import { ShowResultsCategories } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { Losses, PHAST } from '../../models/phast';
+import { AuxiliaryEquipmentItem } from '../../../shared/models/phast/auxEquipment';
+import { AUXILIARY_EQUIPMENT_MEASUREMENT_METHOD_LABELS, AuxiliaryEquipmentMeasurementMethod } from '../../models/auxiliary-equipment';
 
 export type SummaryValue = string | number | undefined | null;
 type UnitPair = readonly [imperial: string, metric: string];
@@ -23,11 +25,11 @@ export interface FieldDefinition<T> {
   value: (item: T, settings: Settings, lookups: InputSummaryLookups) => SummaryValue;
 }
 
-/** A list-based loss: one summary section per item, matched across scenarios by index. */
+/** A list-based loss or other item list: one summary section per item, matched across scenarios by index. */
 interface LossSectionDefinition<T = never> {
   kind: 'items';
   label: string;
-  items: (losses: Losses) => T[] | undefined;
+  items: (losses: Losses, phast: PHAST) => T[] | undefined;
   fields: FieldDefinition<T>[];
   isVisible?: (categories: ShowResultsCategories) => boolean;
 }
@@ -116,6 +118,42 @@ const CHARGE_MATERIAL_SECTION: LossSectionDefinition<ChargeMaterial> = {
     chargeField('Percent Reacted', 'percentReacted', PERCENT),
     chargeField('Heat of Reaction', 'reactionHeat', ['Btu/lb', 'kJ/kg']),
     chargeField('Additional Heat Required', 'additionalHeat', ['Btu/hr', 'kJ/hr']),
+  ],
+};
+
+/**
+ * @param method measurement method the field belongs to
+ * @param label row label
+ * @param unit row unit
+ * @param value reads the field from the item
+ * @returns a field shown only for items measured with that method
+ */
+function methodField(method: AuxiliaryEquipmentMeasurementMethod, label: string, unit: string | undefined, value: (item: AuxiliaryEquipmentItem) => SummaryValue): FieldDefinition<AuxiliaryEquipmentItem> {
+  return field(label, unit, item => item.measurementMethod === method ? value(item) : undefined);
+}
+
+const AUXILIARY_EQUIPMENT_SECTION: LossSectionDefinition<AuxiliaryEquipmentItem> = {
+  kind: 'items',
+  label: 'Auxiliary Equipment',
+  items: (_, phast) => phast.auxiliaryEquipment,
+  fields: [
+    field('Measurement Method', undefined, item => AUXILIARY_EQUIPMENT_MEASUREMENT_METHOD_LABELS[item.measurementMethod]),
+    prop('Annual Operating Hours', 'operatingHours', 'hrs/yr'),
+    methodField(AuxiliaryEquipmentMeasurementMethod.MULTIMETER, 'Number of Phases', undefined, item => item.multimeterData?.numberOfPhases),
+    methodField(AuxiliaryEquipmentMeasurementMethod.MULTIMETER, 'Supply Voltage', 'V', item => item.multimeterData?.supplyVoltage),
+    methodField(AuxiliaryEquipmentMeasurementMethod.MULTIMETER, 'Average Current', 'A', item => item.multimeterData?.averageCurrent),
+    methodField(AuxiliaryEquipmentMeasurementMethod.MULTIMETER, 'Power Factor', undefined, item => item.multimeterData?.powerFactor),
+    methodField(AuxiliaryEquipmentMeasurementMethod.NAMEPLATE, 'Rated Motor Power', undefined,
+      item => item.nameplateData?.ratedMotorPower == null ? undefined : `${item.nameplateData.ratedMotorPower} ${item.userSelectedHP ? 'hp' : 'kW'}`),
+    methodField(AuxiliaryEquipmentMeasurementMethod.NAMEPLATE, 'Variable Speed Motor', undefined, item => item.nameplateData?.variableSpeedMotor ? 'Yes' : 'No'),
+    methodField(AuxiliaryEquipmentMeasurementMethod.NAMEPLATE, 'Line Frequency', 'Hz', item => item.nameplateData?.lineFrequency),
+    methodField(AuxiliaryEquipmentMeasurementMethod.NAMEPLATE, 'Operational Frequency', 'Hz',
+      item => item.nameplateData?.variableSpeedMotor ? item.nameplateData.operationalFrequency : undefined),
+    methodField(AuxiliaryEquipmentMeasurementMethod.NAMEPLATE, 'Motor & Drive Efficiency', PERCENT, item => item.nameplateData?.motorAndDriveEfficiency),
+    methodField(AuxiliaryEquipmentMeasurementMethod.NAMEPLATE, 'Percent Loaded', PERCENT, item => item.nameplateData?.loadFactor),
+    methodField(AuxiliaryEquipmentMeasurementMethod.POWER_METER, 'Equipment Power', 'kW', item => item.powerMeterData?.power),
+    methodField(AuxiliaryEquipmentMeasurementMethod.OTHER, 'Energy', 'kWh/yr', item => item.otherMethodData?.energy),
+    field('# of Units', undefined, item => item.measurementMethod === AuxiliaryEquipmentMeasurementMethod.OTHER ? undefined : item.units),
   ],
 };
 
@@ -327,4 +365,5 @@ export const SECTION_DEFINITIONS: SectionDefinition[] = [
     isVisible: categories => categories.showSystemEff,
     fields: [field<PHAST>('Heat System Efficiency', PERCENT, phast => phast.systemEfficiency)],
   },
+  AUXILIARY_EQUIPMENT_SECTION,
 ];

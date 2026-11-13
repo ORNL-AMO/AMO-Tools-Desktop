@@ -89,6 +89,7 @@ describe('ModificationService', () => {
       modifications: [],
       systemEfficiency: 80,
       losses: { wallLosses: [{ id: 'wall-1', surfaceArea: 100 } as never] },
+      auxiliaryEquipment: [{ id: 'aux-1', operatingHours: 8760 } as never],
     });
 
     const id = service.addModification();
@@ -98,10 +99,12 @@ describe('ModificationService', () => {
       ...assessmentService.processHeatingSignal(),
       systemEfficiency: 95,
       losses: { wallLosses: [{ id: 'wall-1', surfaceArea: 999 } as never] },
+      auxiliaryEquipment: [{ id: 'aux-1', operatingHours: 4000 } as never],
     });
 
     const modification = service.modifications().find((m: ProcessHeatingModification) => m.id === id);
     expect(modification?.scenarioOverrides?.systemEfficiency).toBe(80);
+    expect(modification?.scenarioOverrides?.auxiliaryEquipment?.[0].operatingHours).toBe(8760);
     expect(modification?.scenarioOverrides?.losses?.wallLosses).toEqual(frozenOverrides?.losses?.wallLosses);
     expect(modification?.scenarioOverrides?.losses?.wallLosses?.[0].surfaceArea).toBe(100);
   });

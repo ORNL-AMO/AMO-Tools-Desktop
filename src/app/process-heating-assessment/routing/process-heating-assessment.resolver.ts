@@ -11,6 +11,7 @@ import { AppErrorService } from '../../shared/errors/app-error.service';
 import { MeasurAppError } from '../../shared/errors/errors';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
 import { deriveScenarioOverridesFromLegacyModification, ensureLossIdsForPhast } from '../services/scenario-merge.util';
+import { migrateLegacyAuxEquipment } from '../services/auxiliary-equipment-migration.util';
 
 export interface ProcessHeatingResolverData {
   assessment: Assessment;
@@ -70,7 +71,7 @@ export class ProcessHeatingAssessmentResolver implements Resolve<ProcessHeatingR
         // Module load-time entry point: `assessment.phast` is still typed against the shared,
         // legacy-owned PHAST shape at this boundary. Everything past this point uses the module's
         // own local PHAST type.
-        const processHeating = assessment.phast as unknown as PHAST;
+        const processHeating = migrateLegacyAuxEquipment(assessment.phast as unknown as PHAST);
         // Migrate `scenarioOverrides` and `exploreOpportunityFlags` for modifications last written
         // by legacy (a full `phast` clone and legacy's flat `exploreOppsShowX` fields, neither of
         // which this module reads directly). Idempotent: a modification that already has
@@ -87,7 +88,8 @@ export class ProcessHeatingAssessmentResolver implements Resolve<ProcessHeatingR
             ? modification
             : {
               ...modification,
-              scenarioOverrides: deriveScenarioOverridesFromLegacyModification(legacyModification.phast, processHeating),
+              scenarioOverrides: deriveScenarioOverridesFromLegacyModification(
+                migrateLegacyAuxEquipment(legacyModification.phast, processHeating.auxiliaryEquipment), processHeating),
               exploreOpportunityFlags: computeMigratedExploreOpportunityFlags(legacyModification),
             };
         });

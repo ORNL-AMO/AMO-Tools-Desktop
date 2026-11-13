@@ -76,6 +76,10 @@ describe('HelpPanelComponent', () => {
       expect(render(ROUTE_TOKENS.exploreOpportunities).textContent).toContain('Explore Opportunities Help');
     });
 
+    it('shows Auxiliary Equipment help on its baseline step', () => {
+      expect(render(ROUTE_TOKENS.auxiliaryEquipment).querySelector('app-auxiliary-equipment-help')).not.toBeNull();
+    });
+
     it('shows Assessment Settings help', () => {
       expect(render(ROUTE_TOKENS.assessmentSettings).textContent).toContain('Assessment Settings');
     });

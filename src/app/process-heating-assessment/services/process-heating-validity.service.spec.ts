@@ -23,7 +23,8 @@ import { SlagFormService } from '../heat-balance/losses/slag/slag-form.service';
 import { WallLossesFormService } from '../heat-balance/losses/wall-losses/wall-losses-form.service';
 import { ProcessHeatingModification } from '../models/modification';
 import { Losses, PHAST, PhastResults } from '../models/phast';
-import { EnergyValidationView, LossView } from '../models/views';
+import { AUXILIARY_EQUIPMENT_VIEW, EnergyValidationView, LossView } from '../models/views';
+import { AuxiliaryEquipmentFormService, newAuxiliaryEquipmentItem } from '../auxiliary-equipment/auxiliary-equipment-form.service';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingOperationsFormService } from './process-heating-operations-form.service';
 import { ProcessHeatingResultsService } from './process-heating-results.service';
@@ -80,6 +81,7 @@ describe('ProcessHeatingValidityService', () => {
         FixtureFormService, WallLossesFormService, CoolingFormService, AtmosphereFormService, OpeningFormService,
         GasLeakageFormService, ExtendedSurfaceFormService, OtherFormService, SlagFormService, EnergyInputFormService,
         ExhaustGasFormService, EnergyInputExhaustGasFormService, MeteredEnergyFormService, DesignedEnergyFormService,
+        AuxiliaryEquipmentFormService,
         ConvertUnitsService,
         {
           provide: ProcessHeatingAssessmentService,
@@ -243,6 +245,16 @@ describe('ProcessHeatingValidityService', () => {
 
     it('treats a step without a validity check as valid', () => {
       expect(service.isStepValid('baseline', EnergyValidationView.METERED_ENERGY)).toBeTrue();
+    });
+
+    it('flags auxiliary equipment missing inputs in that scenario only, without invalidating the scenario', () => {
+      const missingVoltage = { ...newAuxiliaryEquipmentItem(8760, true), id: 'aux-1', name: 'Fan' };
+      missingVoltage.multimeterData = { ...missingVoltage.multimeterData, supplyVoltage: undefined };
+      scenarios.mod1.set(phastWith({}, { auxiliaryEquipment: [missingVoltage] }));
+
+      expect(service.isStepValid('mod1', AUXILIARY_EQUIPMENT_VIEW)).toBeFalse();
+      expect(service.isStepValid('baseline', AUXILIARY_EQUIPMENT_VIEW)).toBeTrue();
+      expect(service.scenarioValidity('mod1').isValid).toBeTrue();
     });
   });
 

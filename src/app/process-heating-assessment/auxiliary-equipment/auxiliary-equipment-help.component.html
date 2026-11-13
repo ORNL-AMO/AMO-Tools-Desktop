@@ -1,0 +1,237 @@
+<div class="px-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Auxiliary Equipment Help
+    <br>
+    <small class="text-muted">
+      Electricity used by equipment that supports the process heating system, such as fans, pumps, and conveyors.
+      It is calculated separately from the heat balance, at the facility electricity cost.
+    </small>
+  </h5>
+  <div class="my-2">
+    <h6>
+      <small class="text-muted">
+        These inputs and calculations are the same as the Electricity Reduction calculator
+        (Calculators &gt; Utilities &gt; Electricity Reduction), applied to each piece of equipment.
+      </small>
+    </h6>
+  </div>
+
+  @switch (currentField()) {
+    @case ('operatingHours') {
+      <div class="my-2">
+        <h6>
+          Annual Operating Hours
+          <small class="text-muted">
+            <br>
+            Number of hours per year the equipment is on. Be sure to include normally scheduled overtime.
+            <hr>
+          </small>
+        </h6>
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="text-center">Minimum</th>
+              <th class="text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="text-center">0 hrs/yr</td>
+              <td class="text-center">8760 hrs/yr</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    }
+    @case ('measurementMethod') {
+      <div class="my-2">
+        <h6>
+          Method of Measurement
+          <small class="text-muted">
+            <br>
+            Choose the method to be used to determine electricity consumption.
+            <hr class="my-1">Power Meter Method - The best way to measure electrical consumption is with a power meter.
+            Manufacturer's data on lights can be entered as if the measurements were done with a power meter.
+            <hr class="my-1">Multimeter Reading - Multimeter measurements are the second most accurate means of measuring
+            electrical consumption and are accurate for DC and for AC (when combined with the plant's uncorrected power factor).
+            <hr class="my-1">Nameplate Data - Motor nameplate data can provide a reasonable estimation of the energy that
+            motors are consuming but are not as accurate as a power meter. Nameplate data does not tell the user how
+            heavily loaded the motor is.
+            <hr class="my-1">Other Method – Choose this option if you are using a different method to find the electricity
+            consumption.
+            <hr class="my-1">
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('numberOfPhases') {
+      <div class="my-2">
+        <h6>
+          Number of Phases
+          <small class="text-muted">
+            <br>
+            Select “1” if the motor is single phase or “3” if the motor is three-phase.
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('supplyVoltage') {
+      <div class="my-2">
+        <h6>
+          Supply Voltage
+          <small class="text-muted">
+            <br>
+            The voltage of the equipment as measured by a multimeter. Typically, 480 for three phase systems.
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('averageCurrent') {
+      <div class="my-2">
+        <h6>
+          Average Current
+          <small class="text-muted">
+            <br>
+            The current of the equipment as measured by a multimeter.
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('powerFactor') {
+      <div class="my-2">
+        <h6>
+          Power Factor
+          <small class="text-muted">
+            <br>
+            Use the uncorrected power factor of the plant as an average value. This number is available from the plant
+            electrical specialist. For a modification this value should be the same as the baseline unless specific
+            actions were taken to improve power factor.
+            <br>
+            Do not model savings from power factor correction without reducing the average current simultaneously.
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('ratedMotorPower') {
+      <div class="my-2">
+        <h6>
+          Rated Motor Power
+          <small class="text-muted">
+            <br>
+            The rated power for the equipment in hp or kW.
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('variableSpeedMotor') {
+      <div class="my-2">
+        <h6>
+          Variable Speed Motor
+          <small class="text-muted">
+            <br>
+            Select YES if the equipment has a variable speed motor drive.
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('lineFrequency') {
+      <div class="my-2">
+        <h6>
+          Line Frequency
+          <small class="text-muted">
+            <br>
+            The main supply frequency from the utility. In North America the standard frequency is 60 Hz. Elsewhere, 50 Hz
+            is often the standard.
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('operationalFrequency') {
+      <div class="my-2">
+        <h6>
+          Operational Frequency
+          <small class="text-muted">
+            <br>
+            Input the operating frequency which has been adjusted by the variable speed motor drive.
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('motorAndDriveEfficiency') {
+      <div class="my-2">
+        <h6>
+          Motor &amp; Drive Efficiency
+          <small class="text-muted">
+            <br>
+            The ratio between the amount of mechanical work the equipment performs and the electrical power it consumes to
+            do the work represented by a percentage.
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('loadFactor') {
+      <div class="my-2">
+        <h6>
+          Percent Loaded
+          <small class="text-muted">
+            <br>
+            The amount of work the equipment is doing compared to the nameplate. Typical load factor is 75% for a motor and
+            100% for an electric heater. This value cannot be found on the nameplate.
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('power') {
+      <div class="my-2">
+        <h6>
+          Equipment Power
+          <small class="text-muted">
+            <br>
+            Enter the power reading from the power meter.
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('energy') {
+      <div class="my-2">
+        <h6>
+          Energy
+          <small class="text-muted">
+            <br>
+            Enter the off sheet calculated value for annual energy consumption in kWh.
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('units') {
+      <div class="my-2">
+        <h6>
+          Number of Units
+          <small class="text-muted">
+            <br>
+            The number of identical units in the specified system. When units of different size have been combined
+            previously enter 1.
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+  }
+
+  <div class="my-2">
+    <a class="click-link" [href]="docsLink + 'group__electricity__reduction__calculator'" target="_blank">
+      <span class="fa fa-external-link"></span>
+      <span class="pl-1">How is auxiliary equipment electricity calculated?</span>
+    </a>
+  </div>
+</div>

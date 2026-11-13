@@ -6,6 +6,8 @@ import { Settings } from '../../../shared/models/settings';
 import { PHAST, PhastResults } from '../../models/phast';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
+import { AuxiliaryEquipmentResultsService } from '../../services/auxiliary-equipment-results.service';
+import { AuxiliaryEquipmentResults } from '../../models/auxiliary-equipment';
 import { EnergySummaryResultsService, EnergySummaryUI } from './energy-summary-results.service';
 
 describe('EnergySummaryResultsService', () => {
@@ -14,6 +16,7 @@ describe('EnergySummaryResultsService', () => {
   let phast: PHAST;
   let results: Partial<PhastResults>;
   let resultsService: jasmine.SpyObj<ProcessHeatingResultsService>;
+  let auxiliaryResults: AuxiliaryEquipmentResults;
 
   function ui(): EnergySummaryUI {
     return service.energySummaryUI();
@@ -33,6 +36,7 @@ describe('EnergySummaryResultsService', () => {
       equipmentNotes: 'Batch furnace',
     };
     results = { grossHeatInput: 10 };
+    auxiliaryResults = { items: [], isComplete: true, totalPower: 4, totalEnergyUse: 0, totalEnergyCost: 0 };
     resultsService = jasmine.createSpyObj<ProcessHeatingResultsService>('ProcessHeatingResultsService', [
       'scenarioResults', 'getEnergyUseReportData', 'getCalculatedByPhast', 'getMeteredEnergyResults', 'getDesignedEnergyResults',
     ]);
@@ -49,6 +53,7 @@ describe('EnergySummaryResultsService', () => {
         EnergySummaryResultsService,
         { provide: ProcessHeatingAssessmentService, useValue: { settingsSignal: settings, scenarioPhastSignal: () => phast } },
         { provide: ProcessHeatingResultsService, useValue: resultsService },
+        { provide: AuxiliaryEquipmentResultsService, useValue: { scenarioResults: () => auxiliaryResults } },
       ],
     });
     service = TestBed.inject(EnergySummaryResultsService);
@@ -86,18 +91,29 @@ describe('EnergySummaryResultsService', () => {
     expect(ui().sources[2].energyUsed).toBe(2);
   });
 
-  it('compares calculated, metered, and designed energy', () => {
+  it('compares calculated, metered, and designed energy, with auxiliary electricity from the auxiliary equipment step in every column', () => {
     resultsService.getMeteredEnergyResults.and.returnValue({ metered: { hourlyEnergy: 9, energyIntensity: 8, hourlyElectricity: 1 } } as never);
     resultsService.getDesignedEnergyResults.and.returnValue({ designed: { hourlyEnergy: 11, energyIntensity: 12, hourlyElectricity: 3 } } as never);
     const [energy, intensity, electricity] = ui().comparison;
     expect(energy).toEqual(jasmine.objectContaining({ calculated: 10, metered: 9, designed: 11 }));
     expect(intensity).toEqual(jasmine.objectContaining({ calculated: 100000, metered: 8, designed: 12 }));
-    expect(electricity).toEqual(jasmine.objectContaining({ calculated: 2, metered: 1, designed: 3 }));
+    expect(electricity).toEqual(jasmine.objectContaining({ calculated: 4, metered: 4, designed: 4 }));
+  });
+
+  it('leaves auxiliary electricity empty in every column when baseline equipment is missing inputs', () => {
+    auxiliaryResults = { ...auxiliaryResults, isComplete: false };
+    resultsService.getMeteredEnergyResults.and.returnValue({ metered: { hourlyEnergy: 9, energyIntensity: 8, hourlyElectricity: 1 } } as never);
+
+    const electricity = ui().comparison[2];
+    expect([electricity.calculated, electricity.metered]).toEqual([undefined, undefined]);
   });
 
   it('leaves metered and designed empty when not entered', () => {
-    expect(ui().comparison[0].metered).toBeUndefined();
-    expect(ui().comparison[0].designed).toBeUndefined();
+    const [energy, , electricity] = ui().comparison;
+    expect(energy.metered).toBeUndefined();
+    expect(energy.designed).toBeUndefined();
+    expect(electricity.metered).toBeUndefined();
+    expect(electricity.designed).toBeUndefined();
   });
 
   it('includes equipment notes and operating conditions', () => {

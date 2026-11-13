@@ -42,5 +42,32 @@
     </table>
     <app-exportable-results-table [tableString]="copyTableString"
       (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+
+    @if (ui.auxiliaryEquipmentRows.length) {
+      <table #auxiliaryEquipmentCopyTable class="table table-hover table-striped mt-4">
+        <thead>
+          <tr>
+            <th class="text-left">{{auxiliaryEquipmentTitle}}</th>
+            <th>Baseline</th>
+            @for (modificationName of ui.modificationNames; track modificationName.id) {
+              <th>{{modificationName.name}}</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of ui.auxiliaryEquipmentRows; track $index) {
+            <tr [class]="row.className">
+              <td>{{ row.label }}</td>
+              <td>{{ row.baseline | reportTableCell }}</td>
+              @for (modification of row.modifications; track $index) {
+                <td>{{ modification | reportTableCell }}</td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+      <app-exportable-results-table [tableString]="auxiliaryEquipmentCopyTableString"
+        (updateTableString)="updateAuxiliaryEquipmentCopyTableString()"></app-exportable-results-table>
+    }
   }
 </div>

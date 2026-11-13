@@ -33,6 +33,8 @@
         @if (activePanelTab() === 'results') {
           @if (isEnergyValidationView()) {
             <app-energy-validation-results></app-energy-validation-results>
+          } @else if (isAuxiliaryEquipmentView()) {
+            <app-auxiliary-equipment-results [scenario]="scenario()"></app-auxiliary-equipment-results>
           } @else {
             <app-process-heating-assessment-results [scenario]="scenario()"></app-process-heating-assessment-results>
             @if (isHeatBalanceView()) {

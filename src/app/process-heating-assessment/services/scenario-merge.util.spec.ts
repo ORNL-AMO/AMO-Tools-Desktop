@@ -69,6 +69,15 @@ describe('getEffectivePhast', () => {
     expect(operationsBaseline.operatingHours.hoursPerYear).toBe(8736);
   });
 
+  it('starts a modification without its own auxiliary equipment from baseline, keeping an emptied list empty', () => {
+    const auxiliaryEquipment = [{ id: 'aux-1' } as never];
+    const withEquipment = { ...baseline, auxiliaryEquipment };
+
+    expect(getEffectivePhast(withEquipment, buildModification({ auxiliaryEquipment: undefined })).auxiliaryEquipment).toBe(auxiliaryEquipment);
+    expect(getEffectivePhast(withEquipment, buildModification({ ...getBaselineSnapshot(baseline) })).auxiliaryEquipment).toBe(auxiliaryEquipment);
+    expect(getEffectivePhast(withEquipment, buildModification({ auxiliaryEquipment: [] })).auxiliaryEquipment).toEqual([]);
+  });
+
   it('stays frozen for a loss type that did not exist on baseline at snapshot time, even after baseline adds it', () => {
     let mutableBaseline: PHAST = { name: 'Baseline', losses: {} };
     const modification = buildModification({ losses: getBaselineSnapshot(mutableBaseline).losses });
@@ -123,6 +132,16 @@ describe('deriveScenarioOverridesFromLegacyModification', () => {
     expect(Object.keys(overrides.losses).length).toBe(LOSS_KEYS.length);
     expect(overrides.systemEfficiency).toBe(baseline.systemEfficiency);
     expect('name' in overrides).toBe(false);
+  });
+
+  it('always captures auxiliary equipment, as a copy, even when identical to baseline', () => {
+    const auxiliaryEquipment = [{ id: 'aux-1', name: 'Fan' } as never];
+    const modificationPhast: PHAST = { ...baseline, auxiliaryEquipment };
+
+    const overrides = deriveScenarioOverridesFromLegacyModification(modificationPhast, { ...baseline, auxiliaryEquipment });
+
+    expect(overrides.auxiliaryEquipment).toEqual(auxiliaryEquipment);
+    expect(overrides.auxiliaryEquipment).not.toBe(auxiliaryEquipment);
   });
 
   it('returns an empty object when the modification has no phast clone at all', () => {

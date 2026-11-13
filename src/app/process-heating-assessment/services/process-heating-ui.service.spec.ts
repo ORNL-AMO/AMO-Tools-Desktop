@@ -3,9 +3,10 @@ import { TestBed } from '@angular/core/testing';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { WallLoss } from '../../shared/models/phast/losses/wallLoss';
+import { AuxiliaryEquipmentItem } from '../../shared/models/phast/auxEquipment';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
 import { Losses, PHAST } from '../models/phast';
-import { BaselineView, EnergyValidationView, HeatingEquipmentConfiguration, LossView, MainView, ReportView } from '../models/views';
+import { AUXILIARY_EQUIPMENT_VIEW, BaselineView, EnergyValidationView, HeatingEquipmentConfiguration, LossView, MainView, ReportView } from '../models/views';
 import { STEPPED_ROUTES } from '../routing/stepped-routes';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingUiService } from './process-heating-ui.service';
@@ -426,6 +427,18 @@ describe('ProcessHeatingUiService loss counts', () => {
   it('counts the entries of the given modification', () => {
     expect(service.lossCount(LossView.WALL_LOSSES, 'mod-1')).toBe(3);
     expect(service.lossCount(LossView.HEAT_SYSTEM_EFFICIENCY, 'mod-1')).toBe(0);
+  });
+
+  it('counts auxiliary equipment items per scenario', () => {
+    modification.set({ losses: {}, auxiliaryEquipment: [{} as AuxiliaryEquipmentItem] });
+
+    expect(service.lossCount(AUXILIARY_EQUIPMENT_VIEW)).toBe(0);
+    expect(service.lossCount(AUXILIARY_EQUIPMENT_VIEW, 'mod-1')).toBe(1);
+  });
+
+  it('ends the Expert View tabs with Auxiliary Equipment, outside the heat balance tabs', () => {
+    expect(service.visibleExpertViewTabs().at(-1).view).toBe(AUXILIARY_EQUIPMENT_VIEW);
+    expect(service.visibleHeatBalanceTabs().map(link => link.view)).not.toContain(AUXILIARY_EQUIPMENT_VIEW);
   });
 });
 

@@ -47,6 +47,21 @@ describe('toLegacyJustifiAssessment', () => {
     expect(assessment.phast.losses.auxiliaryPowerLosses.length).toBe(1);
   });
 
+  it('leaves auxiliary equipment out of the exported baseline and modifications', () => {
+    const assessment = buildAssessment([{ id: 'm1', scenarioOverrides: { auxiliaryEquipment: [{ id: 'aux-2' } as never] } }]);
+    const baseline = assessment.phast as unknown as PHAST;
+    baseline.auxEquipment = [{ name: 'Fan' } as never];
+    baseline.auxiliaryEquipment = [{ id: 'aux-1' } as never];
+
+    const result = toLegacyJustifiAssessment(assessment, true);
+
+    expect('auxEquipment' in result.phast).toBeFalse();
+    expect('auxiliaryEquipment' in result.phast).toBeFalse();
+    expect('auxEquipment' in result.phast.modifications[0].phast).toBeFalse();
+    expect('auxiliaryEquipment' in result.phast.modifications[0].phast).toBeFalse();
+    expect(baseline.auxiliaryEquipment.length).toBe(1);
+  });
+
   it('does not mutate the saved assessment', () => {
     const assessment = buildAssessment([{ id: 'm1', scenarioOverrides: { name: 'Mod 1' } }]);
     toLegacyJustifiAssessment(assessment, true);
