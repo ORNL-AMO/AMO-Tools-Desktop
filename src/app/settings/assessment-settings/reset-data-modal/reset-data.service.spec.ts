@@ -418,6 +418,27 @@ describe('ResetDataService (real IndexedDB)', () => {
   });
 
   describe('Delete User Items', () => {
+    it('leaves no orphaned settings when a delete fails partway and the user tries again', async () => {
+      const inventoryDbService: InventoryDbService = TestBed.inject(InventoryDbService);
+      const bulkDeleteInventories = inventoryDbService.bulkDeleteWithObservable.bind(inventoryDbService);
+      let failNextDelete: boolean = true;
+      spyOn(inventoryDbService, 'bulkDeleteWithObservable').and.callFake((inventoryIds: Array<number>) => {
+        if (failNextDelete) {
+          failNextDelete = false;
+          return throwError(() => new Error('delete failed'));
+        }
+        return bulkDeleteInventories(inventoryIds);
+      });
+
+      await expectAsync(service.deleteUserItems()).toBeRejectedWithError('delete failed');
+      await service.deleteUserItems();
+
+      const after: StoredRows = await readAll();
+      expect(ids(after.assessments)).toEqual([seeded.exampleAssessment]);
+      expect(ids(after.inventoryItems)).toEqual([seeded.exampleInventory]);
+      expect(findOrphans(after)).toEqual([]);
+    });
+
     it('deletes older copies of the Examples folder as user folders and keeps the real one', async () => {
       const copy: { folder: number, assessment: number } = await addLegacyExamplesCopy();
 

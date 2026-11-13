@@ -366,16 +366,17 @@ export class ResetDataService {
   }
 
   /**
-   * Deletes rows one store at a time, contents before the folders that hold them.
-   * Each store is its own transaction, so if one fails the folders are still there for a retry to find and finish.
+   * Deletes rows one store at a time: linked rows (calculators, settings) before the items they belong to, and items
+   * before the folders that hold them. Each store is its own transaction, and a retry rebuilds the ids from what remains
+   * (settings and calculators are found through their item or folder), so the owners must outlive what links to them.
    * @param ids Rows to delete, by store.
    */
   private async deleteRows(ids: DirectoryDataIds): Promise<void> {
+    await firstValueFrom(this.calculatorDbService.bulkDeleteWithObservable(ids.calculators));
+    await firstValueFrom(this.settingsDbService.bulkDeleteWithObservable(ids.settings));
     await firstValueFrom(this.assessmentDbService.bulkDeleteWithObservable(ids.assessments));
     await firstValueFrom(this.inventoryDbService.bulkDeleteWithObservable(ids.inventories));
     await firstValueFrom(this.diagramIdbService.bulkDeleteWithObservable(ids.diagrams));
-    await firstValueFrom(this.calculatorDbService.bulkDeleteWithObservable(ids.calculators));
-    await firstValueFrom(this.settingsDbService.bulkDeleteWithObservable(ids.settings));
     await firstValueFrom(this.directoryDbService.bulkDeleteWithObservable(ids.directories));
   }
 
