@@ -25,6 +25,15 @@ describe('ProgressBarComponent', () => {
     expect(bar().getAttribute('aria-valuemax')).toBe('100');
   });
 
+  it('has an accessible name, defaulting to Progress', () => {
+    render({});
+    expect(bar().getAttribute('aria-label')).toBe('Progress');
+
+    fixture.componentRef.setInput('ariaLabel', 'Reset progress');
+    fixture.detectChanges();
+    expect(bar().getAttribute('aria-label')).toBe('Reset progress');
+  });
+
   it('shows a label in place of the percent', () => {
     render({ percent: 100, label: 'Reset complete' });
 

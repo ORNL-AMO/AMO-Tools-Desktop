@@ -39,7 +39,7 @@ export const RESET_STEPS: ReadonlyArray<ResetStep> = [
     runningLabel: 'Restoring example items',
     doneLabel: 'Example items restored',
     progressWeight: 55,
-    failureGuidance: 'Your data was not changed: the example items could not be loaded, so nothing was deleted.',
+    failureGuidance: 'Nothing of yours was deleted. Items you saved in the Examples folder may already have moved to All Assessments.',
     run: (service, onProgress) => service.restoreExampleItems(onProgress),
   },
   {
@@ -116,6 +116,7 @@ export class ResetDataModalComponent implements OnDestroy {
   /** True while "Reset All Data" waits for other MEASUR tabs or windows to close. The modal can be closed then. */
   resetAllBlocked: boolean = false;
 
+  // Derived: setInterval returns a number in the browser but NodeJS.Timeout under Node typings, and no shared named type exists.
   private closeCountdownTimer: ReturnType<typeof setInterval> | undefined;
 
   constructor() {
@@ -128,14 +129,17 @@ export class ResetDataModalComponent implements OnDestroy {
     this.stopCloseCountdown();
   }
 
+  /** @returns The step that failed, or undefined unless the reset failed. */
   get failedStep(): ResetStep | undefined {
     return this.status === 'failed' ? this.pendingSteps[0] : undefined;
   }
 
+  /** @returns The selected steps after the failed one, which did not run. */
   get stepsNotRun(): Array<ResetStep> {
     return this.pendingSteps.slice(1);
   }
 
+  /** @returns The Reset button's text: "Reset All Data", or the number of options selected. */
   get resetButtonLabel(): string {
     if (this.resetAll) {
       return 'Reset All Data';
@@ -144,10 +148,18 @@ export class ResetDataModalComponent implements OnDestroy {
     return count === 1 ? 'Reset 1 option' : `Reset ${count} options`;
   }
 
+  /**
+   * @param option A reset option.
+   * @returns True when the option is selected.
+   */
   isSelected(option: ResetOption): boolean {
     return this.selectedOptions.has(option);
   }
 
+  /**
+   * Checks or unchecks an option. "reset-all" selects or clears all four; unchecking any one turns Reset All off.
+   * @param option The option row the user clicked.
+   */
   toggleResetSystemSettingsOption(option: ResetOption | 'reset-all') {
     if (option === 'reset-all') {
       this.resetAll = !this.resetAll;

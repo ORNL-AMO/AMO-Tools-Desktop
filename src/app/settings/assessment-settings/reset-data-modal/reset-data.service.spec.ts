@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, throwError } from 'rxjs';
 import { NgxIndexedDBModule, NgxIndexedDBService } from 'ngx-indexed-db';
 import {
   AssessmentStoreMeta, CalculatorStoreMeta, DiagramStoreMeta, DirectoryStoreMeta, GasLoadMaterialStoreMeta,
@@ -194,6 +194,19 @@ describe('ResetDataService (real IndexedDB)', () => {
     return (await add<Calculator>(STORES.calculators, { assessmentId: staleAssessmentId, directoryId: seeded.examplesFolder })).id;
   };
 
+  /**
+   * Adds a folder copied from Examples before copies cleared isExample: the folder still says isExample,
+   * the assessment inside (the user's copy) does not.
+   * @returns The copied folder's and assessment's ids.
+   */
+  const addLegacyExamplesCopy = async (): Promise<{ folder: number, assessment: number }> => {
+    const folder = await add<Directory>(STORES.directories, { name: 'Examples (copy)', parentDirectoryId: ROOT_DIRECTORY_ID, isExample: true });
+    await add<Settings>(STORES.settings, { directoryId: folder.id });
+    const assessment = await add<Assessment>(STORES.assessments, { appVersion: environment.version, name: 'My copied pump', directoryId: folder.id, isExample: false } as Assessment);
+    await add<Settings>(STORES.settings, { assessmentId: assessment.id, directoryId: folder.id });
+    return { folder: folder.id, assessment: assessment.id };
+  };
+
   beforeEach(async () => {
     coreService = jasmine.createSpyObj<CoreService>('CoreService', ['loadExampleDirectory']);
     coreService.loadExampleDirectory.and.callFake(importExampleFixture);
@@ -307,9 +320,74 @@ describe('ResetDataService (real IndexedDB)', () => {
 
       expect(await readAll()).toEqual(before);
     });
+
+    it('leaves a copied Examples folder alone when the load fails without writing anything', async () => {
+      await addLegacyExamplesCopy();
+      coreService.loadExampleDirectory.and.resolveTo(false);
+      const before: StoredRows = await readAll();
+
+      await expectAsync(service.restoreExampleItems()).toBeRejectedWithError(/could not be loaded/);
+
+      expect(await readAll()).toEqual(before);
+    });
+
+    it('keeps a copied Examples folder and its contents across two resets, with one set of examples each time', async () => {
+      const copy: { folder: number, assessment: number } = await addLegacyExamplesCopy();
+
+      for (let reset = 1; reset <= 2; reset++) {
+        await service.restoreExampleItems();
+
+        const after: StoredRows = await readAll();
+        expect(after.assessments.filter(assessment => assessment.isExample).map(assessment => assessment.name))
+          .withContext(`reset ${reset}: one fresh example`).toEqual(['Fresh example pump']);
+        expect(ids(after.directories)).withContext(`reset ${reset}: copy kept`).toContain(copy.folder);
+        expect(after.assessments.find(assessment => assessment.id === copy.assessment).directoryId).toBe(copy.folder);
+        expect(findOrphans(after)).toEqual([]);
+      }
+    });
+
+    it('removes the new examples again when replacing the old ones fails, so a retry leaves one set', async () => {
+      const directoryDbService: DirectoryDbService = TestBed.inject(DirectoryDbService);
+      const updateDirectory = directoryDbService.updateWithObservable.bind(directoryDbService);
+      let failNextUpdate: boolean = true;
+      spyOn(directoryDbService, 'updateWithObservable').and.callFake((directory: Directory) => {
+        if (failNextUpdate) {
+          failNextUpdate = false;
+          return throwError(() => new Error('write failed'));
+        }
+        return updateDirectory(directory);
+      });
+
+      await expectAsync(service.restoreExampleItems()).toBeRejectedWithError(/could not be fully restored/);
+
+      const afterFailure: StoredRows = await readAll();
+      expect(afterFailure.directories.filter(directory => directory.isExample).map(directory => directory.id)).toEqual([seeded.examplesFolder]);
+      expect(afterFailure.assessments.some(assessment => assessment.name === 'Fresh example pump')).toBeFalse();
+      expect(findOrphans(afterFailure)).toEqual([]);
+
+      await service.restoreExampleItems();
+
+      const afterRetry: StoredRows = await readAll();
+      expect(afterRetry.directories.filter(directory => directory.isExample).length).toBe(1);
+      expect(afterRetry.assessments.filter(assessment => assessment.isExample).map(assessment => assessment.name)).toEqual(['Fresh example pump']);
+      expect(afterRetry.directories.find(directory => directory.id === seeded.userFolderInsideExamples).parentDirectoryId).toBe(ROOT_DIRECTORY_ID);
+      expect(findOrphans(afterRetry)).toEqual([]);
+    });
   });
 
   describe('Delete User Items', () => {
+    it('moves an Examples folder the user put inside their own folder back to All Assessments', async () => {
+      const examplesFolder: Directory = (await readAll()).directories.find(directory => directory.id === seeded.examplesFolder);
+      await firstValueFrom(dbService.update(STORES.directories, { ...examplesFolder, parentDirectoryId: seeded.userFolder }));
+
+      await service.deleteUserItems();
+
+      const after: StoredRows = await readAll();
+      expect(after.directories.find(directory => directory.id === seeded.examplesFolder).parentDirectoryId).toBe(ROOT_DIRECTORY_ID);
+      expect(ids(after.assessments)).toEqual([seeded.exampleAssessment]);
+      expect(findOrphans(after)).toEqual([]);
+    });
+
     it('deletes user items, folders, pre-assessments and their settings, and keeps examples, global settings and materials', async () => {
       const before: StoredRows = await readAll();
 

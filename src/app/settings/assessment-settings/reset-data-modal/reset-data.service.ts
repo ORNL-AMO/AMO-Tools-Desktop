@@ -97,17 +97,20 @@ export class ResetDataService {
    * The new examples are loaded before anything is deleted. If the load fails, whatever part of it was saved is removed,
    * so existing data is left as it was.
    * User content saved inside the old Examples folder is moved to "All Assessments" rather than deleted.
+   * If anything fails after the new examples are saved, they are removed again, so a retry never leaves two sets.
    * @param onProgress Called with the fraction of this step done (0 to 1) as each phase finishes.
-   * @throws Error when the example data could not be loaded.
+   * @throws Error when the example data could not be loaded or the old examples could not be replaced.
    */
   async restoreExampleItems(onProgress?: (fractionDone: number) => void): Promise<void> {
     const storedBefore: StoredData = await this.getStoredData();
-    const oldExampleDirectory: Directory | undefined = storedBefore.directories.find(directory => directory.isExample);
+    const oldExampleDirectory: Directory | undefined = this.findExamplesFolder(storedBefore);
+    const directoryIdsBefore: Set<number> = new Set(storedBefore.directories.map(directory => directory.id));
     onProgress?.(0.1);
 
     const loaded: boolean = await this.coreService.loadExampleDirectory();
     const directoriesAfterLoad: Array<Directory> = await firstValueFrom(this.directoryDbService.getAllDirectories());
-    const newExampleDirectory: Directory | undefined = directoriesAfterLoad.find(directory => directory.isExample && directory.id !== oldExampleDirectory?.id);
+    // Only a folder that didn't exist before the load is new; copies of Examples can carry isExample too.
+    const newExampleDirectory: Directory | undefined = directoriesAfterLoad.find(directory => directory.isExample && !directoryIdsBefore.has(directory.id));
     if (!loaded || !newExampleDirectory) {
       await this.discardPartialExampleLoad(newExampleDirectory);
       throw new Error('Example items could not be loaded. Existing examples were not changed.');
@@ -116,9 +119,15 @@ export class ResetDataService {
     onProgress?.(0.8);
 
     if (oldExampleDirectory) {
-      await this.moveUserContentToRoot(storedBefore, oldExampleDirectory.id);
-      onProgress?.(0.9);
-      await this.deleteRows(this.getExampleDataIds(storedBefore, oldExampleDirectory.id));
+      try {
+        await this.moveUserContentToRoot(storedBefore, oldExampleDirectory.id);
+        onProgress?.(0.9);
+        await this.deleteRows(this.getExampleDataIds(storedBefore, oldExampleDirectory.id));
+      } catch (error) {
+        // Remove the new examples so a retry starts from one set; anything already moved stays safe in All Assessments.
+        await this.discardPartialExampleLoad(newExampleDirectory);
+        throw new Error('Example items could not be fully restored. Nothing of yours was deleted; try again.', { cause: error });
+      }
     }
     onProgress?.(1);
   }
@@ -126,11 +135,18 @@ export class ResetDataService {
   /**
    * Deletes everything the user created: assessments, inventories, diagrams, their settings and calculators,
    * all pre-assessment calculators, and every folder except "All Assessments" and Examples (with the folders' own settings).
-   * Example items and global settings are kept.
+   * Example items and global settings are kept. An Examples folder the user moved inside one of their folders
+   * moves back to "All Assessments", so it doesn't vanish with its parent.
    */
   async deleteUserItems(): Promise<void> {
     const stored: StoredData = await this.getStoredData();
-    await this.deleteRows(this.getUserDataIds(stored));
+    const ids: DirectoryDataIds = this.getUserDataIds(stored);
+    const keptFoldersInDeletedParents: Array<Directory> = stored.directories
+      .filter(directory => !ids.directories.includes(directory.id) && ids.directories.includes(directory.parentDirectoryId));
+    for (const directory of keptFoldersInDeletedParents) {
+      await firstValueFrom(this.directoryDbService.updateWithObservable({ ...directory, parentDirectoryId: ROOT_DIRECTORY_ID }));
+    }
+    await this.deleteRows(ids);
   }
 
   /** Deletes custom materials from every material library. Default materials are kept. */
@@ -255,7 +271,7 @@ export class ResetDataService {
     ids.directories.push(...userDirectoryIds);
     ids.settings.push(...this.getFolderSettingsIds(stored, userDirectoryIds));
     // Examples ship no folder-level calculators (pre-assessments), so every calculator not tied to an example assessment is the user's.
-    const exampleDirectoryId: number | undefined = stored.directories.find(directory => directory.isExample)?.id;
+    const exampleDirectoryId: number | undefined = this.findExamplesFolder(stored)?.id;
     ids.calculators = stored.calculators
       .filter(calculator => !this.isExampleCalculator(calculator, stored, exampleDirectoryId))
       .map(calculator => calculator.id);
@@ -308,6 +324,21 @@ export class ResetDataService {
    */
   private isFolderSettings(settings: Settings): boolean {
     return !settings.assessmentId && !settings.inventoryId && !settings.diagramId;
+  }
+
+  /**
+   * The real Examples folder. Folders copied from Examples before copies cleared the flag also carry isExample,
+   * but they hold only the user's (non-example) items, so the folder with the most example items wins; ties go to
+   * the oldest folder (lowest id), which is the original.
+   * @param stored Snapshot of stored rows.
+   * @returns The Examples folder, or undefined when there is none.
+   */
+  private findExamplesFolder(stored: StoredData): Directory | undefined {
+    const exampleItemCount = (directoryId: number): number => [...stored.assessments, ...stored.inventoryItems, ...stored.diagrams]
+      .filter(item => item.isExample && item.directoryId === directoryId).length;
+    return stored.directories
+      .filter(directory => directory.isExample)
+      .sort((a, b) => exampleItemCount(b.id) - exampleItemCount(a.id) || a.id - b.id)[0];
   }
 
   /**

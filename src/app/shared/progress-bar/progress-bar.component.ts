@@ -20,6 +20,8 @@ export class ProgressBarComponent {
   /** Text shown inside the bar in place of the percent. */
   label = input<string>();
   status = input<ProgressBarStatus>('active');
+  /** Accessible name for screen readers (the text inside a progressbar does not name it). */
+  ariaLabel = input<string>('Progress');
 
   clampedPercent = computed<number>(() => Math.min(100, Math.max(0, this.percent() ?? 0)));
   barText = computed<string>(() => this.label() ?? `${Math.round(this.clampedPercent())}%`);

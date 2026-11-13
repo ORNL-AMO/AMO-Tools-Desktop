@@ -52,7 +52,7 @@
         @case ('running') {
             <div class="reset-progress" aria-live="polite">
                 <p class="reset-progress-label">{{ progressLabel }}</p>
-                <app-progress-bar [percent]="progressPercent" [status]="progressBarStatus"></app-progress-bar>
+                <app-progress-bar ariaLabel="Reset progress" [percent]="progressPercent" [status]="progressBarStatus"></app-progress-bar>
                 @if (resetAllBlocked) {
                     <p class="reset-blocked mt-2 mb-0">
                         MEASUR is open in another tab or window, so the data can't be deleted yet.
@@ -67,7 +67,7 @@
 
         @case ('succeeded') {
             <div class="reset-progress" aria-live="polite">
-                <app-progress-bar [percent]="100" status="complete" label="Reset complete"></app-progress-bar>
+                <app-progress-bar ariaLabel="Reset progress" [percent]="100" status="complete" label="Reset complete"></app-progress-bar>
                 <ul class="reset-step-results">
                     @for (step of completedSteps; track step.option) {
                         <li class="step-done">
@@ -82,7 +82,7 @@
 
         @case ('failed') {
             <div class="reset-progress" role="alert">
-                <app-progress-bar [percent]="progressPercent" status="error" [label]="progressLabel"></app-progress-bar>
+                <app-progress-bar ariaLabel="Reset progress" [percent]="progressPercent" status="error" [label]="progressLabel"></app-progress-bar>
                 <ul class="reset-step-results">
                     @for (step of completedSteps; track step.option) {
                         <li class="step-done">
@@ -117,7 +117,7 @@
                         </li>
                         <li>
                             If the problem continues, send a bug report to
-                            <a href="mailto:measur-help@ornl.gov">measur-help&#64;ornl.gov</a> (MEASUR {{ appVersion }}).
+                            <a href="mailto:measur-help@ornl.gov?subject=MEASUR Support Request">measur-help&#64;ornl.gov</a> (MEASUR {{ appVersion }}).
                         </li>
                     </ol>
                 </div>
