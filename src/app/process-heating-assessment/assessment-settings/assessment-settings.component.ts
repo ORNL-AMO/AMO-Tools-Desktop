@@ -3,13 +3,15 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { UntypedFormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, concatMap, debounceTime, EMPTY, firstValueFrom, from } from 'rxjs';
-import { PHAST } from '../models/phast';
+import { LOSS_KEYS, PHAST } from '../models/phast';
+import { getEnergySourceTabChanges } from '../models/views';
 import { Settings } from '../../shared/models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { SnackbarService } from '../../shared/snackbar-notification/snackbar.service';
 import { UnitsChangeAction, UnitsChangeDialogComponent, UnitsChangeDialogData } from '../../shared/units-change-dialog/units-change-dialog.component';
-import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { deriveHeatingEquipmentConfiguration, ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { EnergySourceChangeDialogComponent, EnergySourceChangeDialogData } from './energy-source-change-dialog/energy-source-change-dialog.component';
 
 interface AssessmentSettingsMetaForm {
   facilityName: FormControl<string>;
@@ -83,12 +85,16 @@ export class AssessmentSettingsComponent {
     newSettings.createdDate = current.createdDate;
     newSettings.assessmentId = current.assessmentId;
 
+    if (!await this.confirmEnergySourceChange(current, newSettings)) {
+      this.restoreSettingsForm(current);
+      return;
+    }
+
     let convertData = true;
     if (newSettings.unitsOfMeasure !== current.unitsOfMeasure) {
       const action = await this.confirmUnitsChange(current.unitsOfMeasure, newSettings.unitsOfMeasure);
       if (!action) {
-        // Switching units also rewrites dependent fields (energy and rollup units), so restore the whole form.
-        this.settingsForm.patchValue(this.settingsService.getFormFromSettings(current).getRawValue());
+        this.restoreSettingsForm(current);
         return;
       }
       convertData = action === 'convert';
@@ -113,6 +119,47 @@ export class AssessmentSettingsComponent {
     if (message) {
       this.snackbarService.setSnackbarMessage(message, 'info', 'short');
     }
+  }
+
+  /** Restores the whole form, since switching units or energy source also rewrites dependent fields (energy, furnace, and rollup units). */
+  private restoreSettingsForm(current: Settings): void {
+    this.settingsForm.patchValue(this.settingsService.getFormFromSettings(current).getRawValue());
+  }
+
+  /**
+   * Asks for confirmation when the heating equipment configuration changes and there is data the change affects.
+   * @returns Whether to continue saving.
+   */
+  private async confirmEnergySourceChange(current: Settings, newSettings: Settings): Promise<boolean> {
+    const from = deriveHeatingEquipmentConfiguration(current);
+    const to = deriveHeatingEquipmentConfiguration(newSettings);
+    const phast = this.processHeating();
+    const hasModifications = this.assessmentService.getModifications(phast).length > 0;
+    const hasLossData = LOSS_KEYS.some(key => phast?.losses?.[key]?.length);
+    if (from === to || !(hasModifications || hasLossData)) {
+      return true;
+    }
+    const { hidden, added } = getEnergySourceTabChanges(from, to);
+    const dialogRef = this.modalDialogService.openModal<boolean, EnergySourceChangeDialogData, EnergySourceChangeDialogComponent>(
+      EnergySourceChangeDialogComponent, {
+        data: {
+          scenarioName: 'Baseline',
+          fromEnergySource: this.getEnergySourceLabel(current),
+          toEnergySource: this.getEnergySourceLabel(newSettings),
+          hiddenTabs: hidden,
+          addedTabs: added,
+          hasInheritingModifications: hasModifications,
+        },
+      },
+    );
+    return (await firstValueFrom(dialogRef.closed)) === true;
+  }
+
+  private getEnergySourceLabel(settings: Settings): string {
+    if (settings.energySourceType === 'Electricity') {
+      return `Electrotechnology (${settings.furnaceType})`;
+    }
+    return settings.energySourceType === 'Steam' ? 'Steam-based' : 'Fuel-fired';
   }
 
   /**

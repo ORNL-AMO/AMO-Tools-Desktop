@@ -221,3 +221,19 @@ export function isViewVisibleForConfiguration(view: string, configuration: Heati
   }
   return true;
 }
+
+export interface EnergySourceTabChanges {
+  hidden: ViewLink[];
+  added: ViewLink[];
+}
+
+/**
+ * @param from configuration before the energy source change
+ * @param to configuration after the energy source change
+ * @returns Heat Balance tabs that only `from` shows (hidden) and only `to` shows (added)
+ */
+export function getEnergySourceTabChanges(from: HeatingEquipmentConfiguration, to: HeatingEquipmentConfiguration): EnergySourceTabChanges {
+  const onlyVisibleFor = (shown: HeatingEquipmentConfiguration, notShown: HeatingEquipmentConfiguration) =>
+    HEAT_BALANCE_VIEW_LINKS.filter(link => isViewVisibleForConfiguration(link.view, shown) && !isViewVisibleForConfiguration(link.view, notShown));
+  return { hidden: onlyVisibleFor(from, to), added: onlyVisibleFor(to, from) };
+}
