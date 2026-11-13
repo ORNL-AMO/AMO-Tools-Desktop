@@ -30,10 +30,8 @@ describe('WaterReductionResultsComponent', () => {
       .map((cell: HTMLElement) => cell.textContent.replace(/\s+/g, ' ').trim());
   }
 
-  // ngAfterViewInit assigns tableString, which is bound into the template, so the dev-mode no-changes check
-  // throws NG0100 whenever the exportable table renders. That is existing component behavior, not under test here.
   function detectChanges(): void {
-    fixture.detectChanges(false);
+    fixture.detectChanges();
   }
 
   function render(inputs: { modificationExists: boolean, settings?: Settings, isWastewater?: boolean, results?: WaterReductionResults }): void {
@@ -56,22 +54,23 @@ describe('WaterReductionResultsComponent', () => {
     component = fixture.componentInstance;
   });
 
-  describe('initialization', () => {
-    it('fills tableString from the rendered table after the view initializes', () => {
+  describe('user actions', () => {
+    it('fills tableString from the rendered table when the exportable table requests it', () => {
       render({ modificationExists: true });
+      fixture.nativeElement.querySelector('app-exportable-results-table').dispatchEvent(new Event('updateTableString'));
       expect(component.tableString).toContain('Water Use');
       expect(component.tableString).toContain('1,000');
     });
   });
 
   describe('calculation output rendering', () => {
-    it('refreshes tableString when new results arrive', () => {
+    it('exports the current results, not the previous ones, after the results change', () => {
       render({ modificationExists: true });
       fixture.componentRef.setInput('waterReductionResults', makeResults(2500, 600));
       detectChanges();
-      // ngOnChanges reads the table before the new values render, so check the re-read after rendering.
       component.updateTableString();
       expect(component.tableString).toContain('2,500');
+      expect(component.tableString).not.toContain('1,000');
     });
 
     it('renders the updated values when results change', () => {
