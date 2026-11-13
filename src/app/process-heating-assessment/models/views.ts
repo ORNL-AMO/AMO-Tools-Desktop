@@ -76,7 +76,7 @@ export type ProcessHeatingView = MainView | BaselineView | EnergyValidationView 
 
 /** Notes field edited from the results panel while each tab is selected in Expert View. */
 export const LOSS_VIEW_NOTES_KEY: Partial<Record<ProcessHeatingView, keyof Notes>> = {
-  [AUXILIARY_EQUIPMENT_VIEW]: 'auxiliaryPowerNotes',
+  [AUXILIARY_EQUIPMENT_VIEW]: 'auxiliaryEquipmentNotes',
   [LossView.OPERATIONS]: 'operationsNotes',
   [LossView.CHARGE_MATERIAL]: 'chargeNotes',
   [LossView.WALL_LOSSES]: 'wallNotes',

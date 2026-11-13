@@ -27,6 +27,8 @@ export interface AuxiliaryEquipmentItemResult {
 
 export interface AuxiliaryEquipmentResults {
   items: AuxiliaryEquipmentItemResult[];
+  /** false when an item is missing inputs and left out of `items` and the totals */
+  isComplete: boolean;
   /** kW */
   totalPower: number;
   /** kWh/yr */

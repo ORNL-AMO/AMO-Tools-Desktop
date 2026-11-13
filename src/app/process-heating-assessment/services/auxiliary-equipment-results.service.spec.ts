@@ -114,10 +114,11 @@ describe('AuxiliaryEquipmentResultsService', () => {
 
     expect(service.scenarioResults('mod1').items.map(result => result.id)).toEqual(['a']);
     expect(service.scenarioResults('mod1').totalPower).toBe(4);
+    expect(service.scenarioResults('mod1').isComplete).toBeFalse();
   });
 
   it('is empty with zero totals when the scenario has no equipment', () => {
     scenarios.mod1.set({});
-    expect(service.scenarioResults('mod1')).toEqual({ items: [], totalPower: 0, totalEnergyUse: 0, totalEnergyCost: 0 });
+    expect(service.scenarioResults('mod1')).toEqual({ items: [], isComplete: true, totalPower: 0, totalEnergyUse: 0, totalEnergyCost: 0 });
   });
 });

@@ -83,9 +83,14 @@ export class ResultsDataResultsService {
     return [...itemRows, {
       label: 'Total Auxiliary Energy Use',
       className: 'emphasis',
-      baseline: this.cell(baseline.totalEnergyUse, 0),
-      modifications: mods.map(results => this.cell(results.totalEnergyUse, 0)),
+      baseline: this.cell(this.completeTotal(baseline), 0),
+      modifications: mods.map(results => this.cell(this.completeTotal(results), 0)),
     }];
+  }
+
+  /** @returns kWh/yr, or undefined when an item is missing inputs, so a partial total isn't reported */
+  private completeTotal(results: AuxiliaryEquipmentResults): number | undefined {
+    return results.isComplete ? results.totalEnergyUse : undefined;
   }
 
   private buildRows(baseline: PhastResults, mods: PhastResults[], settings: Settings): ReportTableRow[] {

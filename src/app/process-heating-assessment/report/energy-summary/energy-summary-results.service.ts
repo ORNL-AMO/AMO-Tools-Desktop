@@ -69,15 +69,18 @@ export class EnergySummaryResultsService {
     const calculated = this.resultsService.scenarioResults('baseline') ? this.resultsService.getCalculatedByPhast(phast, settings) : undefined;
     const metered = this.resultsService.getMeteredEnergyResults(phast, settings);
     const designed = this.resultsService.getDesignedEnergyResults(phast, settings);
+    // Legacy metered and designed electricity are the legacy equipment sum, so every column shows the same total
+    const auxiliaryEquipmentResults = this.auxiliaryEquipmentResultsService.scenarioResults('baseline');
+    const auxiliaryEquipmentPower = auxiliaryEquipmentResults.isComplete ? auxiliaryEquipmentResults.totalPower : undefined;
     return [
       { label: 'Energy Used', unit: baseEnergyUnit, calculated: calculated?.fuelEnergyUsed, metered: metered?.metered.hourlyEnergy, designed: designed?.designed.hourlyEnergy },
       { label: 'Energy Intensity for Charge Materials', unit: energyPerMassUnit, calculated: calculated?.energyIntensity, metered: metered?.metered.energyIntensity, designed: designed?.designed.energyIntensity },
       {
         label: 'Auxiliary Electricity Used',
         unit: 'kW',
-        calculated: this.auxiliaryEquipmentResultsService.scenarioResults('baseline').totalPower,
-        metered: metered?.metered.hourlyElectricity,
-        designed: designed?.designed.hourlyElectricity,
+        calculated: auxiliaryEquipmentPower,
+        metered: metered ? auxiliaryEquipmentPower : undefined,
+        designed: designed ? auxiliaryEquipmentPower : undefined,
       },
     ];
   });

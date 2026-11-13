@@ -42,11 +42,11 @@ export class AuxiliaryEquipmentResultsService {
    * @returns per-item and total power, energy, and cost; items missing inputs are left out
    */
   getResults(equipment: AuxiliaryEquipmentItem[] | undefined, settings: Settings): AuxiliaryEquipmentResults {
-    const items = (equipment ?? [])
-      .filter(item => this.formService.isValid(item))
-      .map(item => this.calculateItem(item, settings?.electricityCost));
+    const validItems = (equipment ?? []).filter(item => this.formService.isValid(item));
+    const items = validItems.map(item => this.calculateItem(item, settings?.electricityCost));
     return {
       items,
+      isComplete: validItems.length === (equipment ?? []).length,
       totalPower: items.reduce((total, item) => total + item.power, 0),
       totalEnergyUse: items.reduce((total, item) => total + item.energyUse, 0),
       totalEnergyCost: items.reduce((total, item) => total + item.energyCost, 0),

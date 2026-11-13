@@ -1,6 +1,11 @@
 @let base = baselineResults();
 @let mod = modificationResults();
+@let baseTotals = base.isComplete ? base : undefined;
+@let modTotals = mod?.isComplete ? mod : undefined;
 <div class="output-summary">
+  @if (!base.isComplete || (mod && !mod.isComplete)) {
+    <div class="alert-danger">Some equipment is missing inputs. Totals and savings show once every item is complete.</div>
+  }
   <table #copyTable class="table table-hover table-striped panel-table" [class.compare]="mod">
     <thead>
       <tr>
@@ -30,35 +35,35 @@
       }
       <tr class="tr-border">
         <td>Total Power (kW)</td>
-        <td>{{ base.totalPower | number: '1.0-2' }}</td>
+        <td>@if (baseTotals) { {{ baseTotals.totalPower | number: '1.0-2' }} } @else {&mdash; &mdash;}</td>
         @if (mod) {
-          <td>{{ mod.totalPower | number: '1.0-2' }}</td>
+          <td>@if (modTotals) { {{ modTotals.totalPower | number: '1.0-2' }} } @else {&mdash; &mdash;}</td>
         }
       </tr>
       <tr>
         <td>Total Energy Use (kWh/yr)</td>
-        <td>{{ base.totalEnergyUse | number: '1.0-0' }}</td>
+        <td>@if (baseTotals) { {{ baseTotals.totalEnergyUse | number: '1.0-0' }} } @else {&mdash; &mdash;}</td>
         @if (mod) {
-          <td>{{ mod.totalEnergyUse | number: '1.0-0' }}</td>
+          <td>@if (modTotals) { {{ modTotals.totalEnergyUse | number: '1.0-0' }} } @else {&mdash; &mdash;}</td>
         }
       </tr>
       <tr>
         <td>Total Energy Cost ($/yr)</td>
-        <td>{{ base.totalEnergyCost | number: '1.0-0' }}</td>
+        <td>@if (baseTotals) { {{ baseTotals.totalEnergyCost | number: '1.0-0' }} } @else {&mdash; &mdash;}</td>
         @if (mod) {
-          <td>{{ mod.totalEnergyCost | number: '1.0-0' }}</td>
+          <td>@if (modTotals) { {{ modTotals.totalEnergyCost | number: '1.0-0' }} } @else {&mdash; &mdash;}</td>
         }
       </tr>
       @if (mod) {
         <tr>
           <td>Energy Savings (kWh/yr)</td>
           <td>&mdash; &mdash;</td>
-          <td>{{ base.totalEnergyUse - mod.totalEnergyUse | number: '1.0-0' }}</td>
+          <td>@if (baseTotals && modTotals) { {{ baseTotals.totalEnergyUse - modTotals.totalEnergyUse | number: '1.0-0' }} } @else {&mdash; &mdash;}</td>
         </tr>
         <tr>
           <td>Cost Savings ($/yr)</td>
           <td>&mdash; &mdash;</td>
-          <td>{{ base.totalEnergyCost - mod.totalEnergyCost | number: '1.0-0' }}</td>
+          <td>@if (baseTotals && modTotals) { {{ baseTotals.totalEnergyCost - modTotals.totalEnergyCost | number: '1.0-0' }} } @else {&mdash; &mdash;}</td>
         </tr>
       }
     </tbody>

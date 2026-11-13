@@ -14,8 +14,8 @@ const NOTE_PLACEHOLDERS: Record<keyof Notes, string> = {
   extendedNotes: 'Add note for extended surfaces',
   otherNotes: 'Add note for other losses',
   slagNotes: 'Add note for slag loss',
-  // Holds Auxiliary Equipment notes; Notes keeps the legacy field name to match the shared shape.
-  auxiliaryPowerNotes: 'Add note for auxiliary equipment',
+  auxiliaryPowerNotes: 'Add note for auxiliary power',
+  auxiliaryEquipmentNotes: 'Add note for auxiliary equipment',
   energyInputNotes: 'Add note for energy input',
   exhaustGasNotes: 'Add note for exhaust gas',
   energyInputExhaustGasNotes: 'Add note for exhaust gas',

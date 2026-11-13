@@ -51,7 +51,7 @@ describe('ResultsDataResultsService', () => {
     categories = { ...NO_CATEGORIES };
     modifications = signal<ProcessHeatingModification[]>([{ id: 'mod1', scenarioOverrides: { name: 'Scenario 1' } }]);
     showOperationalImpacts = signal(false);
-    const noEquipment: AuxiliaryEquipmentResults = { items: [], totalPower: 0, totalEnergyUse: 0, totalEnergyCost: 0 };
+    const noEquipment: AuxiliaryEquipmentResults = { items: [], isComplete: true, totalPower: 0, totalEnergyUse: 0, totalEnergyCost: 0 };
     auxiliaryEquipmentByName = { baseline: noEquipment, mod1: noEquipment };
 
     TestBed.configureTestingModule({
@@ -203,8 +203,8 @@ describe('ResultsDataResultsService', () => {
 
     it('lists each item by id in baseline order, items only a modification has, then the total', () => {
       auxiliaryEquipmentByName = {
-        baseline: { items: [item('a', 'Fan', 1000), item('b', 'Pump', 500)], totalPower: 0, totalEnergyUse: 1500, totalEnergyCost: 0 },
-        mod1: { items: [item('c', 'Blower', 200), item('a', 'Fan', 750)], totalPower: 0, totalEnergyUse: 950, totalEnergyCost: 0 },
+        baseline: { items: [item('a', 'Fan', 1000), item('b', 'Pump', 500)], isComplete: true, totalPower: 0, totalEnergyUse: 1500, totalEnergyCost: 0 },
+        mod1: { items: [item('c', 'Blower', 200), item('a', 'Fan', 750)], isComplete: true, totalPower: 0, totalEnergyUse: 950, totalEnergyCost: 0 },
       };
 
       const rows = ui().auxiliaryEquipmentRows;
@@ -212,6 +212,17 @@ describe('ResultsDataResultsService', () => {
       expect(rows.map(row => row.label)).toEqual(['Fan', 'Pump', 'Blower', 'Total Auxiliary Energy Use']);
       expect(rows.map(row => [row.baseline.value, row.modifications[0].value])).toEqual([[1000, 750], [500, null], [null, 200], [1500, 950]]);
       expect(rows[3].className).toBe('emphasis');
+    });
+
+    it('leaves the total empty for a scenario whose equipment is missing inputs', () => {
+      auxiliaryEquipmentByName = {
+        baseline: { items: [item('a', 'Fan', 1000)], isComplete: true, totalPower: 0, totalEnergyUse: 1000, totalEnergyCost: 0 },
+        mod1: { items: [], isComplete: false, totalPower: 0, totalEnergyUse: 0, totalEnergyCost: 0 },
+      };
+
+      const total = ui().auxiliaryEquipmentRows.at(-1);
+
+      expect([total.baseline.value, total.modifications[0].value]).toEqual([1000, null]);
     });
   });
 });

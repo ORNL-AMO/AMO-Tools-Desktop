@@ -21,6 +21,7 @@ describe('AuxiliaryEquipmentComponent', () => {
     ({ id, name, collapse: false, heatLoss: null, form: formService.getForm(newAuxiliaryEquipmentItem(8760, true)) });
   const resultsWith = (...items: Array<{ id: string; energyUse: number }>): AuxiliaryEquipmentResults => ({
     items: items.map(item => ({ ...item, name: item.id, power: 1, energyCost: 0 })),
+    isComplete: true,
     totalPower: items.length,
     totalEnergyUse: items.reduce((total, item) => total + item.energyUse, 0),
     totalEnergyCost: 0,

@@ -25,9 +25,8 @@ export class AuxiliaryEquipmentService extends ItemFormListService<AuxiliaryEqui
    */
   override initialize(scenario: AssessmentScenario = 'baseline'): void {
     super.initialize(scenario);
-    const items = this.readItems(scenario);
-    if (scenario !== 'baseline' && items?.length && !this.hasOwnEquipment(scenario)) {
-      this.writeItems(scenario, items);
+    if (scenario !== 'baseline' && !this.hasOwnEquipment(scenario)) {
+      this.writeItems(scenario, this.readItems(scenario) ?? []);
     }
   }
 

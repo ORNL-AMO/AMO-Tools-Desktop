@@ -69,7 +69,7 @@ describe('ExecutiveSummaryResultsService', () => {
       { id: 'mod1', scenarioOverrides: { name: 'Scenario 1' } },
     ]);
     showOperationalImpacts = signal(false);
-    const noEquipment: AuxiliaryEquipmentResults = { items: [], totalPower: 0, totalEnergyUse: 0, totalEnergyCost: 0 };
+    const noEquipment: AuxiliaryEquipmentResults = { items: [], isComplete: true, totalPower: 0, totalEnergyUse: 0, totalEnergyCost: 0 };
     auxiliaryEquipmentByName = { baseline: noEquipment, mod1: noEquipment };
 
     TestBed.configureTestingModule({
@@ -282,7 +282,7 @@ describe('ExecutiveSummaryResultsService', () => {
     // 293,071.07 kWh = 1,000 MMBtu; 293.07107 kW = 1 MMBtu/hr
     const KWH_PER_MMBTU = 293.07107;
     const equipment = (mmbtuPerYear: number, mmbtuPerHour: number, cost: number): AuxiliaryEquipmentResults =>
-      ({ items: [], totalEnergyUse: mmbtuPerYear * KWH_PER_MMBTU, totalPower: mmbtuPerHour * KWH_PER_MMBTU, totalEnergyCost: cost });
+      ({ items: [], isComplete: true, totalEnergyUse: mmbtuPerYear * KWH_PER_MMBTU, totalPower: mmbtuPerHour * KWH_PER_MMBTU, totalEnergyCost: cost });
 
     beforeEach(() => {
       auxiliaryEquipmentByName = { baseline: equipment(1000, 1, 2000), mod1: equipment(500, 0.5, 1000) };
@@ -308,8 +308,34 @@ describe('ExecutiveSummaryResultsService', () => {
       expect(rowOf(ui().summaryRows, 'Simple Payback Period').modifications[0].value as number).toBeCloseTo(5000 / 11000 * 12, 3);
     });
 
-    it('includes auxiliary power in energy intensity', () => {
+    it('includes auxiliary equipment power in energy intensity', () => {
       expect(rowOf(ui().summaryRows, 'Energy Intensity').baseline.value as number).toBeCloseTo(110000, 0);
+    });
+
+    it('leaves auxiliary equipment out of every column when a modification is missing inputs', () => {
+      auxiliaryEquipmentByName.mod1 = { ...auxiliaryEquipmentByName.mod1, isComplete: false };
+
+      expect(rowOf(ui().summaryRows, 'Aux. Energy Used')).toBeUndefined();
+      expect(rowOf(ui().summaryRows, 'Cost').baseline.value).toBe(50000);
+      expect(rowOf(ui().summaryRows, 'Cost').modifications[0].value).toBe(40000);
+      expect(rowOf(ui().summaryRows, 'Cost Savings').modifications[0].value).toBe(10000);
+      expect(rowOf(ui().summaryRows, 'Energy Savings').modifications[0].value).toBe(2000);
+      expect(rowOf(ui().summaryRows, 'Energy Intensity').baseline.value as number).toBeCloseTo(100000, 0);
+    });
+
+    it('ignores missing inputs on a modification left out of the summary for having no results', () => {
+      modifications.set([...modifications(), { id: 'mod2', scenarioOverrides: { name: 'Scenario 2' } }]);
+      auxiliaryEquipmentByName.mod2 = { ...auxiliaryEquipmentByName.mod1, isComplete: false };
+
+      expect(rowOf(ui().summaryRows, 'Aux. Energy Used').baseline.value as number).toBeCloseTo(1000, 1);
+      expect(rowOf(ui().summaryRows, 'Cost').baseline.value).toBe(52000);
+    });
+
+    it('leaves auxiliary equipment out of every column when baseline is missing inputs', () => {
+      auxiliaryEquipmentByName.baseline = { ...auxiliaryEquipmentByName.baseline, isComplete: false };
+
+      expect(rowOf(ui().summaryRows, 'Aux. Energy Used')).toBeUndefined();
+      expect(rowOf(ui().summaryRows, 'Cost').modifications[0].value).toBe(40000);
     });
 
     it('omits the Aux. Energy Used row when no scenario has auxiliary energy', () => {

@@ -63,7 +63,7 @@ const PERCENT = '%';
 
 const NOTE_LABELS: Array<{ key: keyof Notes; label: string }> = [
   { key: 'atmosphereNotes', label: 'Atmosphere Losses' },
-  { key: 'auxiliaryPowerNotes', label: 'Auxiliary Equipment' },
+  { key: 'auxiliaryEquipmentNotes', label: 'Auxiliary Equipment' },
   { key: 'chargeNotes', label: 'Charge Materials' },
   { key: 'coolingNotes', label: 'Cooling Losses' },
   { key: 'energyInputNotes', label: 'Energy Input' },
@@ -97,13 +97,17 @@ export class ExecutiveSummaryResultsService {
     const settings = this.assessmentService.settingsSignal();
     const baselinePhast = this.assessmentService.scenarioPhastSignal('baseline');
     const modifications = this.modificationService.modifications();
-    const baseline = this.getScenarioSummary('baseline', settings);
+    // A partial aux total would read as savings, so aux is left out of every column when any scenario is missing inputs
+    const includeAux = ['baseline', ...modifications.map(modification => modification.id)]
+      .filter(scenario => this.resultsService.scenarioResults(scenario))
+      .every(scenario => this.auxiliaryEquipmentResultsService.scenarioResults(scenario).isComplete);
+    const baseline = this.getScenarioSummary('baseline', settings, includeAux);
     if (!baseline) {
       return undefined;
     }
 
     const modificationSummaries: ScenarioSummary[] = modifications.map(modification =>
-      this.getScenarioSummary(modification.id, settings, baseline)
+      this.getScenarioSummary(modification.id, settings, includeAux, baseline)
     );
     this.applyCo2Savings(baseline, modificationSummaries.filter(Boolean));
     return { settings, baselinePhast, baseline, modifications, modificationSummaries };
@@ -149,17 +153,19 @@ export class ExecutiveSummaryResultsService {
   /**
    * Auxiliary equipment is calculated apart from the heat balance, then added to the scenario's energy intensity,
    * savings, and cost.
+   * @param includeAux false leaves aux energy and cost at 0
    */
-  private getScenarioSummary(scenario: AssessmentScenario, settings: Settings, baseline?: ScenarioSummary): ScenarioSummary | undefined {
+  private getScenarioSummary(scenario: AssessmentScenario, settings: Settings, includeAux: boolean, baseline?: ScenarioSummary): ScenarioSummary | undefined {
     const phast = this.assessmentService.scenarioPhastSignal(scenario);
     const results = this.resultsService.scenarioResults(scenario);
     if (!results) {
       return undefined;
     }
     const auxiliaryEquipment = this.auxiliaryEquipmentResultsService.scenarioResults(scenario);
-    const auxAnnualEnergyUsed = new ConvertValue(auxiliaryEquipment.totalEnergyUse, 'kWh', settings.energyResultUnit).convertedValue;
+    const auxAnnualEnergyUsed = includeAux ? new ConvertValue(auxiliaryEquipment.totalEnergyUse, 'kWh', settings.energyResultUnit).convertedValue : 0;
+    const auxAnnualCost = includeAux ? auxiliaryEquipment.totalEnergyCost : 0;
     // kW running for one hour, in the same per-hour basis as gross heat input
-    const auxHourlyEnergyUsed = new ConvertValue(auxiliaryEquipment.totalPower, 'kWh', settings.energyResultUnit).convertedValue;
+    const auxHourlyEnergyUsed = includeAux ? new ConvertValue(auxiliaryEquipment.totalPower, 'kWh', settings.energyResultUnit).convertedValue : 0;
     const annualEnergyUsed = results.grossHeatInput * phast.operatingHours.hoursPerYear;
     const summary: ExecutiveSummary = {
       percentSavings: 0,
@@ -173,7 +179,7 @@ export class ExecutiveSummaryResultsService {
       co2EmissionsOutput: results.co2EmissionsOutput,
     };
     this.calcAnnualCosts(summary, results, settings, phast);
-    summary.annualCost += auxiliaryEquipment.totalEnergyCost;
+    summary.annualCost += auxAnnualCost;
 
     if (baseline) {
       summary.annualCostSavings = baseline.summary.annualCost - summary.annualCost;
@@ -184,7 +190,7 @@ export class ExecutiveSummaryResultsService {
         ? (phast.implementationCost / summary.annualCostSavings) * 12
         : 0;
     }
-    return { summary, results, auxAnnualEnergyUsed, auxAnnualCost: auxiliaryEquipment.totalEnergyCost };
+    return { summary, results, auxAnnualEnergyUsed, auxAnnualCost };
   }
 
   /** @returns hourly energy per unit of charge feed rate, in Btu/lb or kJ/kg when the result unit is MMBtu or GJ */

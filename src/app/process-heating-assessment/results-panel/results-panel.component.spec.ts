@@ -100,7 +100,7 @@ describe('ResultsPanelComponent tabs', () => {
       childView.set('expert-view');
       selectedExpertViewTab.set('auxiliary-equipment');
 
-      expect(fixture.componentInstance.notesKey()).toBe('auxiliaryPowerNotes');
+      expect(fixture.componentInstance.notesKey()).toBe('auxiliaryEquipmentNotes');
     });
 
     it('shows only the heat balance results elsewhere', () => {

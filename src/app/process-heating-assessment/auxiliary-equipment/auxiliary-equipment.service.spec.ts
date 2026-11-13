@@ -84,6 +84,14 @@ describe('AuxiliaryEquipmentService', () => {
     expect(equipment.map((item: AuxiliaryEquipmentItem) => item.id)).toEqual(['aux-1']);
   });
 
+  it('gives a modification its own empty list when baseline has no items, so later baseline items stay out of it', () => {
+    scenarios['mod-1'].set({ auxiliaryEquipment: undefined });
+    modifications = [{ id: 'mod-1', scenarioOverrides: {} }];
+    service.initialize('mod-1');
+
+    expect(updateModificationProperty).toHaveBeenCalledOnceWith('mod-1', 'auxiliaryEquipment', []);
+  });
+
   it('leaves a modification with its own items unchanged when shown', () => {
     service.initialize('mod-1');
     expect(updateModificationProperty).not.toHaveBeenCalled();

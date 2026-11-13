@@ -118,8 +118,9 @@ export interface Notes {
   leakageNotes?: string;
   extendedNotes?: string;
   slagNotes?: string;
-  /** Unused by this module; kept to match the shared legacy shape (see scripts/check-phast-shape-drift.js). */
+  /** Legacy Auxiliary Power loss notes; unused by this module, kept to match the shared legacy shape (see scripts/check-phast-shape-drift.js). */
   auxiliaryPowerNotes?: string;
+  auxiliaryEquipmentNotes?: string;
   exhaustGasNotes?: string;
   energyInputNotes?: string;
   energyInputExhaustGasNotes?: string;

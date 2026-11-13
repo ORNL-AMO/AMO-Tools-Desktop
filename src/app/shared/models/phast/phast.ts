@@ -102,6 +102,7 @@ export interface Notes {
   extendedNotes?: string;
   slagNotes?: string;
   auxiliaryPowerNotes?: string;
+  auxiliaryEquipmentNotes?: string;
   exhaustGasNotes?: string;
   energyInputNotes?: string;
   energyInputExhaustGasNotes?: string;
