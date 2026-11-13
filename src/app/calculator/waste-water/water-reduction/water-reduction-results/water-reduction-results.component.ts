@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { WaterReductionResults } from '../../../../shared/models/standalone';
 
@@ -24,16 +24,6 @@ export class WaterReductionResultsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-  }
-
-  ngAfterViewInit() {
-    this.updateTableString();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.waterReductionResults && changes.waterReductionResults.firstChange == false) {
-      this.updateTableString();
-    }
   }
 
   updateTableString() {
