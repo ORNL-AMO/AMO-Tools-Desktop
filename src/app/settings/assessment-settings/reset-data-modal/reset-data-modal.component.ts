@@ -1,338 +1,290 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Settings, getDefaultSettings } from '../../../shared/models/settings';
-import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { AssessmentDbService } from '../../../indexedDb/assessment-db.service';
-import { Directory } from '../../../shared/models/directory';
-import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
-import { Assessment } from '../../../shared/models/assessment';
-import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
-import { DashboardService } from '../../../dashboard/dashboard.service';
-import { InventoryDbService } from '../../../indexedDb/inventory-db.service';
-import { InventoryItem } from '../../../shared/models/inventory/inventory';
-import { Calculator } from '../../../shared/models/calculators';
-import { WallLossesSurfaceDbService } from '../../../indexedDb/wall-losses-surface-db.service';
-import { catchError, firstValueFrom, forkJoin } from 'rxjs';
-import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { AtmosphereDbService } from '../../../indexedDb/atmosphere-db.service';
-import { FlueGasMaterialDbService } from '../../../indexedDb/flue-gas-material-db.service';
-import { GasLoadMaterialDbService } from '../../../indexedDb/gas-load-material-db.service';
-import { LiquidLoadMaterialDbService } from '../../../indexedDb/liquid-load-material-db.service';
-import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-material-db.service';
-import { SolidLoadMaterialDbService } from '../../../indexedDb/solid-load-material-db.service';
+import { Component, OnDestroy, inject } from '@angular/core';
+import { DialogRef } from '@angular/cdk/dialog';
+import { Router } from '@angular/router';
 import { ElectronService } from '../../../electron/electron.service';
-import { AppErrorService } from '../../../shared/errors/app-error.service';
-import { DiagramIdbService } from '../../../indexedDb/diagram-idb.service';
-import { Diagram } from '../../../shared/models/diagram';
-import { FeatureFlagService } from '../../../shared/feature-flag.service';
-import { CoreService } from '../../../core/core.service';
+import { ApplicationInstanceDbService } from '../../../indexedDb/application-instance-db.service';
+import { ProgressBarStatus } from '../../../shared/progress-bar/progress-bar.component';
+import { environment } from '../../../../environments/environment';
+import { ResetDataService } from './reset-data.service';
+
+export type ResetOption = 'app-settings' | 'example-items' | 'user-assessments' | 'custom-materials';
+export type ResetStatus = 'selecting' | 'running' | 'succeeded' | 'failed';
+export interface ResetDataResult {
+  /** True when any reset step ran, so the opener should reload what it shows. */
+  dataChanged: boolean;
+}
+
+export interface ResetStep {
+  option: ResetOption;
+  title: string;
+  description: string;
+  runningLabel: string;
+  doneLabel: string;
+  /** Share of the progress bar, from timings measured with the real example data (examples ~0.8 s, user items ~0.5 s). */
+  progressWeight: number;
+  failureGuidance: string;
+  run: (service: ResetDataService, onProgress: (fractionDone: number) => void) => Promise<void>;
+}
+
+/**
+ * The reset options in the order they run.
+ * Examples go first: it is the only step that can fail on loading data, and it fails before deleting anything.
+ * App settings go last, so a failure in an earlier step leaves the user's settings untouched.
+ */
+export const RESET_STEPS: ReadonlyArray<ResetStep> = [
+  {
+    option: 'example-items',
+    title: 'Reset Example Items',
+    description: 'Replaces MEASUR examples with fresh copies. If the examples folder contains your items, they will be moved to All Assessments.',
+    runningLabel: 'Restoring example items',
+    doneLabel: 'Example items restored',
+    progressWeight: 55,
+    failureGuidance: 'Nothing of yours was deleted. Items you saved in the Examples folder may already have moved to All Assessments.',
+    run: (service, onProgress) => service.restoreExampleItems(onProgress),
+  },
+  {
+    option: 'user-assessments',
+    title: 'Delete User Items',
+    description: 'Deletes your assessments, inventories, diagrams, calculators and folders.',
+    runningLabel: 'Deleting your items',
+    doneLabel: 'Your items deleted',
+    progressWeight: 33,
+    failureGuidance: 'Some of your items may already be deleted. Running this step again is safe and finishes the job.',
+    run: service => service.deleteUserItems(),
+  },
+  {
+    option: 'custom-materials',
+    title: 'Delete Custom Materials',
+    description: 'Deletes materials you added. Built-in materials are kept.',
+    runningLabel: 'Deleting custom materials',
+    doneLabel: 'Custom materials deleted',
+    progressWeight: 10,
+    failureGuidance: 'Some custom materials may already be deleted. Running this step again is safe and finishes the job.',
+    run: service => service.deleteCustomMaterials(),
+  },
+  {
+    option: 'app-settings',
+    title: 'Reset Application Settings',
+    description: 'Restores default units, costs and other settings.',
+    runningLabel: 'Restoring application settings',
+    doneLabel: 'Application settings restored',
+    progressWeight: 2,
+    failureGuidance: 'Your settings may not have been reset. Running this step again is safe.',
+    run: service => service.restoreDefaultAppSettings(),
+  },
+];
+
+/**
+ * The order options are listed in. It matches the modal's original layout so returning users don't click the wrong row
+ * out of habit; it differs from the run order in RESET_STEPS on purpose.
+ */
+export const RESET_OPTION_DISPLAY_ORDER: ReadonlyArray<ResetOption> = ['app-settings', 'example-items', 'user-assessments', 'custom-materials'];
+
+/** How long the success view stays up before the modal closes itself. */
+export const RESET_SUCCESS_CLOSE_DELAY_MS = 5000;
 
 @Component({
   selector: 'app-reset-data-modal',
   templateUrl: './reset-data-modal.component.html',
   styleUrls: ['./reset-data-modal.component.css'],
-  standalone: false
+  standalone: false,
+  providers: [ResetDataService]
 })
-export class ResetDataModalComponent implements OnInit {
-  @Output('closeModal')
-  closeModal = new EventEmitter<boolean>();
-  @ViewChild('resetSystemSettingsModal', { static: false }) public resetSystemSettingsModal: ModalDirective;
+export class ResetDataModalComponent implements OnDestroy {
+  private dialogRef: DialogRef<ResetDataResult> = inject<DialogRef<ResetDataResult>>(DialogRef);
+  private router: Router = inject(Router);
+  private resetDataService: ResetDataService = inject(ResetDataService);
+  electronService: ElectronService = inject(ElectronService);
+
+  /** Options in display order (see RESET_OPTION_DISPLAY_ORDER). */
+  readonly displayedSteps: ReadonlyArray<ResetStep> = RESET_OPTION_DISPLAY_ORDER.map(option => RESET_STEPS.find(step => step.option === option));
+  readonly appVersion: string = environment.version;
 
   resetAll: boolean = false;
-  resetAppSettings: boolean = false;
-  resetExampleItems: boolean = false;
-  resetUserAssessments: boolean = false;
-  resetCustomMaterials: boolean = false;
-  deleting: boolean = false;
-  hidingModal: any;
-  constructor(private dashboardService: DashboardService,
-    private electronService: ElectronService,
-    private calculatorDbService: CalculatorDbService,
-    private directoryDbService: DirectoryDbService,
-    private settingsDbService: SettingsDbService,
-    private dbService: NgxIndexedDBService,
-    private assessmentDbService: AssessmentDbService,
-    private wallLossesSurfaceDbService: WallLossesSurfaceDbService,
-    private gasLoadDbService: GasLoadMaterialDbService,
-    private liquidLoadMaterialDbService: LiquidLoadMaterialDbService,
-    private solidLoadMaterialDbService: SolidLoadMaterialDbService,
-    private flueGasMaterialDbService: FlueGasMaterialDbService,
-    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
-    private atmosphereDbService: AtmosphereDbService,
-    private diagramIdbService: DiagramIdbService,
-    private appErrorService: AppErrorService,
-    private inventoryDbService: InventoryDbService,
-    private featureFlagService: FeatureFlagService,
-    private coreService: CoreService
-  ) { }
+  selectedOptions: Set<ResetOption> = new Set<ResetOption>();
+  status: ResetStatus = 'selecting';
 
-  ngOnInit() {
-  }
+  progressPercent: number = 0;
+  progressBarStatus: ProgressBarStatus = 'active';
+  progressLabel: string = '';
+  completedSteps: Array<ResetStep> = [];
+  /** Steps still to run. The first one is running, or failed when status is 'failed'. */
+  pendingSteps: Array<ResetStep> = [];
+  closeCountdownSeconds: number = RESET_SUCCESS_CLOSE_DELAY_MS / 1000;
+  /** Undefined on web, where automatic backup isn't available. */
+  isAutomaticBackupOn: boolean | undefined;
+  /** True while "Reset All Data" waits for other MEASUR tabs or windows to close. The modal can be closed then. */
+  resetAllBlocked: boolean = false;
 
-  ngAfterViewInit() {
-    this.showResetSystemSettingsModal();
-  }
+  // Derived: setInterval returns a number in the browser but NodeJS.Timeout under Node typings, and no shared named type exists.
+  private closeCountdownTimer: ReturnType<typeof setInterval> | undefined;
 
-  showResetSystemSettingsModal() {
-    this.resetSystemSettingsModal.show();
-  }
-
-  hideResetSystemSettingsModal() {
-    this.dashboardService.updateDashboardData.next(true);
-    this.resetSystemSettingsModal.hide();
-    this.closeModal.emit(true);
-  }
-
-  toggleResetSystemSettingsOption(option: string) {
-    switch (option) {
-      case "reset-all": {
-        this.resetAll = !this.resetAll;
-        if (this.resetAll) {
-          this.resetAppSettings = true;
-          this.resetExampleItems = true;
-          this.resetUserAssessments = true;
-          this.resetCustomMaterials = true;
-        }
-        else {
-          this.resetAppSettings = false;
-          this.resetExampleItems = false;
-          this.resetUserAssessments = false;
-          this.resetCustomMaterials = false;
-        }
-        break;
-      }
-      case "app-settings": {
-        this.resetAppSettings = !this.resetAppSettings;
-        break;
-      }
-      case "example-items": {
-        this.resetExampleItems = !this.resetExampleItems;
-        break;
-      }
-      case "user-assessments": {
-        this.resetUserAssessments = !this.resetUserAssessments;
-        break;
-      }
-      case "custom-materials": {
-        this.resetCustomMaterials = !this.resetCustomMaterials;
-        break;
-      }
-      default: {
-        break;
-      }
+  constructor() {
+    if (this.electronService.isElectron) {
+      this.isAutomaticBackupOn = inject(ApplicationInstanceDbService).applicationInstanceData.getValue()?.isAutomaticBackupOn === true;
     }
   }
 
-  async resetSystemSettingsAccept() {
-    this.deleting = true;
-    try {
-      if (this.resetAll) {
-        this.resetAllData();
-      } else if (this.resetUserAssessments) {
-        this.resetAllUserItems();
-      } else if (this.resetAppSettings) {
-        this.resetFactorySystemSettings();
-      } else if (this.resetExampleItems) {
-        this.resetFactoryExampleItems();
-      } else if (this.resetCustomMaterials) {
-        this.resetFactoryCustomMaterials();
-      }
-    } catch (e) {
-      this.appErrorService.handleAppError('Error restoring system settings', e)
+  ngOnDestroy() {
+    this.stopCloseCountdown();
+  }
+
+  /** @returns The step that failed, or undefined unless the reset failed. */
+  get failedStep(): ResetStep | undefined {
+    return this.status === 'failed' ? this.pendingSteps[0] : undefined;
+  }
+
+  /** @returns The selected steps after the failed one, which did not run. */
+  get stepsNotRun(): Array<ResetStep> {
+    return this.pendingSteps.slice(1);
+  }
+
+  /** @returns The Reset button's text: "Reset All Data", or the number of options selected. */
+  get resetButtonLabel(): string {
+    if (this.resetAll) {
+      return 'Reset All Data';
     }
+    const count: number = this.selectedOptions.size;
+    return count === 1 ? 'Reset 1 option' : `Reset ${count} options`;
   }
 
-  async resetFactorySystemSettings() {
-    let defaultSettings: Settings = getDefaultSettings();
-    defaultSettings.directoryId = 1;
-    defaultSettings.id = 1;
-    defaultSettings.disableDashboardTutorial = this.settingsDbService.globalSettings.disableDashboardTutorial;
-    defaultSettings.disablePsatTutorial = this.settingsDbService.globalSettings.disablePsatTutorial;
-    defaultSettings.disableFansTutorial = this.settingsDbService.globalSettings.disableFansTutorial;
-    defaultSettings.disablePhastTutorial = this.settingsDbService.globalSettings.disablePhastTutorial;
-    defaultSettings.disableWasteWaterTutorial = this.settingsDbService.globalSettings.disableWasteWaterTutorial;
-    defaultSettings.disableSteamTutorial = this.settingsDbService.globalSettings.disableSteamTutorial;
-    defaultSettings.disableMotorInventoryTutorial = this.settingsDbService.globalSettings.disableMotorInventoryTutorial;
-    defaultSettings.disableTreasureHuntTutorial = this.settingsDbService.globalSettings.disableTreasureHuntTutorial;
-    defaultSettings.disableDataExplorerTutorial = this.settingsDbService.globalSettings.disableDataExplorerTutorial;
-    defaultSettings.disableTutorial = this.settingsDbService.globalSettings.disableTutorial;
-    defaultSettings.printAll = this.settingsDbService.globalSettings.printAll;
-    defaultSettings.suiteDbItemsInitialized = true;
-    delete defaultSettings.facilityInfo;
-    await firstValueFrom(this.settingsDbService.updateWithObservable(defaultSettings));
-    let settings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
-    this.settingsDbService.setAll(settings);
-    this.featureFlagService.restoreUserFlagsToDefault();
-    this.hideResetSystemSettingsModal();
+  /**
+   * @param option A reset option.
+   * @returns True when the option is selected.
+   */
+  isSelected(option: ResetOption): boolean {
+    return this.selectedOptions.has(option);
   }
 
-  async resetFactoryExampleItems() {
-    let exampleDirectory: Directory = this.directoryDbService.getExample();
-    if (exampleDirectory) {
-      await this.resetAllExampleAssessments(exampleDirectory.id);
+  /**
+   * Checks or unchecks an option. "reset-all" selects or clears all four; unchecking any one turns Reset All off.
+   * @param option The option row the user clicked.
+   */
+  toggleResetSystemSettingsOption(option: ResetOption | 'reset-all') {
+    if (option === 'reset-all') {
+      this.resetAll = !this.resetAll;
+      this.selectedOptions = this.resetAll ? new Set(RESET_STEPS.map(step => step.option)) : new Set<ResetOption>();
+      return;
+    }
+    if (this.selectedOptions.has(option)) {
+      this.selectedOptions.delete(option);
     } else {
-      let examplesDirectory: Directory = {
-        name: 'Examples',
-        createdDate: new Date(),
-        modifiedDate: new Date(),
-        parentDirectoryId: 1,
-        isExample: true
-      };
-      let createdDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(examplesDirectory));
-      let tmpSettings: Settings = getDefaultSettings();
-      tmpSettings.directoryId = createdDirectory.id;
-      delete tmpSettings.facilityInfo;
-      await firstValueFrom(this.settingsDbService.addWithObservable(tmpSettings));
-      await this.resetAllExampleAssessments(createdDirectory.id);
+      this.selectedOptions.add(option);
+    }
+    // "Reset All" deletes the whole database (contacts, backup settings, logs too), so it is only on when chosen explicitly.
+    // Checking the four options one by one runs the four steps instead.
+    if (this.selectedOptions.size < RESET_STEPS.length) {
+      this.resetAll = false;
     }
   }
 
+  /** Runs every selected reset, one after another, showing progress. */
+  async resetSystemSettingsAccept() {
+    if (this.resetAll) {
+      this.status = 'running';
+      this.progressPercent = 100;
+      this.progressLabel = 'Deleting all data. MEASUR will restart.';
+      await this.resetAllData();
+      return;
+    }
+    this.completedSteps = [];
+    this.pendingSteps = RESET_STEPS.filter(step => this.selectedOptions.has(step.option));
+    await this.runPendingSteps();
+  }
 
+  /** Re-runs the failed step and the steps after it. Every step is safe to run again. */
+  async retryFailedSteps() {
+    await this.runPendingSteps();
+  }
 
-  async getDirectoryDataIds(
-    assessmentFilter: (assessment: Assessment) => boolean,
-    inventoryFilter: (item: InventoryItem) => boolean,
-    diagramFilter: (diagram: Diagram) => boolean
-  ): Promise<DirectoryDataIds> {
-    const [allAssessments, allInventoryItems, allDiagrams, allCalculators, allSettings] = await firstValueFrom(
-      forkJoin([
-        this.assessmentDbService.getAllAssessments(),
-        this.inventoryDbService.getAllInventory(),
-        this.diagramIdbService.getAllDiagrams(),
-        this.calculatorDbService.getAllCalculators(),
-        this.settingsDbService.getAllSettings()
-      ])
-    );
-    
-    const assessmentsIds: number[] = [];
-    const settingsIds: number[] = [];
-    const calculatorIds: number[] = [];
-    const inventoriesIds: number[] = [];
-    const diagramsIds: number[] = [];
+  /** Closes the modal, unless a reset is still running (a blocked "Reset All Data" can be closed: it finishes on its own). */
+  close() {
+    if (this.status === 'running' && !this.resetAllBlocked) {
+      return;
+    }
+    this.stopCloseCountdown();
+    this.dialogRef.close({ dataChanged: this.status !== 'selecting' });
+  }
 
-    allAssessments.forEach(assessment => {
-      if (assessmentFilter(assessment)) {
-        assessmentsIds.push(assessment.id);
-        const foundSetting = allSettings.find(settings => settings.assessmentId == assessment.id);
-        if (foundSetting) {
-          settingsIds.push(foundSetting.id);
-        } 
-        const assessmentCalculator = allCalculators.find(calculator => calculator.assessmentId == assessment.id);
-        if (assessmentCalculator) {
-          calculatorIds.push(assessmentCalculator.id);
-        } 
+  /** Closes the modal without resetting and opens Data Storage and Backup. */
+  openDataBackupPage() {
+    this.close();
+    this.router.navigate(['/data-and-backup']);
+  }
+
+  /**
+   * Runs `pendingSteps` in order. Stops at the first failure and keeps the modal open with guidance.
+   * Caches reload once at the end (also after a failure, since earlier steps may have changed data).
+   */
+  private async runPendingSteps() {
+    this.status = 'running';
+    this.progressBarStatus = 'active';
+    const totalWeight: number = [...this.completedSteps, ...this.pendingSteps].reduce((sum, step) => sum + step.progressWeight, 0);
+    const completedWeight = () => this.completedSteps.reduce((sum, step) => sum + step.progressWeight, 0);
+    this.progressPercent = 100 * completedWeight() / totalWeight;
+
+    let failed: boolean = false;
+    while (this.pendingSteps.length > 0) {
+      const step: ResetStep = this.pendingSteps[0];
+      this.progressLabel = `${step.runningLabel}...`;
+      try {
+        await step.run(this.resetDataService, fractionDone => {
+          this.progressPercent = 100 * (completedWeight() + step.progressWeight * fractionDone) / totalWeight;
+        });
+      } catch (error) {
+        console.error(`Reset step "${step.option}" failed`, error);
+        failed = true;
+        break;
       }
-    });
+      this.completedSteps.push(step);
+      this.pendingSteps.shift();
+      this.progressPercent = 100 * completedWeight() / totalWeight;
+    }
 
-    allInventoryItems.forEach(item => {
-      if (inventoryFilter(item)) {
-        inventoriesIds.push(item.id);
-      }
-    });
-
-    allDiagrams.forEach(diagram => {
-      if (diagramFilter(diagram)) {
-        diagramsIds.push(diagram.id);
-      } 
-    });
-
-    return {
-      assessments: assessmentsIds,
-      settings: settingsIds,
-      calculators: calculatorIds,
-      inventories: inventoriesIds,
-      diagrams: diagramsIds
-    };
-  }
-
-
-  async getExampleDataIds(dirId: number): Promise<DirectoryDataIds> {
-    return this.getDirectoryDataIds(
-      (assessment: Assessment) => assessment.isExample && dirId === assessment.directoryId,
-      (item: InventoryItem) => item.isExample && dirId === item.directoryId,
-      (diagram: Diagram) => diagram.isExample && dirId === diagram.directoryId
-    );
-  }
-
-  async getUserDataIds(): Promise<DirectoryDataIds> {
-    return this.getDirectoryDataIds(
-      (assessment: Assessment) => !assessment.isExample,
-      (item: InventoryItem) => !item.isExample,
-      (diagram: Diagram) => !diagram.isExample
-    );
-  }
-
-
-  async resetByDataIds(directoryDataIds: DirectoryDataIds) {
-    const [assessments, settings, calculators, inventoryItems, diagrams] = await firstValueFrom(
-      forkJoin([
-        this.assessmentDbService.bulkDeleteWithObservable(directoryDataIds.assessments),
-        this.settingsDbService.bulkDeleteWithObservable(directoryDataIds.settings),
-        this.calculatorDbService.bulkDeleteWithObservable(directoryDataIds.calculators),
-        this.inventoryDbService.bulkDeleteWithObservable(directoryDataIds.inventories),
-        this.diagramIdbService.bulkDeleteWithObservable(directoryDataIds.diagrams)
-      ])
-    );
-
-     // * use the first inner array - NgxIndexedDBService.bulkDelete (via bulkDeleteWithObservable) returns an Array<Array<T>> snapshots of the current store state; All arrays are identical
-    this.assessmentDbService.setAll(assessments[0]);
-    this.settingsDbService.setAll(settings[0]);
-    this.calculatorDbService.setAll(calculators[0]);
-    this.inventoryDbService.setAll(inventoryItems[0]);
-    this.diagramIdbService.setAll(diagrams[0]);
-  }
-
-  async resetAllExampleAssessments(dirId: number) {
-    const directoryDataIds = await this.getExampleDataIds(dirId);
-    await this.resetByDataIds(directoryDataIds);
-    await this.coreService.loadExampleDirectory();
-    await firstValueFrom(this.directoryDbService.deleteByIdWithObservable(dirId));
-    await this.directoryDbService.setAll();
-    this.hideResetSystemSettingsModal();
-  }
-
-
-  async resetAllUserItems() {
-    const directoryDataIds = await this.getUserDataIds();
-    await this.resetByDataIds(directoryDataIds);
-    this.hideResetSystemSettingsModal();
-  }
-
-  async resetFactoryCustomMaterials() {
-    await this.gasLoadDbService.deleteAllCustomMaterials();
-    await this.atmosphereDbService.deleteAllCustomMaterials();
-    await this.flueGasMaterialDbService.deleteAllCustomMaterials();
-    await this.liquidLoadMaterialDbService.deleteAllCustomMaterials();
-    await this.solidLiquidMaterialDbService.deleteAllCustomMaterials();
-    await this.solidLoadMaterialDbService.deleteAllCustomMaterials();
-    await this.wallLossesSurfaceDbService.deleteAllCustomMaterials();
-    this.hideResetSystemSettingsModal();
-  }
-
-  async resetAllData() {
-    this.featureFlagService.restoreUserFlagsToDefault();
     try {
-      this.dbService.deleteDatabase()
-        .pipe(
-          catchError(e => this.appErrorService.handleObservableAppError('Error Resetting Data', e
-          ))
-        )
-        .subscribe(
-          {
-            next: (v) => {
-              this.finishDelete();
-            },
-            error: (e) => {
-              console.log(e);
-              this.finishDelete();
-            },
-            complete: () => {
-              this.finishDelete();
-            }
-          });
-    } catch (e) {
-      this.finishDelete();
+      await this.resetDataService.refreshCaches();
+    } catch (error) {
+      // The data is already saved; only what screens show until the next reload is stale.
+      console.error('Reloading data after reset failed', error);
     }
+
+    if (failed) {
+      this.status = 'failed';
+      this.progressBarStatus = 'error';
+      this.progressLabel = `${this.pendingSteps[0].title} failed`;
+    } else {
+      this.status = 'succeeded';
+      this.progressBarStatus = 'complete';
+      this.progressPercent = 100;
+      this.progressLabel = 'Reset complete';
+      this.startCloseCountdown();
+    }
+  }
+
+  private startCloseCountdown() {
+    this.closeCountdownSeconds = RESET_SUCCESS_CLOSE_DELAY_MS / 1000;
+    this.closeCountdownTimer = setInterval(() => {
+      this.closeCountdownSeconds--;
+      if (this.closeCountdownSeconds <= 0) {
+        this.close();
+      }
+    }, 1000);
+  }
+
+  private stopCloseCountdown() {
+    clearInterval(this.closeCountdownTimer);
+    this.closeCountdownTimer = undefined;
+  }
+
+  /** Deletes the whole database, then restarts MEASUR. If another tab or window holds it back, explains that and allows closing. */
+  async resetAllData() {
+    try {
+      await this.resetDataService.deleteAllData(() => this.resetAllBlocked = true);
+    } catch (error) {
+      // As before: restart anyway, so the user lands in a working app rather than a stuck window.
+      console.error('Deleting all data failed', error);
+    }
+    this.finishDelete();
   }
 
   finishDelete() {
@@ -342,14 +294,4 @@ export class ResetDataModalComponent implements OnInit {
       location.reload()
     }
   }
-
-
-}
-
-export interface DirectoryDataIds {
-  assessments: Array<number>,
-  settings: Array<number>,
-  calculators: Array<number>,
-  inventories: Array<number>,
-  diagrams: Array<number>
 }
