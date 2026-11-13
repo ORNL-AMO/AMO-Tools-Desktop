@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { WaterReductionCalculatorType } from '../../../../shared/models/standalone';
 import { environment } from '../../../../../environments/environment';
 
 @Component({
@@ -14,7 +15,7 @@ export class WaterReductionHelpComponent implements OnInit {
   @Input()
   currentField: string;
   @Input()
-  isWastewater: boolean;
+  calculatorType: WaterReductionCalculatorType;
 
   docsLink: string = environment.measurDocsUrl;
 

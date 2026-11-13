@@ -173,6 +173,8 @@ export class OpportunitySummaryService {
       oppSummary = this.getWaterHeatingOpportunitySummary(results, opportunityMetaData, thOpportunity, settings);
     } else if (thOpportunity.opportunityType === Treasure.boilerBlowdownRate){      
       oppSummary = this.getBoilerBlowdownRateOpportunitySummary(results, opportunityMetaData, thOpportunity, settings);
+    } else if (thOpportunity.opportunityType === Treasure.waterReduction && results.utilityType === 'Mixed') {
+      oppSummary = this.getWaterReductionOpportunitySummary(results, opportunityMetaData, thOpportunity, settings);
     } else {
       oppSummary = this.getNewOpportunitySummary(opportunityMetaData, results);
     }
@@ -211,7 +213,23 @@ export class OpportunitySummaryService {
     return opSum;
 
   }
-  
+
+  getWaterReductionOpportunitySummary(results: TreasureHuntOpportunityResults, opportunityMetaData: OpportunityMetaData, thOpportunity: TreasureHuntOpportunity, settings: Settings): OpportunitySummary {
+    let opSum: OpportunitySummary;
+    let waterReductionOpportunity = thOpportunity as WaterReductionTreasureHunt;
+    let waterResults: TreasureHuntOpportunityResults = this.waterReductionTreasureHuntService.getWaterOpportunityResults(waterReductionOpportunity, settings);
+    let wastewaterResults: TreasureHuntOpportunityResults = this.waterReductionTreasureHuntService.getWastewaterOpportunityResults(waterReductionOpportunity, settings);
+    let mixedIndividualSummaries: Array<OpportunitySummary> = new Array<OpportunitySummary>();
+    let waterOppSum: OpportunitySummary = this.getNewOpportunitySummary(opportunityMetaData, waterResults);
+    mixedIndividualSummaries.push(waterOppSum);
+    let wastewaterOppSum: OpportunitySummary = this.getNewOpportunitySummary(opportunityMetaData, wastewaterResults);
+    mixedIndividualSummaries.push(wastewaterOppSum);
+    opSum = this.getNewOpportunitySummary(opportunityMetaData, results, mixedIndividualSummaries);
+
+    return opSum;
+
+  }
+
   getCalculatorTreasureHuntResults(treasureHuntOpportunity: TreasureHuntOpportunity, settings: Settings): TreasureHuntOpportunityResults {
     let treasureHuntOpportunityResults: TreasureHuntOpportunityResults; 
     if (treasureHuntOpportunity.opportunityType === Treasure.airLeak) {

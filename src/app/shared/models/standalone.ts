@@ -541,7 +541,15 @@ export interface WaterReductionData {
   volumeMeterMethodData: VolumeMeterMethodData,
   bucketMethodData: BucketMethodData,
   otherMethodData: WaterOtherMethodData,
-  isWastewater: boolean
+  calculatorType: WaterReductionCalculatorType
+};
+
+export type WaterReductionCalculatorType = 'water' | 'wastewater' | 'both';
+
+// saved data before calculatorType was introduced stored a boolean isWastewater
+export interface LegacyWaterReductionData extends Omit<WaterReductionData, 'calculatorType'> {
+  calculatorType?: WaterReductionCalculatorType,
+  isWastewater?: boolean
 };
 
 export interface VolumeMeterMethodData {
@@ -567,14 +575,20 @@ export interface WaterReductionResults {
   baselineResults: WaterReductionResult,
   modificationResults: WaterReductionResult,
   annualWaterSavings: number,
-  annualCostSavings: number
+  annualCostSavings: number,
+  //calculator type "Both" only
+  annualWastewaterSavings?: number,
+  annualWastewaterCostSavings?: number
 };
 
 export interface WaterReductionResult {
   waterUse: number,
   waterCost: number,
   annualWaterSavings: number,
-  costSavings: number
+  costSavings: number,
+  //calculator type "Both" only, disposal equals water use
+  wastewaterDisposal?: number,
+  wastewaterCost?: number
 };
 //===== END water/wastewater reduction objects =====
 

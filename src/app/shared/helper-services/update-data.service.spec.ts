@@ -4,6 +4,8 @@ import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { Assessment } from '../models/assessment';
 import { ProcessCoolingAssessment, TowerType } from '../models/process-cooling-assessment';
 import { environment } from '../../../environments/environment';
+import { LegacyWaterReductionData, WaterReductionData } from '../models/standalone';
+import { Treasure, WaterReductionTreasureHunt } from '../models/treasure-hunt';
 
 describe('UpdateDataService.updateProcessCooling', () => {
   let service: UpdateDataService;
@@ -153,7 +155,7 @@ describe('UpdateDataService.updateProcessCooling', () => {
   });
 });
 
-describe('UpdateDataService.updateSSMT', () => {
+describe('UpdateDataService.updateWaterReductionTreasureHunt', () => {
   let service: UpdateDataService;
 
   beforeEach(() => {
@@ -163,36 +165,42 @@ describe('UpdateDataService.updateSSMT', () => {
     service = TestBed.inject(UpdateDataService);
   });
 
-  function buildSsmtAssessment(baselineValue?: boolean, modificationValue?: boolean): Assessment {
+  function buildOpportunity(baseline: Array<Partial<LegacyWaterReductionData>>, modification: Array<Partial<LegacyWaterReductionData>> = []): WaterReductionTreasureHunt {
     return {
-      name: 'legacy steam assessment',
-      type: 'SSMT',
-      appVersion: '1.8.1',
-      ssmt: {
-        headerInput: {},
-        boilerInput: { sendBlowdownToDeaerator: baselineValue },
-        modifications: [{
-          modificationId: 'modification-id',
-          ssmt: {
-            headerInput: {},
-            boilerInput: { sendBlowdownToDeaerator: modificationValue }
-          }
-        }]
-      }
-    } as Assessment;
+      baseline: baseline as Array<WaterReductionData>,
+      modification: modification as Array<WaterReductionData>,
+      opportunityType: Treasure.waterReduction
+    };
   }
 
-  it('defaults missing baseline and modification routing values to false', () => {
-    const updated = service.updateAssessmentVersion(buildSsmtAssessment());
-
-    expect(updated.ssmt.boilerInput.sendBlowdownToDeaerator).toBeFalse();
-    expect(updated.ssmt.modifications[0].ssmt.boilerInput.sendBlowdownToDeaerator).toBeFalse();
+  it('maps legacy isWastewater true to wastewater and false to water', () => {
+    const opportunity = buildOpportunity([{ isWastewater: true }], [{ isWastewater: false }]);
+    service.updateWaterReductionTreasureHunt(opportunity);
+    expect(opportunity.baseline[0].calculatorType).toBe('wastewater');
+    expect(opportunity.modification[0].calculatorType).toBe('water');
   });
 
-  it('preserves explicit baseline and modification routing values', () => {
-    const updated = service.updateAssessmentVersion(buildSsmtAssessment(true, true));
+  it('defaults to water when neither field is set', () => {
+    const opportunity = buildOpportunity([{}]);
+    service.updateWaterReductionTreasureHunt(opportunity);
+    expect(opportunity.baseline[0].calculatorType).toBe('water');
+  });
 
-    expect(updated.ssmt.boilerInput.sendBlowdownToDeaerator).toBeTrue();
-    expect(updated.ssmt.modifications[0].ssmt.boilerInput.sendBlowdownToDeaerator).toBeTrue();
+  it('keeps an existing calculatorType and removes the legacy field', () => {
+    const opportunity = buildOpportunity([{ calculatorType: 'both', isWastewater: false }]);
+    service.updateWaterReductionTreasureHunt(opportunity);
+    expect(opportunity.baseline[0].calculatorType).toBe('both');
+    expect('isWastewater' in opportunity.baseline[0]).toBeFalse();
+  });
+
+  it('migrates water reductions when updating a treasure hunt assessment', () => {
+    const assessment = {
+      name: 'test treasure hunt',
+      type: 'TreasureHunt',
+      appVersion: '1.7.5',
+      treasureHunt: { waterReductions: [buildOpportunity([{ isWastewater: true }])] }
+    } as Assessment;
+    service.updateAssessmentVersion(assessment);
+    expect(assessment.treasureHunt.waterReductions[0].baseline[0].calculatorType).toBe('wastewater');
   });
 });

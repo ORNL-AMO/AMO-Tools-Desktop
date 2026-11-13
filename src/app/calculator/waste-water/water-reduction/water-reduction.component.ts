@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, 
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
 import { Treasure, WaterReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
-import { WaterReductionData, WaterReductionResults } from '../../../shared/models/standalone';
+import { WaterReductionCalculatorType, WaterReductionData, WaterReductionResults } from '../../../shared/models/standalone';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { WaterReductionService } from './water-reduction.service';
 import { Assessment } from '../../../shared/models/assessment';
@@ -26,7 +26,7 @@ export class WaterReductionComponent implements OnInit {
   @Input()
   operatingHours: OperatingHours;
   @Input()
-  isWastewater: boolean = false;
+  calculatorType: WaterReductionCalculatorType = 'water';
   @Input()
   assessment: Assessment;
 
@@ -107,7 +107,7 @@ export class WaterReductionComponent implements OnInit {
     if (this.waterReductionService.baselineData) {
       this.baselineData = this.waterReductionService.baselineData;
     } else {
-      let tmpObj: WaterReductionData = this.waterReductionService.initObject(0, this.settings, this.isWastewater, this.operatingHours);
+      let tmpObj: WaterReductionData = this.waterReductionService.initObject(0, this.settings, this.calculatorType, this.operatingHours);
       this.baselineData = [tmpObj];
     }
     if (this.waterReductionService.modificationData) {
@@ -119,7 +119,7 @@ export class WaterReductionComponent implements OnInit {
   }
 
   addBaselineEquipment() {
-    let tmpObj: WaterReductionData = this.waterReductionService.initObject(this.baselineData.length, this.settings, this.isWastewater, this.operatingHours);
+    let tmpObj: WaterReductionData = this.waterReductionService.initObject(this.baselineData.length, this.settings, this.baselineData[0]?.calculatorType || this.calculatorType, this.operatingHours);
     this.baselineData.push(tmpObj);
     this.getResults();
   }
@@ -137,7 +137,7 @@ export class WaterReductionComponent implements OnInit {
   }
 
   addModificationEquipment() {
-    let tmpObj: WaterReductionData = this.waterReductionService.initObject(this.modificationData.length, this.settings, this.isWastewater, this.operatingHours);
+    let tmpObj: WaterReductionData = this.waterReductionService.initObject(this.modificationData.length, this.settings, this.baselineData[0]?.calculatorType || this.calculatorType, this.operatingHours);
     this.modificationData.push(tmpObj);
     this.getResults();
   }
@@ -163,7 +163,7 @@ export class WaterReductionComponent implements OnInit {
   updateDataArray(dataArray: Array<WaterReductionData>, data: WaterReductionData, index: number) {
     dataArray[index].name = data.name;
     dataArray[index].hoursPerYear = data.hoursPerYear;
-    dataArray[index].isWastewater = data.isWastewater;
+    dataArray[index].calculatorType = data.calculatorType;
     dataArray[index].waterCost = data.waterCost;
     dataArray[index].measurementMethod = data.measurementMethod;
     dataArray[index].volumeMeterMethodData = data.volumeMeterMethodData;
@@ -177,7 +177,7 @@ export class WaterReductionComponent implements OnInit {
   }
 
   btnResetData() {
-    let tmpObj: WaterReductionData = this.waterReductionService.initObject(0, this.settings, this.isWastewater, this.operatingHours);
+    let tmpObj: WaterReductionData = this.waterReductionService.initObject(0, this.settings, this.calculatorType, this.operatingHours);
     this.baselineData = [tmpObj];
     this.modificationData = new Array<WaterReductionData>();
     this.modificationExists = false;

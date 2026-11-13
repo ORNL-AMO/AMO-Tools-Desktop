@@ -253,6 +253,10 @@ export class ImportOpportunitiesService {
       if (opportunityType == Treasure.electricityReduction) {
         this.updateDataService.updateElectricityReductionTreasureHunt(opp, settings);
       }
+
+      if (opportunityType == Treasure.waterReduction) {
+        this.updateDataService.updateWaterReductionTreasureHunt(opp);
+      }
     });
   }
 
