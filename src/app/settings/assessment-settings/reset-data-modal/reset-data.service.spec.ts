@@ -197,10 +197,11 @@ describe('ResetDataService (real IndexedDB)', () => {
   /**
    * Adds a folder copied from Examples before copies cleared isExample: the folder still says isExample,
    * the assessment inside (the user's copy) does not.
+   * @param parentDirectoryId Folder the copy sits in; defaults to All Assessments.
    * @returns The copied folder's and assessment's ids.
    */
-  const addLegacyExamplesCopy = async (): Promise<{ folder: number, assessment: number }> => {
-    const folder = await add<Directory>(STORES.directories, { name: 'Examples (copy)', parentDirectoryId: ROOT_DIRECTORY_ID, isExample: true });
+  const addLegacyExamplesCopy = async (parentDirectoryId: number = ROOT_DIRECTORY_ID): Promise<{ folder: number, assessment: number }> => {
+    const folder = await add<Directory>(STORES.directories, { name: 'Examples (copy)', parentDirectoryId, isExample: true });
     await add<Settings>(STORES.settings, { directoryId: folder.id });
     const assessment = await add<Assessment>(STORES.assessments, { appVersion: environment.version, name: 'My copied pump', directoryId: folder.id, isExample: false } as Assessment);
     await add<Settings>(STORES.settings, { assessmentId: assessment.id, directoryId: folder.id });
@@ -375,7 +376,60 @@ describe('ResetDataService (real IndexedDB)', () => {
     });
   });
 
+  describe('Example reset with older copies and partial failures', () => {
+    it('moves an older copy saved inside the Examples folder to All Assessments with its contents', async () => {
+      const copy: { folder: number, assessment: number } = await addLegacyExamplesCopy(seeded.examplesFolder);
+
+      await service.restoreExampleItems();
+
+      const after: StoredRows = await readAll();
+      expect(after.directories.find(directory => directory.id === copy.folder).parentDirectoryId).toBe(ROOT_DIRECTORY_ID);
+      expect(after.assessments.find(assessment => assessment.id === copy.assessment).directoryId).toBe(copy.folder);
+      expect(findOrphans(after)).toEqual([]);
+    });
+
+    it('keeps the old Examples folder when deleting its examples fails, so a retry leaves one set and no orphans', async () => {
+      const assessmentDbService: AssessmentDbService = TestBed.inject(AssessmentDbService);
+      const bulkDeleteAssessments = assessmentDbService.bulkDeleteWithObservable.bind(assessmentDbService);
+      let failNextDelete: boolean = true;
+      spyOn(assessmentDbService, 'bulkDeleteWithObservable').and.callFake((assessmentIds: Array<number>) => {
+        if (failNextDelete) {
+          failNextDelete = false;
+          return throwError(() => new Error('delete failed'));
+        }
+        return bulkDeleteAssessments(assessmentIds);
+      });
+
+      await expectAsync(service.restoreExampleItems()).toBeRejectedWithError(/could not be fully restored/);
+
+      const afterFailure: StoredRows = await readAll();
+      expect(ids(afterFailure.directories)).withContext('old Examples folder kept for the retry').toContain(seeded.examplesFolder);
+      expect(afterFailure.assessments.some(assessment => assessment.name === 'Fresh example pump')).toBeFalse();
+      expect(findOrphans(afterFailure)).toEqual([]);
+
+      await service.restoreExampleItems();
+
+      const afterRetry: StoredRows = await readAll();
+      expect(afterRetry.directories.filter(directory => directory.isExample).length).toBe(1);
+      expect(ids(afterRetry.directories)).not.toContain(seeded.examplesFolder);
+      expect(afterRetry.assessments.filter(assessment => assessment.isExample).map(assessment => assessment.name)).toEqual(['Fresh example pump']);
+      expect(findOrphans(afterRetry)).toEqual([]);
+    });
+  });
+
   describe('Delete User Items', () => {
+    it('deletes older copies of the Examples folder as user folders and keeps the real one', async () => {
+      const copy: { folder: number, assessment: number } = await addLegacyExamplesCopy();
+
+      await service.deleteUserItems();
+
+      const after: StoredRows = await readAll();
+      expect(ids(after.directories)).toEqual([ROOT_DIRECTORY_ID, seeded.examplesFolder]);
+      expect(ids(after.assessments)).not.toContain(copy.assessment);
+      expect(after.settings.some(settings => settings.directoryId === copy.folder)).toBeFalse();
+      expect(findOrphans(after)).toEqual([]);
+    });
+
     it('moves an Examples folder the user put inside their own folder back to All Assessments', async () => {
       const examplesFolder: Directory = (await readAll()).directories.find(directory => directory.id === seeded.examplesFolder);
       await firstValueFrom(dbService.update(STORES.directories, { ...examplesFolder, parentDirectoryId: seeded.userFolder }));

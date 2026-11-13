@@ -265,13 +265,14 @@ export class ResetDataService {
       stored.diagrams.filter(isUserItem)
     );
 
+    // Only the real Examples folder is kept: older copies of it still carry isExample but belong to the user.
+    const exampleDirectoryId: number | undefined = this.findExamplesFolder(stored)?.id;
     const userDirectoryIds: Array<number> = stored.directories
-      .filter(directory => directory.id !== ROOT_DIRECTORY_ID && !directory.isExample)
+      .filter(directory => directory.id !== ROOT_DIRECTORY_ID && directory.id !== exampleDirectoryId)
       .map(directory => directory.id);
     ids.directories.push(...userDirectoryIds);
     ids.settings.push(...this.getFolderSettingsIds(stored, userDirectoryIds));
     // Examples ship no folder-level calculators (pre-assessments), so every calculator not tied to an example assessment is the user's.
-    const exampleDirectoryId: number | undefined = this.findExamplesFolder(stored)?.id;
     ids.calculators = stored.calculators
       .filter(calculator => !this.isExampleCalculator(calculator, stored, exampleDirectoryId))
       .map(calculator => calculator.id);
@@ -358,21 +359,24 @@ export class ResetDataService {
         .map(diagram => firstValueFrom(this.diagramIdbService.updateWithObservable({ ...diagram, directoryId: ROOT_DIRECTORY_ID }))),
       ...stored.calculators.filter(calculator => !calculator.assessmentId && calculator.directoryId === fromDirectoryId)
         .map(calculator => firstValueFrom(this.calculatorDbService.updateWithObservable({ ...calculator, directoryId: ROOT_DIRECTORY_ID }))),
-      ...stored.directories.filter(directory => !directory.isExample && directory.parentDirectoryId === fromDirectoryId)
+      // Every subfolder is the user's (examples ship none), including older copies of Examples that still carry isExample.
+      ...stored.directories.filter(directory => directory.parentDirectoryId === fromDirectoryId)
         .map(directory => firstValueFrom(this.directoryDbService.updateWithObservable({ ...directory, parentDirectoryId: ROOT_DIRECTORY_ID }))),
     ]);
   }
 
-  /** @param ids Rows to delete, by store. */
+  /**
+   * Deletes rows one store at a time, contents before the folders that hold them.
+   * Each store is its own transaction, so if one fails the folders are still there for a retry to find and finish.
+   * @param ids Rows to delete, by store.
+   */
   private async deleteRows(ids: DirectoryDataIds): Promise<void> {
-    await Promise.all([
-      firstValueFrom(this.assessmentDbService.bulkDeleteWithObservable(ids.assessments)),
-      firstValueFrom(this.inventoryDbService.bulkDeleteWithObservable(ids.inventories)),
-      firstValueFrom(this.diagramIdbService.bulkDeleteWithObservable(ids.diagrams)),
-      firstValueFrom(this.calculatorDbService.bulkDeleteWithObservable(ids.calculators)),
-      firstValueFrom(this.settingsDbService.bulkDeleteWithObservable(ids.settings)),
-      firstValueFrom(this.directoryDbService.bulkDeleteWithObservable(ids.directories)),
-    ]);
+    await firstValueFrom(this.assessmentDbService.bulkDeleteWithObservable(ids.assessments));
+    await firstValueFrom(this.inventoryDbService.bulkDeleteWithObservable(ids.inventories));
+    await firstValueFrom(this.diagramIdbService.bulkDeleteWithObservable(ids.diagrams));
+    await firstValueFrom(this.calculatorDbService.bulkDeleteWithObservable(ids.calculators));
+    await firstValueFrom(this.settingsDbService.bulkDeleteWithObservable(ids.settings));
+    await firstValueFrom(this.directoryDbService.bulkDeleteWithObservable(ids.directories));
   }
 
   /**

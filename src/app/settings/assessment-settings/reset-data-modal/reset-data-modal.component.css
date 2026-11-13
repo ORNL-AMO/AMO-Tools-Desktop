@@ -107,6 +107,11 @@
     color: #b02a37;
 }
 
+/* Dark red, not the default gray: gray is about 3.5:1 on the red row, under the 4.5:1 needed for this small text. */
+.reset-all-option .reset-option-description {
+    color: #842029;
+}
+
 .reset-all-option:focus-visible {
     outline-color: #b02a37;
 }
