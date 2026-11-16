@@ -44,15 +44,6 @@ export class FuelSwitchingComponent {
   readonly isBaseline: Signal<boolean> = computed(() => this.scenario() === 'baseline');
   private readonly settings: Signal<Settings> = computed(() => this.assessmentService.scenarioSettings(this.scenario()));
 
-  readonly differsFromBaseline: Signal<boolean> = computed(() => {
-    if (this.isBaseline()) return false;
-    const baseline = this.assessmentService.scenarioSettings('baseline');
-    const settings = this.settings();
-    return settings.energySourceType !== baseline.energySourceType
-      || (settings.furnaceType ?? null) !== (baseline.furnaceType ?? null)
-      || (settings.customFurnaceName ?? null) !== (baseline.customFurnaceName ?? null);
-  });
-
   readonly form = new FormGroup<FuelSwitchingForm>({
     energySourceType: new FormControl<string>('Fuel', { nonNullable: true }),
     furnaceType: new FormControl<string | null>(null),
@@ -105,7 +96,7 @@ export class FuelSwitchingComponent {
     const modification = this.modificationService.modifications().find(candidate => candidate.id === this.scenario());
     const dialogRef = this.modalDialogService.openModal<boolean, EnergySourceChangeDialogData, EnergySourceChangeDialogComponent>(
       EnergySourceChangeDialogComponent, {
-        data: buildEnergySourceChangeDialogData(modification ? getModificationName(modification) : 'Modification', current, next, false),
+        data: buildEnergySourceChangeDialogData({ scenarioName: modification ? getModificationName(modification) : 'Modification', current, next }),
       },
     );
     return (await firstValueFrom(dialogRef.closed)) === true;

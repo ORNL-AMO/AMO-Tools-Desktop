@@ -21,16 +21,21 @@ export interface EnergySourceChangeDialogData {
   keptEnergySources: KeptEnergySource[];
 }
 
-/**
- * @param scenarioName 'Baseline' or the modification's name
- * @param current the scenario's settings before the change
- * @param next the scenario's settings after the change
- * @param hasInheritingModifications whether modifications without their own energy source will follow the change
- * @param keptEnergySources modifications with their own energy source selection, listed for a baseline change
- */
-export function buildEnergySourceChangeDialogData(
-  scenarioName: string, current: Settings, next: Settings, hasInheritingModifications: boolean, keptEnergySources: KeptEnergySource[] = [],
-): EnergySourceChangeDialogData {
+export interface EnergySourceChange {
+  /** 'Baseline' or the modification's name */
+  scenarioName: string;
+  /** The scenario's settings before the change */
+  current: Settings;
+  /** The scenario's settings after the change */
+  next: Settings;
+  /** Whether modifications without their own energy source will follow the change; baseline changes only */
+  hasInheritingModifications?: boolean;
+  /** Modifications with their own energy source selection; baseline changes only */
+  keptEnergySources?: KeptEnergySource[];
+}
+
+export function buildEnergySourceChangeDialogData(change: EnergySourceChange): EnergySourceChangeDialogData {
+  const { scenarioName, current, next, hasInheritingModifications = false, keptEnergySources = [] } = change;
   const { hidden, added } = getEnergySourceTabChanges(deriveHeatingEquipmentConfiguration(current), deriveHeatingEquipmentConfiguration(next));
   return {
     scenarioName,

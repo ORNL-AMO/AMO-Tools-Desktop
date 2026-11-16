@@ -143,16 +143,16 @@ export class AssessmentSettingsComponent {
     }
     const dialogRef = this.modalDialogService.openModal<boolean, EnergySourceChangeDialogData, EnergySourceChangeDialogComponent>(
       EnergySourceChangeDialogComponent, {
-        data: buildEnergySourceChangeDialogData(
-          'Baseline',
+        data: buildEnergySourceChangeDialogData({
+          scenarioName: 'Baseline',
           current,
-          newSettings,
-          modifications.some(modification => !modification.energySource),
-          modifications.filter(modification => modification.energySource).map(modification => ({
+          next: newSettings,
+          hasInheritingModifications: modifications.some(modification => !modification.energySource),
+          keptEnergySources: modifications.filter(modification => modification.energySource).map(modification => ({
             modificationName: getModificationName(modification),
             energySource: getEnergySourceLabel(this.assessmentService.scenarioSettings(modification.id)),
           })),
-        ),
+        }),
       },
     );
     return (await firstValueFrom(dialogRef.closed)) === true;

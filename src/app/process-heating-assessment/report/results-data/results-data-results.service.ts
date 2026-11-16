@@ -23,6 +23,17 @@ export const AUXILIARY_EQUIPMENT_TABLE_TITLE = 'Auxiliary Equipment (kWh/yr)';
 
 type ResultSelector = (results: PhastResults) => number | undefined;
 
+interface RowDefinition {
+  label: string;
+  units?: string;
+  selector: ResultSelector;
+  decimals: number;
+  /** Result category the row belongs to; a column whose energy source doesn't use it shows the empty placeholder */
+  category?: keyof ResultCategories;
+  /** False leaves the baseline cell empty, for rows that compare a modification against baseline */
+  showBaseline?: boolean;
+}
+
 interface ResultColumn {
   results: PhastResults;
   categories: ResultCategories;
@@ -105,9 +116,9 @@ export class ResultsDataResultsService {
     const categories = combineResultCategories([baseline.categories, ...mods.map(mod => mod.categories)]);
     const energyDecimals = ['MMBtu', 'GJ', 'kWh'].includes(settings.energyResultUnit) ? 2 : 0;
     const row = (label: string, selector: ResultSelector, category?: keyof ResultCategories): ReportTableRow =>
-      this.buildRow(label, undefined, baseline, mods, selector, energyDecimals, category);
+      this.buildRow({ label, selector, decimals: energyDecimals, category }, baseline, mods);
     const percentRow = (label: string, selector: ResultSelector, decimals: number, category: keyof ResultCategories): ReportTableRow =>
-      this.buildRow(label, '%', baseline, mods, selector, decimals, category);
+      this.buildRow({ label, units: '%', selector, decimals, category }, baseline, mods);
 
     const rows: ReportTableRow[] = [
       row('Charge Materials', r => r.totalChargeMaterialLoss),
@@ -159,28 +170,19 @@ export class ResultsDataResultsService {
 
     if (this.featureFlagService.showOperationalImpacts()) {
       const emissionsUnit = `${settings.emissionsUnit === 'Metric' ? 'tonne' : 'ton'} CO<sub>2</sub>/hr`;
-      rows.push(this.buildRow('CO<sub>2</sub> Emissions', emissionsUnit, baseline, mods, r => r.co2EmissionsOutput?.hourlyTotalEmissionOutput, 2));
+      rows.push(this.buildRow({
+        label: 'CO<sub>2</sub> Emissions', units: emissionsUnit, selector: r => r.co2EmissionsOutput?.hourlyTotalEmissionOutput, decimals: 2,
+      }, baseline, mods));
       if (mods.length) {
         const savings: ResultSelector = r => this.resultsService.getCo2EmissionsSavings(baseline.results, r, 'hourlyTotalEmissionOutput');
-        rows.push(this.buildRow('CO<sub>2</sub> Emissions Savings', emissionsUnit, baseline, mods, savings, 2, undefined, false));
+        rows.push(this.buildRow({ label: 'CO<sub>2</sub> Emissions Savings', units: emissionsUnit, selector: savings, decimals: 2, showBaseline: false }, baseline, mods));
       }
     }
     return rows;
   }
 
-  /**
-   * @param category result category the row belongs to; a column whose energy source doesn't use it shows the empty placeholder
-   */
-  private buildRow(
-    label: string,
-    units: string | undefined,
-    baseline: ResultColumn,
-    mods: ResultColumn[],
-    selector: ResultSelector,
-    decimals: number,
-    category?: keyof ResultCategories,
-    showBaseline = true
-  ): ReportTableRow {
+  private buildRow(definition: RowDefinition, baseline: ResultColumn, mods: ResultColumn[]): ReportTableRow {
+    const { label, units, selector, decimals, category, showBaseline = true } = definition;
     const columnCell = (column: ResultColumn): ReportColumnCell =>
       !category || column.categories[category] ? this.cell(selector(column.results), decimals) : { value: null };
     return {

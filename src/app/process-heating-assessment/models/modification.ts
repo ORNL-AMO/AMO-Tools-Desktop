@@ -1,5 +1,6 @@
 import { ExploreOpportunityCategory, Modification, PHAST } from './phast';
 import { SavingsOpportunity } from '../../shared/models/explore-opps';
+import { Settings } from '../../shared/models/settings';
 
 // The set of fields a modification is allowed to override on baseline. Excludes `modifications`
 // and `selectedModificationId`: a modification's own overrides never carry a nested modification list
@@ -14,6 +15,16 @@ export interface ScenarioEnergySource {
   energySourceType: string;
   furnaceType: string;
   customFurnaceName?: string;
+}
+
+// Picked from Settings so both assessment settings and a ScenarioEnergySource fit; Settings marks these fields optional.
+type EnergySourceFields = Pick<Settings, 'energySourceType' | 'furnaceType' | 'customFurnaceName'>;
+
+/** Missing furnace type and custom name count as equal, since saved data mixes `null` and `undefined`. */
+export function isSameEnergySource(first: EnergySourceFields, second: EnergySourceFields): boolean {
+  return first.energySourceType === second.energySourceType
+    && (first.furnaceType ?? null) === (second.furnaceType ?? null)
+    && (first.customFurnaceName ?? null) === (second.customFurnaceName ?? null);
 }
 
 export interface ProcessHeatingModification extends Modification {

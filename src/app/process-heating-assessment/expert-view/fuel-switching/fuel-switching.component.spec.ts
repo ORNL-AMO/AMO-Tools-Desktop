@@ -212,27 +212,6 @@ describe('FuelSwitchingComponent', () => {
     });
   });
 
-  describe('differsFromBaseline', () => {
-    it("is true when the modification's energy source differs from the baseline's", () => {
-      create('mod-1', { baseline: FUEL, 'mod-1': INFRARED });
-
-      expect(component.differsFromBaseline()).toBeTrue();
-      expect(query('.energy-source.indicate-different')).not.toBeNull();
-    });
-
-    it("is false when the modification's energy source matches the baseline's", () => {
-      create('mod-1');
-
-      expect(component.differsFromBaseline()).toBeFalse();
-    });
-
-    it('is false for the baseline', () => {
-      create('baseline', { baseline: INFRARED, 'mod-1': FUEL });
-
-      expect(component.differsFromBaseline()).toBeFalse();
-    });
-  });
-
   describe('template visibility', () => {
     it('hides the furnace type and custom name for a fuel-fired source', () => {
       create('mod-1');

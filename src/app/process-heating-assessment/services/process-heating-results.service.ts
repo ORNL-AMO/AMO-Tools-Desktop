@@ -21,11 +21,14 @@ export interface ResultCategories extends ShowResultsCategories {
  * @returns a flag set wherever any scenario sets it, so a table shows every row some column uses
  */
 export function combineResultCategories(categories: ResultCategories[]): ResultCategories {
-  return categories.reduce((combined, next) => {
-    const merged = { ...combined };
-    (Object.keys(next) as (keyof ResultCategories)[]).forEach(key => merged[key] = !!combined[key] || !!next[key]);
-    return merged;
-  });
+  const [first, ...rest] = categories;
+  const combined: ResultCategories = { ...first };
+  for (const next of rest) {
+    for (const key of Object.keys(next) as (keyof ResultCategories)[]) {
+      combined[key] = !!combined[key] || !!next[key];
+    }
+  }
+  return combined;
 }
 
 @Injectable()

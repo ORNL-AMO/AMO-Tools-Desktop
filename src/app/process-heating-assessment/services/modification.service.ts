@@ -1,7 +1,7 @@
 import { computed, inject, Injectable, Signal } from '@angular/core';
 import { getNewIdString } from '../../shared/helperFunctions';
 import { ExploreOpportunityCategory, Notes } from '../models/phast';
-import { ProcessHeatingModification, ScenarioEnergySource, ScenarioOverrides } from '../models/modification';
+import { isSameEnergySource, ProcessHeatingModification, ScenarioEnergySource, ScenarioOverrides } from '../models/modification';
 import { SavingsOpportunity } from '../../shared/models/explore-opps';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingUiService } from './process-heating-ui.service';
@@ -98,10 +98,7 @@ export class ModificationService {
    */
   setEnergySource(id: string, energySource: ScenarioEnergySource | undefined): void {
     const baseline = this.assessmentService.settingsSignal();
-    const matchesBaseline = energySource
-      && energySource.energySourceType === baseline?.energySourceType
-      && (energySource.furnaceType ?? null) === (baseline?.furnaceType ?? null)
-      && (energySource.customFurnaceName ?? null) === (baseline?.customFurnaceName ?? null);
+    const matchesBaseline = !!energySource && !!baseline && isSameEnergySource(energySource, baseline);
     const updated = this.modifications().map(modification =>
       modification.id === id ? { ...modification, energySource: matchesBaseline ? undefined : energySource } : modification
     );

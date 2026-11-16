@@ -82,9 +82,10 @@ export class InputSummaryResultsService {
     if (definition.kind === 'scenario') {
       return [{ label: definition.label, rows: this.buildRows(definition.fields, scenarios, scenarios, settings, lookups, scenario => scenario.phast) }];
     }
-    const itemsByScenario = scenarios.map(scenario =>
-      !definition.isVisible || definition.isVisible(scenario.categories) ? definition.items(scenario.phast.losses, scenario.phast) ?? [] : []
-    );
+    const itemsByScenario = scenarios.map(scenario => {
+      const usesSection = !definition.isVisible || definition.isVisible(scenario.categories);
+      return usesSection ? definition.items(scenario.phast.losses, scenario.phast) ?? [] : [];
+    });
     return this.getEntryKeys(itemsByScenario).map((key, index) => {
       const selectEntry = (items: Array<{ id?: string; name?: string }>) => items.find((item, itemIndex) => this.entryKey(item, itemIndex) === key);
       const name = itemsByScenario.map(items => selectEntry(items)?.name).find(Boolean);
