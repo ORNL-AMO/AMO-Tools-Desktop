@@ -5,6 +5,12 @@ import { getEnergySourceLabel } from '../../models/energy-source';
 import { getEnergySourceTabChanges, ViewLink } from '../../models/views';
 import { deriveHeatingEquipmentConfiguration } from '../../services/process-heating-assessment.service';
 
+/** A modification with its own energy source selection, which a baseline change leaves as is. */
+export interface KeptEnergySource {
+  modificationName: string;
+  energySource: string;
+}
+
 export interface EnergySourceChangeDialogData {
   scenarioName: string;
   fromEnergySource: string;
@@ -12,6 +18,7 @@ export interface EnergySourceChangeDialogData {
   hiddenTabs: ViewLink[];
   addedTabs: ViewLink[];
   hasInheritingModifications: boolean;
+  keptEnergySources: KeptEnergySource[];
 }
 
 /**
@@ -19,9 +26,10 @@ export interface EnergySourceChangeDialogData {
  * @param current the scenario's settings before the change
  * @param next the scenario's settings after the change
  * @param hasInheritingModifications whether modifications without their own energy source will follow the change
+ * @param keptEnergySources modifications with their own energy source selection, listed for a baseline change
  */
 export function buildEnergySourceChangeDialogData(
-  scenarioName: string, current: Settings, next: Settings, hasInheritingModifications: boolean,
+  scenarioName: string, current: Settings, next: Settings, hasInheritingModifications: boolean, keptEnergySources: KeptEnergySource[] = [],
 ): EnergySourceChangeDialogData {
   const { hidden, added } = getEnergySourceTabChanges(deriveHeatingEquipmentConfiguration(current), deriveHeatingEquipmentConfiguration(next));
   return {
@@ -31,6 +39,7 @@ export function buildEnergySourceChangeDialogData(
     hiddenTabs: hidden,
     addedTabs: added,
     hasInheritingModifications,
+    keptEnergySources,
   };
 }
 

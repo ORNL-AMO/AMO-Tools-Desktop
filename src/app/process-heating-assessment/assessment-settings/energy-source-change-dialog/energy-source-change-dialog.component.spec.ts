@@ -11,6 +11,7 @@ function makeData(overrides: Partial<EnergySourceChangeDialogData> = {}): Energy
     hiddenTabs: [{ view: LossView.FLUE_GAS, label: 'Flue Gas' }, { view: LossView.GAS_LEAKAGE, label: 'Gas Leakage' }],
     addedTabs: [{ view: LossView.ENERGY_INPUT_EXHAUST_GAS, label: 'Energy Input Exhaust Gas' }],
     hasInheritingModifications: true,
+    keptEnergySources: [],
     ...overrides,
   };
 }
@@ -105,6 +106,27 @@ describe('EnergySourceChangeDialogComponent', () => {
       createComponent(makeData({ hasInheritingModifications: false }));
 
       expect(query('.inheriting-modifications')).toBeNull();
+    });
+
+    it('lists the modifications with their own energy source selection', () => {
+      createComponent(makeData({
+        keptEnergySources: [
+          { modificationName: 'Scenario 2', energySource: 'Electrotechnology (Electric Arc Furnace (EAF))' },
+          { modificationName: 'Scenario 3', energySource: 'Steam-based' },
+        ],
+      }));
+
+      const rows = Array.from(fixture.nativeElement.querySelectorAll('.kept-energy-sources tbody tr'), (row: HTMLTableRowElement) =>
+        Array.from(row.cells, cell => cell.textContent.trim()));
+      expect(query('.kept-energy-sources caption').textContent.trim()).toBe('These modifications have their own energy source selection and will not change');
+      expect(rows).toEqual([['Scenario 2', 'Electrotechnology (Electric Arc Furnace (EAF))'], ['Scenario 3', 'Steam-based']]);
+      expect(query('.change-notes .kept-energy-sources')).toBeNull();
+    });
+
+    it('omits the list when no modification has its own energy source selection', () => {
+      createComponent(makeData());
+
+      expect(query('.kept-energy-sources')).toBeNull();
     });
   });
 

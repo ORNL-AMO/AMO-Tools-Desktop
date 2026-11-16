@@ -44,6 +44,28 @@
     </div>
   }
 
+  @if (data.keptEnergySources.length) {
+    <div class="kept-energy-sources">
+      <table class="table table-sm">
+        <caption>These modifications have their own energy source selection and will not change</caption>
+        <thead>
+          <tr>
+            <th scope="col">Modification</th>
+            <th scope="col">Energy Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (kept of data.keptEnergySources; track $index) {
+            <tr>
+              <td>{{ kept.modificationName }}</td>
+              <td>{{ kept.energySource }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
   <div class="change-notes">
     <div class="change-notes-title">When you confirm</div>
     <ul>

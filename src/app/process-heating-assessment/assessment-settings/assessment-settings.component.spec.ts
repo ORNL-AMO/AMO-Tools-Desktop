@@ -13,7 +13,7 @@ import { ProcessHeatingModification } from '../models/modification';
 import { LossView } from '../models/views';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
 import { AssessmentSettingsComponent } from './assessment-settings.component';
-import { EnergySourceChangeDialogComponent } from './energy-source-change-dialog/energy-source-change-dialog.component';
+import { EnergySourceChangeDialogComponent, EnergySourceChangeDialogData } from './energy-source-change-dialog/energy-source-change-dialog.component';
 
 function makeSettings(overrides: Partial<Settings> = {}): Settings {
   return {
@@ -58,11 +58,12 @@ describe('AssessmentSettingsComponent', () => {
     processHeatingSignal = signal(makePhast());
     assessmentService = jasmine.createSpyObj<ProcessHeatingAssessmentService>(
       'ProcessHeatingAssessmentService',
-      ['saveSettings', 'setProcessHeating', 'getModifications'],
+      ['saveSettings', 'setProcessHeating', 'getModifications', 'scenarioSettings'],
       { settingsSignal, processHeatingSignal, assessment$: of({ name: 'Furnace' }) as never },
     );
     assessmentService.saveSettings.and.resolveTo(false);
     assessmentService.getModifications.and.returnValue([]);
+    assessmentService.scenarioSettings.and.callFake(() => settingsSignal());
     modalDialogService = jasmine.createSpyObj<ModalDialogService>('ModalDialogService', ['openModal']);
     snackbarService = jasmine.createSpyObj<SnackbarService>('SnackbarService', ['setSnackbarMessage']);
 
@@ -232,6 +233,7 @@ describe('AssessmentSettingsComponent', () => {
           hiddenTabs: [{ view: LossView.FLUE_GAS, label: 'Flue Gas' }, { view: LossView.GAS_LEAKAGE, label: 'Gas Leakage' }],
           addedTabs: [{ view: LossView.ENERGY_INPUT_EXHAUST_GAS, label: 'Energy Input Exhaust Gas' }],
           hasInheritingModifications: false,
+          keptEnergySources: [],
         },
       });
     });
@@ -281,6 +283,27 @@ describe('AssessmentSettingsComponent', () => {
 
       const [, config] = modalDialogService.openModal.calls.mostRecent().args;
       expect(config.data).toEqual(jasmine.objectContaining({ hasInheritingModifications: false }));
+    });
+
+    it('lists each modification with its own energy source selection, including one matching the new baseline source', async () => {
+      assessmentService.getModifications.and.returnValue([
+        { id: 'mod-1', scenarioOverrides: { name: 'Steam Option' }, energySource: { energySourceType: 'Steam', furnaceType: null } },
+        { id: 'mod-2', scenarioOverrides: { name: 'Infrared Option' }, energySource: { energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' } },
+        { id: 'mod-3', scenarioOverrides: { name: 'Follows Baseline' } },
+      ] as ProcessHeatingModification[]);
+      assessmentService.scenarioSettings.and.callFake(id => id === 'mod-1'
+        ? makeSettings({ energySourceType: 'Steam', furnaceType: null })
+        : makeSettings({ energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' }));
+      chooseEnergySourceChange(true);
+      switchToElectricity();
+
+      await component.saveSettings();
+
+      const [, config] = modalDialogService.openModal.calls.mostRecent().args;
+      expect((config.data as EnergySourceChangeDialogData).keptEnergySources).toEqual([
+        { modificationName: 'Steam Option', energySource: 'Steam-based' },
+        { modificationName: 'Infrared Option', energySource: 'Electrotechnology (Electrical Infrared)' },
+      ]);
     });
 
     it('saves without asking when there is no loss data and no modification', async () => {

@@ -3,6 +3,8 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { UntypedFormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, concatMap, debounceTime, EMPTY, firstValueFrom, from } from 'rxjs';
+import { getEnergySourceLabel } from '../models/energy-source';
+import { getModificationName } from '../models/modification';
 import { LOSS_KEYS, PHAST } from '../models/phast';
 import { Settings } from '../../shared/models/settings';
 import { SettingsService } from '../../settings/settings.service';
@@ -141,7 +143,16 @@ export class AssessmentSettingsComponent {
     }
     const dialogRef = this.modalDialogService.openModal<boolean, EnergySourceChangeDialogData, EnergySourceChangeDialogComponent>(
       EnergySourceChangeDialogComponent, {
-        data: buildEnergySourceChangeDialogData('Baseline', current, newSettings, modifications.some(modification => !modification.energySource)),
+        data: buildEnergySourceChangeDialogData(
+          'Baseline',
+          current,
+          newSettings,
+          modifications.some(modification => !modification.energySource),
+          modifications.filter(modification => modification.energySource).map(modification => ({
+            modificationName: getModificationName(modification),
+            energySource: getEnergySourceLabel(this.assessmentService.scenarioSettings(modification.id)),
+          })),
+        ),
       },
     );
     return (await firstValueFrom(dialogRef.closed)) === true;
