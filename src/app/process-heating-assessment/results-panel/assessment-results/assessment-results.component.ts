@@ -5,7 +5,8 @@ import { getEnergySourceIcon, getEnergySourceLabel } from '../../models/energy-s
 import { Settings } from '../../../shared/models/settings';
 import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
-import { combineResultCategories, ProcessHeatingResultsService, ResultCategories } from '../../services/process-heating-results.service';
+import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
+import { combineResultCategories, ResultCategories, ResultColumn, ResultRowDefinition, resultRowValue, visibleResultRows } from '../../models/result-rows';
 import { ModificationService } from '../../services/modification.service';
 import { InvalidModification, ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
 
@@ -13,6 +14,18 @@ import { InvalidModification, ProcessHeatingValidityService } from '../../servic
 interface EnergySourceMarker {
   icon: string;
   label: string;
+}
+
+/** A rendered row: the shared definition plus each column's value and the energy source marker. */
+interface ResultRowView {
+  definition: ResultRowDefinition;
+  baseline: number | undefined;
+  modification: number | undefined;
+  marker: EnergySourceMarker | undefined;
+  /** DecimalPipe format */
+  format: string;
+  /** '%' for percent rows */
+  suffix: string;
 }
 
 @Component({
@@ -73,7 +86,10 @@ export class AssessmentResultsComponent {
     return modification ? combineResultCategories([this.baselineCategories(), modification]) : this.baselineCategories();
   });
 
-  /** Rows only one column's energy source uses, marked with that source's icon; empty while both columns share every row. */
+  /**
+   * Rows only one column's energy source uses, marked with that source's icon; empty while both columns share every row.
+   * Only this panel shows markers: Result Data and its PDF export don't yet. Whether they get them, or the markers change, is an open product question.
+   */
   readonly rowMarkers: Signal<Partial<Record<keyof ResultCategories, EnergySourceMarker>>> = computed(() => {
     const modificationCategories = this.modificationCategories();
     if (!modificationCategories) {
@@ -91,6 +107,26 @@ export class AssessmentResultsComponent {
       }
     }
     return markers;
+  });
+
+  readonly rows: Signal<ResultRowView[]> = computed(() => {
+    const markers = this.rowMarkers();
+    const baseline: ResultColumn = { results: this.baselineResults(), categories: this.baselineCategories() };
+    const modificationCategories = this.modificationCategories();
+    const modification: ResultColumn | undefined = modificationCategories
+      ? { results: this.modificationResults(), categories: modificationCategories }
+      : undefined;
+    return visibleResultRows(this.rowCategories()).map(definition => {
+      const isPercent = definition.percentDecimals !== undefined;
+      return {
+        definition,
+        baseline: resultRowValue(definition, baseline),
+        modification: modification ? resultRowValue(definition, modification) : undefined,
+        marker: definition.category ? markers[definition.category] : undefined,
+        format: isPercent ? `1.${definition.percentDecimals}-${definition.percentDecimals}` : this.decimalCount(),
+        suffix: isPercent ? '%' : '',
+      };
+    });
   });
 
   readonly lossUnit: Signal<string> = computed(() => `${this.settings().energyResultUnit}/hr`);

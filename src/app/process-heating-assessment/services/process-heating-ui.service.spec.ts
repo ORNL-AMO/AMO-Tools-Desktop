@@ -588,7 +588,14 @@ describe('ProcessHeatingUiService tabs to visit', () => {
       providers: [
         ProcessHeatingUiService,
         { provide: Router, useValue: router },
-        { provide: ProcessHeatingAssessmentService, useValue: { heatingEquipmentConfiguration: signal(HeatingEquipmentConfiguration.FUEL_FIRED) } },
+        {
+          provide: ProcessHeatingAssessmentService,
+          useValue: {
+            heatingEquipmentConfiguration: signal(HeatingEquipmentConfiguration.FUEL_FIRED),
+            processHeatingSignal: signal<PHAST>({ modifications: [{ id: 'mod-1' }, { id: 'mod-2' }] as PHAST['modifications'] }),
+            scenarioConfiguration: () => HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_EAF,
+          },
+        },
         { provide: STEPPED_ROUTES, useValue: [] },
         { provide: ProcessHeatingValidityService, useValue: VALID_BASELINE },
       ],
@@ -603,11 +610,29 @@ describe('ProcessHeatingUiService tabs to visit', () => {
     expect(service.isTabToVisit('mod-1', LossView.WALL_LOSSES)).toBeFalse();
   });
 
-  it('clears one tab once visited', () => {
-    service.markTabVisited('mod-1', LossView.SLAG);
+  it('clears a tab once it is selected for the selected modification, whether or not anything is entered', () => {
+    service.selectExpertViewTab(LossView.SLAG);
 
     expect(service.isTabToVisit('mod-1', LossView.SLAG)).toBeFalse();
     expect(service.isTabToVisit('mod-1', LossView.OPERATIONS)).toBeTrue();
+  });
+
+  it("leaves another modification's marks when a tab is selected", () => {
+    service.markTabsToVisit('mod-2', [LossView.SLAG]);
+
+    service.selectExpertViewTab(LossView.SLAG);
+
+    expect(service.isTabToVisit('mod-2', LossView.SLAG)).toBeTrue();
+  });
+
+  it('clears the shown tab for the newly selected modification', () => {
+    service.markTabsToVisit('mod-2', [LossView.SLAG]);
+    service.selectExpertViewTab(LossView.SLAG);
+
+    service.activeModificationIdSignal.set('mod-2');
+    service.markShownTabVisited();
+
+    expect(service.isTabToVisit('mod-2', LossView.SLAG)).toBeFalse();
   });
 
   it('replaces earlier marks on a later energy source change', () => {
@@ -615,5 +640,11 @@ describe('ProcessHeatingUiService tabs to visit', () => {
 
     expect(service.isTabToVisit('mod-1', LossView.SLAG)).toBeFalse();
     expect(service.isTabToVisit('mod-1', LossView.HEAT_SYSTEM_EFFICIENCY)).toBeTrue();
+  });
+
+  it("drops a deleted modification's marks", () => {
+    service.clearTabsToVisit('mod-1');
+
+    expect(service.isTabToVisit('mod-1', LossView.OPERATIONS)).toBeFalse();
   });
 });

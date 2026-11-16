@@ -7,7 +7,8 @@ import { ShowResultsCategories } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { Losses, PHAST, PhastResults } from '../models/phast';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
-import { combineResultCategories, ProcessHeatingResultsService, ResultCategories } from './process-heating-results.service';
+import { ProcessHeatingResultsService } from './process-heating-results.service';
+import { combineResultCategories, ResultCategories } from '../models/result-rows';
 
 describe('ProcessHeatingResultsService', () => {
   let service: ProcessHeatingResultsService;

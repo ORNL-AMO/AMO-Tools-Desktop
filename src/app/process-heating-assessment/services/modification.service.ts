@@ -1,6 +1,7 @@
 import { computed, inject, Injectable, Signal } from '@angular/core';
 import { getNewIdString } from '../../shared/helperFunctions';
 import { ExploreOpportunityCategory, Notes } from '../models/phast';
+import { AssessmentView } from '../models/views';
 import { isSameEnergySource, ProcessHeatingModification, ScenarioEnergySource, ScenarioOverrides } from '../models/modification';
 import { SavingsOpportunity } from '../../shared/models/explore-opps';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
@@ -43,6 +44,7 @@ export class ModificationService {
 
   selectModification(id: string): void {
     this.uiService.activeModificationIdSignal.set(id);
+    this.markShownTabVisitedInExpertView();
   }
 
   addModification(name?: string): string {
@@ -115,8 +117,17 @@ export class ModificationService {
   deleteModification(id: string): void {
     const remaining = this.modifications().filter(modification => modification.id !== id);
     this.writeModifications(remaining);
+    this.uiService.clearTabsToVisit(id);
     if (this.uiService.activeModificationIdSignal() === id) {
       this.uiService.activeModificationIdSignal.set(remaining[0]?.id);
+      this.markShownTabVisitedInExpertView();
+    }
+  }
+
+  /** Switching modification while on Expert View shows that modification's copy of the selected tab. */
+  private markShownTabVisitedInExpertView(): void {
+    if (this.uiService.childView() === AssessmentView.EXPERT_VIEW) {
+      this.uiService.markShownTabVisited();
     }
   }
 

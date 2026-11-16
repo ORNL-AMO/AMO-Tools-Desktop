@@ -6,6 +6,7 @@ import { ScenarioOverrides, ProcessHeatingModification } from '../models/modific
 import { ModificationService } from './modification.service';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingUiService } from './process-heating-ui.service';
+import { AssessmentView } from '../models/views';
 import { FakeProcessHeatingUiService } from '../explore-opportunities/opportunity-test-fakes';
 
 class FakeProcessHeatingAssessmentService {
@@ -145,6 +146,28 @@ describe('ModificationService', () => {
     const id = service.addModification();
     service.deleteModification(id);
     expect(service.modifications()).toEqual([]);
+  });
+
+  it("drops the deleted modification's tabs to visit", () => {
+    const clear = spyOn(uiService, 'clearTabsToVisit');
+    const id = service.addModification();
+
+    service.deleteModification(id);
+
+    expect(clear).toHaveBeenCalledWith(id);
+  });
+
+  it('counts the shown Expert View tab as visited when switching modification there', () => {
+    const markShown = spyOn(uiService, 'markShownTabVisited');
+    const firstId = service.addModification('First');
+    service.addModification('Second');
+
+    service.selectModification(firstId);
+    expect(markShown).not.toHaveBeenCalled();
+
+    uiService.childView.set(AssessmentView.EXPERT_VIEW);
+    service.selectModification(firstId);
+    expect(markShown).toHaveBeenCalledTimes(1);
   });
 
   it('selects the next remaining modification when the deleted one was selected', () => {

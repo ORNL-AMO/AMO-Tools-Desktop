@@ -11,7 +11,8 @@ import { getModificationName } from '../../models/modification';
 import { PHAST } from '../../models/phast';
 import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
-import { combineResultCategories, ProcessHeatingResultsService, ResultCategories } from '../../services/process-heating-results.service';
+import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
+import { combineResultCategories, ResultCategories } from '../../models/result-rows';
 import { EMPTY_LOOKUPS, FieldDefinition, InputSummaryLookups, resolveUnit, SECTION_DEFINITIONS, SectionDefinition, SummaryValue } from './input-summary-definitions';
 
 /** One summary definition's sections; `count` is the number of item entries and is omitted for scenario-level definitions. */

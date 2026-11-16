@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, Injector, Signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Injector, Signal } from '@angular/core';
 import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { ModificationService } from '../services/modification.service';
 import { getModificationName, ProcessHeatingModification } from '../models/modification';
@@ -32,14 +32,8 @@ export class ExpertViewComponent {
   readonly selectedTab: Signal<ProcessHeatingView | undefined> = this.uiService.selectedExpertViewTab;
 
   constructor() {
-    // Any tab shown for a modification counts as visited, whether reached by a click or by switching modification.
-    effect(() => {
-      const view = this.selectedTab();
-      const modification = this.selectedModification();
-      if (view && modification) {
-        untracked(() => this.uiService.markTabVisited(modification.id, view));
-      }
-    });
+    // Returning to Expert View shows the tab selected earlier, which counts as a visit.
+    this.uiService.markShownTabVisited();
   }
 
   selectTab(view: ProcessHeatingView): void {

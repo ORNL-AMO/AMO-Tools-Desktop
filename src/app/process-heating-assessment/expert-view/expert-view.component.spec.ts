@@ -61,9 +61,7 @@ class FakeProcessHeatingUiService {
     return !!this.tabsToVisit()[modificationId]?.includes(view);
   }
 
-  markTabVisited(modificationId: string, view: string): void {
-    this.tabsToVisit.update(current => ({ ...current, [modificationId]: (current[modificationId] ?? []).filter(pending => pending !== view) }));
-  }
+  markShownTabVisited(): void {}
 }
 
 class FakeValidityService {
@@ -270,6 +268,22 @@ describe('ExpertViewComponent', () => {
     });
   });
 
+  it('counts the tab it shows on opening as visited', () => {
+    const markShown = spyOn(uiService, 'markShownTabVisited');
+
+    TestBed.createComponent(ExpertViewComponent);
+
+    expect(markShown).toHaveBeenCalled();
+  });
+
+  it('clicking a tab selects it through the UI service, which counts it as visited', () => {
+    const select = spyOn(uiService, 'selectExpertViewTab').and.callThrough();
+
+    query('.tabs li')[1].click();
+
+    expect(select).toHaveBeenCalledWith(LossView.WALL_LOSSES);
+  });
+
   describe('tabs to visit after an energy source change', () => {
     beforeEach(() => {
       uiService.tabsToVisit.set({ 'mod-1': [LossView.WALL_LOSSES, LossView.EXTENDED_SURFACE] });
@@ -280,15 +294,6 @@ describe('ExpertViewComponent', () => {
       const marked = query('.tabs li .badge.input-error').map(badge => badge.closest('a').firstChild.textContent.trim());
       expect(marked).toEqual(['Wall Losses', 'Extended Surface']);
       expect(query('.tabs li > a')[1].getAttribute('title')).toBe('Wall Losses, review after the energy source change');
-    });
-
-    it('clears the mark once the tab is shown, whether or not anything is entered', () => {
-      query('.tabs li')[1].click();
-      fixture.detectChanges();
-
-      expect(uiService.isTabToVisit('mod-1', LossView.WALL_LOSSES)).toBeFalse();
-      expect(uiService.isTabToVisit('mod-1', LossView.EXTENDED_SURFACE)).toBeTrue();
-      expect(query('.tabs li')[1].querySelector('.badge')).toBeNull();
     });
 
     it('keeps the red invalid mark ahead of the visit mark', () => {

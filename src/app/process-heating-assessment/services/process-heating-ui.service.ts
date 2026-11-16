@@ -120,6 +120,7 @@ export class ProcessHeatingUiService {
 
   selectExpertViewTab(view: ProcessHeatingView): void {
     this._selectedExpertViewTab.set(view);
+    this.markShownTabVisited();
   }
 
   // Session-only by design: a reload clears it, and it never reaches saved assessment data.
@@ -134,12 +135,21 @@ export class ProcessHeatingUiService {
     this.tabsToVisit.update(current => ({ ...current, [modificationId]: new Set(views) }));
   }
 
-  markTabVisited(modificationId: string, view: ProcessHeatingView): void {
-    const pending = this.tabsToVisit()[modificationId];
+  /** Counts the tab Expert View shows for the selected modification as visited; called wherever the shown tab or modification changes. */
+  markShownTabVisited(): void {
+    const modificationId = this.selectedModificationId();
+    const view = this.selectedExpertViewTab();
+    const pending = modificationId ? this.tabsToVisit()[modificationId] : undefined;
     if (!pending?.has(view)) return;
     const remaining = new Set(pending);
     remaining.delete(view);
     this.tabsToVisit.update(current => ({ ...current, [modificationId]: remaining }));
+  }
+
+  clearTabsToVisit(modificationId: string): void {
+    const remaining = { ...this.tabsToVisit() };
+    delete remaining[modificationId];
+    this.tabsToVisit.set(remaining);
   }
 
   isTabToVisit(modificationId: string, view: ProcessHeatingView): boolean {

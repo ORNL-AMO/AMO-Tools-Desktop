@@ -51,7 +51,12 @@ export class FakeProcessHeatingAssessmentService {
 export class FakeProcessHeatingUiService {
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   activeModificationIdSignal: WritableSignal<string | undefined> = signal<string | undefined>(undefined);
+  readonly childView: WritableSignal<string> = signal<string>('');
   readonly selectedModificationId: Signal<string | undefined> = computed(() =>
     resolveSelectedModificationId(this.assessmentService.processHeatingSignal()?.modifications ?? [], this.activeModificationIdSignal())
   );
+
+  markShownTabVisited(): void {}
+
+  clearTabsToVisit(_modificationId: string): void {}
 }

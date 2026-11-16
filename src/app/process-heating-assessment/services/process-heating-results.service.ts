@@ -1,6 +1,6 @@
 import { computed, inject, Injectable, Signal } from '@angular/core';
 import { PHAST, PhastResults } from '../models/phast';
-import { CalculatedByPhast, EnergyUseReportData, ShowResultsCategories } from '../../shared/models/phast/phast';
+import { CalculatedByPhast, EnergyUseReportData } from '../../shared/models/phast/phast';
 import { DesignedEnergyResults } from '../../shared/models/phast/designedEnergy';
 import { MeteredEnergyResults } from '../../shared/models/phast/meteredEnergy';
 import { Settings } from '../../shared/models/settings';
@@ -9,27 +9,7 @@ import { MeteredEnergyService } from '../../phast/metered-energy/metered-energy.
 import { DesignedEnergyService } from '../../phast/designed-energy/designed-energy.service';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { toLegacyPhast } from './legacy-phast.util';
-
-/** Result row flags; Electrical Heat Delivered is split because EAF reports it from a different result field. */
-export interface ResultCategories extends ShowResultsCategories {
-  showEafElectricalDelivered: boolean;
-  showStandardElectricalDelivered: boolean;
-}
-
-/**
- * @param categories each scenario's result categories
- * @returns a flag set wherever any scenario sets it, so a table shows every row some column uses
- */
-export function combineResultCategories(categories: ResultCategories[]): ResultCategories {
-  const [first, ...rest] = categories;
-  const combined: ResultCategories = { ...first };
-  for (const next of rest) {
-    for (const key of Object.keys(next) as (keyof ResultCategories)[]) {
-      combined[key] = !!combined[key] || !!next[key];
-    }
-  }
-  return combined;
-}
+import { ResultCategories } from '../models/result-rows';
 
 @Injectable()
 export class ProcessHeatingResultsService {

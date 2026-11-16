@@ -3,10 +3,10 @@ import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { Settings } from '../../../shared/models/settings';
 import { ModificationNameCell, ReportColumnCell, ReportTableRow } from '../../../shared/report-builder/models/report-ui-models';
 import { getModificationName } from '../../models/modification';
-import { PhastResults } from '../../models/phast';
 import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
-import { combineResultCategories, ProcessHeatingResultsService, ResultCategories } from '../../services/process-heating-results.service';
+import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
+import { combineResultCategories, resultRowValue, ResultColumn, visibleResultRows } from '../../models/result-rows';
 import { AuxiliaryEquipmentResultsService } from '../../services/auxiliary-equipment-results.service';
 import { AuxiliaryEquipmentResults } from '../../models/auxiliary-equipment';
 
@@ -20,24 +20,6 @@ export interface ResultsDataUI {
 }
 
 export const AUXILIARY_EQUIPMENT_TABLE_TITLE = 'Auxiliary Equipment (kWh/yr)';
-
-type ResultSelector = (results: PhastResults) => number | undefined;
-
-interface RowDefinition {
-  label: string;
-  units?: string;
-  selector: ResultSelector;
-  decimals: number;
-  /** Result category the row belongs to; a column whose energy source doesn't use it shows the empty placeholder */
-  category?: keyof ResultCategories;
-  /** False leaves the baseline cell empty, for rows that compare a modification against baseline */
-  showBaseline?: boolean;
-}
-
-interface ResultColumn {
-  results: PhastResults;
-  categories: ResultCategories;
-}
 
 /**
  * Builds the hourly energy loss/use table for baseline and every modification from live scenario
@@ -115,83 +97,29 @@ export class ResultsDataResultsService {
   private buildRows(baseline: ResultColumn, mods: ResultColumn[], settings: Settings): ReportTableRow[] {
     const categories = combineResultCategories([baseline.categories, ...mods.map(mod => mod.categories)]);
     const energyDecimals = ['MMBtu', 'GJ', 'kWh'].includes(settings.energyResultUnit) ? 2 : 0;
-    const row = (label: string, selector: ResultSelector, category?: keyof ResultCategories): ReportTableRow =>
-      this.buildRow({ label, selector, decimals: energyDecimals, category }, baseline, mods);
-    const percentRow = (label: string, selector: ResultSelector, decimals: number, category: keyof ResultCategories): ReportTableRow =>
-      this.buildRow({ label, units: '%', selector, decimals, category }, baseline, mods);
-
-    const rows: ReportTableRow[] = [
-      row('Charge Materials', r => r.totalChargeMaterialLoss),
-      row('Fixtures, trays etc.', r => r.totalFixtureLoss),
-      row('Wall Losses', r => r.totalWallLoss),
-      row('Cooling Losses', r => r.totalCoolingLoss),
-      row('Atmosphere Losses', r => r.totalAtmosphereLoss),
-      row('Opening Losses', r => r.totalOpeningLoss),
-      row('Leakage Losses', r => r.totalLeakageLoss),
-      row('Extended Surface Losses', r => r.totalExtSurfaceLoss),
-    ];
-    if (categories.showSlag) rows.push(row('Slag Losses', r => r.totalSlag, 'showSlag'));
-    rows.push(
-      row('Other Losses', r => r.totalOtherLoss),
-      row('Total Available Heat Required', r => r.totalInput),
-    );
-    if (categories.showFlueGas) {
-      rows.push(
-        percentRow('Available Heat', r => r.flueGasAvailableHeat, 1, 'showFlueGas'),
-        row('Flue Gas Losses', r => r.flueGasSystemLosses, 'showFlueGas'),
-      );
-    }
-    rows.push(row('Exothermic Heat from Process', r => r.exothermicHeat));
-    if (categories.showEnInput2) {
-      rows.push(
-        percentRow('Fuel Input Available Heat', r => r.availableHeatPercent, 0, 'showEnInput2'),
-        row('Exhaust Gas Losses', r => r.totalExhaustGas, 'showEnInput2'),
-      );
-    }
-    if (categories.showExGas) rows.push(row('Exhaust Gas Losses', r => r.totalExhaustGasEAF, 'showExGas'));
-    if (categories.showSystemEff) {
-      rows.push(
-        percentRow('System Efficiency', r => r.heatingSystemEfficiency, 0, 'showSystemEff'),
-        row('Total System Losses', r => r.totalSystemLosses, 'showSystemEff'),
-      );
-    }
-    if (categories.showHeatDelivered) rows.push(row('Fuel Heat Delivered', r => r.energyInputHeatDelivered, 'showHeatDelivered'));
-    if (categories.showEnInput2) rows.push(row('Total Additional Fuel Heat', r => r.totalAdditionalFuelHeat, 'showEnInput2'));
-    if (categories.showEafElectricalDelivered) rows.push(row('Electrical Heat Delivered', r => r.energyInputHeatDelivered, 'showEafElectricalDelivered'));
-    if (categories.showChemicalEnergyDelivered) rows.push(row('Chemical Energy Delivered', r => r.energyInputTotalChemEnergy, 'showChemicalEnergyDelivered'));
-    if (categories.showStandardElectricalDelivered) rows.push(row('Electrical Heat Delivered', r => r.electricalHeatDelivered, 'showStandardElectricalDelivered'));
-    if (categories.showEnInput2) {
-      rows.push(
-        row('Electrical Heater Losses', r => r.electricalHeaterLosses, 'showEnInput2'),
-        row('Total Provided Electrical Heat', r => r.totalProvidedElectricalHeat, 'showEnInput2'),
-      );
-    }
-    rows.push({ ...row('Gross Heat Input', r => r.grossHeatInput), className: 'emphasis' });
+    const rows = visibleResultRows(categories).map((definition): ReportTableRow => {
+      const decimals = definition.percentDecimals ?? energyDecimals;
+      const columnCell = (column: ResultColumn): ReportColumnCell => this.cell(resultRowValue(definition, column), decimals);
+      return {
+        label: definition.label,
+        units: definition.percentDecimals === undefined ? undefined : '%',
+        className: definition.isTotal ? 'emphasis' : 'default',
+        baseline: columnCell(baseline),
+        modifications: mods.map(columnCell),
+      };
+    });
 
     if (this.featureFlagService.showOperationalImpacts()) {
-      const emissionsUnit = `${settings.emissionsUnit === 'Metric' ? 'tonne' : 'ton'} CO<sub>2</sub>/hr`;
-      rows.push(this.buildRow({
-        label: 'CO<sub>2</sub> Emissions', units: emissionsUnit, selector: r => r.co2EmissionsOutput?.hourlyTotalEmissionOutput, decimals: 2,
-      }, baseline, mods));
+      const units = `${settings.emissionsUnit === 'Metric' ? 'tonne' : 'ton'} CO<sub>2</sub>/hr`;
+      const emissions = (column: ResultColumn): ReportColumnCell => this.cell(column.results?.co2EmissionsOutput?.hourlyTotalEmissionOutput, 2);
+      rows.push({ label: 'CO<sub>2</sub> Emissions', units, className: 'default', baseline: emissions(baseline), modifications: mods.map(emissions) });
       if (mods.length) {
-        const savings: ResultSelector = r => this.resultsService.getCo2EmissionsSavings(baseline.results, r, 'hourlyTotalEmissionOutput');
-        rows.push(this.buildRow({ label: 'CO<sub>2</sub> Emissions Savings', units: emissionsUnit, selector: savings, decimals: 2, showBaseline: false }, baseline, mods));
+        const savings = (column: ResultColumn): ReportColumnCell =>
+          this.cell(this.resultsService.getCo2EmissionsSavings(baseline.results, column.results, 'hourlyTotalEmissionOutput'), 2);
+        rows.push({ label: 'CO<sub>2</sub> Emissions Savings', units, className: 'default', baseline: { value: null }, modifications: mods.map(savings) });
       }
     }
     return rows;
-  }
-
-  private buildRow(definition: RowDefinition, baseline: ResultColumn, mods: ResultColumn[]): ReportTableRow {
-    const { label, units, selector, decimals, category, showBaseline = true } = definition;
-    const columnCell = (column: ResultColumn): ReportColumnCell =>
-      !category || column.categories[category] ? this.cell(selector(column.results), decimals) : { value: null };
-    return {
-      label,
-      units,
-      className: 'default',
-      baseline: showBaseline ? columnCell(baseline) : { value: null },
-      modifications: mods.map(columnCell),
-    };
   }
 
   /** Zero and missing values render as the empty placeholder, matching legacy. */

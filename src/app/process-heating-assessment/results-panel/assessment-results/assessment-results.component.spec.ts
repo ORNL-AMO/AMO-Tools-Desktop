@@ -5,7 +5,8 @@ import { Settings } from '../../../shared/models/settings';
 import { PhastResults } from '../../models/phast';
 import { ProcessHeatingModification } from '../../models/modification';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
-import { ProcessHeatingResultsService, ResultCategories } from '../../services/process-heating-results.service';
+import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
+import { ResultCategories } from '../../models/result-rows';
 import { ModificationService } from '../../services/modification.service';
 import { InvalidModification, ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
 import { AssessmentResultsComponent } from './assessment-results.component';
@@ -177,7 +178,7 @@ describe('AssessmentResultsComponent', () => {
   describe('conditional rows', () => {
     it('hides configuration-specific rows when no category applies', () => {
       render();
-      ['Aux Power Losses', 'Slag Losses', 'Available Heat (%)', 'Flue Gas Losses', 'Fuel Input Available Heat', 'System Efficiency', 'Electrical Heat Delivered']
+      ['Aux Power Losses', 'Slag Losses', 'Available Heat', 'Flue Gas Losses', 'Fuel Input Available Heat', 'System Efficiency', 'Electrical Heat Delivered']
         .forEach(label => expect(row(label)).withContext(label).toBeUndefined());
     });
 
@@ -185,7 +186,7 @@ describe('AssessmentResultsComponent', () => {
       categories.set({ ...NO_CATEGORIES, showFlueGas: true });
       baselineResults.set(makeResults({ flueGasAvailableHeat: 55.5, flueGasSystemLosses: 3 }));
       render();
-      expect(rowCells('Available Heat (%)')).toEqual(['55.5%']);
+      expect(rowCells('Available Heat')).toEqual(['55.5%']);
       expect(rowCells('Flue Gas Losses')).toEqual(['3.00']);
     });
 
