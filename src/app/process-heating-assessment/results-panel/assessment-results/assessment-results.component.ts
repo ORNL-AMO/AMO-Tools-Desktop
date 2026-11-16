@@ -1,12 +1,19 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, Signal, viewChild } from '@angular/core';
 import { PhastResults } from '../../models/phast';
 import { getModificationName, ProcessHeatingModification } from '../../models/modification';
+import { getEnergySourceIcon, getEnergySourceLabel } from '../../models/energy-source';
 import { Settings } from '../../../shared/models/settings';
 import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { combineResultCategories, ProcessHeatingResultsService, ResultCategories } from '../../services/process-heating-results.service';
 import { ModificationService } from '../../services/modification.service';
 import { InvalidModification, ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
+
+/** Marks a result row only one column's energy source uses. */
+interface EnergySourceMarker {
+  icon: string;
+  label: string;
+}
 
 @Component({
   selector: 'app-process-heating-assessment-results',
@@ -66,11 +73,36 @@ export class AssessmentResultsComponent {
     return modification ? combineResultCategories([this.baselineCategories(), modification]) : this.baselineCategories();
   });
 
+  /** Rows only one column's energy source uses, marked with that source's icon; empty while both columns share every row. */
+  readonly rowMarkers: Signal<Partial<Record<keyof ResultCategories, EnergySourceMarker>>> = computed(() => {
+    const modificationCategories = this.modificationCategories();
+    if (!modificationCategories) {
+      return {};
+    }
+    const baselineCategories = this.baselineCategories();
+    const baselineMarker = this.energySourceMarker('baseline', 'Baseline');
+    const modificationMarker = this.energySourceMarker(this.scenario(), this.modificationName());
+    const markers: Partial<Record<keyof ResultCategories, EnergySourceMarker>> = {};
+    for (const key of Object.keys(baselineCategories) as (keyof ResultCategories)[]) {
+      if (baselineCategories[key] && !modificationCategories[key]) {
+        markers[key] = baselineMarker;
+      } else if (modificationCategories[key] && !baselineCategories[key]) {
+        markers[key] = modificationMarker;
+      }
+    }
+    return markers;
+  });
+
   readonly lossUnit: Signal<string> = computed(() => `${this.settings().energyResultUnit}/hr`);
 
   readonly decimalCount: Signal<string> = computed(() =>
     ['MMBtu', 'GJ', 'kWh'].includes(this.settings().energyResultUnit?.trim()) ? '1.2-2' : '1.0-0'
   );
+
+  private energySourceMarker(scenario: AssessmentScenario, scenarioName: string): EnergySourceMarker {
+    const settings = this.assessmentService.scenarioSettings(scenario);
+    return { icon: getEnergySourceIcon(settings), label: `Only used by ${scenarioName} (${getEnergySourceLabel(settings)})` };
+  }
 
   private readonly copyTable = viewChild<ElementRef<HTMLTableElement>>('copyTable');
   copyTableString: string;

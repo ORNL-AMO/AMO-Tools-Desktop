@@ -3,6 +3,7 @@
 @let cats = rowCategories();
 @let baseCats = baselineCategories();
 @let modCats = modificationCategories();
+@let markers = rowMarkers();
 <div class="output-summary">
   <table #copyTable class="table table-hover table-striped panel-table">
     <thead>
@@ -92,7 +93,7 @@
       </tr>
       @if (cats.showSlag) {
         <tr>
-          <td>Slag Losses</td>
+          <td>Slag Losses<ng-container *ngTemplateOutlet="energySourceMarker; context: { $implicit: markers.showSlag }"></ng-container></td>
           <td>@if (baseCats.showSlag && base?.totalSlag) { {{base.totalSlag | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
           @if (modification()) {
             <td>@if (modCats?.showSlag && mod?.totalSlag) { {{mod.totalSlag | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
@@ -115,14 +116,14 @@
       </tr>
       @if (cats.showFlueGas) {
         <tr>
-          <td>Available Heat (%)</td>
+          <td>Available Heat (%)<ng-container *ngTemplateOutlet="energySourceMarker; context: { $implicit: markers.showFlueGas }"></ng-container></td>
           <td>@if (baseCats.showFlueGas && base?.flueGasAvailableHeat) { {{base.flueGasAvailableHeat | number: '2.1-1'}}% } @else {&mdash; &mdash;}</td>
           @if (modification()) {
             <td>@if (modCats?.showFlueGas && mod?.flueGasAvailableHeat) { {{mod.flueGasAvailableHeat | number: '2.1-1'}}% } @else {&mdash; &mdash;}</td>
           }
         </tr>
         <tr>
-          <td>Flue Gas Losses</td>
+          <td>Flue Gas Losses<ng-container *ngTemplateOutlet="energySourceMarker; context: { $implicit: markers.showFlueGas }"></ng-container></td>
           <td>@if (baseCats.showFlueGas && base?.flueGasSystemLosses) { {{base.flueGasSystemLosses | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
           @if (modification()) {
             <td>@if (modCats?.showFlueGas && mod?.flueGasSystemLosses) { {{mod.flueGasSystemLosses | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
@@ -138,14 +139,14 @@
       </tr>
       @if (cats.showEnInput2) {
         <tr class="tr-border">
-          <td>Fuel Input Available Heat</td>
+          <td>Fuel Input Available Heat<ng-container *ngTemplateOutlet="energySourceMarker; context: { $implicit: markers.showEnInput2 }"></ng-container></td>
           <td>@if (baseCats.showEnInput2 && base?.availableHeatPercent) { {{base.availableHeatPercent | number: '1.0-0'}}% } @else {&mdash; &mdash;}</td>
           @if (modification()) {
             <td>@if (modCats?.showEnInput2 && mod?.availableHeatPercent) { {{mod.availableHeatPercent | number: '1.0-0'}}% } @else {&mdash; &mdash;}</td>
           }
         </tr>
         <tr>
-          <td>Exhaust Gas Losses</td>
+          <td>Exhaust Gas Losses<ng-container *ngTemplateOutlet="energySourceMarker; context: { $implicit: markers.showEnInput2 }"></ng-container></td>
           <td>@if (baseCats.showEnInput2 && base?.totalExhaustGas) { {{base.totalExhaustGas | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
           @if (modification()) {
             <td>@if (modCats?.showEnInput2 && mod?.totalExhaustGas) { {{mod.totalExhaustGas | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
@@ -154,7 +155,7 @@
       }
       @if (cats.showExGas) {
         <tr>
-          <td>Exhaust Gas Losses</td>
+          <td>Exhaust Gas Losses<ng-container *ngTemplateOutlet="energySourceMarker; context: { $implicit: markers.showExGas }"></ng-container></td>
           <td>@if (baseCats.showExGas && base?.totalExhaustGasEAF) { {{base.totalExhaustGasEAF | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
           @if (modification()) {
             <td>@if (modCats?.showExGas && mod?.totalExhaustGasEAF) { {{mod.totalExhaustGasEAF | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
@@ -163,14 +164,14 @@
       }
       @if (cats.showSystemEff) {
         <tr>
-          <td>System Efficiency</td>
+          <td>System Efficiency<ng-container *ngTemplateOutlet="energySourceMarker; context: { $implicit: markers.showSystemEff }"></ng-container></td>
           <td>@if (baseCats.showSystemEff && base?.heatingSystemEfficiency) { {{base.heatingSystemEfficiency | number: '1.0-0'}}% } @else {&mdash; &mdash;}</td>
           @if (modification()) {
             <td>@if (modCats?.showSystemEff && mod?.heatingSystemEfficiency) { {{mod.heatingSystemEfficiency | number: '1.0-0'}}% } @else {&mdash; &mdash;}</td>
           }
         </tr>
         <tr>
-          <td>Total System Losses</td>
+          <td>Total System Losses<ng-container *ngTemplateOutlet="energySourceMarker; context: { $implicit: markers.showSystemEff }"></ng-container></td>
           <td>@if (baseCats.showSystemEff && base?.totalSystemLosses) { {{base.totalSystemLosses | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
           @if (modification()) {
             <td>@if (modCats?.showSystemEff && mod?.totalSystemLosses) { {{mod.totalSystemLosses | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
@@ -179,7 +180,7 @@
       }
       @if (cats.showHeatDelivered) {
         <tr>
-          <td>Fuel Heat Delivered</td>
+          <td>Fuel Heat Delivered<ng-container *ngTemplateOutlet="energySourceMarker; context: { $implicit: markers.showHeatDelivered }"></ng-container></td>
           <td>@if (baseCats.showHeatDelivered && base?.energyInputHeatDelivered) { {{base.energyInputHeatDelivered | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
           @if (modification()) {
             <td>@if (modCats?.showHeatDelivered && mod?.energyInputHeatDelivered) { {{mod.energyInputHeatDelivered | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
@@ -188,7 +189,7 @@
       }
       @if (cats.showEnInput2) {
         <tr>
-          <td>Total Additional Fuel Heat</td>
+          <td>Total Additional Fuel Heat<ng-container *ngTemplateOutlet="energySourceMarker; context: { $implicit: markers.showEnInput2 }"></ng-container></td>
           <td>@if (baseCats.showEnInput2 && base?.totalAdditionalFuelHeat) { {{base.totalAdditionalFuelHeat | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
           @if (modification()) {
             <td>@if (modCats?.showEnInput2 && mod?.totalAdditionalFuelHeat) { {{mod.totalAdditionalFuelHeat | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
@@ -197,7 +198,7 @@
       }
       @if (cats.showEafElectricalDelivered) {
         <tr>
-          <td>Electrical Heat Delivered</td>
+          <td>Electrical Heat Delivered<ng-container *ngTemplateOutlet="energySourceMarker; context: { $implicit: markers.showEafElectricalDelivered }"></ng-container></td>
           <td>@if (baseCats.showEafElectricalDelivered && base?.energyInputHeatDelivered) { {{base.energyInputHeatDelivered | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
           @if (modification()) {
             <td>@if (modCats?.showEafElectricalDelivered && mod?.energyInputHeatDelivered) { {{mod.energyInputHeatDelivered | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
@@ -206,7 +207,7 @@
       }
       @if (cats.showChemicalEnergyDelivered) {
         <tr>
-          <td>Chemical Energy Delivered</td>
+          <td>Chemical Energy Delivered<ng-container *ngTemplateOutlet="energySourceMarker; context: { $implicit: markers.showChemicalEnergyDelivered }"></ng-container></td>
           <td>@if (baseCats.showChemicalEnergyDelivered && base?.energyInputTotalChemEnergy) { {{base.energyInputTotalChemEnergy | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
           @if (modification()) {
             <td>@if (modCats?.showChemicalEnergyDelivered && mod?.energyInputTotalChemEnergy) { {{mod.energyInputTotalChemEnergy | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
@@ -215,7 +216,7 @@
       }
       @if (cats.showStandardElectricalDelivered) {
         <tr class="tr-border">
-          <td>Electrical Heat Delivered</td>
+          <td>Electrical Heat Delivered<ng-container *ngTemplateOutlet="energySourceMarker; context: { $implicit: markers.showStandardElectricalDelivered }"></ng-container></td>
           <td>@if (baseCats.showStandardElectricalDelivered && base?.electricalHeatDelivered) { {{base.electricalHeatDelivered | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
           @if (modification()) {
             <td>@if (modCats?.showStandardElectricalDelivered && mod?.electricalHeatDelivered) { {{mod.electricalHeatDelivered | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
@@ -224,14 +225,14 @@
       }
       @if (cats.showEnInput2) {
         <tr>
-          <td>Electrical Heater Losses</td>
+          <td>Electrical Heater Losses<ng-container *ngTemplateOutlet="energySourceMarker; context: { $implicit: markers.showEnInput2 }"></ng-container></td>
           <td>@if (baseCats.showEnInput2 && base?.electricalHeaterLosses) { {{base.electricalHeaterLosses | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
           @if (modification()) {
             <td>@if (modCats?.showEnInput2 && mod?.electricalHeaterLosses) { {{mod.electricalHeaterLosses | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
           }
         </tr>
         <tr>
-          <td>Total Provided Electrical Heat</td>
+          <td>Total Provided Electrical Heat<ng-container *ngTemplateOutlet="energySourceMarker; context: { $implicit: markers.showEnInput2 }"></ng-container></td>
           <td>@if (baseCats.showEnInput2 && base?.totalProvidedElectricalHeat) { {{base.totalProvidedElectricalHeat | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
           @if (modification()) {
             <td>@if (modCats?.showEnInput2 && mod?.totalProvidedElectricalHeat) { {{mod.totalProvidedElectricalHeat | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
@@ -281,3 +282,9 @@
 
 <app-exportable-results-table [tableString]="copyTableString"
   (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+
+<ng-template #energySourceMarker let-marker>
+  @if (marker) {
+    <span role="img" [class]="'energy-source-marker fa ' + marker.icon" [attr.title]="marker.label" [attr.aria-label]="marker.label"></span>
+  }
+</ng-template>

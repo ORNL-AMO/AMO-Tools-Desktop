@@ -39,6 +39,7 @@ describe('AssessmentResultsComponent', () => {
   let baselineResults: WritableSignal<PhastResults | undefined>;
   let modificationResults: WritableSignal<PhastResults | undefined>;
   let settings: WritableSignal<Partial<Settings>>;
+  let modificationEnergySource: WritableSignal<Partial<Settings>>;
   let invalidModifications: WritableSignal<InvalidModification[]>;
   let showOperationalImpacts: WritableSignal<boolean>;
   let resultsService: jasmine.SpyObj<ProcessHeatingResultsService>;
@@ -72,7 +73,8 @@ describe('AssessmentResultsComponent', () => {
     modificationCategories = signal<ResultCategories | undefined>(undefined);
     baselineResults = signal(makeResults());
     modificationResults = signal(makeResults({ totalWallLoss: 5 }));
-    settings = signal<Partial<Settings>>({ energyResultUnit: 'MMBtu', emissionsUnit: 'Imperial' });
+    settings = signal<Partial<Settings>>({ energyResultUnit: 'MMBtu', emissionsUnit: 'Imperial', energySourceType: 'Fuel' });
+    modificationEnergySource = signal<Partial<Settings>>({});
     invalidModifications = signal([]);
     showOperationalImpacts = signal(false);
 
@@ -90,7 +92,13 @@ describe('AssessmentResultsComponent', () => {
     TestBed.configureTestingModule({
       declarations: [AssessmentResultsComponent],
       providers: [
-        { provide: ProcessHeatingAssessmentService, useValue: { settingsSignal: settings } },
+        {
+          provide: ProcessHeatingAssessmentService,
+          useValue: {
+            settingsSignal: settings,
+            scenarioSettings: (scenario: string) => scenario === 'baseline' ? settings() : { ...settings(), ...modificationEnergySource() },
+          },
+        },
         { provide: ProcessHeatingResultsService, useValue: resultsService },
         { provide: ModificationService, useValue: { modifications: signal([MODIFICATION]) } },
         { provide: ProcessHeatingValidityService, useValue: { invalidModifications } },
@@ -231,6 +239,42 @@ describe('AssessmentResultsComponent', () => {
       render();
       expect(row('System Efficiency')).toBeUndefined();
       expect(rowCells('Flue Gas Losses')).toEqual(['3.00']);
+    });
+
+    it('marks each row only one column uses with that energy source icon and says which scenario uses it', () => {
+      modificationEnergySource.set({ energySourceType: 'Steam' });
+      render('mod-1');
+
+      const flueGasMarker = row('Flue Gas Losses').querySelector('.energy-source-marker');
+      const efficiencyMarker = row('System Efficiency').querySelector('.energy-source-marker');
+      expect(flueGasMarker.classList).toContain('fa-fire');
+      expect(flueGasMarker.getAttribute('title')).toBe('Only used by Baseline (Fuel-fired)');
+      expect(efficiencyMarker.classList).toContain('fa-cloud');
+      expect(efficiencyMarker.getAttribute('title')).toBe('Only used by Better Walls (Steam-based)');
+    });
+
+    it('leaves the markers out of the copied table text', () => {
+      render('mod-1');
+      fixture.componentInstance.updateCopyTableString();
+
+      expect(fixture.componentInstance.copyTableString).not.toContain('Only used by');
+    });
+  });
+
+  describe('energy source markers', () => {
+    it('marks no row while both columns use the same rows', () => {
+      categories.set({ ...NO_CATEGORIES, showFlueGas: true });
+      render('mod-1');
+
+      expect(fixture.nativeElement.querySelector('.energy-source-marker')).toBeNull();
+    });
+
+    it('marks no row on Baseline steps', () => {
+      categories.set({ ...NO_CATEGORIES, showFlueGas: true });
+      modificationCategories.set({ ...NO_CATEGORIES, showSystemEff: true });
+      render();
+
+      expect(fixture.nativeElement.querySelector('.energy-source-marker')).toBeNull();
     });
   });
 

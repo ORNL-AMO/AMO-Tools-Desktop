@@ -13,6 +13,17 @@ export const ENERGY_SOURCE_TYPE_OPTIONS: readonly EnergySourceTypeOption[] = [
 
 /**
  * @param settings a scenario's settings
+ * @returns Font Awesome icon class for the energy source: a flame for fuel, a bolt for electricity, a cloud for steam
+ */
+export function getEnergySourceIcon(settings: Settings): string {
+  if (settings.energySourceType === 'Electricity') {
+    return 'fa-bolt';
+  }
+  return settings.energySourceType === 'Steam' ? 'fa-cloud' : 'fa-fire';
+}
+
+/**
+ * @param settings a scenario's settings
  * @returns the energy source as the settings screen words it, with the furnace type for Electrotechnology
  */
 export function getEnergySourceLabel(settings: Settings): string {

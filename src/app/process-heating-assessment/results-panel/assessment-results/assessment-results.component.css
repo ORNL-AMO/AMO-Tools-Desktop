@@ -33,3 +33,10 @@
 .gross-heat-input td {
   font-weight: bold;
 }
+
+.energy-source-marker {
+  margin-left: 0.375rem;
+  color: var(--process-heating-assessment);
+  font-size: 12px;
+  cursor: pointer;
+}
