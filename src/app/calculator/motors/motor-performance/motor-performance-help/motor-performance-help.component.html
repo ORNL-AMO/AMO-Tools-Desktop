@@ -2,40 +2,45 @@
   <h5>
     Motor Performance Help
     <br>
-    <small class="text-muted"> 
+    <small class="text-muted">
       Plots current, efficiency, power factor vs motor shaft load for a given motor description. Click within the plot to add values for the selected shaft load to the table below the graph.
     </small>
   </h5>
   <hr class="my-1 hr-spacer">
 
-  <div class="my-2" *ngIf="currentField == 'frequency'">
-    <h6>
-      Line Frequency
-      <br>
-      <small class="text-muted">
-        Utility frequency, line frequency or mains frequency is the frequency level of the AC electricity used in transmission and
-        distribution from electricity generation sources to customers.
-        <hr>
-      </small>
-    </h6>
-  </div>
+  @if (currentField == 'frequency') {
+    <div class="my-2">
+      <h6>
+        Line Frequency
+        <br>
+        <small class="text-muted">
+          Utility frequency, line frequency or mains frequency is the frequency level of the AC electricity used in transmission and
+          distribution from electricity generation sources to customers.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
 
-  <div class="my-2" *ngIf="currentField == 'horsePower'">
-    <h6>
-      Motor Power
-      <br>
-      <small class="text-muted">
-        The power rating of equipment is the highest power input allowed to flow through the motor.
-        <hr>
-      </small>
-    </h6>
-  </div>
+  @if (currentField == 'horsePower') {
+    <div class="my-2">
+      <h6>
+        Motor Power
+        <br>
+        <small class="text-muted">
+          The power rating of equipment is the highest power input allowed to flow through the motor.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
 
-  <div class="my-2" *ngIf="currentField == 'motorRPM'">
-    <h6>
-      Motor RPM
-      <br>
-      <small class="text-muted">
+  @if (currentField == 'motorRPM') {
+    <div class="my-2">
+      <h6>
+        Motor RPM
+        <br>
+        <small class="text-muted">
           Motor RPM is the nameplate speed of the motor.
           <hr>
           This value is used with the line frequency to determine the number of motor poles. This, in turn, is
@@ -44,160 +49,171 @@
           electrical power
           or current conditions.
           <br>
-          These calculators are based on curve fits to actual purchasable motors and motors in the original MotorMaster Database. 
-          At the time of data collection, premium motors were only available in 2-, 4-, or 6- poles: 
+          These calculators are based on curve fits to actual purchasable motors and motors in the original MotorMaster Database.
+          At the time of data collection, premium motors were only available in 2-, 4-, or 6- poles:
           rpms lower than 900/1080 rpm extend past the bounds of the models and results may be inaccurate.
           <hr>
         </small>
-  </h6>
-  <div class="w-100 justify-content-center">
-      <label class="group-label">Standard and Energy Efficient Motors</label>
-      <table class="table table-hover table-striped">
+      </h6>
+      <div class="w-100 justify-content-center">
+        <label class="group-label">Standard and Energy Efficient Motors</label>
+        <table class="table table-hover table-striped">
           <tbody>
-              <tr>
-                  <th class="text-center">Motor Size</th>
-                  <th class="text-center">Minimum</th>
-                  <th class="text-center">Maximum</th>
-              </tr>
-              <tr>
-                  <td class="text-center">60 Hz</td>
-                  <td class="text-center">540 rpm</td>
-                  <td class="text-center">3600 rpm</td>
-              </tr>
-              <tr>
-                  <td class="text-center">50 Hz</td>
-                  <td class="text-center">450 rpm</td>
-                  <td class="text-center">3000 rpm</td>
-              </tr>
+            <tr>
+              <th class="text-center">Motor Size</th>
+              <th class="text-center">Minimum</th>
+              <th class="text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="text-center">60 Hz</td>
+              <td class="text-center">540 rpm</td>
+              <td class="text-center">3600 rpm</td>
+            </tr>
+            <tr>
+              <td class="text-center">50 Hz</td>
+              <td class="text-center">450 rpm</td>
+              <td class="text-center">3000 rpm</td>
+            </tr>
           </tbody>
-      </table>
-  </div>
-  <div class="w-100 justify-content-center">
-      <label class="group-label">Premium Efficient Motors</label>
-      <table class="table table-hover table-striped">
-          <tbody>
-              <tr>
-                  <th class="text-center">Motor Size</th>
-                  <th class="text-center">Minimum</th>
-                  <th class="text-center">Maximum</th>
-              </tr>
-              <tr>
-                  <td class="text-center">60 Hz</td>
-                  <td class="text-center">1080 rpm</td>
-                  <td class="text-center">3600 rpm</td>
-              </tr>
-              <tr>
-                  <td class="text-center">50 Hz</td>
-                  <td class="text-center">900 rpm</td>
-                  <td class="text-center">3000 rpm</td>
-              </tr>
-          </tbody>
-      </table>
+        </table>
       </div>
-  </div>
-
-  <div class="my-2" *ngIf="currentField == 'efficiencyClass'">
-    <h6>
-      Efficiency Class
-      <br>
-      <small class="text-muted">
-        Efficiency Class is the classification of efficiency given to motor. This can be found either on the nameplate or
-        based on how the motor compares with the NEMA MG 1-2003.
-        <br><br>
-        Efficiency Class options include Standard Efficiency, Energy Efficient, Premium Efficient, or Specified.
-        <br><br>
-        The Premium (IE3) and Energy Efficient (IE2) classes are based on motors that match those NEMA classes. Standard
-        motors should be used if the efficiency is below Energy Efficient (IE2).
-        If the user knows the full load efficiency, it can be directly entered using the "Specified" option. The motor
-        efficiency at load will be calculated based on the same curves used for the other efficiency classes.
-        <hr>
-      </small>
-    </h6>
-  </div>
-
-  <div class="my-2" *ngIf="currentField == 'efficiency'">
-    <h6>
-      Efficiency
-      <br>
-      <small class="text-muted">
-        If the user knows the full load efficiency of the motor, it can be entered here instead of estimated via the efficiency
-        class.
-        <br><br>
-        Motor efficiency is the ratio between the amount of mechanical work the motor performs and the electrical power it
-        consumes to do the work, represented by a percentage. A higher percentage represents a more efficient motor. Electric
-        motor efficiency is dependent on (but not limited to) design, materials, construction, rating, load, power quality, and
-        operating conditions. Enter this value as a percentage.
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">1%</td>
-            <td class="w-50 text-center">100%</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="w-100 justify-content-center">
+        <label class="group-label">Premium Efficient Motors</label>
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="text-center">Motor Size</th>
+              <th class="text-center">Minimum</th>
+              <th class="text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="text-center">60 Hz</td>
+              <td class="text-center">1080 rpm</td>
+              <td class="text-center">3600 rpm</td>
+            </tr>
+            <tr>
+              <td class="text-center">50 Hz</td>
+              <td class="text-center">900 rpm</td>
+              <td class="text-center">3000 rpm</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  }
 
-  <div class="my-2" *ngIf="currentField == 'efficiency'">
-    <h6>
-      Efficiency
-      <br>
-      <small class="text-muted">
-        If the user knows the full load efficiency of the motor, it can be entered here instead of estimated via the efficiency
-        class.
-        <br><br>
-        Motor efficiency is the ratio between the amount of mechanical work the motor performs and the electrical power it
-        consumes to do the work, represented by a percentage. A higher percentage represents a more efficient motor. Electric
-        motor efficiency is dependent on (but not limited to) design, materials, construction, rating, load, power quality, and
-        operating conditions. Enter this value as a percentage.
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">1%</td>
-            <td class="w-50 text-center">100%</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'motorVoltage'">
-    <h6>
-      Voltage
-      <br>
-      <small class="text-muted">
-        The voltage at which the motor is designed to operate.
-        <hr>
-      </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'fullLoadAmps'">
-    <h6>
-      Full-Load Amps
-      <br>
-      <small class="text-muted">
-        Full load current is the maximum current that the motor can draw/supply safely by meeting (either supplying or consuming)
-        the full-load conditions.
+  @if (currentField == 'efficiencyClass') {
+    <div class="my-2">
+      <h6>
+        Efficiency Class
         <br>
-        Note: The correct Voltage, Motor Power, and Motor RPM should be entered making an estimate. 
-        FLA are calcuated based on curve fits from historic MotorMaster data and actual purchasable motors.
-        <hr>
-      </small>
-    </h6>
-  </div>
+        <small class="text-muted">
+          Efficiency Class is the classification of efficiency given to motor. This can be found either on the nameplate or
+          based on how the motor compares with the NEMA MG 1-2003.
+          <br><br>
+          Efficiency Class options include Standard Efficiency, Energy Efficient, Premium Efficient, or Specified.
+          <br><br>
+          The Premium (IE3) and Energy Efficient (IE2) classes are based on motors that match those NEMA classes. Standard
+          motors should be used if the efficiency is below Energy Efficient (IE2).
+          If the user knows the full load efficiency, it can be directly entered using the "Specified" option. The motor
+          efficiency at load will be calculated based on the same curves used for the other efficiency classes.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField == 'efficiency') {
+    <div class="my-2">
+      <h6>
+        Efficiency
+        <br>
+        <small class="text-muted">
+          If the user knows the full load efficiency of the motor, it can be entered here instead of estimated via the efficiency
+          class.
+          <br><br>
+          Motor efficiency is the ratio between the amount of mechanical work the motor performs and the electrical power it
+          consumes to do the work, represented by a percentage. A higher percentage represents a more efficient motor. Electric
+          motor efficiency is dependent on (but not limited to) design, materials, construction, rating, load, power quality, and
+          operating conditions. Enter this value as a percentage.
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">1%</td>
+              <td class="w-50 text-center">100%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  @if (currentField == 'efficiency') {
+    <div class="my-2">
+      <h6>
+        Efficiency
+        <br>
+        <small class="text-muted">
+          If the user knows the full load efficiency of the motor, it can be entered here instead of estimated via the efficiency
+          class.
+          <br><br>
+          Motor efficiency is the ratio between the amount of mechanical work the motor performs and the electrical power it
+          consumes to do the work, represented by a percentage. A higher percentage represents a more efficient motor. Electric
+          motor efficiency is dependent on (but not limited to) design, materials, construction, rating, load, power quality, and
+          operating conditions. Enter this value as a percentage.
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">1%</td>
+              <td class="w-50 text-center">100%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+  @if (currentField == 'motorVoltage') {
+    <div class="my-2">
+      <h6>
+        Voltage
+        <br>
+        <small class="text-muted">
+          The voltage at which the motor is designed to operate.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+  @if (currentField == 'fullLoadAmps') {
+    <div class="my-2">
+      <h6>
+        Full-Load Amps
+        <br>
+        <small class="text-muted">
+          Full load current is the maximum current that the motor can draw/supply safely by meeting (either supplying or consuming)
+          the full-load conditions.
+          <br>
+          Note: The correct Voltage, Motor Power, and Motor RPM should be entered making an estimate.
+          FLA are calcuated based on curve fits from historic MotorMaster data and actual purchasable motors.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
 </div>

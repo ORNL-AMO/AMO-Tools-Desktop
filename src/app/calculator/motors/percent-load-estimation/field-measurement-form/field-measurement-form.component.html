@@ -3,16 +3,23 @@
   <div class="form-group pt-1 pb-3">
     <label>Average Power Factor</label>
     <div class="input-group">
-    <input type="number" step="any" class="form-control" name="powerFactor" formControlName="powerFactor"
-      (input)="calculate()" onfocus="this.select();" (focus)="focusField('powerFactor')">
+      <input type="number" step="any" class="form-control" name="powerFactor" formControlName="powerFactor"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('powerFactor')">
       <span class="input-group-addon units">%</span>
-      </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="form.controls.powerFactor.invalid && !form.controls.powerFactor.pristine">
-      <span *ngIf="form.controls.powerFactor.errors.required">Value required.</span>
-      <span *ngIf="form.controls.powerFactor.errors.max">Value cannot exceed {{form.controls.powerFactor.errors.max.max}}%</span>
-      <span *ngIf="form.controls.powerFactor.errors.min">Value cannot be less than {{form.controls.powerFactor.errors.min.min}}%</span>
-    </span>
+    </div>
+    @if (form.controls.powerFactor.invalid && !form.controls.powerFactor.pristine) {
+      <span class="alert-danger pull-right small">
+        @if (form.controls.powerFactor.errors.required) {
+          <span>Value required.</span>
+        }
+        @if (form.controls.powerFactor.errors.max) {
+          <span>Value cannot exceed {{form.controls.powerFactor.errors.max.max}}%</span>
+        }
+        @if (form.controls.powerFactor.errors.min) {
+          <span>Value cannot be less than {{form.controls.powerFactor.errors.min.min}}%</span>
+        }
+      </span>
+    }
   </div>
 
   <div class="form-group mb-0">
@@ -27,7 +34,7 @@
         [disabled]="true" value="Volts">
       <!-- <input type="number" step="any" name="amps" type="text" class="form-control auto-width disabled-input" [disabled]="true"
         formControlName="amps">
-      <input type="number" step="any" name="volts" type="text" class="form-control auto-width disabled-input"
+        <input type="number" step="any" name="volts" type="text" class="form-control auto-width disabled-input"
         [disabled]="true" formControlName="volts"> -->
     </div>
   </div>
@@ -70,10 +77,13 @@
         (input)="calculate()" onfocus="this.select();" (focus)="focusField('ratedCurrent')">
       <span class="input-group-addon units">A</span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="form.controls.ratedCurrent.invalid && !form.controls.ratedCurrent.pristine">
-      <span *ngIf="form.controls.ratedCurrent.errors.required">Value required.</span>
-    </span>
+    @if (form.controls.ratedCurrent.invalid && !form.controls.ratedCurrent.pristine) {
+      <span class="alert-danger pull-right small">
+        @if (form.controls.ratedCurrent.errors.required) {
+          <span>Value required.</span>
+        }
+      </span>
+    }
   </div>
   <div class="form-group">
     <label>Rated Voltage</label>
@@ -82,9 +92,12 @@
         (input)="calculate()" onfocus="this.select();" (focus)="focusField('ratedVoltage')">
       <span class="input-group-addon units">V</span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="form.controls.ratedVoltage.invalid && !form.controls.ratedVoltage.pristine">
-      <span *ngIf="form.controls.ratedVoltage.errors.required">Value required.</span>
-    </span>
+    @if (form.controls.ratedVoltage.invalid && !form.controls.ratedVoltage.pristine) {
+      <span class="alert-danger pull-right small">
+        @if (form.controls.ratedVoltage.errors.required) {
+          <span>Value required.</span>
+        }
+      </span>
+    }
   </div>
 </form>

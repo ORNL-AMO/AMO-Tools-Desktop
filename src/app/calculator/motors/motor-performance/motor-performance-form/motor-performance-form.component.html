@@ -3,7 +3,9 @@
     <label for="frequency">Line Frequency</label>
     <select name="frequency" class="form-control" id="frequency" formControlName="frequency" (change)="emitChange()"
       (focus)="focusField('frequency')">
-      <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}} Hz</option>
+      @for (frequency of frequencies; track frequency) {
+        <option [ngValue]="frequency">{{frequency}} Hz</option>
+      }
     </select>
   </div>
 
@@ -11,18 +13,23 @@
     <label for="horsePower">Motor Power</label>
     <!-- <select name="horsePower" class="form-control" id="horsePower" formControlName="horsePower" (change)="emitChange()" (focus)="focusField('horsePower')">
       <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
-    </select> -->
+      </select> -->
     <div class="input-group calc-addon-group">
       <input name="horsePower" type="number" min="0" step="any" class="form-control" id="horsePower"
         formControlName="horsePower" (input)="emitChange()" onfocus="this.select();" (focus)="focusField('horsePower')">
       <span class="units">{{settings.powerMeasurement}}</span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="performanceForm.controls.horsePower.invalid && !performanceForm.controls.horsePower.pristine">
-      <span *ngIf="performanceForm.controls.horsePower.errors.required">Value required.</span>
-      <span *ngIf="performanceForm.controls.horsePower.errors.min">Value cannot be less than
-        {{performanceForm.controls.horsePower.errors.min.min}} {{settings.powerMeasurement}}.</span>
-    </span>
+    @if (performanceForm.controls.horsePower.invalid && !performanceForm.controls.horsePower.pristine) {
+      <span class="alert-danger pull-right small">
+        @if (performanceForm.controls.horsePower.errors.required) {
+          <span>Value required.</span>
+        }
+        @if (performanceForm.controls.horsePower.errors.min) {
+          <span>Value cannot be less than
+            {{performanceForm.controls.horsePower.errors.min.min}} {{settings.powerMeasurement}}.</span>
+        }
+      </span>
+    }
   </div>
 
   <div class="form-group">
@@ -32,13 +39,18 @@
         id="motorRPM" (input)="emitChange()" onfocus="this.select();" (focus)="focusField('motorRPM')">
       <span class="units">RPM</span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="performanceForm.controls.motorRPM.invalid && !performanceForm.controls.motorRPM.pristine">
-      <span *ngIf="performanceForm.controls.motorRPM.errors.required">Value required.</span>
-      <span *ngIf="performanceForm.controls.motorRPM.errors.min">Motor RPM too small for selected efficiency class,
-        should
-        be higher than {{performanceForm.controls.motorRPM.errors.min.min}}.</span>
-    </span>
+    @if (performanceForm.controls.motorRPM.invalid && !performanceForm.controls.motorRPM.pristine) {
+      <span class="alert-danger pull-right small">
+        @if (performanceForm.controls.motorRPM.errors.required) {
+          <span>Value required.</span>
+        }
+        @if (performanceForm.controls.motorRPM.errors.min) {
+          <span>Motor RPM too small for selected efficiency class,
+            should
+            be higher than {{performanceForm.controls.motorRPM.errors.min.min}}.</span>
+        }
+      </span>
+    }
   </div>
 
 
@@ -46,29 +58,40 @@
     <label for="efficiencyClass">Efficiency Class</label>
     <select name="efficiencyClass" class="form-control" id="efficiencyClass" formControlName="efficiencyClass"
       (change)="changePowerArrays()" (focus)="focusField('efficiencyClass')">
-      <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">
-        {{efficiencyClass.display}}</option>
+      @for (efficiencyClass of efficiencyClasses; track efficiencyClass) {
+        <option [ngValue]="efficiencyClass.value">
+          {{efficiencyClass.display}}</option>
+      }
     </select>
   </div>
   <!--specified efficiency-->
-  <div class="form-group" *ngIf="performanceForm.controls.efficiencyClass.value == 3">
-    <label for="efficiency">Efficiency</label>
-    <div class="input-group calc-addon-group">
-      <input name="efficiency" type="number" min="0" step="any" max="100" class="form-control" id="efficiency"
-        formControlName="efficiency" (input)="emitChange()" onfocus="this.select();" (focus)="focusField('efficiency')">
-      <span class="units">%</span>
+  @if (performanceForm.controls.efficiencyClass.value == 3) {
+    <div class="form-group">
+      <label for="efficiency">Efficiency</label>
+      <div class="input-group calc-addon-group">
+        <input name="efficiency" type="number" min="0" step="any" max="100" class="form-control" id="efficiency"
+          formControlName="efficiency" (input)="emitChange()" onfocus="this.select();" (focus)="focusField('efficiency')">
+        <span class="units">%</span>
+      </div>
+      @if (performanceForm.controls.efficiency.invalid && !performanceForm.controls.efficiency.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (performanceForm.controls.efficiency.errors.required) {
+            <span>Value required.</span>
+          }
+          @if (performanceForm.controls.efficiency.errors.max) {
+            <span>Value can't be greater than
+              {{performanceForm.controls.efficiency.errors.max.max}}
+              %.</span>
+          }
+          @if (performanceForm.controls.efficiency.errors.min) {
+            <span>Value can't be less than
+              {{performanceForm.controls.efficiency.errors.min.min}}
+              %.</span>
+          }
+        </span>
+      }
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="performanceForm.controls.efficiency.invalid && !performanceForm.controls.efficiency.pristine">
-      <span *ngIf="performanceForm.controls.efficiency.errors.required">Value required.</span>
-      <span *ngIf="performanceForm.controls.efficiency.errors.max">Value can't be greater than
-        {{performanceForm.controls.efficiency.errors.max.max}}
-        %.</span>
-      <span *ngIf="performanceForm.controls.efficiency.errors.min">Value can't be less than
-        {{performanceForm.controls.efficiency.errors.min.min}}
-        %.</span>
-    </span>
-  </div>
+  }
 
   <div class="form-group">
     <label for="motorVoltage">Voltage</label>
@@ -78,18 +101,23 @@
         (focus)="focusField('motorVoltage')">
       <span class="input-group-addon units">V</span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="performanceForm.controls.motorVoltage.invalid && !performanceForm.controls.motorVoltage.pristine">
-      <span *ngIf="performanceForm.controls.motorVoltage.errors.required">Value required.</span>
-    </span>
+    @if (performanceForm.controls.motorVoltage.invalid && !performanceForm.controls.motorVoltage.pristine) {
+      <span class="alert-danger pull-right small">
+        @if (performanceForm.controls.motorVoltage.errors.required) {
+          <span>Value required.</span>
+        }
+      </span>
+    }
   </div>
 
   <div class="form-group">
     <label for="fullLoadAmps" aria-describedby="flaHelp">
       Full-Load Amps
       <a class="form-text small click-link" (click)="calculateFullLoadAmps()">Estimate Full-Load Amps</a>
-      <span class="alert-danger form-text small" *ngIf="calcFLAError">The rest of the form must be valid before
-        estimation.</span>
+      @if (calcFLAError) {
+        <span class="alert-danger form-text small">The rest of the form must be valid before
+          estimation.</span>
+      }
     </label>
     <div class="input-group calc-addon-group">
       <input name="fullLoadAmps" type="number" step="any" class="form-control addon-input" id="fullLoadAmps"
@@ -97,9 +125,12 @@
         formControlName="fullLoadAmps">
       <span class="input-group-addon units">A</span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="performanceForm.controls.fullLoadAmps.invalid && !performanceForm.controls.fullLoadAmps.pristine">
-      <span *ngIf="performanceForm.controls.fullLoadAmps.errors.required">Value required.</span>
-    </span>
+    @if (performanceForm.controls.fullLoadAmps.invalid && !performanceForm.controls.fullLoadAmps.pristine) {
+      <span class="alert-danger pull-right small">
+        @if (performanceForm.controls.fullLoadAmps.errors.required) {
+          <span>Value required.</span>
+        }
+      </span>
+    }
   </div>
 </form>
