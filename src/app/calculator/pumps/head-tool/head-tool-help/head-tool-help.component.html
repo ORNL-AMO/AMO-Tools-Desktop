@@ -7,319 +7,352 @@
     </small>
   </h5>
   <hr class="my-1 hr-spacer">
-  <div class="my-2" *ngIf="currentField == 'headToolType'">
-    <h6>
-      Suction Gauge Reference Point
-      <br>
-      <small class="text-muted">
-        Choose the location of the suction side gauge (at the tank fluid surface or before the pump).
-        <hr>
-      </small>
-    </h6>
-  </div>
+  @if (currentField == 'headToolType') {
+    <div class="my-2">
+      <h6>
+        Suction Gauge Reference Point
+        <br>
+        <small class="text-muted">
+          Choose the location of the suction side gauge (at the tank fluid surface or before the pump).
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
 
-  <div class="my-2" *ngIf="currentField == 'specificGravity'">
-    <h6>
-      Specific Gravity
-      <br>
-      <small class="text-muted">
-        Specific gravity of the fluid (relative to water).
-        <hr>
-      </small>
-    </h6>
-  </div>
+  @if (currentField == 'specificGravity') {
+    <div class="my-2">
+      <h6>
+        Specific Gravity
+        <br>
+        <small class="text-muted">
+          Specific gravity of the fluid (relative to water).
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
 
-  <div class="my-2" *ngIf="currentField == 'flowRate'">
-    <h6>
-      Flow Rate
-      <br>
-      <small class="text-muted">
-        Pump flow rate.
-        <hr>
-      </small>
-    </h6>
-  </div>
+  @if (currentField == 'flowRate') {
+    <div class="my-2">
+      <h6>
+        Flow Rate
+        <br>
+        <small class="text-muted">
+          Pump flow rate.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
   <!--SUCTION TANK ELEVATION-->
-  <div *ngIf="headToolType == 'Suction tank elevation'">
-    <div class="my-2" *ngIf="currentField == 'suctionPipeDiameter'">
-      <h6>
-        Suction Pipe Diameter (ID)
-        <br>
-        <small class="text-muted">
-          Inner diameter of the suction side pipe (in inches or mm). This is used to calculate the fluid velocity in the
-          suction pipe,
-          which is then used to determine the suction velocity head.
-          <hr>
-        </small>
-      </h6>
+  @if (headToolType == 'Suction tank elevation') {
+    <div>
+      @if (currentField == 'suctionPipeDiameter') {
+        <div class="my-2">
+          <h6>
+            Suction Pipe Diameter (ID)
+            <br>
+            <small class="text-muted">
+              Inner diameter of the suction side pipe (in inches or mm). This is used to calculate the fluid velocity in the
+              suction pipe,
+              which is then used to determine the suction velocity head.
+              <hr>
+            </small>
+          </h6>
+        </div>
+      }
+      @if (currentField == 'suctionTankGasOverPressure') {
+        <div class="my-2">
+          <h6>
+            Suction Tank gas overpressure (P<sub>g</sub>)
+            <br>
+            <small class="text-muted">
+              The gas overpressure within the suction side tank (in psig or kPA). If the tank (or well, lake, etc.) is open
+              to the atmosphere,
+              the gauge pressure should be set to 0.
+              <hr>
+            </small>
+          </h6>
+        </div>
+      }
+      @if (currentField == 'suctionTankFluidSurfaceElevation') {
+        <div class="my-2">
+          <h6>
+            Suction Tank fluid surface elevation (Z<sub>s</sub>)
+            <br>
+            <small class="text-muted">
+              The elevation of the tank (or well, lake, etc.) (in feet or meters). Both the suction tank fluid surface
+              elevation and the
+              discharge gauge elevation should be relative to a common elevation, which could be absolute (e.g., sea level)
+              or
+              relative (e.g., floor level).
+              <hr>
+            </small>
+          </h6>
+        </div>
+      }
+      @if (currentField == 'suctionLineLossCoefficients') {
+        <div class="my-2">
+          <h6>
+            Suction Line loss coefficients (K<sub>s</sub>)
+            <br>
+            <small class="text-muted">
+              The suction line loss coefficients (the sum of all suction line loss elements) are used to estimate the
+              frictional head losses
+              between the suction reference point (e.g., tank level) and the pump suction flange. Note that these
+              coefficients
+              apply to the Darcy-Weisbach style calculation (loss – K x velocity head).
+              <hr> These losses might come from elbows, tees, suction isolation valve, entrance loss from the tank to the
+              pipe, etc.
+              <hr>
+              <b>IMPORTANT:</b> All losses must be normalized to the specific suction pipe diameter, and loss coefficient
+              adjustments
+              are made to the 4th order of the pipe diameter ratio.
+              <br> For example if there is a 12-inch isolation valve with a loss coefficient (K) of 0.4, but the suction
+              pipe diameter
+              at the point where the pressure is measured is 16-inches (such as in a suction header) the loss coefficient
+              for
+              the valve would be 0.4 x (
+              <sup>16</sup>&frasl;
+              <sub>12</sub>)
+              <sup>4</sup> = 1.26.
+              <hr>
+            </small>
+          </h6>
+        </div>
+      }
+      @if (currentField == 'dischargePipeDiameter') {
+        <div class="my-2">
+          <h6>
+            Discharge Pipe diameter (ID)
+            <br>
+            <small class="text-muted">
+              Inner diameter of the discharge pipe. This is used to calculate the fluid velocity in the discharge pipe,
+              which is then used
+              to determine the discharge velocity head.
+              <hr>
+            </small>
+          </h6>
+        </div>
+      }
+      @if (currentField == 'dischargeGaugePressure') {
+        <div class="my-2">
+          <h6>
+            Discharge Gauge pressure (P<sub>d</sub>)
+            <br>
+            <small class="text-muted">
+              Discharge gauge pressure.
+              <hr>
+            </small>
+          </h6>
+        </div>
+      }
+      @if (currentField == 'dischargeGaugeElevation') {
+        <div class="my-2">
+          <h6>
+            Discharge Gauge elevation (Z<sub>d</sub>)
+            <br>
+            <small class="text-muted">
+              The elevation of the discharge gauge (in feet or meters). Both the suction tank fluid surface elevation and
+              the discharge
+              gauge elevation should be relative to a common elevation, which could be absolute (e.g., sea level) or
+              relative
+              (e.g., floor level).
+              <hr>
+            </small>
+          </h6>
+        </div>
+      }
+      @if (currentField == 'dischargeLineLossCoefficients') {
+        <div class="my-2">
+          <h6>
+            Discharge Line loss coefficients (K<sub>d</sub>)
+            <br>
+            <small class="text-muted">
+              The discharge line loss coefficients (the sum of all discharge line loss elements) are used to estimate the
+              pump discharge
+              flange and the discharge pressure gauge.
+              <hr> Note that these coefficients apply to the Darcy-Weisbach style calculation (loss – K x velocity head).
+              These losses
+              might come from elbows, tees, suction isolation valve, entrance loss from the tank to the pipe, etc.
+              <hr>
+              <b>IMPORTANT:</b> All losses must be normalized to the specific suction pipe diameter, and loss coefficient
+              adjustments
+              are made to the 4th order of the pipe diameter ratio.
+              <br> For example if there is a 12-inch isolation valve with a loss coefficient (K) of 0.4, but the suction
+              pipe diameter
+              at the point where the pressure is measured is 16-inches (such as in a suction header) the loss coefficient
+              for
+              the valve would be 0.4 x (
+              <sup>16</sup>&frasl;
+              <sub>12</sub>)
+              <sup>4</sup> = 1.26.
+              <hr>
+            </small>
+          </h6>
+        </div>
+      }
     </div>
-
-    <div class="my-2" *ngIf="currentField == 'suctionTankGasOverPressure'">
-      <h6>
-        Suction Tank gas overpressure (P<sub>g</sub>)
-        <br>
-        <small class="text-muted">
-          The gas overpressure within the suction side tank (in psig or kPA). If the tank (or well, lake, etc.) is open
-          to the atmosphere,
-          the gauge pressure should be set to 0.
-          <hr>
-        </small>
-      </h6>
-    </div>
-
-    <div class="my-2" *ngIf="currentField == 'suctionTankFluidSurfaceElevation'">
-      <h6>
-        Suction Tank fluid surface elevation (Z<sub>s</sub>)
-        <br>
-        <small class="text-muted">
-          The elevation of the tank (or well, lake, etc.) (in feet or meters). Both the suction tank fluid surface
-          elevation and the
-          discharge gauge elevation should be relative to a common elevation, which could be absolute (e.g., sea level)
-          or
-          relative (e.g., floor level).
-          <hr>
-        </small>
-      </h6>
-    </div>
-
-    <div class="my-2" *ngIf="currentField == 'suctionLineLossCoefficients'">
-      <h6>
-        Suction Line loss coefficients (K<sub>s</sub>)
-        <br>
-        <small class="text-muted">
-          The suction line loss coefficients (the sum of all suction line loss elements) are used to estimate the
-          frictional head losses
-          between the suction reference point (e.g., tank level) and the pump suction flange. Note that these
-          coefficients
-          apply to the Darcy-Weisbach style calculation (loss – K x velocity head).
-          <hr> These losses might come from elbows, tees, suction isolation valve, entrance loss from the tank to the
-          pipe, etc.
-          <hr>
-          <b>IMPORTANT:</b> All losses must be normalized to the specific suction pipe diameter, and loss coefficient
-          adjustments
-          are made to the 4th order of the pipe diameter ratio.
-          <br> For example if there is a 12-inch isolation valve with a loss coefficient (K) of 0.4, but the suction
-          pipe diameter
-          at the point where the pressure is measured is 16-inches (such as in a suction header) the loss coefficient
-          for
-          the valve would be 0.4 x (
-          <sup>16</sup>&frasl;
-          <sub>12</sub>)
-          <sup>4</sup> = 1.26.
-          <hr>
-        </small>
-      </h6>
-    </div>
-    <div class="my-2" *ngIf="currentField == 'dischargePipeDiameter'">
-      <h6>
-        Discharge Pipe diameter (ID)
-        <br>
-        <small class="text-muted">
-          Inner diameter of the discharge pipe. This is used to calculate the fluid velocity in the discharge pipe,
-          which is then used
-          to determine the discharge velocity head.
-          <hr>
-        </small>
-      </h6>
-    </div>
-    <div class="my-2" *ngIf="currentField == 'dischargeGaugePressure'">
-      <h6>
-        Discharge Gauge pressure (P<sub>d</sub>)
-        <br>
-        <small class="text-muted">
-          Discharge gauge pressure.
-          <hr>
-        </small>
-      </h6>
-    </div>
-    <div class="my-2" *ngIf="currentField == 'dischargeGaugeElevation'">
-      <h6>
-        Discharge Gauge elevation (Z<sub>d</sub>)
-        <br>
-        <small class="text-muted">
-          The elevation of the discharge gauge (in feet or meters). Both the suction tank fluid surface elevation and
-          the discharge
-          gauge elevation should be relative to a common elevation, which could be absolute (e.g., sea level) or
-          relative
-          (e.g., floor level).
-          <hr>
-        </small>
-      </h6>
-    </div>
-
-    <div class="my-2" *ngIf="currentField == 'dischargeLineLossCoefficients'">
-      <h6>
-        Discharge Line loss coefficients (K<sub>d</sub>)
-        <br>
-        <small class="text-muted">
-          The discharge line loss coefficients (the sum of all discharge line loss elements) are used to estimate the
-          pump discharge
-          flange and the discharge pressure gauge.
-          <hr> Note that these coefficients apply to the Darcy-Weisbach style calculation (loss – K x velocity head).
-          These losses
-          might come from elbows, tees, suction isolation valve, entrance loss from the tank to the pipe, etc.
-          <hr>
-          <b>IMPORTANT:</b> All losses must be normalized to the specific suction pipe diameter, and loss coefficient
-          adjustments
-          are made to the 4th order of the pipe diameter ratio.
-          <br> For example if there is a 12-inch isolation valve with a loss coefficient (K) of 0.4, but the suction
-          pipe diameter
-          at the point where the pressure is measured is 16-inches (such as in a suction header) the loss coefficient
-          for
-          the valve would be 0.4 x (
-          <sup>16</sup>&frasl;
-          <sub>12</sub>)
-          <sup>4</sup> = 1.26.
-          <hr>
-        </small>
-      </h6>
-    </div>
-  </div>
+  }
 
   <!--SUCTION GAUGE ELEVATION-->
-  <div *ngIf="headToolType == 'Suction gauge elevation'">
-    <div class="my-2" *ngIf="currentField == 'suctionPipeDiameter'">
-      <h6>
-        Suction Pipe diameter (ID)
-        <br>
-        <small class="text-muted">
-          Inner diameter of the suction side pipe. This is used to calculate the fluid velocity in the suction pipe,
-          which is then
-          used to determine the suction velocity head.
-          <hr>
-        </small>
-      </h6>
+  @if (headToolType == 'Suction gauge elevation') {
+    <div>
+      @if (currentField == 'suctionPipeDiameter') {
+        <div class="my-2">
+          <h6>
+            Suction Pipe diameter (ID)
+            <br>
+            <small class="text-muted">
+              Inner diameter of the suction side pipe. This is used to calculate the fluid velocity in the suction pipe,
+              which is then
+              used to determine the suction velocity head.
+              <hr>
+            </small>
+          </h6>
+        </div>
+      }
+      @if (currentField == 'suctionGuagePressure') {
+        <div class="my-2">
+          <h6>
+            Suction Gauge pressure (P<sub>g</sub>)
+            <br>
+            <small class="text-muted">
+              The gauge pressure of the suction side.
+              <hr>
+            </small>
+          </h6>
+        </div>
+      }
+      @if (currentField == 'suctionGuageElevation') {
+        <div class="my-2">
+          <h6>
+            Suction Gauge elevation (Z<sub>s</sub>)
+            <br>
+            <small class="text-muted">
+              The elevation of the suction gauge. Both the suction gauge elevation and the discharge gauge elevation should
+              be relative
+              to a common elevation, which could be absolute (e.g., sea level) or relative (e.g., floor level).
+              <hr>
+            </small>
+          </h6>
+        </div>
+      }
+      @if (currentField == 'suctionLineLossCoefficients') {
+        <div class="my-2">
+          <h6>
+            Suction Line loss coefficients (K<sub>s</sub>)
+            <br>
+            <small class="text-muted">
+              The suction line loss coefficients (the sum of all suction line loss elements) are used to estimate the
+              frictional head losses
+              between the suction reference point (e.g., suction gauge level) and the pump suction flange.
+              <hr> Note that these coefficients apply to the Darcy-Weisbach style calculation (loss – K x velocity head).
+              These losses
+              might come from elbows, tees, suction isolation valve, etc.
+              <hr>
+              <b>IMPORTANT:</b> All losses must be normalized to the specific suction pipe diameter, and loss coefficient
+              adjustments
+              are made to the 4th order of the pipe diameter ratio.
+              <br>For example if there is a 12-inch isolation valve with a loss coefficient (K) of 0.4, but the suction pipe
+              diameter
+              at the point where the pressure is measured is 16-inches (such as in a suction header) the loss coefficient
+              for
+              the valve would be 0.4 x (
+              <sup>16</sup>&frasl;
+              <sub>12</sub>)
+              <sup>4</sup> = 1.26
+              <hr>
+            </small>
+          </h6>
+        </div>
+      }
+      @if (currentField == 'dischargePipeDiameter') {
+        <div class="my-2">
+          <h6>
+            Discharge Pipe diameter (ID)
+            <br>
+            <small class="text-muted">
+              Inner diameter of the discharge pipe. This is used to calculate the fluid velocity in the discharge pipe,
+              which is then used
+              to determine the discharge velocity head.
+              <hr>
+            </small>
+          </h6>
+          <div class="d-flex justify-content-center">
+            <table class="table table-hover table-striped w-75">
+              <tbody>
+                <tr>
+                  <th class="w-50 text-center">Minimum</th>
+                  <th class="w-50 text-center">Maximum</th>
+                </tr>
+                <tr>
+                  <td class="w-50 text-center">0 {{smallUnit}}</td>
+                  <td class="w-50 text-center">2,000 {{smallUnit}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+      @if (currentField == 'dischargeGaugePressure') {
+        <div class="my-2">
+          <h6>
+            Discharge Gauge pressure (P<sub>d</sub>)
+            <br>
+            <small class="text-muted">
+              Discharge gauge pressure
+              <hr>
+            </small>
+          </h6>
+        </div>
+      }
+      @if (currentField == 'dischargeGaugeElevation') {
+        <div class="my-2">
+          <h6>
+            Discharge Gauge elevation (Z<sub>d</sub>)
+            <br>
+            <small class="text-muted">
+              The elevation of the discharge gauge. Both the suction gauge elevation and the discharge gauge elevation
+              should be relative
+              to a common elevation, which could be absolute (e.g., sea level) or relative (e.g., floor level).
+              <hr>
+            </small>
+          </h6>
+        </div>
+      }
+      @if (currentField == 'dischargeLineLossCoefficients') {
+        <div class="my-2">
+          <h6>
+            Discharge Line loss coefficients (K<sub>d</sub>)
+            <br>
+            <small class="text-muted">
+              The discharge line loss coefficients (the sum of all discharge line loss elements) are used to estimate the
+              pump discharge
+              flange and the discharge pressure gauge.
+              <hr>Note that these coefficients apply to the Darcy-Weisbach style calculation (loss – K x velocity head).
+              These losses
+              might come from elbows, tees, suction isolation valve, entrance loss from the tank to the pipe, etc.
+              <hr>
+              <b>IMPORTANT:</b> All losses must be normalized to the specific suction pipe diameter, and loss coefficient
+              adjustments
+              are made to the 4th order of the pipe diameter ratio.
+              <br> For example if there is a 12-inch isolation valve with a loss coefficient (K) of 0.4, but the suction
+              pipe diameter
+              at the point where the pressure is measured is 16-inches (such as in a suction header) the loss coefficient
+              for
+              the valve would be 0.4 x (
+              <sup>16</sup>&frasl;
+              <sub>12</sub>)
+              <sup>4</sup> = 1.26
+              <hr>
+            </small>
+          </h6>
+        </div>
+      }
     </div>
-    <div class="my-2" *ngIf="currentField == 'suctionGuagePressure'">
-      <h6>
-        Suction Gauge pressure (P<sub>g</sub>)
-        <br>
-        <small class="text-muted">
-          The gauge pressure of the suction side.
-          <hr>
-        </small>
-      </h6>
-    </div>
-
-    <div class="my-2" *ngIf="currentField == 'suctionGuageElevation'">
-      <h6>
-        Suction Gauge elevation (Z<sub>s</sub>)
-        <br>
-        <small class="text-muted">
-          The elevation of the suction gauge. Both the suction gauge elevation and the discharge gauge elevation should
-          be relative
-          to a common elevation, which could be absolute (e.g., sea level) or relative (e.g., floor level).
-          <hr>
-        </small>
-      </h6>
-    </div>
-
-    <div class="my-2" *ngIf="currentField == 'suctionLineLossCoefficients'">
-      <h6>
-        Suction Line loss coefficients (K<sub>s</sub>)
-        <br>
-        <small class="text-muted">
-          The suction line loss coefficients (the sum of all suction line loss elements) are used to estimate the
-          frictional head losses
-          between the suction reference point (e.g., suction gauge level) and the pump suction flange.
-          <hr> Note that these coefficients apply to the Darcy-Weisbach style calculation (loss – K x velocity head).
-          These losses
-          might come from elbows, tees, suction isolation valve, etc.
-          <hr>
-          <b>IMPORTANT:</b> All losses must be normalized to the specific suction pipe diameter, and loss coefficient
-          adjustments
-          are made to the 4th order of the pipe diameter ratio.
-          <br>For example if there is a 12-inch isolation valve with a loss coefficient (K) of 0.4, but the suction pipe
-          diameter
-          at the point where the pressure is measured is 16-inches (such as in a suction header) the loss coefficient
-          for
-          the valve would be 0.4 x (
-          <sup>16</sup>&frasl;
-          <sub>12</sub>)
-          <sup>4</sup> = 1.26
-          <hr>
-        </small>
-      </h6>
-    </div>
-
-    <div class="my-2" *ngIf="currentField == 'dischargePipeDiameter'">
-      <h6>
-        Discharge Pipe diameter (ID)
-        <br>
-        <small class="text-muted">
-          Inner diameter of the discharge pipe. This is used to calculate the fluid velocity in the discharge pipe,
-          which is then used
-          to determine the discharge velocity head.
-          <hr>
-        </small>
-      </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-75">
-          <tbody>
-            <tr>
-              <th class="w-50 text-center">Minimum</th>
-              <th class="w-50 text-center">Maximum</th>
-            </tr>
-            <tr>
-              <td class="w-50 text-center">0 {{smallUnit}}</td>
-              <td class="w-50 text-center">2,000 {{smallUnit}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="my-2" *ngIf="currentField == 'dischargeGaugePressure'">
-      <h6>
-        Discharge Gauge pressure (P<sub>d</sub>)
-        <br>
-        <small class="text-muted">
-          Discharge gauge pressure
-          <hr>
-        </small>
-      </h6>
-    </div>
-
-    <div class="my-2" *ngIf="currentField == 'dischargeGaugeElevation'">
-      <h6>
-        Discharge Gauge elevation (Z<sub>d</sub>)
-        <br>
-        <small class="text-muted">
-          The elevation of the discharge gauge. Both the suction gauge elevation and the discharge gauge elevation
-          should be relative
-          to a common elevation, which could be absolute (e.g., sea level) or relative (e.g., floor level).
-          <hr>
-        </small>
-      </h6>
-    </div>
-    <div class="my-2" *ngIf="currentField == 'dischargeLineLossCoefficients'">
-      <h6>
-        Discharge Line loss coefficients (K<sub>d</sub>)
-        <br>
-        <small class="text-muted">
-          The discharge line loss coefficients (the sum of all discharge line loss elements) are used to estimate the
-          pump discharge
-          flange and the discharge pressure gauge.
-          <hr>Note that these coefficients apply to the Darcy-Weisbach style calculation (loss – K x velocity head).
-          These losses
-          might come from elbows, tees, suction isolation valve, entrance loss from the tank to the pipe, etc.
-          <hr>
-          <b>IMPORTANT:</b> All losses must be normalized to the specific suction pipe diameter, and loss coefficient
-          adjustments
-          are made to the 4th order of the pipe diameter ratio.
-          <br> For example if there is a 12-inch isolation valve with a loss coefficient (K) of 0.4, but the suction
-          pipe diameter
-          at the point where the pressure is measured is 16-inches (such as in a suction header) the loss coefficient
-          for
-          the valve would be 0.4 x (
-          <sup>16</sup>&frasl;
-          <sub>12</sub>)
-          <sup>4</sup> = 1.26
-          <hr>
-        </small>
-      </h6>
-    </div>
-  </div>
+  }
   <div class="my-2">
     <a class="pl-1" [href]="docsLink + 'group__pump__head__calculator.html'" target="_blank" rel="noopener noreferrer">
       <span class="fa fa-external-link"></span>
