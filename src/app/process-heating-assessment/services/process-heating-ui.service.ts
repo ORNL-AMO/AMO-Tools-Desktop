@@ -3,8 +3,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
+import { resolveSelectedModificationId } from '../models/modification';
 import { Losses, Notes } from '../models/phast';
-import { AssessmentView, AUXILIARY_EQUIPMENT_VIEW, AUXILIARY_EQUIPMENT_VIEW_LINK, BaselineView, EnergyValidationView, EXPERT_VIEW_LOSS_VIEWS, HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, isViewVisibleForConfiguration, LossView, MainView, ProcessHeatingView, ReportView, ViewLink } from '../models/views';
+import { AssessmentView, AUXILIARY_EQUIPMENT_VIEW, AUXILIARY_EQUIPMENT_VIEW_LINK, BaselineView, EnergyValidationView, EXPERT_VIEW_LOSS_VIEWS, FUEL_SWITCHING_VIEW_LINK, HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, isViewVisibleForConfiguration, LossView, MainView, ProcessHeatingView, ReportView, ViewLink } from '../models/views';
 import { ProcessHeatingRouteData, STEPPED_ROUTES } from '../routing/stepped-routes';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingValidityService } from './process-heating-validity.service';
@@ -47,6 +48,10 @@ export class ProcessHeatingUiService {
     
   activeModificationIdSignal: WritableSignal<string | undefined> = signal<string | undefined>(undefined);
 
+  readonly selectedModificationId: Signal<string | undefined> = computed(() =>
+    resolveSelectedModificationId(this.processHeatingAssessmentService.processHeatingSignal()?.modifications ?? [], this.activeModificationIdSignal())
+  );
+
   // UI state signals
   // Reset on navigation so a field focused on one view doesn't keep its help showing on the next.
   focusedFieldSignal: WritableSignal<string> = linkedSignal({
@@ -88,10 +93,21 @@ export class ProcessHeatingUiService {
     HEAT_BALANCE_VIEW_LINKS.filter(link => this.isTabVisibleForHeatingEquipmentConfiguration(link.view))
   );
 
-  readonly visibleExpertViewTabs: Signal<ViewLink[]> = computed(() => [
-    ...this.visibleHeatBalanceTabs().filter(link => EXPERT_VIEW_LOSS_VIEWS.has(link.view)),
-    AUXILIARY_EQUIPMENT_VIEW_LINK,
-  ]);
+  /** Loss tabs used by the baseline or the selected modification, since their energy sources can differ. */
+  readonly visibleExpertViewTabs: Signal<ViewLink[]> = computed(() => {
+    const modificationId = this.selectedModificationId();
+    const configurations = [this.heatingSystemConfigurationSignal()];
+    if (modificationId) {
+      configurations.push(this.processHeatingAssessmentService.scenarioConfiguration(modificationId));
+    }
+    return [
+      FUEL_SWITCHING_VIEW_LINK,
+      ...HEAT_BALANCE_VIEW_LINKS.filter(link =>
+        EXPERT_VIEW_LOSS_VIEWS.has(link.view) && configurations.some(configuration => isViewVisibleForConfiguration(link.view, configuration))
+      ),
+      AUXILIARY_EQUIPMENT_VIEW_LINK,
+    ];
+  });
 
   // Service-held so the selection survives leaving and returning to Expert View. Falls back to the
   // first tab when a configuration change hides the selected one.
@@ -104,6 +120,30 @@ export class ProcessHeatingUiService {
 
   selectExpertViewTab(view: ProcessHeatingView): void {
     this._selectedExpertViewTab.set(view);
+  }
+
+  // Session-only by design: a reload clears it, and it never reaches saved assessment data.
+  private readonly tabsToVisit = signal<Record<string, ReadonlySet<ProcessHeatingView>>>({});
+
+  /**
+   * Marks Expert View tabs a modification's energy source change asks the user to visit, replacing any earlier marks.
+   * @param modificationId the modification whose energy source changed
+   * @param views the tabs to visit
+   */
+  markTabsToVisit(modificationId: string, views: ProcessHeatingView[]): void {
+    this.tabsToVisit.update(current => ({ ...current, [modificationId]: new Set(views) }));
+  }
+
+  markTabVisited(modificationId: string, view: ProcessHeatingView): void {
+    const pending = this.tabsToVisit()[modificationId];
+    if (!pending?.has(view)) return;
+    const remaining = new Set(pending);
+    remaining.delete(view);
+    this.tabsToVisit.update(current => ({ ...current, [modificationId]: remaining }));
+  }
+
+  isTabToVisit(modificationId: string, view: ProcessHeatingView): boolean {
+    return !!this.tabsToVisit()[modificationId]?.has(view);
   }
 
   private getActiveRouteData(): ProcessHeatingRouteData {

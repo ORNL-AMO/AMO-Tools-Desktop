@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { ViewLink } from '../../models/views';
+import { Settings } from '../../../shared/models/settings';
+import { getEnergySourceLabel } from '../../models/energy-source';
+import { getEnergySourceTabChanges, ViewLink } from '../../models/views';
+import { deriveHeatingEquipmentConfiguration } from '../../services/process-heating-assessment.service';
 
 export interface EnergySourceChangeDialogData {
   scenarioName: string;
@@ -9,6 +12,26 @@ export interface EnergySourceChangeDialogData {
   hiddenTabs: ViewLink[];
   addedTabs: ViewLink[];
   hasInheritingModifications: boolean;
+}
+
+/**
+ * @param scenarioName 'Baseline' or the modification's name
+ * @param current the scenario's settings before the change
+ * @param next the scenario's settings after the change
+ * @param hasInheritingModifications whether modifications without their own energy source will follow the change
+ */
+export function buildEnergySourceChangeDialogData(
+  scenarioName: string, current: Settings, next: Settings, hasInheritingModifications: boolean,
+): EnergySourceChangeDialogData {
+  const { hidden, added } = getEnergySourceTabChanges(deriveHeatingEquipmentConfiguration(current), deriveHeatingEquipmentConfiguration(next));
+  return {
+    scenarioName,
+    fromEnergySource: getEnergySourceLabel(current),
+    toEnergySource: getEnergySourceLabel(next),
+    hiddenTabs: hidden,
+    addedTabs: added,
+    hasInheritingModifications,
+  };
 }
 
 /**

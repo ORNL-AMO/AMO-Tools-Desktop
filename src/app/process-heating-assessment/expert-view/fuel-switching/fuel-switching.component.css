@@ -1,0 +1,33 @@
+.energy-source.indicate-different {
+  border: #007bff solid 2px;
+  border-radius: 4px;
+}
+
+/* Matches the energy source radios in Assessment Settings (phast-settings.component.css). */
+input[type=radio]:checked + label {
+  display: inline-block;
+  color: #BF3D00;
+  font-weight: bold;
+}
+
+.form-group .form-check {
+  width: 50%;
+  font-size: 0.8rem;
+}
+
+/* The app-wide form layout gives every form-group label 50% width, which wraps the radio labels. */
+.form-group .form-check label {
+  width: auto;
+  margin: 0 0 0 0.25rem;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.form-group .form-check input[type=radio] {
+  vertical-align: middle;
+}
+
+input[type=radio]:enabled,
+input[type=radio]:enabled + label {
+  cursor: pointer;
+}

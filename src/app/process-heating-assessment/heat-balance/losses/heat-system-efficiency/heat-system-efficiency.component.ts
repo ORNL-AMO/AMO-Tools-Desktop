@@ -35,7 +35,7 @@ export class HeatSystemEfficiencyComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly uiService = inject(ProcessHeatingUiService);
 
-  readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
+  readonly settings: Signal<Settings> = computed(() => this.assessmentService.scenarioSettings(this.scenario()));
   readonly form = new FormGroup({
     efficiency: new FormControl<number | null>(null, HEAT_SYSTEM_EFFICIENCY_VALIDATORS),
   });

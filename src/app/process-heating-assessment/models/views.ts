@@ -13,6 +13,9 @@ export type MainView = typeof MainView[keyof typeof MainView];
 /** Auxiliary Equipment's view in every context it appears: its Baseline step and its Expert View tab. */
 export const AUXILIARY_EQUIPMENT_VIEW = 'auxiliary-equipment';
 
+/** Expert View tab where a modification picks its own energy source; not a route. */
+export const FUEL_SWITCHING_VIEW = 'fuel-switching';
+
 export const BaselineView = {
   ASSESSMENT_SETTINGS: 'assessment-settings',
   ENERGY_VALIDATION: 'energy-validation',
@@ -72,7 +75,7 @@ export const LossView = {
 } as const;
 export type LossView = typeof LossView[keyof typeof LossView];
 
-export type ProcessHeatingView = MainView | BaselineView | EnergyValidationView | AssessmentView | ReportView | CalculatorsView | LossView;
+export type ProcessHeatingView = MainView | BaselineView | EnergyValidationView | AssessmentView | ReportView | CalculatorsView | LossView | typeof FUEL_SWITCHING_VIEW;
 
 /** Notes field edited from the results panel while each tab is selected in Expert View. */
 export const LOSS_VIEW_NOTES_KEY: Partial<Record<ProcessHeatingView, keyof Notes>> = {
@@ -128,6 +131,8 @@ export const MAIN_VIEW_LINKS: ViewLink[] = [
 
 /** Baseline step, also the last Expert View tab; kept out of the heat balance tabs since it isn't part of the heat balance. */
 export const AUXILIARY_EQUIPMENT_VIEW_LINK: ViewLink = { view: AUXILIARY_EQUIPMENT_VIEW, label: 'Auxiliary Equipment' };
+
+export const FUEL_SWITCHING_VIEW_LINK: ViewLink = { view: FUEL_SWITCHING_VIEW, label: 'Fuel Switching' };
 
 export const BASELINE_VIEW_LINKS: ViewLink[] = [
   { view: BaselineView.ASSESSMENT_SETTINGS, label: 'Assessment Settings' },

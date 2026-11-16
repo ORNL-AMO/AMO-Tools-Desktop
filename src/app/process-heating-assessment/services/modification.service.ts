@@ -35,14 +35,7 @@ export class ModificationService {
     this.assessmentService.processHeatingSignal()?.modifications ?? []
   );
 
-  readonly selectedModificationId: Signal<string | undefined> = computed(() => {
-    const modifications = this.modifications();
-    const activeId = this.uiService.activeModificationIdSignal();
-    if (activeId && modifications.some(modification => modification.id === activeId)) {
-      return activeId;
-    }
-    return modifications[0]?.id;
-  });
+  readonly selectedModificationId: Signal<string | undefined> = this.uiService.selectedModificationId;
 
   readonly selectedModification: Signal<ProcessHeatingModification | undefined> = computed(() =>
     this.modifications().find(modification => modification.id === this.selectedModificationId())

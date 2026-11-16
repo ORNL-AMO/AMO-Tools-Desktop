@@ -6,7 +6,7 @@ import { WallLoss } from '../../shared/models/phast/losses/wallLoss';
 import { AuxiliaryEquipmentItem } from '../../shared/models/phast/auxEquipment';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
 import { Losses, PHAST } from '../models/phast';
-import { AUXILIARY_EQUIPMENT_VIEW, BaselineView, EnergyValidationView, HeatingEquipmentConfiguration, LossView, MainView, ReportView } from '../models/views';
+import { AUXILIARY_EQUIPMENT_VIEW, BaselineView, FUEL_SWITCHING_VIEW, EnergyValidationView, HeatingEquipmentConfiguration, LossView, MainView, ReportView } from '../models/views';
 import { STEPPED_ROUTES } from '../routing/stepped-routes';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingUiService } from './process-heating-ui.service';
@@ -31,7 +31,7 @@ describe('ProcessHeatingUiService fuel-fired gating', () => {
       providers: [
         ProcessHeatingUiService,
         { provide: Router, useValue: router },
-        { provide: ProcessHeatingAssessmentService, useValue: { heatingEquipmentConfiguration: configuration } },
+        { provide: ProcessHeatingAssessmentService, useValue: { heatingEquipmentConfiguration: configuration, processHeatingSignal: signal<PHAST>({}) } },
         { provide: STEPPED_ROUTES, useValue: [] },
         { provide: ProcessHeatingValidityService, useValue: VALID_BASELINE },
       ],
@@ -87,7 +87,7 @@ describe('ProcessHeatingUiService electrotechnology-standard gating', () => {
       providers: [
         ProcessHeatingUiService,
         { provide: Router, useValue: router },
-        { provide: ProcessHeatingAssessmentService, useValue: { heatingEquipmentConfiguration: configuration } },
+        { provide: ProcessHeatingAssessmentService, useValue: { heatingEquipmentConfiguration: configuration, processHeatingSignal: signal<PHAST>({}) } },
         { provide: STEPPED_ROUTES, useValue: [] },
         { provide: ProcessHeatingValidityService, useValue: VALID_BASELINE },
       ],
@@ -153,7 +153,7 @@ describe('ProcessHeatingUiService EAF and heat system efficiency gating', () => 
       providers: [
         ProcessHeatingUiService,
         { provide: Router, useValue: router },
-        { provide: ProcessHeatingAssessmentService, useValue: { heatingEquipmentConfiguration: configuration } },
+        { provide: ProcessHeatingAssessmentService, useValue: { heatingEquipmentConfiguration: configuration, processHeatingSignal: signal<PHAST>({}) } },
         { provide: STEPPED_ROUTES, useValue: [] },
         { provide: ProcessHeatingValidityService, useValue: VALID_BASELINE },
       ],
@@ -396,6 +396,7 @@ describe('ProcessHeatingUiService loss counts', () => {
           provide: ProcessHeatingAssessmentService,
           useValue: {
             heatingEquipmentConfiguration: signal(HeatingEquipmentConfiguration.FUEL_FIRED),
+            processHeatingSignal: signal<PHAST>({}),
             scenarioPhastSignal: scenarioPhast,
             lossSignal: (scenario: string, lossKey: keyof Losses) => scenarioPhast(scenario).losses?.[lossKey],
           },
@@ -505,5 +506,114 @@ describe('ProcessHeatingUiService focused field', () => {
     navigate({ childView: ROUTE_TOKENS.auxiliaryEquipment });
     expect(service.showResultsPanel()).toBeTrue();
     expect(service.isEnergyValidationView()).toBeFalse();
+  });
+});
+
+describe('ProcessHeatingUiService Expert View tabs across energy sources', () => {
+  let service: ProcessHeatingUiService;
+  let baselineConfiguration: WritableSignal<HeatingEquipmentConfiguration>;
+  let modificationConfigurations: WritableSignal<Record<string, HeatingEquipmentConfiguration>>;
+  let processHeating: WritableSignal<PHAST>;
+
+  beforeEach(() => {
+    baselineConfiguration = signal<HeatingEquipmentConfiguration>(HeatingEquipmentConfiguration.FUEL_FIRED);
+    modificationConfigurations = signal<Record<string, HeatingEquipmentConfiguration>>({});
+    processHeating = signal<PHAST>({ modifications: [{ id: 'mod-1' }, { id: 'mod-2' }] as PHAST['modifications'] });
+    const router = {
+      events: new Subject(),
+      routerState: { snapshot: { root: { params: {}, data: {}, firstChild: null } } },
+    };
+    TestBed.configureTestingModule({
+      providers: [
+        ProcessHeatingUiService,
+        { provide: Router, useValue: router },
+        {
+          provide: ProcessHeatingAssessmentService,
+          useValue: {
+            heatingEquipmentConfiguration: baselineConfiguration,
+            processHeatingSignal: processHeating,
+            scenarioConfiguration: (scenario: string) => modificationConfigurations()[scenario] ?? baselineConfiguration(),
+          },
+        },
+        { provide: STEPPED_ROUTES, useValue: [] },
+        { provide: ProcessHeatingValidityService, useValue: VALID_BASELINE },
+      ],
+    });
+    service = TestBed.inject(ProcessHeatingUiService);
+  });
+
+  const expertViewTabs = (): string[] => service.visibleExpertViewTabs().map(link => link.view);
+
+  it('starts with Fuel Switching and ends with Auxiliary Equipment', () => {
+    expect(expertViewTabs()[0]).toBe(FUEL_SWITCHING_VIEW);
+    expect(expertViewTabs().at(-1)).toBe(AUXILIARY_EQUIPMENT_VIEW);
+  });
+
+  it("shows the tabs of both the baseline's and the selected modification's energy sources", () => {
+    modificationConfigurations.set({ 'mod-1': HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_EAF });
+
+    expect(expertViewTabs()).toEqual(jasmine.arrayContaining([LossView.FLUE_GAS, LossView.GAS_LEAKAGE, LossView.ENERGY_INPUT, LossView.EXHAUST_GAS, LossView.SLAG]));
+    expect(expertViewTabs()).not.toContain(LossView.HEAT_SYSTEM_EFFICIENCY);
+  });
+
+  it("follows the selected modification's energy source, falling back to the first modification", () => {
+    modificationConfigurations.set({ 'mod-2': HeatingEquipmentConfiguration.STEAM });
+    expect(service.selectedModificationId()).toBe('mod-1');
+    expect(expertViewTabs()).not.toContain(LossView.HEAT_SYSTEM_EFFICIENCY);
+
+    service.activeModificationIdSignal.set('mod-2');
+
+    expect(service.selectedModificationId()).toBe('mod-2');
+    expect(expertViewTabs()).toContain(LossView.HEAT_SYSTEM_EFFICIENCY);
+  });
+
+  it("shows only the baseline's tabs when there is no modification", () => {
+    processHeating.set({ modifications: [] });
+
+    expect(service.selectedModificationId()).toBeUndefined();
+    expect(expertViewTabs()).toContain(LossView.FLUE_GAS);
+    expect(expertViewTabs()).not.toContain(LossView.ENERGY_INPUT);
+  });
+});
+
+describe('ProcessHeatingUiService tabs to visit', () => {
+  let service: ProcessHeatingUiService;
+
+  beforeEach(() => {
+    const router = {
+      events: new Subject(),
+      routerState: { snapshot: { root: { params: {}, data: {}, firstChild: null } } },
+    };
+    TestBed.configureTestingModule({
+      providers: [
+        ProcessHeatingUiService,
+        { provide: Router, useValue: router },
+        { provide: ProcessHeatingAssessmentService, useValue: { heatingEquipmentConfiguration: signal(HeatingEquipmentConfiguration.FUEL_FIRED) } },
+        { provide: STEPPED_ROUTES, useValue: [] },
+        { provide: ProcessHeatingValidityService, useValue: VALID_BASELINE },
+      ],
+    });
+    service = TestBed.inject(ProcessHeatingUiService);
+    service.markTabsToVisit('mod-1', [LossView.OPERATIONS, LossView.SLAG]);
+  });
+
+  it('marks tabs for the given modification only', () => {
+    expect(service.isTabToVisit('mod-1', LossView.SLAG)).toBeTrue();
+    expect(service.isTabToVisit('mod-2', LossView.SLAG)).toBeFalse();
+    expect(service.isTabToVisit('mod-1', LossView.WALL_LOSSES)).toBeFalse();
+  });
+
+  it('clears one tab once visited', () => {
+    service.markTabVisited('mod-1', LossView.SLAG);
+
+    expect(service.isTabToVisit('mod-1', LossView.SLAG)).toBeFalse();
+    expect(service.isTabToVisit('mod-1', LossView.OPERATIONS)).toBeTrue();
+  });
+
+  it('replaces earlier marks on a later energy source change', () => {
+    service.markTabsToVisit('mod-1', [LossView.HEAT_SYSTEM_EFFICIENCY]);
+
+    expect(service.isTabToVisit('mod-1', LossView.SLAG)).toBeFalse();
+    expect(service.isTabToVisit('mod-1', LossView.HEAT_SYSTEM_EFFICIENCY)).toBeTrue();
   });
 });

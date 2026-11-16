@@ -22,6 +22,11 @@ export interface ProcessHeatingModification extends Modification {
   energySource?: ScenarioEnergySource;
 }
 
+/** @returns the active modification's id while it still exists, else the first modification's */
+export function resolveSelectedModificationId(modifications: Modification[], activeId: string | undefined): string | undefined {
+  return activeId && modifications.some(modification => modification.id === activeId) ? activeId : modifications[0]?.id;
+}
+
 export function getModificationName(modification: ProcessHeatingModification): string {
   return modification.scenarioOverrides?.name ?? '';
 }

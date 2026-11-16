@@ -2,9 +2,10 @@
   <ul class="tabs subtabs process-heating-assessment">
     @for (link of tabs(); track link.view) {
       <li [class.active]="link.view === selectedTab()" (click)="selectTab(link.view)">
-        <a [attr.aria-label]="invalidTabLabel(link, modification)" [attr.title]="invalidTabLabel(link, modification)">
+        <a [attr.aria-label]="tabStatusLabel(link, modification)" [attr.title]="tabStatusLabel(link, modification)">
           {{ link.label }}
-          <app-loss-tab-badge [count]="lossCount(link, modification)" [invalid]="isTabInvalid(link, modification)"></app-loss-tab-badge>
+          <app-loss-tab-badge [count]="lossCount(link, modification)" [invalid]="isTabInvalid(link, modification)"
+            [needsVisit]="needsVisit(link, modification)"></app-loss-tab-badge>
         </a>
       </li>
     }
@@ -13,13 +14,13 @@
     <div class="expert-view-panel">
       <div class="expert-view-panel-header">Baseline</div>
       <div class="expert-view-panel-content">
-        <ng-container *ngTemplateOutlet="lossForm; context: { $implicit: 'baseline' }"></ng-container>
+        <ng-container *ngTemplateOutlet="lossForm; context: { $implicit: 'baseline', name: 'Baseline' }"></ng-container>
       </div>
     </div>
     <div class="expert-view-panel">
       <div class="expert-view-panel-header">{{ modificationName(modification) }}</div>
       <div class="expert-view-panel-content">
-        <ng-container *ngTemplateOutlet="lossForm; context: { $implicit: modification.id }"></ng-container>
+        <ng-container *ngTemplateOutlet="lossForm; context: { $implicit: modification.id, name: modificationName(modification) }"></ng-container>
       </div>
     </div>
   </div>
@@ -31,24 +32,36 @@
   </div>
 }
 
-<ng-template #lossForm let-scenario>
-  @switch (selectedTab()) {
-    @case (LossView.OPERATIONS) { <app-process-heating-operations [scenario]="scenario"></app-process-heating-operations> }
-    @case (LossView.CHARGE_MATERIAL) { <app-charge-material [scenario]="scenario"></app-charge-material> }
-    @case (LossView.WALL_LOSSES) { <app-wall-losses [scenario]="scenario"></app-wall-losses> }
-    @case (LossView.EXTENDED_SURFACE) { <app-extended-surface [scenario]="scenario"></app-extended-surface> }
-    @case (LossView.ATMOSPHERE) { <app-atmosphere [scenario]="scenario"></app-atmosphere> }
-    @case (LossView.FIXTURE) { <app-fixture [scenario]="scenario"></app-fixture> }
-    @case (LossView.COOLING) { <app-cooling [scenario]="scenario"></app-cooling> }
-    @case (LossView.OPENING) { <app-opening [scenario]="scenario"></app-opening> }
-    @case (LossView.FLUE_GAS) { <app-flue-gas [scenario]="scenario"></app-flue-gas> }
-    @case (LossView.GAS_LEAKAGE) { <app-gas-leakage [scenario]="scenario"></app-gas-leakage> }
-    @case (LossView.ENERGY_INPUT_EXHAUST_GAS) { <app-energy-input-exhaust-gas [scenario]="scenario"></app-energy-input-exhaust-gas> }
-    @case (LossView.ENERGY_INPUT) { <app-energy-input [scenario]="scenario"></app-energy-input> }
-    @case (LossView.EXHAUST_GAS) { <app-exhaust-gas [scenario]="scenario"></app-exhaust-gas> }
-    @case (LossView.SLAG) { <app-slag [scenario]="scenario"></app-slag> }
-    @case (LossView.HEAT_SYSTEM_EFFICIENCY) { <app-heat-system-efficiency [scenario]="scenario"></app-heat-system-efficiency> }
-    @case (LossView.OTHER) { <app-other [scenario]="scenario"></app-other> }
-    @case (AUXILIARY_EQUIPMENT_VIEW) { <app-auxiliary-equipment [scenario]="scenario"></app-auxiliary-equipment> }
+<ng-template #lossForm let-scenario let-name="name">
+  @if (notApplicableMessage(scenario, name); as message) {
+    <div class="panel-container p-2">
+      <div class="card not-applicable">
+        <div class="card-body p-2">
+          <div class="not-applicable-label">Not Applicable</div>
+          <p class="not-applicable-message small mb-0">{{ message }}</p>
+        </div>
+      </div>
+    </div>
+  } @else {
+    @switch (selectedTab()) {
+      @case (FUEL_SWITCHING_VIEW) { <app-fuel-switching [scenario]="scenario"></app-fuel-switching> }
+      @case (LossView.OPERATIONS) { <app-process-heating-operations [scenario]="scenario"></app-process-heating-operations> }
+      @case (LossView.CHARGE_MATERIAL) { <app-charge-material [scenario]="scenario"></app-charge-material> }
+      @case (LossView.WALL_LOSSES) { <app-wall-losses [scenario]="scenario"></app-wall-losses> }
+      @case (LossView.EXTENDED_SURFACE) { <app-extended-surface [scenario]="scenario"></app-extended-surface> }
+      @case (LossView.ATMOSPHERE) { <app-atmosphere [scenario]="scenario"></app-atmosphere> }
+      @case (LossView.FIXTURE) { <app-fixture [scenario]="scenario"></app-fixture> }
+      @case (LossView.COOLING) { <app-cooling [scenario]="scenario"></app-cooling> }
+      @case (LossView.OPENING) { <app-opening [scenario]="scenario"></app-opening> }
+      @case (LossView.FLUE_GAS) { <app-flue-gas [scenario]="scenario"></app-flue-gas> }
+      @case (LossView.GAS_LEAKAGE) { <app-gas-leakage [scenario]="scenario"></app-gas-leakage> }
+      @case (LossView.ENERGY_INPUT_EXHAUST_GAS) { <app-energy-input-exhaust-gas [scenario]="scenario"></app-energy-input-exhaust-gas> }
+      @case (LossView.ENERGY_INPUT) { <app-energy-input [scenario]="scenario"></app-energy-input> }
+      @case (LossView.EXHAUST_GAS) { <app-exhaust-gas [scenario]="scenario"></app-exhaust-gas> }
+      @case (LossView.SLAG) { <app-slag [scenario]="scenario"></app-slag> }
+      @case (LossView.HEAT_SYSTEM_EFFICIENCY) { <app-heat-system-efficiency [scenario]="scenario"></app-heat-system-efficiency> }
+      @case (LossView.OTHER) { <app-other [scenario]="scenario"></app-other> }
+      @case (AUXILIARY_EQUIPMENT_VIEW) { <app-auxiliary-equipment [scenario]="scenario"></app-auxiliary-equipment> }
+    }
   }
 </ng-template>

@@ -1,0 +1,42 @@
+<div class="panel-container p-2">
+  <div class="card mb-2">
+    <form [formGroup]="form" class="card-body p-2">
+      <div class="form-section energy-source" [class.indicate-different]="differsFromBaseline()">
+        <div class="form-group">
+          <label class="small">Energy Source Type</label>
+          <div class="form-check">
+            @for (option of ENERGY_SOURCE_TYPE_OPTIONS; track option.value; let last = $last) {
+              <input type="radio" id="energySourceType_{{option.value}}_{{scenario()}}" formControlName="energySourceType"
+                [value]="option.value" (change)="changeEnergySourceType()">
+              <label for="energySourceType_{{option.value}}_{{scenario()}}">{{ option.label }}</label>
+              @if (!last) { <br> }
+            }
+          </div>
+        </div>
+
+        @if (form.controls.energySourceType.value === 'Electricity') {
+          <div class="form-group">
+            <label class="small" for="furnaceType_{{scenario()}}">Type of Electric Furnace</label>
+            <select class="form-control" id="furnaceType_{{scenario()}}" formControlName="furnaceType" (change)="save()">
+              @for (furnaceType of ELECTROTECHNOLOGY_FURNACE_TYPES; track furnaceType) {
+                <option [value]="furnaceType">{{ furnaceType }}</option>
+              }
+            </select>
+          </div>
+          @if (form.controls.furnaceType.value === 'Custom Electrotechnology') {
+            <div class="form-group">
+              <label class="small" for="customFurnaceName_{{scenario()}}">Custom Furnace Name</label>
+              <input type="text" class="form-control" id="customFurnaceName_{{scenario()}}" formControlName="customFurnaceName" (change)="save()">
+            </div>
+          }
+        }
+      </div>
+
+      @if (isBaseline()) {
+        <p class="baseline-note small text-muted mb-0">
+          Change the baseline energy source in <a [routerLink]="assessmentSettingsLink">Assessment Settings</a>.
+        </p>
+      }
+    </form>
+  </div>
+</div>

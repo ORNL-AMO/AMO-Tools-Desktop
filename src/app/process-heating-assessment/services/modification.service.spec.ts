@@ -6,6 +6,7 @@ import { ScenarioOverrides, ProcessHeatingModification } from '../models/modific
 import { ModificationService } from './modification.service';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingUiService } from './process-heating-ui.service';
+import { FakeProcessHeatingUiService } from '../explore-opportunities/opportunity-test-fakes';
 
 class FakeProcessHeatingAssessmentService {
   readonly processHeatingSignal: WritableSignal<PHAST> = signal<PHAST>({ name: 'Baseline', modifications: [] });
@@ -24,10 +25,6 @@ class FakeProcessHeatingAssessmentService {
     updated[index] = { ...updated[index], scenarioOverrides: { ...updated[index].scenarioOverrides, [key]: value } };
     this.processHeatingSignal.set({ ...current, modifications: updated });
   }
-}
-
-class FakeProcessHeatingUiService {
-  activeModificationIdSignal: WritableSignal<string | undefined> = signal<string | undefined>(undefined);
 }
 
 describe('ModificationService', () => {

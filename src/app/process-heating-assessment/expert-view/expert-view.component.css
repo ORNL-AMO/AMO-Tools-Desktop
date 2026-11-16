@@ -43,3 +43,17 @@
   min-height: 0;
   overflow-y: auto;
 }
+
+.not-applicable {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+}
+
+.not-applicable-label {
+  color: var(--process-heating-assessment);
+  font-weight: 700;
+  border-bottom: var(--process-heating-assessment) solid 2px;
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
+}

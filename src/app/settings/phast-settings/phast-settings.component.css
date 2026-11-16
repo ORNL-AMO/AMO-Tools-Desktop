@@ -26,3 +26,7 @@ label, .form-check{
 .form-check{
   width: 50%;
 }
+input[type=radio]:enabled,
+input[type=radio]:enabled + label {
+  cursor: pointer;
+}
