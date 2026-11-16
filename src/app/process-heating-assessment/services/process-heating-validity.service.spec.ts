@@ -246,6 +246,37 @@ describe('ProcessHeatingValidityService', () => {
     });
   });
 
+  describe('energy entry for a modification on another energy source', () => {
+    const ELECTRO_STANDARD = { ...FUEL_FIRED, energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' } as Settings;
+
+    it('requires Energy Input for an EAF modification on a fuel-fired baseline', () => {
+      scenarioSettings.mod1.set(EAF);
+
+      expect(service.scenarioValidity('mod1').energyInputValid).toBeFalse();
+      expect(service.invalidStepLabels('mod1')).toContain('Energy Input');
+    });
+
+    it('requires Energy Input Exhaust Gas for a standard electric modification on a fuel-fired baseline', () => {
+      scenarioSettings.mod1.set(ELECTRO_STANDARD);
+
+      expect(service.scenarioValidity('mod1').inputExhaustValid).toBeFalse();
+    });
+
+    it('requires Flue Gas for a fuel-fired modification on an EAF baseline', () => {
+      settings.set(EAF);
+      scenarioSettings.mod1.set(FUEL_FIRED);
+
+      expect(service.scenarioValidity('mod1').flueGasValid).toBeFalse();
+    });
+
+    it('keeps the entry optional for the baseline and for a modification on its energy source', () => {
+      settings.set(EAF);
+
+      expect(service.scenarioValidity('baseline').energyInputValid).toBeTrue();
+      expect(service.scenarioValidity('mod1').energyInputValid).toBeTrue();
+    });
+  });
+
   describe('isStepValid', () => {
     it('flags only the step with invalid inputs, in that scenario only', () => {
       scenarios.baseline.set(phastWith({ wallLosses: [{}] }));
