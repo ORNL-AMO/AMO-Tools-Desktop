@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal, Signal } from '@angular/core';
 import { PhastValidService } from '../../phast/phast-valid.service';
-import { Settings } from '../../shared/models/settings';
 import { ProcessHeatingValidityService } from '../services/process-heating-validity.service';
 import { SANKEY_LABEL_STYLE_OPTIONS, SankeyLabelStyle } from './sankey-label-style';
 import { providePhastValidService, SankeyResultsService, SankeyScenario } from './sankey-results.service';
@@ -17,7 +16,6 @@ export class ProcessHeatingSankeyComponent {
   private readonly sankeyResultsService = inject(SankeyResultsService);
   private readonly validityService = inject(ProcessHeatingValidityService);
 
-  readonly settings: Signal<Settings> = this.sankeyResultsService.settings;
   readonly labelStyle = signal<SankeyLabelStyle>('both');
   readonly labelStyleOptions = SANKEY_LABEL_STYLE_OPTIONS;
   readonly selectedId = signal<string>('baseline');

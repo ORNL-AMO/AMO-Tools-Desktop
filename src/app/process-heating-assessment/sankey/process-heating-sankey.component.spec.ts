@@ -13,6 +13,7 @@ function buildScenarios(count = 3): SankeyScenario[] {
     id: i === 0 ? 'baseline' : `mod${i}`,
     name: i === 0 ? 'Baseline' : `Scenario ${i}`,
     phast: { name: `phast${i}`, losses: {} } as SharedPHAST,
+    settings: { energyResultUnit: 'MMBtu' } as Settings,
   }));
 }
 

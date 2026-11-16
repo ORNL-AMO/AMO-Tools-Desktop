@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, Signal, viewChild } from '@angular/core';
 import { PhastResults } from '../../models/phast';
 import { getModificationName, ProcessHeatingModification } from '../../models/modification';
-import { ShowResultsCategories } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
-import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
+import { combineResultCategories, ProcessHeatingResultsService, ResultCategories } from '../../services/process-heating-results.service';
 import { ModificationService } from '../../services/modification.service';
 import { InvalidModification, ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
 
@@ -55,9 +54,17 @@ export class AssessmentResultsComponent {
     return baseline && modification ? this.resultsService.getCo2EmissionsSavings(baseline, modification, 'hourlyTotalEmissionOutput') : undefined;
   });
 
-  readonly showResultsCats: Signal<ShowResultsCategories> = computed(() => this.resultsService.getResultCategories(this.settings()));
+  readonly baselineCategories: Signal<ResultCategories> = computed(() => this.resultsService.scenarioResultCategories('baseline'));
 
-  readonly isEaf: Signal<boolean> = computed(() => this.settings().furnaceType === 'Electric Arc Furnace (EAF)');
+  readonly modificationCategories: Signal<ResultCategories | undefined> = computed(() =>
+    this.modification() ? this.resultsService.scenarioResultCategories(this.scenario()) : undefined
+  );
+
+  /** Rows either column uses, since the baseline and modification can use different energy sources. */
+  readonly rowCategories: Signal<ResultCategories> = computed(() => {
+    const modification = this.modificationCategories();
+    return modification ? combineResultCategories([this.baselineCategories(), modification]) : this.baselineCategories();
+  });
 
   readonly lossUnit: Signal<string> = computed(() => `${this.settings().energyResultUnit}/hr`);
 

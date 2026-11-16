@@ -1,27 +1,28 @@
 import { signal, WritableSignal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FeatureFlagService } from '../../../shared/feature-flag.service';
-import { ShowResultsCategories } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { ReportTableRow } from '../../../shared/report-builder/models/report-ui-models';
 import { ProcessHeatingModification } from '../../models/modification';
 import { PhastResults } from '../../models/phast';
 import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
-import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
+import { ProcessHeatingResultsService, ResultCategories } from '../../services/process-heating-results.service';
 import { AuxiliaryEquipmentResultsService } from '../../services/auxiliary-equipment-results.service';
 import { AuxiliaryEquipmentResults } from '../../models/auxiliary-equipment';
 import { ResultsDataResultsService, ResultsDataUI } from './results-data-results.service';
 
-const NO_CATEGORIES: ShowResultsCategories = {
+const NO_CATEGORIES: ResultCategories = {
   showSlag: false, showAuxPower: false, showSystemEff: false, showFlueGas: false, showEnInput1: false, showEnInput2: false, showExGas: false,
+  showEafElectricalDelivered: false, showStandardElectricalDelivered: false,
 };
 
 describe('ResultsDataResultsService', () => {
   let service: ResultsDataResultsService;
   let settings: WritableSignal<Partial<Settings>>;
   let resultsByName: Record<string, Partial<PhastResults>>;
-  let categories: ShowResultsCategories;
+  let categories: ResultCategories;
+  let modificationCategories: ResultCategories | undefined;
   let modifications: WritableSignal<ProcessHeatingModification[]>;
   let showOperationalImpacts: WritableSignal<boolean>;
   let auxiliaryEquipmentByName: Record<string, AuxiliaryEquipmentResults>;
@@ -49,6 +50,7 @@ describe('ResultsDataResultsService', () => {
       mod1: { totalWallLoss: 0, flueGasAvailableHeat: 60, grossHeatInput: 8 },
     };
     categories = { ...NO_CATEGORIES };
+    modificationCategories = undefined;
     modifications = signal<ProcessHeatingModification[]>([{ id: 'mod1', scenarioOverrides: { name: 'Scenario 1' } }]);
     showOperationalImpacts = signal(false);
     const noEquipment: AuxiliaryEquipmentResults = { items: [], isComplete: true, totalPower: 0, totalEnergyUse: 0, totalEnergyCost: 0 };
@@ -68,7 +70,7 @@ describe('ResultsDataResultsService', () => {
           provide: ProcessHeatingResultsService,
           useValue: {
             scenarioResults: (scenario: string) => resultsByName[scenario],
-            getResultCategories: () => categories,
+            scenarioResultCategories: (scenario: string) => scenario === 'baseline' ? categories : modificationCategories ?? categories,
             getCo2EmissionsSavings: (baseline: PhastResults, mod: PhastResults) =>
               baseline.co2EmissionsOutput.hourlyTotalEmissionOutput - mod.co2EmissionsOutput.hourlyTotalEmissionOutput,
           },
@@ -128,7 +130,7 @@ describe('ResultsDataResultsService', () => {
   describe('electrotechnology', () => {
     it('adds electrical rows for non-EAF electric furnaces', () => {
       settings.update(current => ({ ...current, energySourceType: 'Electricity' }));
-      categories = { ...NO_CATEGORIES, showHeatDelivered: true, showElectricalDelivered: true, showAuxPower: true, showEnInput2: true };
+      categories = { ...NO_CATEGORIES, showHeatDelivered: true, showElectricalDelivered: true, showStandardElectricalDelivered: true, showAuxPower: true, showEnInput2: true };
       expect(labels()).not.toContain('Aux Power Losses');
       expect(labels()).toContain('Electrical Heat Delivered');
       expect(labels()).toContain('Electrical Heater Losses');
@@ -137,7 +139,7 @@ describe('ResultsDataResultsService', () => {
 
     it('shows slag, exhaust gas, and chemical energy rows for EAF furnaces', () => {
       settings.update(current => ({ ...current, energySourceType: 'Electricity', furnaceType: 'Electric Arc Furnace (EAF)' }));
-      categories = { ...NO_CATEGORIES, showSlag: true, showExGas: true, showEnInput1: true, showElectricalDelivered: true, showChemicalEnergyDelivered: true };
+      categories = { ...NO_CATEGORIES, showSlag: true, showExGas: true, showEnInput1: true, showElectricalDelivered: true, showEafElectricalDelivered: true, showChemicalEnergyDelivered: true };
       expect(labels()).toContain('Slag Losses');
       expect(labels()).toContain('Exhaust Gas Losses');
       expect(labels()).toContain('Chemical Energy Delivered');
@@ -151,6 +153,34 @@ describe('ResultsDataResultsService', () => {
       expect(labels()).toContain('System Efficiency');
       expect(labels()).toContain('Total System Losses');
       expect(labels()).not.toContain('Flue Gas Losses');
+    });
+  });
+
+  describe('baseline and modification with different energy sources', () => {
+    beforeEach(() => {
+      categories = { ...NO_CATEGORIES, showFlueGas: true, showHeatDelivered: true };
+      modificationCategories = { ...NO_CATEGORIES, showSlag: true, showExGas: true, showEafElectricalDelivered: true, showChemicalEnergyDelivered: true };
+      resultsByName.baseline = { ...resultsByName.baseline, flueGasSystemLosses: 2, energyInputHeatDelivered: 7 };
+      resultsByName.mod1 = { ...resultsByName.mod1, flueGasSystemLosses: 3, totalSlag: 4, energyInputHeatDelivered: 6 };
+    });
+
+    it("shows the rows of every column's energy source", () => {
+      ['Flue Gas Losses', 'Fuel Heat Delivered', 'Slag Losses', 'Chemical Energy Delivered', 'Electrical Heat Delivered']
+        .forEach(label => expect(labels()).withContext(label).toContain(label));
+    });
+
+    it("leaves a column empty for a row its energy source doesn't use", () => {
+      expect(rowOf('Flue Gas Losses').baseline.value).toBe(2);
+      expect(rowOf('Flue Gas Losses').modifications[0].value).toBeNull();
+      expect(rowOf('Slag Losses').baseline.value).toBeNull();
+      expect(rowOf('Slag Losses').modifications[0].value).toBe(4);
+    });
+
+    it('reads heat delivered as fuel for the baseline and as electrical for the EAF modification', () => {
+      expect(rowOf('Fuel Heat Delivered').baseline.value).toBe(7);
+      expect(rowOf('Fuel Heat Delivered').modifications[0].value).toBeNull();
+      expect(rowOf('Electrical Heat Delivered').baseline.value).toBeNull();
+      expect(rowOf('Electrical Heat Delivered').modifications[0].value).toBe(6);
     });
   });
 

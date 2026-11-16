@@ -40,6 +40,7 @@ describe('ExecutiveSummaryResultsService', () => {
   let modifications: WritableSignal<ProcessHeatingModification[]>;
   let showOperationalImpacts: WritableSignal<boolean>;
   let auxiliaryEquipmentByName: Record<string, AuxiliaryEquipmentResults>;
+  let ownEnergySources: Record<string, Partial<Settings>>;
 
   function ui(): ExecutiveSummaryUI {
     return service.executiveSummaryUI();
@@ -70,6 +71,7 @@ describe('ExecutiveSummaryResultsService', () => {
       { id: 'mod1', scenarioOverrides: { name: 'Scenario 1' } },
     ]);
     showOperationalImpacts = signal(false);
+    ownEnergySources = {};
     const noEquipment: AuxiliaryEquipmentResults = { items: [], isComplete: true, totalPower: 0, totalEnergyUse: 0, totalEnergyCost: 0 };
     auxiliaryEquipmentByName = { baseline: noEquipment, mod1: noEquipment };
 
@@ -81,6 +83,7 @@ describe('ExecutiveSummaryResultsService', () => {
           provide: ProcessHeatingAssessmentService,
           useValue: {
             settingsSignal: settings,
+            scenarioSettings: (scenario: string) => ({ ...settings(), ...ownEnergySources[scenario] }),
             scenarioPhastSignal: (scenario: string) => scenarios[scenario],
           },
         },
@@ -225,6 +228,29 @@ describe('ExecutiveSummaryResultsService', () => {
       expect(ui().costRows[3].baseline.value).toBe(6000);
       expect(ui().costRows[4].baseline.value).toBe(30);
       expect(rowOf(ui().summaryRows, 'Cost').baseline.value).toBe(8530 + 100);
+    });
+  });
+
+  describe('fuel-fired baseline with an electric arc furnace modification', () => {
+    beforeEach(() => {
+      ownEnergySources = { mod1: { energySourceType: 'Electricity', furnaceType: 'Electric Arc Furnace (EAF)' } };
+      const eafResults = { naturalGasUsed: 100, otherFuelUsed: 10, electricEnergyUsed: 1000, coalCarbonUsed: 5, electrodeEnergyUsed: 6 };
+      resultsByName['mod1'] = { grossHeatInput: 8, annualEAFResults: eafResults } as Partial<PhastResults>;
+      scenarios['mod1'].losses.energyInputEAF = [{ coalCarbonInjection: 2, electrodeUse: 3 }] as EnergyInputEAF[];
+    });
+
+    it("prices each scenario by its own energy source", () => {
+      expect(rowOf(ui().summaryRows, 'Cost').baseline.value).toBe(50000);
+      expect(rowOf(ui().summaryRows, 'Cost').modifications[0].value).toBe(100 + 500 + 2000 + 6000 + 30);
+      expect(rowOf(ui().summaryRows, 'Cost Savings').modifications[0].value).toBe(50000 - 8630);
+    });
+
+    it('shows the EAF energy and cost tables with empty baseline cells', () => {
+      expect(ui().eafEnergyRows[0].baseline.value).toBeNull();
+      expect(ui().eafEnergyRows[0].modifications[0].value).toBe(1000);
+      expect(ui().costRows.map(row => row.label)).toEqual(['Electrical', 'Natural Gas', 'Coal Carbon', 'Electrode', 'Other Fuel']);
+      expect(ui().costRows.every(row => row.baseline.value === null)).toBeTrue();
+      expect(ui().costRows[1].modifications[0].value).toBe(500);
     });
   });
 

@@ -10,6 +10,24 @@ import { DesignedEnergyService } from '../../phast/designed-energy/designed-ener
 import { AssessmentScenario, ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { toLegacyPhast } from './legacy-phast.util';
 
+/** Result row flags; Electrical Heat Delivered is split because EAF reports it from a different result field. */
+export interface ResultCategories extends ShowResultsCategories {
+  showEafElectricalDelivered: boolean;
+  showStandardElectricalDelivered: boolean;
+}
+
+/**
+ * @param categories each scenario's result categories
+ * @returns a flag set wherever any scenario sets it, so a table shows every row some column uses
+ */
+export function combineResultCategories(categories: ResultCategories[]): ResultCategories {
+  return categories.reduce((combined, next) => {
+    const merged = { ...combined };
+    (Object.keys(next) as (keyof ResultCategories)[]).forEach(key => merged[key] = !!combined[key] || !!next[key]);
+    return merged;
+  });
+}
+
 @Injectable()
 export class ProcessHeatingResultsService {
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
@@ -40,11 +58,25 @@ export class ProcessHeatingResultsService {
   }
 
   /**
-   * @param settings assessment settings (energy source and furnace type drive visibility)
+   * @param settings a scenario's settings (energy source and furnace type drive visibility)
    * @returns flags for which conditional result rows apply to the configuration
    */
-  getResultCategories(settings: Settings): ShowResultsCategories {
-    return { ...this.phastResultsService.getResultCategories(settings), showAuxPower: false };
+  getResultCategories(settings: Settings): ResultCategories {
+    const categories = { ...this.phastResultsService.getResultCategories(settings), showAuxPower: false };
+    const isEaf = settings.furnaceType === 'Electric Arc Furnace (EAF)';
+    return {
+      ...categories,
+      showEafElectricalDelivered: !!categories.showElectricalDelivered && isEaf,
+      showStandardElectricalDelivered: !!categories.showElectricalDelivered && !isEaf,
+    };
+  }
+
+  /**
+   * @param scenario 'baseline' or a modification id
+   * @returns flags for which conditional result rows apply to the scenario's own energy source
+   */
+  scenarioResultCategories(scenario: AssessmentScenario): ResultCategories {
+    return this.getResultCategories(this.assessmentService.scenarioSettings(scenario));
   }
 
   /**

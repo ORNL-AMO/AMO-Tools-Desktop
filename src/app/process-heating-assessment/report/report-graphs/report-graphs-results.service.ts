@@ -32,7 +32,6 @@ export class ReportGraphsResultsService {
 
   readonly reportGraphsUI: Signal<ReportGraphsUI | undefined> = computed(() => {
     const settings = this.assessmentService.settingsSignal();
-    const categories = this.resultsService.getResultCategories(settings);
     const scenarioIds = [
       { id: 'baseline', name: 'Baseline' },
       ...this.modificationService.modifications().map(modification => ({ id: modification.id, name: getModificationName(modification) })),
@@ -46,7 +45,7 @@ export class ReportGraphsResultsService {
       return [{
         id,
         name,
-        lossValuesAndLabels: this.phastChartsService.getLossValuesAndLabels(results, categories),
+        lossValuesAndLabels: this.phastChartsService.getLossValuesAndLabels(results, this.resultsService.scenarioResultCategories(id)),
         deliverValuesAndLabels: this.phastChartsService.getDeliverValuesAndLabels(results),
       }];
     });

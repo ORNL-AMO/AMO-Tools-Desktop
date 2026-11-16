@@ -7,7 +7,7 @@ import { ShowResultsCategories } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { Losses, PHAST, PhastResults } from '../models/phast';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
-import { ProcessHeatingResultsService } from './process-heating-results.service';
+import { combineResultCategories, ProcessHeatingResultsService, ResultCategories } from './process-heating-results.service';
 
 describe('ProcessHeatingResultsService', () => {
   let service: ProcessHeatingResultsService;
@@ -38,7 +38,9 @@ describe('ProcessHeatingResultsService', () => {
         },
         {
           provide: PhastResultsService,
-          useValue: { getResults: legacyGetResults, getResultCategories: () => ({ showAuxPower: true, showSlag: true } as ShowResultsCategories) },
+          useValue: { getResults: legacyGetResults, getResultCategories: (scenarioSettings: Settings) => ({
+            showAuxPower: true, showSlag: true, showElectricalDelivered: scenarioSettings.energySourceType === 'Electricity',
+          } as ShowResultsCategories) },
         },
         { provide: MeteredEnergyService, useValue: {} },
         { provide: DesignedEnergyService, useValue: {} },
@@ -106,6 +108,34 @@ describe('ProcessHeatingResultsService', () => {
 
     it('never shows the auxiliary power result category', () => {
       expect(service.getResultCategories(settings() as Settings)).toEqual(jasmine.objectContaining({ showAuxPower: false, showSlag: true }));
+    });
+  });
+
+  describe('result categories', () => {
+    it('splits Electrical Heat Delivered between EAF and other electric furnaces', () => {
+      const eaf = service.getResultCategories({ energySourceType: 'Electricity', furnaceType: 'Electric Arc Furnace (EAF)' } as Settings);
+      const induction = service.getResultCategories({ energySourceType: 'Electricity', furnaceType: 'Induction Heating and Melting' } as Settings);
+      const fuel = service.getResultCategories({ energySourceType: 'Fuel' } as Settings);
+
+      expect([eaf.showEafElectricalDelivered, eaf.showStandardElectricalDelivered]).toEqual([true, false]);
+      expect([induction.showEafElectricalDelivered, induction.showStandardElectricalDelivered]).toEqual([false, true]);
+      expect([fuel.showEafElectricalDelivered, fuel.showStandardElectricalDelivered]).toEqual([false, false]);
+    });
+
+    it("reads each scenario's own energy source", () => {
+      mod1EnergySource.set({ energySourceType: 'Electricity' });
+
+      expect(service.scenarioResultCategories('baseline').showElectricalDelivered).toBeFalse();
+      expect(service.scenarioResultCategories('mod1').showElectricalDelivered).toBeTrue();
+    });
+
+    it('combines categories so a flag is set when any scenario sets it', () => {
+      const none = { showSlag: false, showFlueGas: false } as ResultCategories;
+      const combined = combineResultCategories([none, { ...none, showSlag: true }, { ...none, showFlueGas: true }]);
+
+      expect(combined.showSlag).toBeTrue();
+      expect(combined.showFlueGas).toBeTrue();
+      expect(combineResultCategories([none]).showSlag).toBeFalse();
     });
   });
 

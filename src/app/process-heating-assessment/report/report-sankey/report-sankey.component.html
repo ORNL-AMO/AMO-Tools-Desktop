@@ -15,7 +15,7 @@
         <app-sankey-scenario-picker [options]="pickerOptions()" [selected]="scenario.id"
           (selectedChange)="selectScenario(index, $event)" [costSavings]="scenario.costSavings"
           [energySavings]="scenario.energySavings" [energySavingsUnit]="ui.energySavingsUnit">
-          <app-phast-sankey [phast]="scenario.phast" [settings]="ui.settings" [labelStyle]="labelStyle()"></app-phast-sankey>
+          <app-phast-sankey [phast]="scenario.phast" [settings]="scenario.settings" [labelStyle]="labelStyle()"></app-phast-sankey>
         </app-sankey-scenario-picker>
       }
     </div>

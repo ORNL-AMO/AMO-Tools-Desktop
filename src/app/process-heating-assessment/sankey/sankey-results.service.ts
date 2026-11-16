@@ -13,6 +13,8 @@ export interface SankeyScenario {
   name: string;
   /** Legacy-shaped scenario copy, since the shared sankey component reads and annotates its input */
   phast: SharedPHAST;
+  /** The scenario's own settings, since the sankey's flows depend on its energy source */
+  settings: Settings;
 }
 
 /** Builds the sankey input for the baseline and every modification. */
@@ -31,6 +33,7 @@ export class SankeyResultsService {
       id,
       name,
       phast: toLegacyPhast(this.assessmentService.scenarioPhastSignal(id)),
+      settings: this.assessmentService.scenarioSettings(id),
     }))
   );
 }

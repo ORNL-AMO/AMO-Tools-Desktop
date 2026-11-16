@@ -23,6 +23,7 @@ describe('SankeyResultsService', () => {
           useValue: {
             settingsSignal: signal<Partial<Settings>>({ energyResultUnit: 'MMBtu' }),
             scenarioPhastSignal: (id: string) => scenarioPhasts[id],
+            scenarioSettings: (id: string) => ({ energyResultUnit: 'MMBtu', energySourceType: id === 'mod1' ? 'Electricity' : 'Fuel' }) as Settings,
           },
         },
         { provide: ModificationService, useValue: { modifications } },
@@ -47,5 +48,9 @@ describe('SankeyResultsService', () => {
   it('updates when modifications change', () => {
     modifications.set([]);
     expect(service.scenarios().map(scenario => scenario.id)).toEqual(['baseline']);
+  });
+
+  it("gives each scenario its own settings, since a modification can use another energy source", () => {
+    expect(service.scenarios().map(scenario => scenario.settings.energySourceType)).toEqual(['Fuel', 'Electricity']);
   });
 });

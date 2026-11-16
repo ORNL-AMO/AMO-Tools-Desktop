@@ -1,18 +1,19 @@
 import { NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FeatureFlagService } from '../../../shared/feature-flag.service';
-import { ShowResultsCategories } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { PhastResults } from '../../models/phast';
 import { ProcessHeatingModification } from '../../models/modification';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
-import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
+import { ProcessHeatingResultsService, ResultCategories } from '../../services/process-heating-results.service';
 import { ModificationService } from '../../services/modification.service';
 import { InvalidModification, ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
 import { AssessmentResultsComponent } from './assessment-results.component';
 
-const NO_CATEGORIES: ShowResultsCategories = {
+const NO_CATEGORIES: ResultCategories = {
   showSlag: false,
+  showEafElectricalDelivered: false,
+  showStandardElectricalDelivered: false,
   showAuxPower: false,
   showSystemEff: false,
   showFlueGas: false,
@@ -33,7 +34,8 @@ function co2(hourlyTotalEmissionOutput: number): PhastResults['co2EmissionsOutpu
 
 describe('AssessmentResultsComponent', () => {
   let fixture: ComponentFixture<AssessmentResultsComponent>;
-  let categories: WritableSignal<ShowResultsCategories>;
+  let categories: WritableSignal<ResultCategories>;
+  let modificationCategories: WritableSignal<ResultCategories | undefined>;
   let baselineResults: WritableSignal<PhastResults | undefined>;
   let modificationResults: WritableSignal<PhastResults | undefined>;
   let settings: WritableSignal<Partial<Settings>>;
@@ -67,6 +69,7 @@ describe('AssessmentResultsComponent', () => {
 
   beforeEach(() => {
     categories = signal({ ...NO_CATEGORIES });
+    modificationCategories = signal<ResultCategories | undefined>(undefined);
     baselineResults = signal(makeResults());
     modificationResults = signal(makeResults({ totalWallLoss: 5 }));
     settings = signal<Partial<Settings>>({ energyResultUnit: 'MMBtu', emissionsUnit: 'Imperial' });
@@ -75,11 +78,13 @@ describe('AssessmentResultsComponent', () => {
 
     resultsService = jasmine.createSpyObj<ProcessHeatingResultsService>('ProcessHeatingResultsService', [
       'scenarioResults',
-      'getResultCategories',
+      'scenarioResultCategories',
       'getCo2EmissionsSavings',
     ]);
     resultsService.scenarioResults.and.callFake(scenario => (scenario === 'baseline' ? baselineResults() : modificationResults()));
-    resultsService.getResultCategories.and.callFake(() => categories());
+    resultsService.scenarioResultCategories.and.callFake(scenario =>
+      scenario === 'baseline' ? categories() : modificationCategories() ?? categories()
+    );
     resultsService.getCo2EmissionsSavings.and.returnValue(2.5);
 
     TestBed.configureTestingModule({
@@ -185,8 +190,8 @@ describe('AssessmentResultsComponent', () => {
     });
 
     it('reads EAF electrical heat from energy input heat delivered', () => {
-      categories.set({ ...NO_CATEGORIES, showElectricalDelivered: true });
-      settings.set({ energyResultUnit: 'kWh', furnaceType: 'Electric Arc Furnace (EAF)' });
+      categories.set({ ...NO_CATEGORIES, showElectricalDelivered: true, showEafElectricalDelivered: true });
+      settings.set({ energyResultUnit: 'kWh' });
       baselineResults.set(makeResults({ energyInputHeatDelivered: 8, electricalHeatDelivered: 9 }));
       render();
       expect(rowCells('Electrical Heat Delivered')).toEqual(['8.00']);
@@ -194,11 +199,38 @@ describe('AssessmentResultsComponent', () => {
     });
 
     it('reads non-EAF electrical heat from electrical heat delivered with a top border', () => {
-      categories.set({ ...NO_CATEGORIES, showElectricalDelivered: true });
+      categories.set({ ...NO_CATEGORIES, showElectricalDelivered: true, showStandardElectricalDelivered: true });
       baselineResults.set(makeResults({ energyInputHeatDelivered: 8, electricalHeatDelivered: 9 }));
       render();
       expect(rowCells('Electrical Heat Delivered')).toEqual(['9.00']);
       expect(row('Electrical Heat Delivered').classList).toContain('tr-border');
+    });
+  });
+
+  describe('baseline and modification with different energy sources', () => {
+    beforeEach(() => {
+      categories.set({ ...NO_CATEGORIES, showFlueGas: true, showHeatDelivered: true });
+      modificationCategories.set({ ...NO_CATEGORIES, showSystemEff: true });
+      baselineResults.set(makeResults({ flueGasSystemLosses: 3, energyInputHeatDelivered: 6, heatingSystemEfficiency: 70 }));
+      modificationResults.set(makeResults({ flueGasSystemLosses: 4, heatingSystemEfficiency: 75, totalSystemLosses: 2 }));
+    });
+
+    it("shows the rows of both columns' energy sources", () => {
+      render('mod-1');
+      ['Flue Gas Losses', 'Fuel Heat Delivered', 'System Efficiency', 'Total System Losses']
+        .forEach(label => expect(row(label)).withContext(label).toBeDefined());
+    });
+
+    it("shows a placeholder in a column whose energy source doesn't use the row", () => {
+      render('mod-1');
+      expect(rowCells('Flue Gas Losses')).toEqual(['3.00', '— —']);
+      expect(rowCells('System Efficiency')).toEqual(['— —', '75%']);
+    });
+
+    it("shows only the baseline's rows on Baseline steps", () => {
+      render();
+      expect(row('System Efficiency')).toBeUndefined();
+      expect(rowCells('Flue Gas Losses')).toEqual(['3.00']);
     });
   });
 
