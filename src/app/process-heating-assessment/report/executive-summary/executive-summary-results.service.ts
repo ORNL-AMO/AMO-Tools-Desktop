@@ -226,7 +226,8 @@ export class ExecutiveSummaryResultsService {
         summary.annualTotalFuelCost = summary.annualNaturalGasCost + summary.annualCarbonCoalCost + summary.annualElectrodeCost + summary.annualOtherFuelCost;
       } else {
         const totalHeatInput = (phast.losses.energyInputExhaustGasLoss ?? []).reduce((sum, loss) => sum + loss.totalHeatInput, 0);
-        summary.annualElectricityCost = results.electricalHeatDelivered * operatingHours.hoursPerYear * operatingCosts.electricityCost;
+        const electricalHeatDeliveredKwh = new ConvertValue(results.electricalHeatDelivered, settings.energyResultUnit, 'kWh').convertedValue;
+        summary.annualElectricityCost = electricalHeatDeliveredKwh * operatingHours.hoursPerYear * operatingCosts.electricityCost;
         summary.annualTotalFuelCost = totalHeatInput * operatingHours.hoursPerYear * operatingCosts.fuelCost;
       }
       summary.annualCost = summary.annualTotalFuelCost + summary.annualElectricityCost;

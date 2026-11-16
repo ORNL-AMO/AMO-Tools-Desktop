@@ -1,7 +1,7 @@
 import { computed, inject, Injectable, Signal } from '@angular/core';
 import { getNewIdString } from '../../shared/helperFunctions';
 import { ExploreOpportunityCategory, Notes } from '../models/phast';
-import { ProcessHeatingModification, ScenarioOverrides } from '../models/modification';
+import { ProcessHeatingModification, ScenarioEnergySource, ScenarioOverrides } from '../models/modification';
 import { SavingsOpportunity } from '../../shared/models/explore-opps';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingUiService } from './process-heating-ui.service';
@@ -95,6 +95,22 @@ export class ModificationService {
       modification.id === id
         ? { ...modification, exploreOpportunityFlags: { ...modification.exploreOpportunityFlags, [category]: value } }
         : modification
+    );
+    this.writeModifications(updated);
+  }
+
+  /**
+   * @param id the modification id
+   * @param energySource the modification's own energy source; matching the baseline's, or undefined, makes it follow the baseline
+   */
+  setEnergySource(id: string, energySource: ScenarioEnergySource | undefined): void {
+    const baseline = this.assessmentService.settingsSignal();
+    const matchesBaseline = energySource
+      && energySource.energySourceType === baseline?.energySourceType
+      && (energySource.furnaceType ?? null) === (baseline?.furnaceType ?? null)
+      && (energySource.customFurnaceName ?? null) === (baseline?.customFurnaceName ?? null);
+    const updated = this.modifications().map(modification =>
+      modification.id === id ? { ...modification, energySource: matchesBaseline ? undefined : energySource } : modification
     );
     this.writeModifications(updated);
   }

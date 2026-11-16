@@ -82,7 +82,7 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
         {
           provide: ProcessHeatingAssessmentService,
           useValue: {
-            heatingEquipmentConfiguration: configuration,
+            scenarioConfiguration: () => configuration(),
             lossSignal: (_scenario: string, lossKey: keyof Losses) => populatedLossKeys.has(lossKey) ? [{}] : [],
           },
         },
@@ -98,6 +98,16 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
   it('shows every fuel-fired opportunity in order for fuel-fired with all baseline losses', () => {
     expect(createComponent().visibleOpportunityComponents())
       .toEqual(componentsAllowedFor(ALL_COMPONENTS_IN_ORDER, HeatingEquipmentConfiguration.FUEL_FIRED));
+  });
+
+  it("filters opportunities by the selected modification's configuration", () => {
+    const scenarioConfiguration = jasmine.createSpy('scenarioConfiguration').and.returnValue(HeatingEquipmentConfiguration.STEAM);
+    TestBed.overrideProvider(ModificationService, { useValue: { selectedModification: signal({ id: 'mod' }), modifications: signal([]) } });
+    TestBed.overrideProvider(ProcessHeatingAssessmentService, { useValue: { scenarioConfiguration, lossSignal: () => [{}] } });
+
+    expect(createComponent().visibleOpportunityComponents())
+      .toEqual(componentsAllowedFor(ALL_COMPONENTS_IN_ORDER, HeatingEquipmentConfiguration.STEAM));
+    expect(scenarioConfiguration).toHaveBeenCalledWith('mod');
   });
 
   it('shows only the operations opportunity when baseline has no losses', () => {
@@ -151,7 +161,7 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
         { provide: ModalDialogService, useValue: {} },
         { provide: ProcessHeatingUiService, useValue: uiService },
         { provide: ModificationService, useValue: { selectedModification: signal({ id: 'mod' }), modifications: signal([]) } },
-        { provide: ProcessHeatingAssessmentService, useValue: { heatingEquipmentConfiguration: configuration, lossSignal: () => [{}] } },
+        { provide: ProcessHeatingAssessmentService, useValue: { scenarioConfiguration: () => configuration(), lossSignal: () => [{}] } },
       ],
     });
     const fixture = TestBed.createComponent(ExploreOpportunitiesComponent);
@@ -174,7 +184,7 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
         { provide: ModificationService, useValue: { selectedModification: signal({ id: 'mod' }), modifications: signal([]) } },
         {
           provide: ProcessHeatingAssessmentService,
-          useValue: { heatingEquipmentConfiguration: configuration, lossSignal: () => [{}] },
+          useValue: { scenarioConfiguration: () => configuration(), lossSignal: () => [{}] },
         },
       ],
     });
@@ -192,7 +202,7 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
 });
 
 describe('ExploreOpportunitiesComponent modification header and implementation costs', () => {
-  let assessmentService: { heatingEquipmentConfiguration: WritableSignal<HeatingEquipmentConfiguration>; lossSignal: () => unknown[]; updateModificationProperty: jasmine.Spy };
+  let assessmentService: { scenarioConfiguration: () => HeatingEquipmentConfiguration; lossSignal: () => unknown[]; updateModificationProperty: jasmine.Spy };
   let focusedFieldSignal: WritableSignal<string>;
 
   function render(selectedModification: ProcessHeatingModification | undefined) {
@@ -218,7 +228,7 @@ describe('ExploreOpportunitiesComponent modification header and implementation c
   beforeEach(() => {
     focusedFieldSignal = signal('default');
     assessmentService = {
-      heatingEquipmentConfiguration: signal(HeatingEquipmentConfiguration.FUEL_FIRED),
+      scenarioConfiguration: () => HeatingEquipmentConfiguration.FUEL_FIRED,
       lossSignal: () => [],
       updateModificationProperty: jasmine.createSpy('updateModificationProperty'),
     };

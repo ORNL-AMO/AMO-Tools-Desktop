@@ -134,7 +134,8 @@ export class AssessmentSettingsComponent {
     const from = deriveHeatingEquipmentConfiguration(current);
     const to = deriveHeatingEquipmentConfiguration(newSettings);
     const phast = this.processHeating();
-    const hasModifications = this.assessmentService.getModifications(phast).length > 0;
+    const modifications = this.assessmentService.getModifications(phast);
+    const hasModifications = modifications.length > 0;
     const hasLossData = LOSS_KEYS.some(key => phast?.losses?.[key]?.length);
     if (from === to || !(hasModifications || hasLossData)) {
       return true;
@@ -148,7 +149,7 @@ export class AssessmentSettingsComponent {
           toEnergySource: this.getEnergySourceLabel(newSettings),
           hiddenTabs: hidden,
           addedTabs: added,
-          hasInheritingModifications: hasModifications,
+          hasInheritingModifications: modifications.some(modification => !modification.energySource),
         },
       },
     );

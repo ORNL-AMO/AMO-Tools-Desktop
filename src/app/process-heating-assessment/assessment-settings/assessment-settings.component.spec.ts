@@ -270,6 +270,19 @@ describe('AssessmentSettingsComponent', () => {
       expect(config.data).toEqual(jasmine.objectContaining({ hasInheritingModifications: true }));
     });
 
+    it('omits the inheriting note when every modification has its own energy source', async () => {
+      assessmentService.getModifications.and.returnValue([
+        { id: 'mod-1', energySource: { energySourceType: 'Steam', furnaceType: null } } as ProcessHeatingModification,
+      ]);
+      chooseEnergySourceChange(true);
+      switchToElectricity();
+
+      await component.saveSettings();
+
+      const [, config] = modalDialogService.openModal.calls.mostRecent().args;
+      expect(config.data).toEqual(jasmine.objectContaining({ hasInheritingModifications: false }));
+    });
+
     it('saves without asking when there is no loss data and no modification', async () => {
       processHeatingSignal.set(makePhast());
       switchToElectricity();

@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { Co2SavingsPhastService } from '../../phast/losses/operations/co2-savings-phast/co2-savings-phast.service';
 import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { Settings } from '../../shared/models/settings';
@@ -45,7 +45,7 @@ describe('OperationsComponent', () => {
     });
     assessmentService = jasmine.createSpyObj<ProcessHeatingAssessmentService>(
       'ProcessHeatingAssessmentService',
-      ['setProcessHeating', 'updateProcessHeatingProperty', 'updateModificationProperty', 'scenarioPhast', 'scenarioPhastSignal'],
+      ['setProcessHeating', 'updateProcessHeatingProperty', 'updateModificationProperty', 'scenarioPhast', 'scenarioPhastSignal', 'scenarioSettings', 'scenarioConfiguration'],
       {
         settingsSignal: signal({ unitsOfMeasure: 'Imperial' } as Settings),
         processHeatingSignal: signal(scenarios().baseline),
@@ -53,6 +53,9 @@ describe('OperationsComponent', () => {
     );
     assessmentService.scenarioPhast.and.callFake(scenario => scenarios()[scenario]);
     assessmentService.scenarioPhastSignal.and.callFake(scenario => scenarios()[scenario]);
+    assessmentService.scenarioSettings.and.returnValue({ unitsOfMeasure: 'Imperial' } as Settings);
+    assessmentService.scenarioConfiguration.and.callFake(scenario =>
+      scenario === 'mod-2' ? HeatingEquipmentConfiguration.STEAM : HeatingEquipmentConfiguration.FUEL_FIRED);
 
     TestBed.configureTestingModule({
       declarations: [OperationsComponent],
@@ -62,7 +65,7 @@ describe('OperationsComponent', () => {
         { provide: ProcessHeatingAssessmentService, useValue: assessmentService },
         {
           provide: ProcessHeatingUiService,
-          useValue: { heatingSystemConfigurationSignal: signal(HeatingEquipmentConfiguration.FUEL_FIRED), focusedFieldSignal: signal('default') },
+          useValue: { focusedFieldSignal: signal('default') },
         },
         { provide: Co2SavingsPhastService, useValue: { getCo2SavingsDataFromSettingsObject: () => ({}) } },
         { provide: ModalDialogService, useValue: {} },
@@ -89,6 +92,25 @@ describe('OperationsComponent', () => {
       render('mod-1');
 
       expect(input('hoursPerYear_mod-1')).not.toBeNull();
+    });
+  });
+
+  describe('validator toggling', () => {
+    it("requires the cost for the scenario's own energy source", () => {
+      render('mod-2');
+
+      expect(component.form.controls.steamCost.hasValidator(Validators.required)).toBeTrue();
+      expect(component.form.controls.fuelCost.hasValidator(Validators.required)).toBeFalse();
+    });
+
+    it('moves the required cost when the scenario changes to one with a different energy source', () => {
+      render('mod-2');
+
+      fixture.componentRef.setInput('scenario', 'baseline');
+      fixture.detectChanges();
+
+      expect(component.form.controls.fuelCost.hasValidator(Validators.required)).toBeTrue();
+      expect(component.form.controls.steamCost.hasValidator(Validators.required)).toBeFalse();
     });
   });
 

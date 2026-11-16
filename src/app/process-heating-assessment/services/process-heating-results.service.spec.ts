@@ -12,11 +12,13 @@ import { ProcessHeatingResultsService } from './process-heating-results.service'
 describe('ProcessHeatingResultsService', () => {
   let service: ProcessHeatingResultsService;
   let settings: WritableSignal<Partial<Settings>>;
+  let mod1EnergySource: WritableSignal<Partial<Settings> | undefined>;
   let scenarios: Record<string, WritableSignal<PHAST | undefined>>;
   let legacyGetResults: jasmine.Spy;
 
   beforeEach(() => {
     settings = signal<Partial<Settings>>({ unitsOfMeasure: 'Imperial' });
+    mod1EnergySource = signal<Partial<Settings> | undefined>(undefined);
     scenarios = {
       baseline: signal<PHAST>({ name: 'baseline', losses: {} as Losses }),
       mod1: signal<PHAST>({ name: 'mod1', losses: {} as Losses }),
@@ -28,7 +30,11 @@ describe('ProcessHeatingResultsService', () => {
         ProcessHeatingResultsService,
         {
           provide: ProcessHeatingAssessmentService,
-          useValue: { settingsSignal: settings, scenarioPhastSignal: (scenario: string) => scenarios[scenario]() },
+          useValue: {
+            settingsSignal: settings,
+            scenarioPhastSignal: (scenario: string) => scenarios[scenario](),
+            scenarioSettings: (scenario: string) => (scenario === 'mod1' ? { ...settings(), ...mod1EnergySource() } : settings()),
+          },
         },
         {
           provide: PhastResultsService,
@@ -68,6 +74,16 @@ describe('ProcessHeatingResultsService', () => {
 
       expect(legacyGetResults).toHaveBeenCalledTimes(2);
       expect(legacyGetResults.calls.mostRecent().args[1]).toEqual({ unitsOfMeasure: 'Metric' });
+    });
+
+    it("calculates each scenario with its own energy source", () => {
+      mod1EnergySource.set({ energySourceType: 'Electricity' });
+
+      service.scenarioResults('baseline');
+      expect(legacyGetResults.calls.mostRecent().args[1]).toEqual({ unitsOfMeasure: 'Imperial' });
+
+      service.scenarioResults('mod1');
+      expect(legacyGetResults.calls.mostRecent().args[1]).toEqual({ unitsOfMeasure: 'Imperial', energySourceType: 'Electricity' });
     });
 
     it('is undefined when the scenario has no losses', () => {

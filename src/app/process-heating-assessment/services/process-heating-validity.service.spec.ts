@@ -46,6 +46,7 @@ const phastWith = (losses: Losses, extra: Partial<PHAST> = {}): PHAST => ({ ...O
 describe('ProcessHeatingValidityService', () => {
   let service: ProcessHeatingValidityService;
   let settings: WritableSignal<Settings>;
+  let scenarioSettings: Record<string, WritableSignal<Settings | undefined>>;
   let scenarios: Record<string, WritableSignal<PHAST | undefined>>;
   let processHeating: WritableSignal<PHAST>;
   let settingsFormValid: boolean;
@@ -61,6 +62,7 @@ describe('ProcessHeatingValidityService', () => {
       return { totalInput: 1000, exothermicHeat: -100, energyInputTotalChemEnergy: 300 } as PhastResults;
     });
     settings = signal(FUEL_FIRED);
+    scenarioSettings = { mod1: signal<Settings | undefined>(undefined) };
     scenarios = {
       baseline: signal<PHAST | undefined>(phastWith({})),
       mod1: signal<PHAST | undefined>(phastWith({})),
@@ -89,6 +91,7 @@ describe('ProcessHeatingValidityService', () => {
             settingsSignal: settings,
             processHeatingSignal: processHeating,
             scenarioPhastSignal: (scenario: string) => scenarios[scenario](),
+            scenarioSettings: (scenario: string) => scenarioSettings[scenario]?.() ?? settings(),
           },
         },
         {
@@ -154,6 +157,15 @@ describe('ProcessHeatingValidityService', () => {
 
       settings.set(FUEL_FIRED);
       expect(service.scenarioValidity('baseline').flueGasValid).toBeFalse();
+    });
+
+    it("checks each scenario against its own energy source", () => {
+      scenarios.baseline.set(phastWith({ flueGasLosses: [{}] }));
+      scenarios.mod1.set(phastWith({ flueGasLosses: [{}] }));
+      scenarioSettings.mod1.set(EAF);
+
+      expect(service.scenarioValidity('baseline').flueGasValid).toBeFalse();
+      expect(service.scenarioValidity('mod1').flueGasValid).toBeTrue();
     });
 
     it('validates only the first flue gas entry', () => {

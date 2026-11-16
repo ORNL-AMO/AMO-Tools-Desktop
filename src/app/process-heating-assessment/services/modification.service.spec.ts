@@ -1,6 +1,7 @@
 import { signal, WritableSignal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { PHAST } from '../models/phast';
+import { Settings } from '../../shared/models/settings';
 import { ScenarioOverrides, ProcessHeatingModification } from '../models/modification';
 import { ModificationService } from './modification.service';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
@@ -8,6 +9,7 @@ import { ProcessHeatingUiService } from './process-heating-ui.service';
 
 class FakeProcessHeatingAssessmentService {
   readonly processHeatingSignal: WritableSignal<PHAST> = signal<PHAST>({ name: 'Baseline', modifications: [] });
+  readonly settingsSignal: WritableSignal<Settings> = signal<Settings>({ energySourceType: 'Fuel', furnaceType: null } as Settings);
 
   updateProcessHeatingProperty<K extends keyof PHAST>(key: K, value: PHAST[K]): void {
     this.processHeatingSignal.set({ ...this.processHeatingSignal(), [key]: value });
@@ -166,5 +168,36 @@ describe('ModificationService', () => {
     service.deleteModification(secondId);
 
     expect(service.selectedModificationId()).toBe(firstId);
+  });
+
+  describe('setEnergySource', () => {
+    it('stores the energy source on that modification only', () => {
+      const firstId = service.addModification();
+      const secondId = service.addModification();
+
+      service.setEnergySource(firstId, { energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' });
+
+      expect(service.modifications().find(mod => mod.id === firstId)?.energySource)
+        .toEqual({ energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' });
+      expect(service.modifications().find(mod => mod.id === secondId)?.energySource).toBeUndefined();
+    });
+
+    it("clears the energy source when it matches the baseline's", () => {
+      const id = service.addModification();
+      service.setEnergySource(id, { energySourceType: 'Steam', furnaceType: null });
+
+      service.setEnergySource(id, { energySourceType: 'Fuel', furnaceType: null });
+
+      expect(service.selectedModification()?.energySource).toBeUndefined();
+    });
+
+    it('clears the energy source when given undefined', () => {
+      const id = service.addModification();
+      service.setEnergySource(id, { energySourceType: 'Steam', furnaceType: null });
+
+      service.setEnergySource(id, undefined);
+
+      expect(service.selectedModification()?.energySource).toBeUndefined();
+    });
   });
 });

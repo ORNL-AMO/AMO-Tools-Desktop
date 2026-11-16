@@ -25,7 +25,7 @@ export class ProcessHeatingResultsService {
   private readonly scenarioResultsCache = new Map<AssessmentScenario, Signal<PhastResults | undefined>>();
 
   /**
-   * Results shared by every reader of the scenario, recalculated only when its losses or the settings change.
+   * Results shared by every reader of the scenario, recalculated only when its losses or its settings change.
    * Readers must not mutate the returned object.
    * @param scenario 'baseline' or a modification id
    * @returns the scenario's results, or undefined when it has no losses
@@ -33,7 +33,7 @@ export class ProcessHeatingResultsService {
   scenarioResults(scenario: AssessmentScenario): PhastResults | undefined {
     let cached = this.scenarioResultsCache.get(scenario);
     if (!cached) {
-      cached = computed(() => this.getResults(this.assessmentService.scenarioPhastSignal(scenario), this.assessmentService.settingsSignal()));
+      cached = computed(() => this.getResults(this.assessmentService.scenarioPhastSignal(scenario), this.assessmentService.scenarioSettings(scenario)));
       this.scenarioResultsCache.set(scenario, cached);
     }
     return cached();

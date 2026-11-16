@@ -8,6 +8,7 @@ import { TestBed } from '@angular/core/testing';
 import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { ReportTableRow } from '../../../shared/report-builder/models/report-ui-models';
 import { Settings } from '../../../shared/models/settings';
+import { ConvertValue } from '../../../shared/convert-units/ConvertValue';
 import { ProcessHeatingModification } from '../../models/modification';
 import { PHAST, PhastResults, Losses } from '../../models/phast';
 import { ModificationService } from '../../services/modification.service';
@@ -182,6 +183,13 @@ describe('ExecutiveSummaryResultsService', () => {
       expect(labels).toEqual(['Electrical', 'Fuel']);
       expect(ui().costRows[0].baseline.value).toBe(2000);
       expect(ui().costRows[1].baseline.value).toBe(20000);
+    });
+
+    it('converts electrical heat delivered to kWh before pricing it', () => {
+      settings.update(current => ({ ...current, energyResultUnit: 'MMBtu' }));
+      resultsByName['baseline'] = { grossHeatInput: 10, electricalHeatDelivered: new ConvertValue(20, 'kWh', 'MMBtu').convertedValue };
+
+      expect(ui().costRows[0].baseline.value).toBeCloseTo(2000, 6);
     });
 
     it('omits the EAF energy table', () => {

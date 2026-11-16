@@ -43,9 +43,9 @@ export class OperationsComponent {
   private readonly modalDialogService = inject(ModalDialogService);
   private readonly injector = inject(Injector);
 
-  readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
-  readonly heatingSystemConfiguration: Signal<HeatingEquipmentConfiguration> =
-    this.uiService.heatingSystemConfigurationSignal;
+  readonly settings: Signal<Settings> = computed(() => this.assessmentService.scenarioSettings(this.scenario()));
+  readonly heatingSystemConfiguration: Signal<HeatingEquipmentConfiguration> = computed(() =>
+    this.assessmentService.scenarioConfiguration(this.scenario()));
   readonly HC = HeatingEquipmentConfiguration;
 
   readonly isBaseline: Signal<boolean> = computed(() => this.scenario() === 'baseline');

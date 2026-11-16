@@ -73,6 +73,60 @@ describe('ProcessHeatingAssessmentService', () => {
     });
   });
 
+  describe('scenarioSettings / scenarioConfiguration', () => {
+    const fuelSettings = {
+      id: 1, unitsOfMeasure: 'Imperial', energyResultUnit: 'MMBtu', energySourceType: 'Fuel', furnaceType: null, customFurnaceName: 'Old furnace',
+    } as Settings;
+
+    function setModifications(...modifications: ProcessHeatingModification[]): void {
+      service.setProcessHeating({ name: 'Baseline', losses: {}, modifications });
+    }
+
+    beforeEach(() => {
+      service.setSettings(fuelSettings);
+    });
+
+    it('returns the assessment settings for the baseline', () => {
+      setModifications();
+
+      expect(service.scenarioSettings('baseline')).toBe(fuelSettings);
+      expect(service.scenarioConfiguration('baseline')).toBe('fuel-fired');
+    });
+
+    it('returns the assessment settings for a modification without its own energy source', () => {
+      setModifications({ id: 'mod-1' });
+
+      expect(service.scenarioSettings('mod-1')).toBe(fuelSettings);
+    });
+
+    it("applies a modification's own energy source and keeps the assessment units", () => {
+      setModifications({ id: 'mod-1', energySource: { energySourceType: 'Electricity', furnaceType: 'Electric Arc Furnace (EAF)' } });
+
+      expect(service.scenarioSettings('mod-1')).toEqual({
+        ...fuelSettings, energySourceType: 'Electricity', furnaceType: 'Electric Arc Furnace (EAF)', customFurnaceName: undefined,
+      });
+      expect(service.scenarioConfiguration('mod-1')).toBe('electrotechnology-eaf');
+      expect(service.scenarioConfiguration('baseline')).toBe('fuel-fired');
+    });
+
+    it('follows a baseline energy source change when the modification has none of its own', () => {
+      setModifications({ id: 'mod-1' });
+
+      service.setSettings({ ...fuelSettings, energySourceType: 'Steam' });
+
+      expect(service.scenarioConfiguration('mod-1')).toBe('steam');
+    });
+
+    it('keeps the same settings object when unrelated modification data changes', () => {
+      setModifications({ id: 'mod-1', energySource: { energySourceType: 'Steam', furnaceType: null } });
+      const before = service.scenarioSettings('mod-1');
+
+      service.updateModificationProperty('mod-1', 'name', 'Renamed');
+
+      expect(service.scenarioSettings('mod-1')).toBe(before);
+    });
+  });
+
   describe('saveSettings', () => {
     const imperial = { id: 1, unitsOfMeasure: 'Imperial', energyResultUnit: 'MMBtu' } as Settings;
     const metric = { id: 1, unitsOfMeasure: 'Metric', energyResultUnit: 'GJ' } as Settings;

@@ -173,7 +173,7 @@ export class ProcessHeatingValidityService {
    */
   private checkValid(scenario: AssessmentScenario): PhastValid {
     const phast = this.assessmentService.scenarioPhastSignal(scenario);
-    const settings = this.assessmentService.settingsSignal();
+    const settings = this.assessmentService.scenarioSettings(scenario);
     const configuration = deriveHeatingEquipmentConfiguration(settings);
     const valid = Object.fromEntries(this.checks.map(check => [
       check.key,

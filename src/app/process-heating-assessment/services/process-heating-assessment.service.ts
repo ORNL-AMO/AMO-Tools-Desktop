@@ -172,6 +172,39 @@ export class ProcessHeatingAssessmentService {
     return cached();
   }
 
+  private readonly scenarioSettingsCache = new Map<AssessmentScenario, Signal<Settings>>();
+
+  /**
+   * @param scenario 'baseline' or a modification id
+   * @returns the assessment settings with the modification's own energy source applied, when it has one
+   */
+  scenarioSettings(scenario: AssessmentScenario): Settings {
+    let cached = this.scenarioSettingsCache.get(scenario);
+    if (!cached) {
+      cached = computed(() => {
+        const settings = this.settingsSignal();
+        const energySource = scenario === 'baseline'
+          ? undefined
+          : this.getModifications(this.processHeatingSignal()).find(mod => mod.id === scenario)?.energySource;
+        if (!settings || !energySource) {
+          return settings;
+        }
+        const { energySourceType, furnaceType, customFurnaceName } = energySource;
+        return { ...settings, energySourceType, furnaceType, customFurnaceName };
+      }, { equal: isEqual });
+      this.scenarioSettingsCache.set(scenario, cached);
+    }
+    return cached();
+  }
+
+  /**
+   * @param scenario 'baseline' or a modification id
+   * @returns the heating equipment configuration of the scenario's energy source
+   */
+  scenarioConfiguration(scenario: AssessmentScenario): HeatingEquipmentConfiguration {
+    return deriveHeatingEquipmentConfiguration(this.scenarioSettings(scenario));
+  }
+
   updateLossesProperty<K extends keyof Losses>(scenario: AssessmentScenario, lossKey: K, value: Losses[K]): void {
     if (scenario === 'baseline') {
       const current = this.processHeating.getValue();

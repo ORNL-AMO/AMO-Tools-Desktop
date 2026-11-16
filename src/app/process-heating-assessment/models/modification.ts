@@ -9,8 +9,17 @@ export type ScenarioOverrides = Partial<Omit<PHAST, 'modifications' | 'selectedM
 // `Modification` (id, notes, the exploreOpportunityFlags curation state) has no full-clone field of
 // its own to extend around: `scenarioOverrides` is the only place a modification's data lives,
 // storing just the fields it overrides, not a clone of the assessment.
+/** A modification's own energy source. Units and the energy result unit always come from the assessment settings. */
+export interface ScenarioEnergySource {
+  energySourceType: string;
+  furnaceType: string;
+  customFurnaceName?: string;
+}
+
 export interface ProcessHeatingModification extends Modification {
   scenarioOverrides?: ScenarioOverrides;
+  /** Absent when the modification follows the baseline's energy source. */
+  energySource?: ScenarioEnergySource;
 }
 
 export function getModificationName(modification: ProcessHeatingModification): string {
