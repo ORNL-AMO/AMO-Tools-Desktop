@@ -56,6 +56,11 @@ export class WallLossesSurfaceDbService {
     for (const material of customMaterials) {
       await firstValueFrom(this.deleteByIdWithObservable(material.id));
     }
+    await this.setAllMaterialsFromDb();
     return true;
+  }
+
+  async setAllMaterialsFromDb(): Promise<void> {
+    this.dbWallLossesSurfaceMaterials.next(await firstValueFrom(this.getAllWithObservable()));
   }
 }

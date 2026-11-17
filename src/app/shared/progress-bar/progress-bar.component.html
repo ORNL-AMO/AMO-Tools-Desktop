@@ -1,0 +1,7 @@
+<div class="progress-bar-container">
+    <div class="progress-bar-fill" [class.complete]="status() === 'complete'" [class.error]="status() === 'error'"
+        role="progressbar" [attr.aria-label]="ariaLabel()" [style.width.%]="clampedPercent()" [attr.aria-valuenow]="clampedPercent()" aria-valuemin="0"
+        aria-valuemax="100" [attr.aria-valuetext]="barText()">
+        {{ barText() }}
+    </div>
+</div>

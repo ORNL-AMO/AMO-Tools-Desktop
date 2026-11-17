@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, Signal } from '@angular/core';
+import { Component, inject, Injector, OnInit, Signal } from '@angular/core';
 import { FeatureFlagService } from '../../shared/feature-flag.service';
 import { Settings } from '../../shared/models/settings';
 import { SettingsService } from '../settings.service'
@@ -6,6 +6,9 @@ import { SettingsService } from '../settings.service'
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { DashboardService } from '../../dashboard/dashboard.service';
+import { ResetDataModalComponent, ResetDataResult } from './reset-data-modal/reset-data-modal.component';
 
 @Component({
     selector: 'app-assessment-settings',
@@ -15,6 +18,9 @@ import { firstValueFrom } from 'rxjs';
 })
 export class AssessmentSettingsComponent implements OnInit {
   public featureFlagService: FeatureFlagService = inject(FeatureFlagService);
+  private modalDialogService: ModalDialogService = inject(ModalDialogService);
+  private dashboardService: DashboardService = inject(DashboardService);
+  private injector: Injector = inject(Injector);
   settings: Settings;
   settingsForm: UntypedFormGroup;
 
@@ -26,7 +32,6 @@ export class AssessmentSettingsComponent implements OnInit {
   showFsatSettings: boolean = false;
   showTutorialSettings: boolean = false;
   showPrintSettings: boolean = false;
-  showSettingsModal: boolean = false;
   showOperationalImpactOptions: boolean = false;
   showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
 
@@ -98,11 +103,24 @@ export class AssessmentSettingsComponent implements OnInit {
   }
 
   showResetSystemSettingsModal() {
-    this.showSettingsModal = true;
-  }
-
-  hideResetSystemSettingsModal() {
-    this.showSettingsModal = false;
-    this.initializeSettings();
+    // The injector carries module-level providers (e.g. DashboardService) the modal and its ResetDataService need.
+    this.modalDialogService.openModal<ResetDataResult, undefined, ResetDataModalComponent>(
+      ResetDataModalComponent,
+      {
+        width: '720px',
+        maxWidth: '95vw',
+        maxHeight: '90vh',
+        // reset-data-modal-dialog (src/assets/styles/app.css) makes the dialog full screen on small views.
+        panelClass: ['app-modal-dialog', 'reset-data-modal-dialog'],
+        disableClose: true,
+        ariaLabelledBy: 'resetDataModalTitle'
+      },
+      this.injector
+    ).closed.subscribe((result: ResetDataResult | undefined) => {
+      if (result?.dataChanged) {
+        this.initializeSettings();
+        this.dashboardService.updateDashboardData.next(true);
+      }
+    });
   }
 }
