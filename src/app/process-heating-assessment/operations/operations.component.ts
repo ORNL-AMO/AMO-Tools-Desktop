@@ -67,9 +67,13 @@ export class OperationsComponent {
   // Held per scenario rather than read live: the CO2 section rebuilds its form whenever this reference changes.
   readonly co2SavingsData = linkedSignal<AssessmentScenario, PhastCo2SavingsData>({
     source: this.scenario,
-    computation: scenario => untracked(() =>
-      this.assessmentService.scenarioPhast(scenario)?.co2SavingsData ?? this.co2Service.getCo2SavingsDataFromSettingsObject(this.settings())
-    ),
+    computation: scenario => untracked(() => {
+      // A copy, since the lookup fills missing defaults into the settings object it's given
+      const fromSettings = this.co2Service.getCo2SavingsDataFromSettingsObject({ ...this.settings() });
+      const saved = this.assessmentService.scenarioPhast(scenario)?.co2SavingsData;
+      // Saved data keeps the energy type from before an energy source switch; it picks which emission factors show
+      return saved ? { ...saved, energyType: fromSettings.energyType } : fromSettings;
+    }),
   });
 
   constructor() {

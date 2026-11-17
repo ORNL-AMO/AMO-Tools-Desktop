@@ -29,9 +29,10 @@ export class ExportToJustifiPhastService {
       let modResults: PhastResults;
       if (assessment.phast.selectedModificationId) {
         modification = assessment.phast.modifications.find(mod => mod.id === assessment.phast.selectedModificationId);
-        modResults = this.phastResultsService.getResults(modification.phast, settings);
       } else if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
         modification = assessment.phast.modifications[0]
+      }
+      if (modification && !modification.exportWithoutResults) {
         modResults = this.phastResultsService.getResults(modification.phast, settings);
       }
 
@@ -145,7 +146,7 @@ export class ExportToJustifiPhastService {
       //L: Other fuels unit
       assessmentWorksheet.getCell('L' + assessmentRowIndex).value = settings.energyResultUnit;
     }
-    if (modification) {
+    if (modification && modResults) {
       let modSummary: ExecutiveSummary = this.executiveSummaryService.getSummary(modification.phast, true, settings, phast, baselineSummary, modResults);
       if (modification.phast.co2SavingsData && modification.phast.co2SavingsData.fuelType == 'Steam & Hot Water') {
         //Y: steam savings

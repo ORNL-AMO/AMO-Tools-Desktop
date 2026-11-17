@@ -246,7 +246,7 @@ describe('ProcessHeatingValidityService', () => {
     });
   });
 
-  describe('energy entry for a modification on another energy source', () => {
+  describe('energy entry for a modification', () => {
     const ELECTRO_STANDARD = { ...FUEL_FIRED, energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' } as Settings;
 
     it('requires Energy Input for an EAF modification on a fuel-fired baseline', () => {
@@ -269,11 +269,27 @@ describe('ProcessHeatingValidityService', () => {
       expect(service.scenarioValidity('mod1').flueGasValid).toBeFalse();
     });
 
-    it('keeps the entry optional for the baseline and for a modification on its energy source', () => {
+    it('keeps the entry optional for the baseline and for a modification on its energy source while the baseline has none', () => {
       settings.set(EAF);
 
       expect(service.scenarioValidity('baseline').energyInputValid).toBeTrue();
       expect(service.scenarioValidity('mod1').energyInputValid).toBeTrue();
+    });
+
+    it('requires the entry for a modification on the baseline\'s energy source once the baseline has one', () => {
+      settings.set(EAF);
+      scenarios.baseline.set(phastWith({ energyInputEAF: [{}] as never }));
+
+      expect(service.requiresEnergyEntry('mod1')).toBeTrue();
+      expect(service.scenarioValidity('mod1').energyInputValid).toBeFalse();
+    });
+
+    it('does not require an entry for a custom furnace modification, which has none', () => {
+      const CUSTOM = { ...FUEL_FIRED, energySourceType: 'Electricity', furnaceType: 'Custom Electrotechnology' } as Settings;
+      settings.set(CUSTOM);
+      scenarios.baseline.set(phastWith({ energyInputExhaustGasLoss: [{}] as never }));
+
+      expect(service.requiresEnergyEntry('mod1')).toBeFalse();
     });
 
     it('reports the requirement only for a modification on another energy source', () => {

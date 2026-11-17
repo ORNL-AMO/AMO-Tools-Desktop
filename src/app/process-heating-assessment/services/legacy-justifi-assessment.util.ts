@@ -1,9 +1,11 @@
 import { Assessment } from '../../shared/models/assessment';
 import { Modification as LegacyModification } from '../../shared/models/phast/phast';
+import { Settings } from '../../shared/models/settings';
 import { ExploreOpportunityCategory, PHAST } from '../models/phast';
 import { ProcessHeatingModification } from '../models/modification';
 import { getEffectivePhast } from './scenario-merge.util';
-import { toLegacyPhast } from './legacy-phast.util';
+import { toLegacyPhast, withoutHiddenLosses } from './legacy-phast.util';
+import { AssessmentScenario, deriveHeatingEquipmentConfiguration } from './process-heating-assessment.service';
 
 const LEGACY_FLAG_KEYS: Record<ExploreOpportunityCategory, keyof LegacyModification> = {
   [ExploreOpportunityCategory.FlueGas]: 'exploreOppsShowFlueGas',
@@ -26,14 +28,24 @@ const LEGACY_FLAG_KEYS: Record<ExploreOpportunityCategory, keyof LegacyModificat
 /**
  * The shared JUSTIFI exporter reads each modification's full `phast` clone and legacy `exploreOppsShowX` fields;
  * this module stores `scenarioOverrides` and `exploreOpportunityFlags` instead.
+ *
+ * The exporter calculates every scenario with the baseline's energy source, so a modification on a different
+ * heating equipment configuration is exported without results until the exporter supports per-scenario energy sources.
  * @param assessment assessment saved by this module
  * @param setupDone whether the settings and baseline are complete; the exporter writes no results without it
+ * @param scenarioSettings settings of the baseline or a modification, with that scenario's energy source applied
  * @returns a copy whose modifications carry the legacy shape the exporter reads; the input is not mutated
  */
-export function toLegacyJustifiAssessment(assessment: Assessment, setupDone: boolean): Assessment {
+export function toLegacyJustifiAssessment(
+  assessment: Assessment,
+  setupDone: boolean,
+  scenarioSettings: (scenario: AssessmentScenario) => Settings
+): Assessment {
   const baseline = assessment.phast as unknown as PHAST;
+  const baselineConfiguration = deriveHeatingEquipmentConfiguration(scenarioSettings('baseline'));
   const modifications = (baseline.modifications ?? []) as ProcessHeatingModification[];
   const legacyModifications = modifications.map(modification => {
+    const configuration = deriveHeatingEquipmentConfiguration(scenarioSettings(modification.id));
     const flags = modification.exploreOpportunityFlags ?? {};
     const legacyFlags: Partial<LegacyModification> = {};
     (Object.keys(flags) as ExploreOpportunityCategory[]).forEach(category => {
@@ -44,10 +56,12 @@ export function toLegacyJustifiAssessment(assessment: Assessment, setupDone: boo
       notes: modification.notes,
       exploreOpportunities: Object.keys(flags).length > 0,
       ...legacyFlags,
-      phast: toLegacyPhast(withoutAuxiliaryEquipment(getEffectivePhast(baseline, modification))),
+      exportWithoutResults: configuration !== baselineConfiguration,
+      phast: toLegacyPhast(withoutHiddenLosses(withoutAuxiliaryEquipment(getEffectivePhast(baseline, modification)), configuration)),
     } as LegacyModification;
   });
-  return { ...assessment, phast: { ...toLegacyPhast(withoutAuxiliaryEquipment(baseline)), setupDone, modifications: legacyModifications } };
+  const legacyBaseline = toLegacyPhast(withoutHiddenLosses(withoutAuxiliaryEquipment(baseline), baselineConfiguration));
+  return { ...assessment, phast: { ...legacyBaseline, setupDone, modifications: legacyModifications } };
 }
 
 /**

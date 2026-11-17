@@ -22,8 +22,8 @@ import { OtherFormService } from '../heat-balance/losses/other/other-form.servic
 import { SlagFormService } from '../heat-balance/losses/slag/slag-form.service';
 import { WallLossesFormService } from '../heat-balance/losses/wall-losses/wall-losses-form.service';
 import { getModificationName } from '../models/modification';
-import { PHAST, PhastValid } from '../models/phast';
-import { AUXILIARY_EQUIPMENT_VIEW, isViewVisibleForConfiguration, LossView } from '../models/views';
+import { Losses, PHAST, PhastValid } from '../models/phast';
+import { AUXILIARY_EQUIPMENT_VIEW, HeatingEquipmentConfiguration, isViewVisibleForConfiguration, LossView } from '../models/views';
 import { AuxiliaryEquipmentFormService } from '../auxiliary-equipment/auxiliary-equipment-form.service';
 import { AssessmentScenario, deriveHeatingEquipmentConfiguration, ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingOperationsFormService } from './process-heating-operations-form.service';
@@ -43,6 +43,13 @@ interface ValidityCheck {
   label: string;
   isValid: (phast: PHAST, settings: Settings, scenario: AssessmentScenario) => boolean;
 }
+
+/** The entry each configuration's energy use comes from; custom furnaces and steam use Heat System Efficiency instead. */
+const ENERGY_ENTRY_KEYS: Partial<Record<HeatingEquipmentConfiguration, keyof Losses>> = {
+  [HeatingEquipmentConfiguration.FUEL_FIRED]: 'flueGasLosses',
+  [HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_STANDARD]: 'energyInputExhaustGasLoss',
+  [HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_EAF]: 'energyInputEAF',
+};
 
 export interface InvalidModification {
   id: string;
@@ -213,8 +220,9 @@ export class ProcessHeatingValidityService {
   }
 
   /**
-   * A modification on a different energy source than the baseline needs that source's energy entry: without one its gross heat is 0,
-   * so the whole baseline energy reads as savings. The baseline, and a modification on its energy source, keep legacy's optional entry.
+   * A modification without its energy entry has gross heat 0, so the whole baseline energy reads as savings. It needs the entry when
+   * it uses a different energy source than the baseline, or when the baseline has one: a modification's losses are a snapshot, so an
+   * entry added to the baseline after a switch never reaches it. The baseline keeps legacy's optional entry.
    * @param scenario 'baseline' or a modification id
    * @returns whether the scenario's energy entry (Flue Gas, Energy Input or Energy Input Exhaust Gas) can't be left empty
    */
@@ -224,7 +232,11 @@ export class ProcessHeatingValidityService {
     }
     const configuration = deriveHeatingEquipmentConfiguration(this.assessmentService.scenarioSettings(scenario));
     const baselineConfiguration = deriveHeatingEquipmentConfiguration(this.assessmentService.scenarioSettings('baseline'));
-    return configuration !== baselineConfiguration;
+    if (configuration !== baselineConfiguration) {
+      return true;
+    }
+    const entryKey = ENERGY_ENTRY_KEYS[configuration];
+    return !!entryKey && !!this.assessmentService.scenarioPhastSignal('baseline')?.losses?.[entryKey]?.length;
   }
 
   private hasRequiredEnergyEntry(scenario: AssessmentScenario, entries: unknown[] | undefined): boolean {

@@ -24,7 +24,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (row of ui.rows; track row.label) {
+        @for (row of ui.rows; track $index) {
           <tr [class]="row.className">
             <td>
               <span [innerHTML]="row.label"></span>

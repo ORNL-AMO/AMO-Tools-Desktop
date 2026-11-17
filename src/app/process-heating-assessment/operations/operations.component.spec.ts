@@ -67,7 +67,12 @@ describe('OperationsComponent', () => {
           provide: ProcessHeatingUiService,
           useValue: { focusedFieldSignal: signal('default') },
         },
-        { provide: Co2SavingsPhastService, useValue: { getCo2SavingsDataFromSettingsObject: () => ({}) } },
+        {
+          provide: Co2SavingsPhastService,
+          useValue: {
+            getCo2SavingsDataFromSettingsObject: (settings: Settings) => ({ energyType: settings.energySourceType === 'Electricity' ? 'electricity' : 'fuel' }),
+          },
+        },
         { provide: ModalDialogService, useValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
@@ -183,6 +188,15 @@ describe('OperationsComponent', () => {
       component.updateCo2SavingsData(co2SavingsData);
 
       expect(assessmentService.updateModificationProperty).toHaveBeenCalledWith('mod-1', 'co2SavingsData', co2SavingsData);
+    });
+  });
+
+  describe('CO2 data', () => {
+    it("shows saved CO2 data with the energy type of the scenario's current energy source", () => {
+      assessmentService.scenarioSettings.and.returnValue({ unitsOfMeasure: 'Imperial', energySourceType: 'Electricity' } as Settings);
+      render('mod-1');
+
+      expect(component.co2SavingsData()).toEqual({ zipcode: '00000', energyType: 'electricity' } as PhastCo2SavingsData);
     });
   });
 

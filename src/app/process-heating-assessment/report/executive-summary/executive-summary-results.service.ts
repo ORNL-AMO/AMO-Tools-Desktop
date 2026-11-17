@@ -367,7 +367,7 @@ export class ExecutiveSummaryResultsService {
       rows.push(this.scenarioRow('Fuel', unit, baseline, mods, cost(s => s.annualTotalFuelCost, isStandardElectricScenario), 'whole'));
     }
     if (this.hasAuxiliaryEquipment(baseline, mods)) {
-      rows.push(this.scenarioRow('Auxiliary Equipment', unit, baseline, mods, valueIfApplies(isElectricScenario, scenario => scenario.auxAnnualCost), 'whole'));
+      rows.push(this.scenarioRow('Auxiliary Equipment', unit, baseline, mods, scenario => scenario.auxAnnualCost, 'whole'));
     }
     return rows;
   }

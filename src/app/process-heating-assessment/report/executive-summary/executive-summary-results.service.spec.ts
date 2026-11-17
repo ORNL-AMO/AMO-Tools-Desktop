@@ -252,6 +252,15 @@ describe('ExecutiveSummaryResultsService', () => {
       expect(ui().costRows.every(row => row.baseline.value === null)).toBeTrue();
       expect(ui().costRows[1].modifications[0].value).toBe(500);
     });
+
+    it('shows the fuel-fired baseline\'s auxiliary equipment cost, which its total includes', () => {
+      const equipment: AuxiliaryEquipmentResults = { items: [], isComplete: true, totalPower: 1, totalEnergyUse: 1000, totalEnergyCost: 2000 };
+      auxiliaryEquipmentByName = { baseline: equipment, mod1: equipment };
+
+      const auxRow = rowOf(ui().costRows, 'Auxiliary Equipment');
+      expect(auxRow.baseline.value).toBe(2000);
+      expect(auxRow.modifications[0].value).toBe(2000);
+    });
   });
 
   describe('operational impacts flag', () => {

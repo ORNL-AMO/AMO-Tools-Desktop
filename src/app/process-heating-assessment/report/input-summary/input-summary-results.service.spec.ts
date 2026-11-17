@@ -7,6 +7,7 @@ import { SolidLoadMaterialDbService } from '../../../indexedDb/solid-load-materi
 import { WallLossesSurfaceDbService } from '../../../indexedDb/wall-losses-surface-db.service';
 import { TestBed } from '@angular/core/testing';
 import { ShowResultsCategories } from '../../../shared/models/phast/phast';
+import { LeakageLoss } from '../../../shared/models/phast/losses/leakageLoss';
 import { Settings } from '../../../shared/models/settings';
 import { ProcessHeatingModification } from '../../models/modification';
 import { PHAST, Losses } from '../../models/phast';
@@ -220,6 +221,16 @@ describe('InputSummaryResultsService', () => {
       const efficiency = row('Heat System Efficiency', 'Heat System Efficiency');
       expect(efficiency.baseline.value).toBeNull();
       expect(efficiency.modifications[0].value).toBe(75);
+    });
+
+    it('shows Gas Leakage only for the fuel-fired scenario', () => {
+      const leakageLosses = [{ id: 'leak-1', draftPressure: 0.1 }] as LeakageLoss[];
+      scenarios['baseline'] = buildPhast({ ...scenarios['baseline'], losses: { ...scenarios['baseline'].losses, leakageLosses } });
+      scenarios['mod1'] = buildPhast({ ...scenarios['mod1'], losses: { ...scenarios['mod1'].losses, leakageLosses } });
+
+      const draftPressure = row('Gas Leakage Loss 1', 'Furnace Draft Pressure');
+      expect(draftPressure.baseline.value).toBe(0.1);
+      expect(draftPressure.modifications[0].value).toBeNull();
     });
   });
 

@@ -92,7 +92,7 @@ describe('EnergyInputExhaustGasComponent', () => {
       expect(fixture.nativeElement.querySelector('.no-data .text-muted')).not.toBeNull();
     });
 
-    it('says the entry is required for a modification on a different energy source than the baseline', () => {
+    it('says the entry is required when the validity rule requires it', () => {
       validityServiceSpy.requiresEnergyEntry.and.returnValue(true);
       const modFixture = TestBed.createComponent(EnergyInputExhaustGasComponent);
       modFixture.componentRef.setInput('scenario', 'mod-1');
