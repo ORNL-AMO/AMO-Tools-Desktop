@@ -79,9 +79,9 @@ describe('toLegacyJustifiAssessment', () => {
 
     const result = toLegacyJustifiAssessment(assessment, true, scenario => scenario === 'baseline' ? EAF : FUEL_FIRED);
 
-    expect(result.phast.losses.leakageLosses).toBeUndefined();
-    expect(result.phast.losses.wallLosses).toEqual([]);
-    expect(result.phast.modifications[0].phast.losses.leakageLosses.length).toBe(1);
+    expect(result.phast?.losses?.leakageLosses).toBeUndefined();
+    expect(result.phast?.losses?.wallLosses).toEqual([]);
+    expect(result.phast?.modifications?.[0].phast?.losses?.leakageLosses?.length).toBe(1);
   });
 
   it('exports a modification on a different heating equipment configuration without results', () => {
@@ -89,6 +89,6 @@ describe('toLegacyJustifiAssessment', () => {
 
     const result = toLegacyJustifiAssessment(assessment, true, scenario => scenario === 'switched' ? EAF : FUEL_FIRED);
 
-    expect(result.phast.modifications.map(modification => modification.exportWithoutResults)).toEqual([false, true]);
+    expect(result.phast?.modifications?.map(modification => modification.exportWithoutResults)).toEqual([false, true]);
   });
 });

@@ -258,8 +258,8 @@ describe('ExecutiveSummaryResultsService', () => {
       auxiliaryEquipmentByName = { baseline: equipment, mod1: equipment };
 
       const auxRow = rowOf(ui().costRows, 'Auxiliary Equipment');
-      expect(auxRow.baseline.value).toBe(2000);
-      expect(auxRow.modifications[0].value).toBe(2000);
+      expect(auxRow?.baseline.value).toBe(2000);
+      expect(auxRow?.modifications[0].value).toBe(2000);
     });
   });
 
