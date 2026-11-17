@@ -28,9 +28,10 @@ describe('HeatSystemEfficiencyComponent', () => {
 
     assessmentServiceSpy = jasmine.createSpyObj(
       'ProcessHeatingAssessmentService',
-      ['scenarioPhastSignal', 'scenarioPhast', 'updateProcessHeatingProperty', 'updateModificationProperty'],
+      ['scenarioPhastSignal', 'scenarioPhast', 'scenarioSettings', 'updateProcessHeatingProperty', 'updateModificationProperty'],
       { settingsSignal },
     );
+    assessmentServiceSpy.scenarioSettings.and.callFake(() => settingsSignal());
     assessmentServiceSpy.scenarioPhastSignal.and.callFake(() => phastSignal() as never);
     assessmentServiceSpy.scenarioPhast.and.callFake(() => phastSignal() as never);
 
@@ -116,6 +117,14 @@ describe('HeatSystemEfficiencyComponent', () => {
   });
 
   describe('results', () => {
+    it("calculates with the scenario's own settings, since a modification can use another energy source", () => {
+      const steamSettings = { ...MOCK_SETTINGS, energySourceType: 'Steam' } as Settings;
+      assessmentServiceSpy.scenarioSettings.and.callFake(scenario => scenario === 'mod-1' ? steamSettings : settingsSignal());
+      create('mod-1');
+      component.results();
+      expect(resultsServiceSpy.getResults).toHaveBeenCalledWith(jasmine.anything(), steamSettings);
+    });
+
     it('derives gross heat and system losses from total input, exothermic heat and efficiency', () => {
       create();
       // losses = 800 / 0.8 * 0.2 = 200; gross = 800 + 200 - 5 = 995

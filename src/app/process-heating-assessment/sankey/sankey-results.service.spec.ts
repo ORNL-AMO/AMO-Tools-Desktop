@@ -2,7 +2,7 @@ import { signal, WritableSignal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Settings } from '../../shared/models/settings';
 import { ProcessHeatingModification } from '../models/modification';
-import { PHAST } from '../models/phast';
+import { Losses, PHAST } from '../models/phast';
 import { ModificationService } from '../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
 import { SankeyResultsService } from './sankey-results.service';
@@ -23,6 +23,7 @@ describe('SankeyResultsService', () => {
           useValue: {
             settingsSignal: signal<Partial<Settings>>({ energyResultUnit: 'MMBtu' }),
             scenarioPhastSignal: (id: string) => scenarioPhasts[id],
+            scenarioSettings: (id: string) => ({ energyResultUnit: 'MMBtu', energySourceType: id === 'mod1' ? 'Electricity' : 'Fuel' }) as Settings,
           },
         },
         { provide: ModificationService, useValue: { modifications } },
@@ -47,5 +48,19 @@ describe('SankeyResultsService', () => {
   it('updates when modifications change', () => {
     modifications.set([]);
     expect(service.scenarios().map(scenario => scenario.id)).toEqual(['baseline']);
+  });
+
+  it("gives each scenario its own settings, since a modification can use another energy source", () => {
+    expect(service.scenarios().map(scenario => scenario.settings.energySourceType)).toEqual(['Fuel', 'Electricity']);
+  });
+
+  it("leaves out losses the scenario's energy source hides", () => {
+    const losses = { leakageLosses: [{ name: 'Leak' }], wallLosses: [] } as Losses;
+    scenarioPhasts = { baseline: { name: 'baseline', losses } as PHAST, mod1: { name: 'mod1', losses } as PHAST };
+
+    const [baseline, modification] = service.scenarios();
+    expect(baseline.phast.losses.leakageLosses?.length).toBe(1);
+    expect(modification.phast.losses.leakageLosses).toBeUndefined();
+    expect(modification.phast.losses.wallLosses).toEqual([]);
   });
 });

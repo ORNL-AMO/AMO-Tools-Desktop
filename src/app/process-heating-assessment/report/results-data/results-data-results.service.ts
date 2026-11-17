@@ -1,13 +1,12 @@
 import { computed, inject, Injectable, Signal } from '@angular/core';
 import { FeatureFlagService } from '../../../shared/feature-flag.service';
-import { ShowResultsCategories } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { ModificationNameCell, ReportColumnCell, ReportTableRow } from '../../../shared/report-builder/models/report-ui-models';
 import { getModificationName } from '../../models/modification';
-import { PhastResults } from '../../models/phast';
 import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
+import { combineResultCategories, resultRowValue, ResultColumn, visibleResultRows } from '../../models/result-rows';
 import { AuxiliaryEquipmentResultsService } from '../../services/auxiliary-equipment-results.service';
 import { AuxiliaryEquipmentResults } from '../../models/auxiliary-equipment';
 
@@ -21,8 +20,6 @@ export interface ResultsDataUI {
 }
 
 export const AUXILIARY_EQUIPMENT_TABLE_TITLE = 'Auxiliary Equipment (kWh/yr)';
-
-type ResultSelector = (results: PhastResults) => number | undefined;
 
 /**
  * Builds the hourly energy loss/use table for baseline and every modification from live scenario
@@ -52,7 +49,11 @@ export class ResultsDataResultsService {
     return {
       modificationNames: validModifications.map(modification => ({ id: modification.id, name: getModificationName(modification) })),
       title: `Hourly Energy Loss/Use (${lossUnit})`,
-      rows: this.buildRows(baselineResults, mods, settings),
+      rows: this.buildRows(
+        { results: baselineResults, categories: this.resultsService.scenarioResultCategories('baseline') },
+        validModifications.map((modification, index) => ({ results: mods[index], categories: this.resultsService.scenarioResultCategories(modification.id) })),
+        settings,
+      ),
       auxiliaryEquipmentRows: this.buildAuxiliaryEquipmentRows(
         this.auxiliaryEquipmentResultsService.scenarioResults('baseline'),
         validModifications.map(modification => this.auxiliaryEquipmentResultsService.scenarioResults(modification.id)),
@@ -93,90 +94,32 @@ export class ResultsDataResultsService {
     return results.isComplete ? results.totalEnergyUse : undefined;
   }
 
-  private buildRows(baseline: PhastResults, mods: PhastResults[], settings: Settings): ReportTableRow[] {
-    const categories: ShowResultsCategories = this.resultsService.getResultCategories(settings);
-    const isEaf = this.isEaf(settings);
+  private buildRows(baseline: ResultColumn, mods: ResultColumn[], settings: Settings): ReportTableRow[] {
+    const categories = combineResultCategories([baseline.categories, ...mods.map(mod => mod.categories)]);
     const energyDecimals = ['MMBtu', 'GJ', 'kWh'].includes(settings.energyResultUnit) ? 2 : 0;
-    const row = (label: string, selector: ResultSelector, decimals = energyDecimals): ReportTableRow =>
-      this.buildRow(label, undefined, baseline, mods, selector, decimals);
-    const percentRow = (label: string, selector: ResultSelector, decimals: number): ReportTableRow =>
-      this.buildRow(label, '%', baseline, mods, selector, decimals);
-
-    const rows: ReportTableRow[] = [
-      row('Charge Materials', r => r.totalChargeMaterialLoss),
-      row('Fixtures, trays etc.', r => r.totalFixtureLoss),
-      row('Wall Losses', r => r.totalWallLoss),
-      row('Cooling Losses', r => r.totalCoolingLoss),
-      row('Atmosphere Losses', r => r.totalAtmosphereLoss),
-      row('Opening Losses', r => r.totalOpeningLoss),
-      row('Leakage Losses', r => r.totalLeakageLoss),
-      row('Extended Surface Losses', r => r.totalExtSurfaceLoss),
-    ];
-    if (categories.showSlag) rows.push(row('Slag Losses', r => r.totalSlag));
-    rows.push(
-      row('Other Losses', r => r.totalOtherLoss),
-      row('Total Available Heat Required', r => r.totalInput),
-    );
-    if (categories.showFlueGas) {
-      rows.push(
-        percentRow('Available Heat', r => r.flueGasAvailableHeat, 1),
-        row('Flue Gas Losses', r => r.flueGasSystemLosses),
-      );
-    }
-    rows.push(row('Exothermic Heat from Process', r => r.exothermicHeat));
-    if (categories.showEnInput2) {
-      rows.push(
-        percentRow('Fuel Input Available Heat', r => r.availableHeatPercent, 0),
-        row('Exhaust Gas Losses', r => r.totalExhaustGas),
-      );
-    }
-    if (categories.showExGas) rows.push(row('Exhaust Gas Losses', r => r.totalExhaustGasEAF));
-    if (categories.showSystemEff) {
-      rows.push(
-        percentRow('System Efficiency', r => r.heatingSystemEfficiency, 0),
-        row('Total System Losses', r => r.totalSystemLosses),
-      );
-    }
-    if (categories.showHeatDelivered) rows.push(row('Fuel Heat Delivered', r => r.energyInputHeatDelivered));
-    if (categories.showEnInput2) rows.push(row('Total Additional Fuel Heat', r => r.totalAdditionalFuelHeat));
-    if (categories.showElectricalDelivered && isEaf) rows.push(row('Electrical Heat Delivered', r => r.energyInputHeatDelivered));
-    if (categories.showChemicalEnergyDelivered) rows.push(row('Chemical Energy Delivered', r => r.energyInputTotalChemEnergy));
-    if (categories.showElectricalDelivered && !isEaf) rows.push(row('Electrical Heat Delivered', r => r.electricalHeatDelivered));
-    if (categories.showEnInput2) {
-      rows.push(
-        row('Electrical Heater Losses', r => r.electricalHeaterLosses),
-        row('Total Provided Electrical Heat', r => r.totalProvidedElectricalHeat),
-      );
-    }
-    rows.push({ ...row('Gross Heat Input', r => r.grossHeatInput), className: 'emphasis' });
+    const rows = visibleResultRows(categories).map((definition): ReportTableRow => {
+      const decimals = definition.percentDecimals ?? energyDecimals;
+      const columnCell = (column: ResultColumn): ReportColumnCell => this.cell(resultRowValue(definition, column), decimals);
+      return {
+        label: definition.label,
+        units: definition.percentDecimals === undefined ? undefined : '%',
+        className: definition.isTotal ? 'emphasis' : 'default',
+        baseline: columnCell(baseline),
+        modifications: mods.map(columnCell),
+      };
+    });
 
     if (this.featureFlagService.showOperationalImpacts()) {
-      const emissionsUnit = `${settings.emissionsUnit === 'Metric' ? 'tonne' : 'ton'} CO<sub>2</sub>/hr`;
-      rows.push(this.buildRow('CO<sub>2</sub> Emissions', emissionsUnit, baseline, mods, r => r.co2EmissionsOutput?.hourlyTotalEmissionOutput, 2));
+      const units = `${settings.emissionsUnit === 'Metric' ? 'tonne' : 'ton'} CO<sub>2</sub>/hr`;
+      const emissions = (column: ResultColumn): ReportColumnCell => this.cell(column.results?.co2EmissionsOutput?.hourlyTotalEmissionOutput, 2);
+      rows.push({ label: 'CO<sub>2</sub> Emissions', units, className: 'default', baseline: emissions(baseline), modifications: mods.map(emissions) });
       if (mods.length) {
-        const savings: ResultSelector = r => this.resultsService.getCo2EmissionsSavings(baseline, r, 'hourlyTotalEmissionOutput');
-        rows.push(this.buildRow('CO<sub>2</sub> Emissions Savings', emissionsUnit, baseline, mods, savings, 2, false));
+        const savings = (column: ResultColumn): ReportColumnCell =>
+          this.cell(this.resultsService.getCo2EmissionsSavings(baseline.results, column.results, 'hourlyTotalEmissionOutput'), 2);
+        rows.push({ label: 'CO<sub>2</sub> Emissions Savings', units, className: 'default', baseline: { value: null }, modifications: mods.map(savings) });
       }
     }
     return rows;
-  }
-
-  private buildRow(
-    label: string,
-    units: string | undefined,
-    baseline: PhastResults,
-    mods: PhastResults[],
-    selector: ResultSelector,
-    decimals: number,
-    showBaseline = true
-  ): ReportTableRow {
-    return {
-      label,
-      units,
-      className: 'default',
-      baseline: showBaseline ? this.cell(selector(baseline), decimals) : { value: null },
-      modifications: mods.map(results => this.cell(selector(results), decimals)),
-    };
   }
 
   /** Zero and missing values render as the empty placeholder, matching legacy. */
@@ -185,9 +128,5 @@ export class ResultsDataResultsService {
       return { value: null };
     }
     return { value, decimalPipe: `1.${decimals}-${decimals}` };
-  }
-
-  private isEaf(settings: Settings): boolean {
-    return settings.furnaceType === 'Electric Arc Furnace (EAF)';
   }
 }

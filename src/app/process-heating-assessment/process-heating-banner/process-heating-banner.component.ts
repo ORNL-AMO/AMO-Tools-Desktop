@@ -77,7 +77,7 @@ export class ProcessHeatingBannerComponent {
       width: '600px',
       data: {
         measurItemAttachment: { itemType: 'assessment', itemName: assessment.name, itemData: assessment },
-        justifiAssessment: toLegacyJustifiAssessment(assessment, this.uiService.canVisitView(MainView.REPORT)),
+        justifiAssessment: toLegacyJustifiAssessment(assessment, this.uiService.canVisitView(MainView.REPORT), scenario => this.assessmentService.scenarioSettings(scenario)),
       },
     });
   }

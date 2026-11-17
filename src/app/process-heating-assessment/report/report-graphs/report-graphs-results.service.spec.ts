@@ -11,6 +11,7 @@ import { ProcessHeatingResultsService } from '../../services/process-heating-res
 import { ReportGraphsResultsService, ReportGraphsUI } from './report-graphs-results.service';
 
 const CATEGORIES = { showFlueGas: true } as ShowResultsCategories;
+const MODIFICATION_CATEGORIES = { showSlag: true } as ShowResultsCategories;
 
 describe('ReportGraphsResultsService', () => {
   let service: ReportGraphsResultsService;
@@ -42,7 +43,7 @@ describe('ReportGraphsResultsService', () => {
         { provide: PhastChartsService, useValue: chartsService },
         {
           provide: ProcessHeatingResultsService,
-          useValue: { scenarioResults: (id: string) => resultsByName[id], getResultCategories: () => CATEGORIES },
+          useValue: { scenarioResults: (id: string) => resultsByName[id], scenarioResultCategories: (id: string) => id === 'mod1' ? MODIFICATION_CATEGORIES : CATEGORIES },
         },
       ],
     });
@@ -89,5 +90,11 @@ describe('ReportGraphsResultsService', () => {
   it('is undefined when the baseline has no results', () => {
     resultsByName.baseline = undefined;
     expect(ui()).toBeUndefined();
+  });
+
+  it("charts each scenario's losses by its own energy source's categories", () => {
+    service.reportGraphsUI();
+    expect(chartsService.getLossValuesAndLabels).toHaveBeenCalledWith(jasmine.objectContaining({ totalWallLoss: 2 }), CATEGORIES);
+    expect(chartsService.getLossValuesAndLabels).toHaveBeenCalledWith(jasmine.objectContaining({ totalWallLoss: 1 }), MODIFICATION_CATEGORIES);
   });
 });

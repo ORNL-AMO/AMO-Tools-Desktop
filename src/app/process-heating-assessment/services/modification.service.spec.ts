@@ -1,13 +1,17 @@
 import { signal, WritableSignal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { PHAST } from '../models/phast';
+import { Settings } from '../../shared/models/settings';
 import { ScenarioOverrides, ProcessHeatingModification } from '../models/modification';
 import { ModificationService } from './modification.service';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingUiService } from './process-heating-ui.service';
+import { AssessmentView } from '../models/views';
+import { FakeProcessHeatingUiService } from '../explore-opportunities/opportunity-test-fakes';
 
 class FakeProcessHeatingAssessmentService {
   readonly processHeatingSignal: WritableSignal<PHAST> = signal<PHAST>({ name: 'Baseline', modifications: [] });
+  readonly settingsSignal: WritableSignal<Settings> = signal<Settings>({ energySourceType: 'Fuel', furnaceType: null } as Settings);
 
   updateProcessHeatingProperty<K extends keyof PHAST>(key: K, value: PHAST[K]): void {
     this.processHeatingSignal.set({ ...this.processHeatingSignal(), [key]: value });
@@ -22,10 +26,6 @@ class FakeProcessHeatingAssessmentService {
     updated[index] = { ...updated[index], scenarioOverrides: { ...updated[index].scenarioOverrides, [key]: value } };
     this.processHeatingSignal.set({ ...current, modifications: updated });
   }
-}
-
-class FakeProcessHeatingUiService {
-  activeModificationIdSignal: WritableSignal<string | undefined> = signal<string | undefined>(undefined);
 }
 
 describe('ModificationService', () => {
@@ -148,6 +148,28 @@ describe('ModificationService', () => {
     expect(service.modifications()).toEqual([]);
   });
 
+  it("drops the deleted modification's tabs to visit", () => {
+    const clear = spyOn(uiService, 'clearTabsToVisit');
+    const id = service.addModification();
+
+    service.deleteModification(id);
+
+    expect(clear).toHaveBeenCalledWith(id);
+  });
+
+  it('counts the shown Expert View tab as visited when switching modification there', () => {
+    const markShown = spyOn(uiService, 'markShownTabVisited');
+    const firstId = service.addModification('First');
+    service.addModification('Second');
+
+    service.selectModification(firstId);
+    expect(markShown).not.toHaveBeenCalled();
+
+    uiService.childView.set(AssessmentView.EXPERT_VIEW);
+    service.selectModification(firstId);
+    expect(markShown).toHaveBeenCalledTimes(1);
+  });
+
   it('selects the next remaining modification when the deleted one was selected', () => {
     const firstId = service.addModification('First');
     const secondId = service.addModification('Second');
@@ -166,5 +188,56 @@ describe('ModificationService', () => {
     service.deleteModification(secondId);
 
     expect(service.selectedModificationId()).toBe(firstId);
+  });
+
+  describe('setEnergySource', () => {
+    it('stores the energy source on that modification only', () => {
+      const firstId = service.addModification();
+      const secondId = service.addModification();
+
+      service.setEnergySource(firstId, { energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' });
+
+      expect(service.modifications().find(mod => mod.id === firstId)?.energySource)
+        .toEqual({ energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' });
+      expect(service.modifications().find(mod => mod.id === secondId)?.energySource).toBeUndefined();
+    });
+
+    it("clears the energy source when it matches the baseline's", () => {
+      const id = service.addModification();
+      service.setEnergySource(id, { energySourceType: 'Steam', furnaceType: null });
+
+      service.setEnergySource(id, { energySourceType: 'Fuel', furnaceType: null });
+
+      expect(service.selectedModification()?.energySource).toBeUndefined();
+    });
+
+    it('ignores a leftover custom furnace name when the furnace type is not Custom Electrotechnology', () => {
+      const id = service.addModification();
+      service.setEnergySource(id, { energySourceType: 'Steam', furnaceType: null });
+
+      service.setEnergySource(id, { energySourceType: 'Fuel', furnaceType: null, customFurnaceName: 'Kiln' });
+
+      expect(service.selectedModification()?.energySource).toBeUndefined();
+    });
+
+    it('keeps a Custom Electrotechnology energy source whose name differs from the baseline', () => {
+      const assessmentService = TestBed.inject(ProcessHeatingAssessmentService) as unknown as FakeProcessHeatingAssessmentService;
+      const custom = { energySourceType: 'Electricity', furnaceType: 'Custom Electrotechnology' };
+      assessmentService.settingsSignal.set({ ...custom, customFurnaceName: 'Kiln' } as Settings);
+      const id = service.addModification();
+
+      service.setEnergySource(id, { ...custom, customFurnaceName: 'Oven' });
+
+      expect(service.selectedModification()?.energySource).toEqual({ ...custom, customFurnaceName: 'Oven' });
+    });
+
+    it('clears the energy source when given undefined', () => {
+      const id = service.addModification();
+      service.setEnergySource(id, { energySourceType: 'Steam', furnaceType: null });
+
+      service.setEnergySource(id, undefined);
+
+      expect(service.selectedModification()?.energySource).toBeUndefined();
+    });
   });
 });

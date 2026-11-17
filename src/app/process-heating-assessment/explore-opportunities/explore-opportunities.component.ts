@@ -41,7 +41,8 @@ export class ExploreOpportunitiesComponent {
 
   readonly visibleOpportunityComponents: Signal<Type<unknown>[]> = computed(() => this.visibleOpportunityGroups().flatMap(({ components }) => components));
 
-  private readonly heatingEquipmentConfiguration = this.assessmentService.heatingEquipmentConfiguration;
+  private readonly heatingEquipmentConfiguration = computed(() =>
+    this.assessmentService.scenarioConfiguration(this.selectedModification()?.id ?? 'baseline'));
 
   private hasBaselineLosses(lossKey: keyof Losses): boolean {
     return (this.assessmentService.lossSignal('baseline', lossKey)?.length ?? 0) > 0;

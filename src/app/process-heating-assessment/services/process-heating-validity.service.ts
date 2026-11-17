@@ -22,8 +22,8 @@ import { OtherFormService } from '../heat-balance/losses/other/other-form.servic
 import { SlagFormService } from '../heat-balance/losses/slag/slag-form.service';
 import { WallLossesFormService } from '../heat-balance/losses/wall-losses/wall-losses-form.service';
 import { getModificationName } from '../models/modification';
-import { PHAST, PhastValid } from '../models/phast';
-import { AUXILIARY_EQUIPMENT_VIEW, isViewVisibleForConfiguration, LossView } from '../models/views';
+import { Losses, PHAST, PhastValid } from '../models/phast';
+import { AUXILIARY_EQUIPMENT_VIEW, HeatingEquipmentConfiguration, isViewVisibleForConfiguration, LossView } from '../models/views';
 import { AuxiliaryEquipmentFormService } from '../auxiliary-equipment/auxiliary-equipment-form.service';
 import { AssessmentScenario, deriveHeatingEquipmentConfiguration, ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingOperationsFormService } from './process-heating-operations-form.service';
@@ -43,6 +43,13 @@ interface ValidityCheck {
   label: string;
   isValid: (phast: PHAST, settings: Settings, scenario: AssessmentScenario) => boolean;
 }
+
+/** The entry each configuration's energy use comes from; custom furnaces and steam use Heat System Efficiency instead. */
+const ENERGY_ENTRY_KEYS: Partial<Record<HeatingEquipmentConfiguration, keyof Losses>> = {
+  [HeatingEquipmentConfiguration.FUEL_FIRED]: 'flueGasLosses',
+  [HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_STANDARD]: 'energyInputExhaustGasLoss',
+  [HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_EAF]: 'energyInputEAF',
+};
 
 export interface InvalidModification {
   id: string;
@@ -103,7 +110,7 @@ export class ProcessHeatingValidityService {
       }
     }) },
     // The flue gas editor and the results read only the first entry; extra imported entries can't be fixed in the UI.
-    { key: 'flueGasValid', view: LossView.FLUE_GAS, label: 'Flue Gas', isValid: (phast, settings) => this.allValid(phast.losses?.flueGasLosses?.slice(0, 1), loss =>
+    { key: 'flueGasValid', view: LossView.FLUE_GAS, label: 'Flue Gas', isValid: (phast, settings, scenario) => this.hasRequiredEnergyEntry(scenario, phast.losses?.flueGasLosses) && this.allValid(phast.losses?.flueGasLosses?.slice(0, 1), loss =>
       loss.flueGasType === FlueGasType.ByMass
         ? this.flueGasFormService.getFlueGasMassForm(loss, settings)
         : this.flueGasFormService.getFlueGasVolumeForm(loss, settings)) },
@@ -116,9 +123,9 @@ export class ProcessHeatingValidityService {
     { key: 'extendedSurfaceValid', view: LossView.EXTENDED_SURFACE, label: 'Extended Surface', isValid: phast => this.allValid(phast.losses?.extendedSurfaces, loss => this.extendedSurfaceFormService.getExtendedSurfaceForm(loss)) },
     { key: 'otherValid', view: LossView.OTHER, label: 'Other', isValid: phast => this.allValid(phast.losses?.otherLosses, loss => this.otherFormService.getOtherForm(loss)) },
     { key: 'slagValid', view: LossView.SLAG, label: 'Slag', isValid: phast => this.allValid(phast.losses?.slagLosses, loss => this.slagFormService.getSlagForm(loss)) },
-    { key: 'energyInputValid', view: LossView.ENERGY_INPUT, label: 'Energy Input', isValid: (phast, settings, scenario) => this.isEnergyInputValid(phast, settings, scenario) },
+    { key: 'energyInputValid', view: LossView.ENERGY_INPUT, label: 'Energy Input', isValid: (phast, settings, scenario) => this.hasRequiredEnergyEntry(scenario, phast.losses?.energyInputEAF) && this.isEnergyInputValid(phast, settings, scenario) },
     { key: 'systemEfficiencyValid', view: LossView.HEAT_SYSTEM_EFFICIENCY, label: 'System Efficiency', isValid: phast => new FormControl(phast.systemEfficiency ?? null, HEAT_SYSTEM_EFFICIENCY_VALIDATORS).valid },
-    { key: 'inputExhaustValid', view: LossView.ENERGY_INPUT_EXHAUST_GAS, label: 'Energy Input Exhaust Gas', isValid: phast => this.allValid(phast.losses?.energyInputExhaustGasLoss, loss => this.energyInputExhaustGasFormService.getEnergyInputExhaustGasForm(loss)) },
+    { key: 'inputExhaustValid', view: LossView.ENERGY_INPUT_EXHAUST_GAS, label: 'Energy Input Exhaust Gas', isValid: (phast, _, scenario) => this.hasRequiredEnergyEntry(scenario, phast.losses?.energyInputExhaustGasLoss) && this.allValid(phast.losses?.energyInputExhaustGasLoss, loss => this.energyInputExhaustGasFormService.getEnergyInputExhaustGasForm(loss)) },
     { key: 'exhaustGasValid', view: LossView.EXHAUST_GAS, label: 'Exhaust Gas', isValid: phast => this.allValid(phast.losses?.exhaustGasEAF, loss => this.exhaustGasFormService.getExhaustGasForm(loss)) },
   ];
 
@@ -173,7 +180,7 @@ export class ProcessHeatingValidityService {
    */
   private checkValid(scenario: AssessmentScenario): PhastValid {
     const phast = this.assessmentService.scenarioPhastSignal(scenario);
-    const settings = this.assessmentService.settingsSignal();
+    const settings = this.assessmentService.scenarioSettings(scenario);
     const configuration = deriveHeatingEquipmentConfiguration(settings);
     const valid = Object.fromEntries(this.checks.map(check => [
       check.key,
@@ -210,6 +217,30 @@ export class ProcessHeatingValidityService {
 
   private allValid<T>(losses: T[] | undefined, buildForm: (loss: T) => AbstractControl): boolean {
     return (losses ?? []).every(loss => buildForm(loss).valid);
+  }
+
+  /**
+   * A modification without its energy entry has gross heat 0, so the whole baseline energy reads as savings. It needs the entry when
+   * it uses a different energy source than the baseline, or when the baseline has one: a modification's losses are a snapshot, so an
+   * entry added to the baseline after a switch never reaches it. The baseline keeps legacy's optional entry.
+   * @param scenario 'baseline' or a modification id
+   * @returns whether the scenario's energy entry (Flue Gas, Energy Input or Energy Input Exhaust Gas) can't be left empty
+   */
+  requiresEnergyEntry(scenario: AssessmentScenario): boolean {
+    if (scenario === 'baseline') {
+      return false;
+    }
+    const configuration = deriveHeatingEquipmentConfiguration(this.assessmentService.scenarioSettings(scenario));
+    const baselineConfiguration = deriveHeatingEquipmentConfiguration(this.assessmentService.scenarioSettings('baseline'));
+    if (configuration !== baselineConfiguration) {
+      return true;
+    }
+    const entryKey = ENERGY_ENTRY_KEYS[configuration];
+    return !!entryKey && !!this.assessmentService.scenarioPhastSignal('baseline')?.losses?.[entryKey]?.length;
+  }
+
+  private hasRequiredEnergyEntry(scenario: AssessmentScenario, entries: unknown[] | undefined): boolean {
+    return !this.requiresEnergyEntry(scenario) || !!entries?.length;
   }
 
   /** The electricity input can't fall below what the scenario's other inputs require. */

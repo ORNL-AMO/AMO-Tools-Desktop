@@ -3,13 +3,16 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { UntypedFormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, concatMap, debounceTime, EMPTY, firstValueFrom, from } from 'rxjs';
-import { PHAST } from '../models/phast';
+import { getEnergySourceLabel } from '../models/energy-source';
+import { getModificationName } from '../models/modification';
+import { LOSS_KEYS, PHAST } from '../models/phast';
 import { Settings } from '../../shared/models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { SnackbarService } from '../../shared/snackbar-notification/snackbar.service';
 import { UnitsChangeAction, UnitsChangeDialogComponent, UnitsChangeDialogData } from '../../shared/units-change-dialog/units-change-dialog.component';
-import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { deriveHeatingEquipmentConfiguration, ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { buildEnergySourceChangeDialogData, EnergySourceChangeDialogComponent, EnergySourceChangeDialogData } from './energy-source-change-dialog/energy-source-change-dialog.component';
 
 interface AssessmentSettingsMetaForm {
   facilityName: FormControl<string>;
@@ -83,12 +86,16 @@ export class AssessmentSettingsComponent {
     newSettings.createdDate = current.createdDate;
     newSettings.assessmentId = current.assessmentId;
 
+    if (!await this.confirmEnergySourceChange(current, newSettings)) {
+      this.restoreSettingsForm(current);
+      return;
+    }
+
     let convertData = true;
     if (newSettings.unitsOfMeasure !== current.unitsOfMeasure) {
       const action = await this.confirmUnitsChange(current.unitsOfMeasure, newSettings.unitsOfMeasure);
       if (!action) {
-        // Switching units also rewrites dependent fields (energy and rollup units), so restore the whole form.
-        this.settingsForm.patchValue(this.settingsService.getFormFromSettings(current).getRawValue());
+        this.restoreSettingsForm(current);
         return;
       }
       convertData = action === 'convert';
@@ -113,6 +120,42 @@ export class AssessmentSettingsComponent {
     if (message) {
       this.snackbarService.setSnackbarMessage(message, 'info', 'short');
     }
+  }
+
+  /** Restores the whole form, since switching units or energy source also rewrites dependent fields (energy, furnace, and rollup units). */
+  private restoreSettingsForm(current: Settings): void {
+    this.settingsForm.patchValue(this.settingsService.getFormFromSettings(current).getRawValue());
+  }
+
+  /**
+   * Asks for confirmation when the heating equipment configuration changes and there is data the change affects.
+   * @returns Whether to continue saving.
+   */
+  private async confirmEnergySourceChange(current: Settings, newSettings: Settings): Promise<boolean> {
+    const from = deriveHeatingEquipmentConfiguration(current);
+    const to = deriveHeatingEquipmentConfiguration(newSettings);
+    const phast = this.processHeating();
+    const modifications = this.assessmentService.getModifications(phast);
+    const hasModifications = modifications.length > 0;
+    const hasLossData = LOSS_KEYS.some(key => phast?.losses?.[key]?.length);
+    if (from === to || !(hasModifications || hasLossData)) {
+      return true;
+    }
+    const dialogRef = this.modalDialogService.openModal<boolean, EnergySourceChangeDialogData, EnergySourceChangeDialogComponent>(
+      EnergySourceChangeDialogComponent, {
+        data: buildEnergySourceChangeDialogData({
+          scenarioName: 'Baseline',
+          current,
+          next: newSettings,
+          hasInheritingModifications: modifications.some(modification => !modification.energySource),
+          keptEnergySources: modifications.filter(modification => modification.energySource).map(modification => ({
+            modificationName: getModificationName(modification),
+            energySource: getEnergySourceLabel(this.assessmentService.scenarioSettings(modification.id)),
+          })),
+        }),
+      },
+    );
+    return (await firstValueFrom(dialogRef.closed)) === true;
   }
 
   /**

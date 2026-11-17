@@ -1,13 +1,34 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, Signal, viewChild } from '@angular/core';
 import { PhastResults } from '../../models/phast';
 import { getModificationName, ProcessHeatingModification } from '../../models/modification';
-import { ShowResultsCategories } from '../../../shared/models/phast/phast';
+import { getEnergySourceIcon, getEnergySourceLabel } from '../../models/energy-source';
 import { Settings } from '../../../shared/models/settings';
 import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
+import { combineResultCategories, ResultCategories, resultCategoryKeys, ResultColumn, ResultRowDefinition, resultRowValue, visibleResultRows } from '../../models/result-rows';
 import { ModificationService } from '../../services/modification.service';
 import { InvalidModification, ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
+
+/** Marks a result row only one column's energy source uses. */
+interface EnergySourceMarker {
+  icon: string;
+  energySource: string;
+  scenarioName: string;
+  label: string;
+}
+
+/** A rendered row: the shared definition plus each column's value and the energy source marker. */
+interface ResultRowView {
+  definition: ResultRowDefinition;
+  baseline: number | undefined;
+  modification: number | undefined;
+  marker: EnergySourceMarker | undefined;
+  /** DecimalPipe format */
+  format: string;
+  /** '%' for percent rows */
+  suffix: string;
+}
 
 @Component({
   selector: 'app-process-heating-assessment-results',
@@ -55,20 +76,82 @@ export class AssessmentResultsComponent {
     return baseline && modification ? this.resultsService.getCo2EmissionsSavings(baseline, modification, 'hourlyTotalEmissionOutput') : undefined;
   });
 
-  readonly showResultsCats: Signal<ShowResultsCategories> = computed(() => this.resultsService.getResultCategories(this.settings()));
+  readonly baselineCategories: Signal<ResultCategories> = computed(() => this.resultsService.scenarioResultCategories('baseline'));
 
-  readonly isEaf: Signal<boolean> = computed(() => this.settings().furnaceType === 'Electric Arc Furnace (EAF)');
+  readonly modificationCategories: Signal<ResultCategories | undefined> = computed(() =>
+    this.modification() ? this.resultsService.scenarioResultCategories(this.scenario()) : undefined
+  );
+
+  /** Rows either column uses, since the baseline and modification can use different energy sources. */
+  readonly rowCategories: Signal<ResultCategories> = computed(() => {
+    const modification = this.modificationCategories();
+    return modification ? combineResultCategories([this.baselineCategories(), modification]) : this.baselineCategories();
+  });
+
+  /**
+   * Rows only one column's energy source uses, marked with that source's icon; empty while both columns share every row.
+   * Only this panel shows markers: Result Data and its PDF export don't yet. Whether they get them, or the markers change, is an open product question.
+   */
+  readonly rowMarkers: Signal<Partial<Record<keyof ResultCategories, EnergySourceMarker>>> = computed(() => {
+    const modificationCategories = this.modificationCategories();
+    if (!modificationCategories) {
+      return {};
+    }
+    const baselineCategories = this.baselineCategories();
+    const baselineMarker = this.energySourceMarker('baseline', 'Baseline');
+    const modificationMarker = this.energySourceMarker(this.scenario(), this.modificationName());
+    const markers: Partial<Record<keyof ResultCategories, EnergySourceMarker>> = {};
+    for (const key of resultCategoryKeys(baselineCategories)) {
+      if (baselineCategories[key] && !modificationCategories[key]) {
+        markers[key] = baselineMarker;
+      } else if (modificationCategories[key] && !baselineCategories[key]) {
+        markers[key] = modificationMarker;
+      }
+    }
+    return markers;
+  });
+
+  readonly rows: Signal<ResultRowView[]> = computed(() => {
+    const markers = this.rowMarkers();
+    const baseline: ResultColumn = { results: this.baselineResults(), categories: this.baselineCategories() };
+    const modificationCategories = this.modificationCategories();
+    const modification: ResultColumn | undefined = modificationCategories
+      ? { results: this.modificationResults(), categories: modificationCategories }
+      : undefined;
+    return visibleResultRows(this.rowCategories()).map(definition => {
+      const isPercent = definition.percentDecimals !== undefined;
+      return {
+        definition,
+        baseline: resultRowValue(definition, baseline),
+        modification: modification ? resultRowValue(definition, modification) : undefined,
+        marker: definition.category ? markers[definition.category] : undefined,
+        format: isPercent ? `1.${definition.percentDecimals}-${definition.percentDecimals}` : this.decimalCount(),
+        suffix: isPercent ? '%' : '',
+      };
+    });
+  });
+
+  /** Each marker the table shows, once, in row order. */
+  readonly legendMarkers: Signal<EnergySourceMarker[]> = computed(() =>
+    [...new Set(this.rows().map(row => row.marker).filter(marker => !!marker))]
+  );
 
   readonly lossUnit: Signal<string> = computed(() => `${this.settings().energyResultUnit}/hr`);
 
   readonly decimalCount: Signal<string> = computed(() =>
-    ['MMBtu', 'GJ', 'kWh'].includes(this.settings().energyResultUnit?.trim()) ? '1.2-2' : '1.0-0'
+    ['MMBtu', 'GJ', 'kWh'].includes(this.settings().energyResultUnit?.trim() ?? '') ? '1.2-2' : '1.0-0'
   );
 
+  private energySourceMarker(scenario: AssessmentScenario, scenarioName: string): EnergySourceMarker {
+    const settings = this.assessmentService.scenarioSettings(scenario);
+    const energySource = getEnergySourceLabel(settings);
+    return { icon: getEnergySourceIcon(settings), energySource, scenarioName, label: `Only used by ${scenarioName} (${energySource})` };
+  }
+
   private readonly copyTable = viewChild<ElementRef<HTMLTableElement>>('copyTable');
-  copyTableString: string;
+  copyTableString = '';
 
   updateCopyTableString(): void {
-    this.copyTableString = this.copyTable()?.nativeElement.innerText;
+    this.copyTableString = this.copyTable()?.nativeElement.innerText ?? '';
   }
 }

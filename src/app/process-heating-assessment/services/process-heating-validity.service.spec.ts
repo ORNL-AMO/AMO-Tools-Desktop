@@ -46,6 +46,7 @@ const phastWith = (losses: Losses, extra: Partial<PHAST> = {}): PHAST => ({ ...O
 describe('ProcessHeatingValidityService', () => {
   let service: ProcessHeatingValidityService;
   let settings: WritableSignal<Settings>;
+  let scenarioSettings: Record<string, WritableSignal<Settings | undefined>>;
   let scenarios: Record<string, WritableSignal<PHAST | undefined>>;
   let processHeating: WritableSignal<PHAST>;
   let settingsFormValid: boolean;
@@ -61,6 +62,7 @@ describe('ProcessHeatingValidityService', () => {
       return { totalInput: 1000, exothermicHeat: -100, energyInputTotalChemEnergy: 300 } as PhastResults;
     });
     settings = signal(FUEL_FIRED);
+    scenarioSettings = { mod1: signal<Settings | undefined>(undefined) };
     scenarios = {
       baseline: signal<PHAST | undefined>(phastWith({})),
       mod1: signal<PHAST | undefined>(phastWith({})),
@@ -89,6 +91,7 @@ describe('ProcessHeatingValidityService', () => {
             settingsSignal: settings,
             processHeatingSignal: processHeating,
             scenarioPhastSignal: (scenario: string) => scenarios[scenario](),
+            scenarioSettings: (scenario: string) => scenarioSettings[scenario]?.() ?? settings(),
           },
         },
         {
@@ -154,6 +157,15 @@ describe('ProcessHeatingValidityService', () => {
 
       settings.set(FUEL_FIRED);
       expect(service.scenarioValidity('baseline').flueGasValid).toBeFalse();
+    });
+
+    it("checks each scenario against its own energy source", () => {
+      scenarios.baseline.set(phastWith({ flueGasLosses: [{}] }));
+      scenarios.mod1.set(phastWith({ flueGasLosses: [{}] }));
+      scenarioSettings.mod1.set(EAF);
+
+      expect(service.scenarioValidity('baseline').flueGasValid).toBeFalse();
+      expect(service.scenarioValidity('mod1').flueGasValid).toBeTrue();
     });
 
     it('validates only the first flue gas entry', () => {
@@ -231,6 +243,61 @@ describe('ProcessHeatingValidityService', () => {
         expect(scenarioResults).toHaveBeenCalledWith('baseline');
         expect(getResults).not.toHaveBeenCalled();
       });
+    });
+  });
+
+  describe('energy entry for a modification', () => {
+    const ELECTRO_STANDARD = { ...FUEL_FIRED, energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' } as Settings;
+
+    it('requires Energy Input for an EAF modification on a fuel-fired baseline', () => {
+      scenarioSettings.mod1.set(EAF);
+
+      expect(service.scenarioValidity('mod1').energyInputValid).toBeFalse();
+      expect(service.invalidStepLabels('mod1')).toContain('Energy Input');
+    });
+
+    it('requires Energy Input Exhaust Gas for a standard electric modification on a fuel-fired baseline', () => {
+      scenarioSettings.mod1.set(ELECTRO_STANDARD);
+
+      expect(service.scenarioValidity('mod1').inputExhaustValid).toBeFalse();
+    });
+
+    it('requires Flue Gas for a fuel-fired modification on an EAF baseline', () => {
+      settings.set(EAF);
+      scenarioSettings.mod1.set(FUEL_FIRED);
+
+      expect(service.scenarioValidity('mod1').flueGasValid).toBeFalse();
+    });
+
+    it('keeps the entry optional for the baseline and for a modification on its energy source while the baseline has none', () => {
+      settings.set(EAF);
+
+      expect(service.scenarioValidity('baseline').energyInputValid).toBeTrue();
+      expect(service.scenarioValidity('mod1').energyInputValid).toBeTrue();
+    });
+
+    it('requires the entry for a modification on the baseline\'s energy source once the baseline has one', () => {
+      settings.set(EAF);
+      scenarios.baseline.set(phastWith({ energyInputEAF: [{}] as never }));
+
+      expect(service.requiresEnergyEntry('mod1')).toBeTrue();
+      expect(service.scenarioValidity('mod1').energyInputValid).toBeFalse();
+    });
+
+    it('does not require an entry for a custom furnace modification, which has none', () => {
+      const CUSTOM = { ...FUEL_FIRED, energySourceType: 'Electricity', furnaceType: 'Custom Electrotechnology' } as Settings;
+      settings.set(CUSTOM);
+      scenarios.baseline.set(phastWith({ energyInputExhaustGasLoss: [{}] as never }));
+
+      expect(service.requiresEnergyEntry('mod1')).toBeFalse();
+    });
+
+    it('reports the requirement only for a modification on another energy source', () => {
+      expect(service.requiresEnergyEntry('mod1')).toBeFalse();
+
+      scenarioSettings.mod1.set(ELECTRO_STANDARD);
+      expect(service.requiresEnergyEntry('mod1')).toBeTrue();
+      expect(service.requiresEnergyEntry('baseline')).toBeFalse();
     });
   });
 

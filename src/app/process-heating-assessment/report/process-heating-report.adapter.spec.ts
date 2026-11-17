@@ -77,6 +77,7 @@ function buildReportSankey(modificationCount = 1): ReportSankeyUI {
       id: i === 0 ? 'baseline' : `mod${i}`,
       name: i === 0 ? 'Baseline' : `Scenario ${i}`,
       phast: { name: `phast${i}` } as ReportSankeyUI['scenarios'][number]['phast'],
+      settings: { energyResultUnit: 'MMBtu' } as ReportSankeyUI['settings'],
       costSavings: 0,
       energySavings: 0,
     })),

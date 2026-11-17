@@ -28,7 +28,7 @@ export class FlueGasComponent {
 
   readonly FlueGasType = FlueGasType;
 
-  readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
+  readonly settings: Signal<Settings> = computed(() => this.assessmentService.scenarioSettings(this.scenario()));
 
   readonly availableHeatWarning = computed(() => getAvailableHeatWarning(this.service.result()?.availableHeat));
 

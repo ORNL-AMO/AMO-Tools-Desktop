@@ -270,7 +270,7 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
       group: ROUTE_TOKENS.reportSankey,
       pageBreakBefore: !invalidModifications.length && index === 0,
       aspectRatio: 1400 / 500,
-      imageDataProvider: () => this.phastChartsService.renderSankeyAsImage(scenario.phast, ui.settings),
+      imageDataProvider: () => this.phastChartsService.renderSankeyAsImage(scenario.phast, scenario.settings),
     }))];
   }
 

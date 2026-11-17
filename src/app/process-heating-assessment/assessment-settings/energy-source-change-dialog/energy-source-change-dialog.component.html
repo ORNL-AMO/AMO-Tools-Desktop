@@ -1,0 +1,88 @@
+<div class="modal-header">
+  <h3 class="modal-title">Change {{ data.scenarioName }} Energy Source</h3>
+  <button type="button" class="close" aria-label="Close" (click)="close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <p class="question">
+    Switch <em>{{ data.scenarioName }}</em> from
+    <span class="energy-source">{{ data.fromEnergySource }}</span>
+    to <span class="energy-source">{{ data.toEnergySource }}</span>?
+  </p>
+
+  @if (data.hiddenTabs.length || data.addedTabs.length) {
+    <div class="tab-changes">
+      <div class="tab-change-column">
+        <table class="table table-sm hidden-tabs">
+          <thead>
+            <tr><th scope="col">Hidden Heat Balance Tabs</th></tr>
+          </thead>
+          <tbody>
+            @for (tab of data.hiddenTabs; track tab.view) {
+              <tr><td>{{ tab.label }}</td></tr>
+            } @empty {
+              <tr><td class="empty-row">None</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-change-column">
+        <table class="table table-sm added-tabs">
+          <thead>
+            <tr><th scope="col">Added Heat Balance Tabs</th></tr>
+          </thead>
+          <tbody>
+            @for (tab of data.addedTabs; track tab.view) {
+              <tr><td>{{ tab.label }}</td></tr>
+            } @empty {
+              <tr><td class="empty-row">None</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  @if (data.keptEnergySources.length) {
+    <div class="kept-energy-sources">
+      <table class="table table-sm">
+        <caption>These modifications have their own energy source selection and will not change</caption>
+        <thead>
+          <tr>
+            <th scope="col">Modification</th>
+            <th scope="col">Energy Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (kept of data.keptEnergySources; track $index) {
+            <tr>
+              <td>{{ kept.modificationName }}</td>
+              <td>{{ kept.energySource }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <div class="change-notes">
+    <div class="change-notes-title">When you confirm</div>
+    <ul>
+      @if (data.addedTabs.length) {
+        <li class="required-step">Complete the added tabs to see calculated results.</li>
+      }
+      @if (data.hiddenTabs.length) {
+        <li class="hidden-tabs-note">Data on the hidden tabs is kept but not used in results. It returns if you switch back.</li>
+      }
+      <li>Check Operations and enter the cost for {{ data.toEnergySource }}.</li>
+      @if (data.hasInheritingModifications) {
+        <li class="inheriting-modifications">Modifications without their own energy source will also switch to {{ data.toEnergySource }}.</li>
+      }
+    </ul>
+  </div>
+</div>
+<div class="modal-footer phast">
+  <button type="button" class="btn btn-white" (click)="close()">Cancel</button>
+  <button type="button" class="btn btn-primary" (click)="close(true)">Change Energy Source</button>
+</div>

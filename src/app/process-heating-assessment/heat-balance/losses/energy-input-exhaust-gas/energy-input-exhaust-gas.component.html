@@ -18,7 +18,14 @@
 
   @if (service.losses().length === 0) {
     <div class="no-data text-center p-4">
-      <p class="text-muted">No energy input exhaust gas losses. Click <strong>Add Loss</strong> to begin.</p>
+      @if (isEntryRequired()) {
+        <div class="alert alert-danger energy-entry-required p-3" role="alert">
+          Energy Input Exhaust Gas is required: this modification's energy use requires an entry here to accurately calculate the energy balance.
+          Click <strong>Add Loss</strong> to enter it.
+        </div>
+      } @else {
+        <p class="text-muted">No energy input exhaust gas losses. Click <strong>Add Loss</strong> to begin.</p>
+      }
     </div>
   }
 

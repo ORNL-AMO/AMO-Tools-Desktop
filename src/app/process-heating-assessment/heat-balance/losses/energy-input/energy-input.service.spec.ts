@@ -20,9 +20,10 @@ describe('EnergyInputService', () => {
   beforeEach(() => {
     assessmentServiceSpy = jasmine.createSpyObj(
       'ProcessHeatingAssessmentService',
-      ['lossSignal', 'scenarioPhast', 'updateLossesProperty'],
+      ['lossSignal', 'scenarioPhast', 'scenarioSettings', 'updateLossesProperty'],
       { settingsSignal: signal(SETTINGS) },
     );
+    assessmentServiceSpy.scenarioSettings.and.returnValue(SETTINGS);
     assessmentServiceSpy.lossSignal.and.returnValue([{ id: 'a', name: 'Energy Input', electricityInput: 100 }] as never);
     assessmentServiceSpy.scenarioPhast.and.returnValue({ losses: {} } as never);
     resultsServiceSpy = jasmine.createSpyObj('ProcessHeatingResultsService', ['getResults']);
@@ -103,5 +104,14 @@ describe('EnergyInputService', () => {
 
     expect(service.losses()[0].form.controls.electricityInput.invalid).toBeTrue();
     expect(service.losses()[0].heatLoss).toBeNull();
+  });
+
+  it("calculates the minimum with the scenario's own settings, since a modification can use another energy source", () => {
+    const eafSettings = { ...SETTINGS, energySourceType: 'Electricity', furnaceType: 'Electric Arc Furnace (EAF)' } as Settings;
+    assessmentServiceSpy.scenarioSettings.and.callFake(scenario => scenario === 'mod-1' ? eafSettings : SETTINGS);
+
+    service.initialize('mod-1');
+
+    expect(resultsServiceSpy.getResults).toHaveBeenCalledWith(jasmine.anything(), eafSettings);
   });
 });

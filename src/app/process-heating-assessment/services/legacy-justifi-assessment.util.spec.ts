@@ -1,4 +1,5 @@
 import { Assessment } from '../../shared/models/assessment';
+import { Settings } from '../../shared/models/settings';
 import { ExploreOpportunityCategory, PHAST } from '../models/phast';
 import { ProcessHeatingModification } from '../models/modification';
 import { toLegacyJustifiAssessment } from './legacy-justifi-assessment.util';
@@ -8,9 +9,13 @@ function buildAssessment(modifications: ProcessHeatingModification[]): Assessmen
   return { id: 1, name: 'Furnace', type: 'PHAST', phast } as unknown as Assessment;
 }
 
+const FUEL_FIRED = { energySourceType: 'Fuel' } as Settings;
+const EAF = { energySourceType: 'Electricity', furnaceType: 'Electric Arc Furnace (EAF)' } as Settings;
+const fuelFired = (): Settings => FUEL_FIRED;
+
 describe('toLegacyJustifiAssessment', () => {
   it('gives each modification a full phast built from baseline plus its overrides', () => {
-    const result = toLegacyJustifiAssessment(buildAssessment([{ id: 'm1', scenarioOverrides: { name: 'Mod 1', implementationCost: 500 } }]), true);
+    const result = toLegacyJustifiAssessment(buildAssessment([{ id: 'm1', scenarioOverrides: { name: 'Mod 1', implementationCost: 500 } }]), true, fuelFired);
     const modification = result.phast.modifications[0];
     expect(modification.id).toBe('m1');
     expect(modification.phast.name).toBe('Mod 1');
@@ -19,27 +24,27 @@ describe('toLegacyJustifiAssessment', () => {
 
   it('maps explore opportunity flags to the legacy exploreOppsShow fields', () => {
     const flag = { hasOpportunity: true, display: 'Reduce flue gas' };
-    const result = toLegacyJustifiAssessment(buildAssessment([{ id: 'm1', exploreOpportunityFlags: { [ExploreOpportunityCategory.FlueGas]: flag } }]), true);
+    const result = toLegacyJustifiAssessment(buildAssessment([{ id: 'm1', exploreOpportunityFlags: { [ExploreOpportunityCategory.FlueGas]: flag } }]), true, fuelFired);
     const modification = result.phast.modifications[0];
     expect(modification.exploreOpportunities).toBeTrue();
     expect(modification.exploreOppsShowFlueGas).toEqual(flag);
   });
 
   it('leaves exploreOpportunities false when a modification has no flags', () => {
-    const result = toLegacyJustifiAssessment(buildAssessment([{ id: 'm1' }]), true);
+    const result = toLegacyJustifiAssessment(buildAssessment([{ id: 'm1' }]), true, fuelFired);
     expect(result.phast.modifications[0].exploreOpportunities).toBeFalse();
   });
 
   it('sets setupDone on the exported baseline from the given readiness, even when the saved assessment has none', () => {
-    expect(toLegacyJustifiAssessment(buildAssessment([]), true).phast.setupDone).toBeTrue();
-    expect(toLegacyJustifiAssessment(buildAssessment([]), false).phast.setupDone).toBeFalse();
+    expect(toLegacyJustifiAssessment(buildAssessment([]), true, fuelFired).phast.setupDone).toBeTrue();
+    expect(toLegacyJustifiAssessment(buildAssessment([]), false, fuelFired).phast.setupDone).toBeFalse();
   });
 
   it('leaves saved auxiliary power losses out of the exported baseline and modifications', () => {
     const assessment = buildAssessment([{ id: 'm1' }]);
     (assessment.phast as unknown as PHAST).losses = { auxiliaryPowerLosses: [{ supplyVoltage: 480 }], wallLosses: [] };
 
-    const result = toLegacyJustifiAssessment(assessment, true);
+    const result = toLegacyJustifiAssessment(assessment, true, fuelFired);
 
     expect(result.phast.losses.auxiliaryPowerLosses).toBeUndefined();
     expect(result.phast.losses.wallLosses).toEqual([]);
@@ -53,7 +58,7 @@ describe('toLegacyJustifiAssessment', () => {
     baseline.auxEquipment = [{ name: 'Fan' } as never];
     baseline.auxiliaryEquipment = [{ id: 'aux-1' } as never];
 
-    const result = toLegacyJustifiAssessment(assessment, true);
+    const result = toLegacyJustifiAssessment(assessment, true, fuelFired);
 
     expect('auxEquipment' in result.phast).toBeFalse();
     expect('auxiliaryEquipment' in result.phast).toBeFalse();
@@ -64,7 +69,26 @@ describe('toLegacyJustifiAssessment', () => {
 
   it('does not mutate the saved assessment', () => {
     const assessment = buildAssessment([{ id: 'm1', scenarioOverrides: { name: 'Mod 1' } }]);
-    toLegacyJustifiAssessment(assessment, true);
+    toLegacyJustifiAssessment(assessment, true, fuelFired);
     expect((assessment.phast.modifications[0] as ProcessHeatingModification).scenarioOverrides.name).toBe('Mod 1');
+  });
+
+  it('leaves out the losses of tabs each scenario\'s energy source hides', () => {
+    const assessment = buildAssessment([{ id: 'm1' }]);
+    (assessment.phast as unknown as PHAST).losses = { leakageLosses: [{ id: 'l1' } as never], wallLosses: [] };
+
+    const result = toLegacyJustifiAssessment(assessment, true, scenario => scenario === 'baseline' ? EAF : FUEL_FIRED);
+
+    expect(result.phast?.losses?.leakageLosses).toBeUndefined();
+    expect(result.phast?.losses?.wallLosses).toEqual([]);
+    expect(result.phast?.modifications?.[0].phast?.losses?.leakageLosses?.length).toBe(1);
+  });
+
+  it('exports a modification on a different heating equipment configuration without results', () => {
+    const assessment = buildAssessment([{ id: 'same' }, { id: 'switched' }]);
+
+    const result = toLegacyJustifiAssessment(assessment, true, scenario => scenario === 'switched' ? EAF : FUEL_FIRED);
+
+    expect(result.phast?.modifications?.map(modification => modification.exportWithoutResults)).toEqual([false, true]);
   });
 });

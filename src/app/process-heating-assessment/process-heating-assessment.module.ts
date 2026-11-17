@@ -80,6 +80,7 @@ import { OpeningSizeOpportunityComponent } from './explore-opportunities/opening
 import { OpeningEmissivityOpportunityComponent } from './explore-opportunities/opening-emissivity-opportunity/opening-emissivity-opportunity.component';
 import { OpeningTimeOpenOpportunityComponent } from './explore-opportunities/opening-time-open-opportunity/opening-time-open-opportunity.component';
 import { ExpertViewComponent } from './expert-view/expert-view.component';
+import { FuelSwitchingComponent } from './expert-view/fuel-switching/fuel-switching.component';
 import { ProcessHeatingDiagramComponent } from './diagram/process-heating-diagram.component';
 import { ProcessHeatingSankeyComponent } from './sankey/process-heating-sankey.component';
 import { SankeyResultsService } from './sankey/sankey-results.service';
@@ -440,6 +441,7 @@ export const ROUTES: Route[] = [
     PreheatCombustionAirOpportunityComponent,
     OperationsOpportunityComponent,
     ExpertViewComponent,
+    FuelSwitchingComponent,
     ProcessHeatingDiagramComponent,
     ProcessHeatingSankeyComponent,
     ReportComponent,

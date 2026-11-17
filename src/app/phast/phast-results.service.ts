@@ -162,8 +162,10 @@ export class PhastResultsService {
       }
       //if no exhaust gas EAF
       if (!this.checkLoss(phast.losses.exhaustGasEAF)) {
-        results.energyInputTotal = phast.losses.energyInputEAF[0].electricityInput + results.energyInputTotalChemEnergy;
-        results.energyInputHeatDelivered = phast.losses.energyInputEAF[0].electricityInput;
+        // electricityInput is entered in kW (kWh per hour); the chemical energy is already in the result unit
+        const electricityHeatInput: number = this.convertUnitsService.value(phast.losses.energyInputEAF[0].electricityInput).from('kWh').to(settings.energyResultUnit);
+        results.energyInputTotal = electricityHeatInput + results.energyInputTotalChemEnergy;
+        results.energyInputHeatDelivered = electricityHeatInput;
         results.totalExhaustGasEAF = results.energyInputTotal - results.totalInput - results.exothermicHeat;
         results.grossHeatInput = results.energyInputHeatDelivered + results.energyInputTotalChemEnergy;
       }

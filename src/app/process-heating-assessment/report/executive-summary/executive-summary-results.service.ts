@@ -34,6 +34,8 @@ export interface SummaryNote {
 }
 
 interface ScenarioSummary {
+  /** The scenario's own settings; its energy source can differ from the baseline's */
+  settings: Settings;
   summary: ExecutiveSummary;
   results: PhastResults;
   /** Auxiliary equipment energy in `settings.energyResultUnit`/yr; not part of `summary.annualEnergyUsed`, but included in savings and cost */
@@ -60,6 +62,20 @@ const LOSS_LABELS: Array<{ key: keyof Losses; label: string }> = [
 ];
 
 const PERCENT = '%';
+
+type ScenarioFilter = (scenario: ScenarioSummary) => boolean;
+
+function isEaf(settings: Settings): boolean {
+  return settings.furnaceType === 'Electric Arc Furnace (EAF)';
+}
+
+const isEafScenario: ScenarioFilter = scenario => isEaf(scenario.settings);
+const isElectricScenario: ScenarioFilter = scenario => scenario.settings.energySourceType === 'Electricity';
+
+/** Leaves the value out (placeholder cell) for scenarios whose energy source doesn't produce it. */
+function valueIfApplies(appliesTo: ScenarioFilter, getValue: (scenario: ScenarioSummary) => number | undefined): (scenario: ScenarioSummary) => number | undefined {
+  return scenario => appliesTo(scenario) ? getValue(scenario) : undefined;
+}
 
 const NOTE_LABELS: Array<{ key: keyof Notes; label: string }> = [
   { key: 'atmosphereNotes', label: 'Atmosphere Losses' },
@@ -101,13 +117,13 @@ export class ExecutiveSummaryResultsService {
     const includeAux = ['baseline', ...modifications.map(modification => modification.id)]
       .filter(scenario => this.resultsService.scenarioResults(scenario))
       .every(scenario => this.auxiliaryEquipmentResultsService.scenarioResults(scenario).isComplete);
-    const baseline = this.getScenarioSummary('baseline', settings, includeAux);
+    const baseline = this.getScenarioSummary('baseline', includeAux);
     if (!baseline) {
       return undefined;
     }
 
     const modificationSummaries: ScenarioSummary[] = modifications.map(modification =>
-      this.getScenarioSummary(modification.id, settings, includeAux, baseline)
+      this.getScenarioSummary(modification.id, includeAux, baseline)
     );
     this.applyCo2Savings(baseline, modificationSummaries.filter(Boolean));
     return { settings, baselinePhast, baseline, modifications, modificationSummaries };
@@ -139,13 +155,14 @@ export class ExecutiveSummaryResultsService {
     const showCo2 = this.featureFlagService.showOperationalImpacts();
     const validModifications = modifications.filter((_, index) => modificationSummaries[index]);
     const mods = modificationSummaries.filter(Boolean);
+    const scenarios = [baseline, ...mods];
 
     return {
       modificationNames: validModifications.map(modification => ({ id: modification.id, name: getModificationName(modification) })),
       summaryRows: this.buildSummaryRows(baseline, mods, settings, showCo2, validModifications, baselinePhast),
-      eafEnergyRows: this.isEaf(settings) ? this.buildEafEnergyRows(baseline, mods) : [],
-      co2Rows: showCo2 && settings.energySourceType === 'Electricity' ? this.buildCo2Rows(baseline, mods, settings) : [],
-      costRows: settings.energySourceType === 'Electricity' ? this.buildCostRows(baseline, mods, settings) : [],
+      eafEnergyRows: scenarios.some(isEafScenario) ? this.buildEafEnergyRows(baseline, mods) : [],
+      co2Rows: showCo2 && scenarios.some(isElectricScenario) ? this.buildCo2Rows(baseline, mods, settings) : [],
+      costRows: scenarios.some(isElectricScenario) ? this.buildCostRows(baseline, mods, settings) : [],
       notes: this.buildNotes(validModifications),
     };
   });
@@ -155,7 +172,8 @@ export class ExecutiveSummaryResultsService {
    * savings, and cost.
    * @param includeAux false leaves aux energy and cost at 0
    */
-  private getScenarioSummary(scenario: AssessmentScenario, settings: Settings, includeAux: boolean, baseline?: ScenarioSummary): ScenarioSummary | undefined {
+  private getScenarioSummary(scenario: AssessmentScenario, includeAux: boolean, baseline?: ScenarioSummary): ScenarioSummary | undefined {
+    const settings = this.assessmentService.scenarioSettings(scenario);
     const phast = this.assessmentService.scenarioPhastSignal(scenario);
     const results = this.resultsService.scenarioResults(scenario);
     if (!results) {
@@ -190,7 +208,7 @@ export class ExecutiveSummaryResultsService {
         ? (phast.implementationCost / summary.annualCostSavings) * 12
         : 0;
     }
-    return { summary, results, auxAnnualEnergyUsed, auxAnnualCost };
+    return { settings, summary, results, auxAnnualEnergyUsed, auxAnnualCost };
   }
 
   /** @returns hourly energy per unit of charge feed rate, in Btu/lb or kJ/kg when the result unit is MMBtu or GJ */
@@ -216,7 +234,7 @@ export class ExecutiveSummaryResultsService {
   private calcAnnualCosts(summary: ExecutiveSummary, results: PhastResults, settings: Settings, phast: PHAST): void {
     const { operatingCosts, operatingHours } = phast;
     if (settings.energySourceType === 'Electricity') {
-      if (this.isEaf(settings)) {
+      if (isEaf(settings)) {
         const energyInput = phast.losses.energyInputEAF?.[0];
         summary.annualNaturalGasCost = results.annualEAFResults.naturalGasUsed * operatingCosts.fuelCost;
         summary.annualCarbonCoalCost = energyInput ? energyInput.coalCarbonInjection * operatingCosts.coalCarbonCost * operatingHours.hoursPerYear : 0;
@@ -226,7 +244,8 @@ export class ExecutiveSummaryResultsService {
         summary.annualTotalFuelCost = summary.annualNaturalGasCost + summary.annualCarbonCoalCost + summary.annualElectrodeCost + summary.annualOtherFuelCost;
       } else {
         const totalHeatInput = (phast.losses.energyInputExhaustGasLoss ?? []).reduce((sum, loss) => sum + loss.totalHeatInput, 0);
-        summary.annualElectricityCost = results.electricalHeatDelivered * operatingHours.hoursPerYear * operatingCosts.electricityCost;
+        const electricalHeatDeliveredKwh = new ConvertValue(results.electricalHeatDelivered, settings.energyResultUnit, 'kWh').convertedValue;
+        summary.annualElectricityCost = electricalHeatDeliveredKwh * operatingHours.hoursPerYear * operatingCosts.electricityCost;
         summary.annualTotalFuelCost = totalHeatInput * operatingHours.hoursPerYear * operatingCosts.fuelCost;
       }
       summary.annualCost = summary.annualTotalFuelCost + summary.annualElectricityCost;
@@ -296,7 +315,7 @@ export class ExecutiveSummaryResultsService {
 
   private buildEafEnergyRows(baseline: ScenarioSummary, mods: ScenarioSummary[]): ReportTableRow[] {
     const unit = 'kWh/yr';
-    const eaf = (field: keyof EAFResults) => (scenario: ScenarioSummary) => scenario.results.annualEAFResults?.[field];
+    const eaf = (field: keyof EAFResults) => valueIfApplies(isEafScenario, scenario => scenario.results.annualEAFResults?.[field]);
     return [
       this.scenarioRow('Electrical', unit, baseline, mods, eaf('electricEnergyUsed'), 'whole'),
       this.scenarioRow('Natural Gas', unit, baseline, mods, eaf('naturalGasUsed'), 'whole'),
@@ -308,16 +327,20 @@ export class ExecutiveSummaryResultsService {
 
   private buildCo2Rows(baseline: ScenarioSummary, mods: ScenarioSummary[], settings: Settings): ReportTableRow[] {
     const unit = `${settings.emissionsUnit === 'Metric' ? 'tonne' : 'ton'} CO<sub>2</sub>`;
-    const co2 = (field: keyof PhastCo2EmissionsOutput) => (scenario: ScenarioSummary) => scenario.results.co2EmissionsOutput?.[field];
+    const scenarios = [baseline, ...mods];
+    const co2 = (field: keyof PhastCo2EmissionsOutput, appliesTo: ScenarioFilter) =>
+      valueIfApplies(appliesTo, scenario => scenario.results.co2EmissionsOutput?.[field]);
+    // EAF's fuel emissions are natural gas only; standard electric furnaces report all fuel
+    const fuelLabel = scenarios.filter(isElectricScenario).every(isEafScenario) ? 'Natural Gas CO<sub>2</sub> Emissions' : 'Fuel CO<sub>2</sub> Emissions';
     const rows = [
-      this.scenarioRow('Electrical CO<sub>2</sub> Emissions', unit, baseline, mods, co2('electricityEmissionOutput'), 'decimal2'),
-      this.scenarioRow(this.isEaf(settings) ? 'Natural Gas CO<sub>2</sub> Emissions' : 'Fuel CO<sub>2</sub> Emissions', unit, baseline, mods, co2('fuelEmissionOutput'), 'decimal2'),
+      this.scenarioRow('Electrical CO<sub>2</sub> Emissions', unit, baseline, mods, co2('electricityEmissionOutput', isElectricScenario), 'decimal2'),
+      this.scenarioRow(fuelLabel, unit, baseline, mods, co2('fuelEmissionOutput', isElectricScenario), 'decimal2'),
     ];
-    if (this.isEaf(settings)) {
+    if (scenarios.some(isEafScenario)) {
       rows.push(
-        this.scenarioRow('Coal Carbon CO<sub>2</sub> Emissions', unit, baseline, mods, co2('coalCarbonEmissionsOutput'), 'decimal2'),
-        this.scenarioRow('Electrode CO<sub>2</sub> Emissions', unit, baseline, mods, co2('electrodeEmissionsOutput'), 'decimal2'),
-        this.scenarioRow('Other Fuel CO<sub>2</sub> Emissions', unit, baseline, mods, co2('otherFuelEmissionsOutput'), 'decimal2'),
+        this.scenarioRow('Coal Carbon CO<sub>2</sub> Emissions', unit, baseline, mods, co2('coalCarbonEmissionsOutput', isEafScenario), 'decimal2'),
+        this.scenarioRow('Electrode CO<sub>2</sub> Emissions', unit, baseline, mods, co2('electrodeEmissionsOutput', isEafScenario), 'decimal2'),
+        this.scenarioRow('Other Fuel CO<sub>2</sub> Emissions', unit, baseline, mods, co2('otherFuelEmissionsOutput', isEafScenario), 'decimal2'),
       );
     }
     return rows;
@@ -325,21 +348,26 @@ export class ExecutiveSummaryResultsService {
 
   private buildCostRows(baseline: ScenarioSummary, mods: ScenarioSummary[], settings: Settings): ReportTableRow[] {
     const unit = settings.currency;
+    const scenarios = [baseline, ...mods];
+    const cost = (getCost: (summary: ExecutiveSummary) => number | undefined, appliesTo: ScenarioFilter) =>
+      valueIfApplies(appliesTo, scenario => getCost(scenario.summary));
+    const isStandardElectricScenario: ScenarioFilter = scenario => isElectricScenario(scenario) && !isEafScenario(scenario);
     const rows = [
-      this.row('Electrical', unit, baseline, mods, s => s.annualElectricityCost, 'whole'),
+      this.scenarioRow('Electrical', unit, baseline, mods, cost(s => s.annualElectricityCost, isElectricScenario), 'whole'),
     ];
-    if (this.isEaf(settings)) {
+    if (scenarios.some(isEafScenario)) {
       rows.push(
-        this.row('Natural Gas', unit, baseline, mods, s => s.annualNaturalGasCost, 'whole'),
-        this.row('Coal Carbon', unit, baseline, mods, s => s.annualCarbonCoalCost, 'whole'),
-        this.row('Electrode', unit, baseline, mods, s => s.annualElectrodeCost, 'whole'),
-        this.row('Other Fuel', unit, baseline, mods, s => s.annualOtherFuelCost, 'whole'),
+        this.scenarioRow('Natural Gas', unit, baseline, mods, cost(s => s.annualNaturalGasCost, isEafScenario), 'whole'),
+        this.scenarioRow('Coal Carbon', unit, baseline, mods, cost(s => s.annualCarbonCoalCost, isEafScenario), 'whole'),
+        this.scenarioRow('Electrode', unit, baseline, mods, cost(s => s.annualElectrodeCost, isEafScenario), 'whole'),
+        this.scenarioRow('Other Fuel', unit, baseline, mods, cost(s => s.annualOtherFuelCost, isEafScenario), 'whole'),
       );
-    } else {
-      rows.push(this.row('Fuel', unit, baseline, mods, s => s.annualTotalFuelCost, 'whole'));
+    }
+    if (scenarios.some(isStandardElectricScenario)) {
+      rows.push(this.scenarioRow('Fuel', unit, baseline, mods, cost(s => s.annualTotalFuelCost, isStandardElectricScenario), 'whole'));
     }
     if (this.hasAuxiliaryEquipment(baseline, mods)) {
-      rows.push(this.scenarioRow('Auxiliary Equipment', unit, baseline, mods, s => s.auxAnnualCost, 'whole'));
+      rows.push(this.scenarioRow('Auxiliary Equipment', unit, baseline, mods, scenario => scenario.auxAnnualCost, 'whole'));
     }
     return rows;
   }
@@ -409,10 +437,6 @@ export class ExecutiveSummaryResultsService {
       return 'kJ/kg';
     }
     return `${settings.energyResultUnit}/${settings.unitsOfMeasure === 'Metric' ? 'kg' : 'lb'}`;
-  }
-
-  private isEaf(settings: Settings): boolean {
-    return settings.furnaceType === 'Electric Arc Furnace (EAF)';
   }
 
   private getModificationsMade(baseline: PHAST, modification: PHAST): string[] {

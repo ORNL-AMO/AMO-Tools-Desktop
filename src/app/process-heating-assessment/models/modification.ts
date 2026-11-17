@@ -1,5 +1,6 @@
 import { ExploreOpportunityCategory, Modification, PHAST } from './phast';
 import { SavingsOpportunity } from '../../shared/models/explore-opps';
+import { Settings } from '../../shared/models/settings';
 
 // The set of fields a modification is allowed to override on baseline. Excludes `modifications`
 // and `selectedModificationId`: a modification's own overrides never carry a nested modification list
@@ -9,8 +10,35 @@ export type ScenarioOverrides = Partial<Omit<PHAST, 'modifications' | 'selectedM
 // `Modification` (id, notes, the exploreOpportunityFlags curation state) has no full-clone field of
 // its own to extend around: `scenarioOverrides` is the only place a modification's data lives,
 // storing just the fields it overrides, not a clone of the assessment.
+/** A modification's own energy source. Units and the energy result unit always come from the assessment settings. */
+export interface ScenarioEnergySource {
+  energySourceType: string;
+  furnaceType: string;
+  customFurnaceName?: string;
+}
+
+// Picked from Settings so both assessment settings and a ScenarioEnergySource fit; Settings marks these fields optional.
+type EnergySourceFields = Pick<Settings, 'energySourceType' | 'furnaceType' | 'customFurnaceName'>;
+
+/**
+ * An empty furnace type or custom name matches whether saved as `null` or `undefined`, since saved data mixes both.
+ * The custom name is compared only for Custom Electrotechnology, since switching away keeps the name already typed.
+ */
+export function isSameEnergySource(first: EnergySourceFields, second: EnergySourceFields): boolean {
+  return first.energySourceType === second.energySourceType
+    && (first.furnaceType ?? null) === (second.furnaceType ?? null)
+    && (first.furnaceType !== 'Custom Electrotechnology' || (first.customFurnaceName ?? null) === (second.customFurnaceName ?? null));
+}
+
 export interface ProcessHeatingModification extends Modification {
   scenarioOverrides?: ScenarioOverrides;
+  /** Absent when the modification follows the baseline's energy source. */
+  energySource?: ScenarioEnergySource;
+}
+
+/** @returns the active modification's id while it still exists, else the first modification's */
+export function resolveSelectedModificationId(modifications: Modification[], activeId: string | undefined): string | undefined {
+  return activeId && modifications.some(modification => modification.id === activeId) ? activeId : modifications[0]?.id;
 }
 
 export function getModificationName(modification: ProcessHeatingModification): string {

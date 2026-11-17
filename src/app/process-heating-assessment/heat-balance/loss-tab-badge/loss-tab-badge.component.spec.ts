@@ -39,6 +39,34 @@ describe('LossTabBadgeComponent', () => {
     expect(badge().querySelector('.fa-exclamation')).not.toBeNull();
   });
 
+  describe('needing a visit', () => {
+    function renderNeedsVisit(count: number | undefined, invalid: boolean): void {
+      fixture.componentRef.setInput('needsVisit', true);
+      render(count, invalid);
+    }
+
+    it('shows an orange exclamation, even for a step with entries', () => {
+      renderNeedsVisit(3, false);
+
+      expect(badge().classList).toContain('input-error');
+      expect(badge().classList).not.toContain('success');
+      expect(badge().querySelector('.fa-exclamation')).not.toBeNull();
+    });
+
+    it('shows a step with no entries', () => {
+      renderNeedsVisit(0, false);
+
+      expect(badge()).not.toBeNull();
+    });
+
+    it('stays red while the step is invalid', () => {
+      renderNeedsVisit(2, true);
+
+      expect(badge().classList).toContain('missing-data');
+      expect(badge().classList).not.toContain('input-error');
+    });
+  });
+
   it('shows nothing for a valid step with no entries', () => {
     render(0, false);
 

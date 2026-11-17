@@ -1,7 +1,8 @@
-import { signal, WritableSignal } from '@angular/core';
+import { computed, inject, Signal, signal, WritableSignal } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { PHAST } from '../models/phast';
-import { ProcessHeatingModification, ScenarioOverrides } from '../models/modification';
+import { ProcessHeatingModification, resolveSelectedModificationId, ScenarioOverrides } from '../models/modification';
+import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
 import { getEffectivePhast } from '../services/scenario-merge.util';
 
 /** Spec-only stand-in for `ProcessHeatingAssessmentService`: real merge, in-memory state. */
@@ -46,6 +47,16 @@ export class FakeProcessHeatingAssessmentService {
   }
 }
 
+/** Spec-only stand-in for `ProcessHeatingUiService`: real modification selection rule over the injected assessment state. */
 export class FakeProcessHeatingUiService {
+  private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   activeModificationIdSignal: WritableSignal<string | undefined> = signal<string | undefined>(undefined);
+  readonly childView: WritableSignal<string> = signal<string>('');
+  readonly selectedModificationId: Signal<string | undefined> = computed(() =>
+    resolveSelectedModificationId(this.assessmentService.processHeatingSignal()?.modifications ?? [], this.activeModificationIdSignal())
+  );
+
+  markShownTabVisited(): void {}
+
+  clearTabsToVisit(_modificationId: string): void {}
 }

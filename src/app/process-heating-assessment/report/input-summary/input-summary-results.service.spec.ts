@@ -7,6 +7,7 @@ import { SolidLoadMaterialDbService } from '../../../indexedDb/solid-load-materi
 import { WallLossesSurfaceDbService } from '../../../indexedDb/wall-losses-surface-db.service';
 import { TestBed } from '@angular/core/testing';
 import { ShowResultsCategories } from '../../../shared/models/phast/phast';
+import { LeakageLoss } from '../../../shared/models/phast/losses/leakageLoss';
 import { Settings } from '../../../shared/models/settings';
 import { ProcessHeatingModification } from '../../models/modification';
 import { PHAST, Losses } from '../../models/phast';
@@ -40,6 +41,7 @@ describe('InputSummaryResultsService', () => {
   let service: InputSummaryResultsService;
   let settings: WritableSignal<Partial<Settings>>;
   let categories: WritableSignal<ShowResultsCategories>;
+  let modificationOverrides: { settings?: Partial<Settings>; categories?: ShowResultsCategories };
   let scenarios: Record<string, PHAST>;
   let modifications: WritableSignal<ProcessHeatingModification[]>;
 
@@ -58,6 +60,7 @@ describe('InputSummaryResultsService', () => {
   beforeEach(() => {
     settings = signal<Partial<Settings>>({ unitsOfMeasure: 'Imperial', energySourceType: 'Fuel', furnaceType: 'Rotary Furnace' });
     categories = signal<ShowResultsCategories>({ ...NO_CATEGORIES });
+    modificationOverrides = {};
     scenarios = { baseline: buildPhast(), mod1: buildPhast() };
     modifications = signal<ProcessHeatingModification[]>([{ id: 'mod1', scenarioOverrides: { name: 'Scenario 1' } }]);
 
@@ -66,14 +69,23 @@ describe('InputSummaryResultsService', () => {
         InputSummaryResultsService,
         {
           provide: ProcessHeatingAssessmentService,
-          useValue: { settingsSignal: settings, scenarioPhastSignal: (scenario: string) => scenarios[scenario] },
+          useValue: {
+            settingsSignal: settings,
+            scenarioSettings: (scenario: string) => ({ ...settings(), ...(scenario === 'baseline' ? {} : modificationOverrides.settings) }),
+            scenarioPhastSignal: (scenario: string) => scenarios[scenario],
+          },
         },
         { provide: ModificationService, useValue: { modifications } },
         { provide: SolidLoadMaterialDbService, useValue: { getAllWithObservable: () => of([{ id: 7, substance: 'Carbon Steel' }]) } },
         { provide: LiquidLoadMaterialDbService, useValue: { getAllWithObservable: () => of([{ id: 7, substance: 'Water' }]) } },
         { provide: GasLoadMaterialDbService, useValue: { getAllWithObservable: () => of([{ id: 7, substance: 'Nitrogen' }]) } },
         { provide: WallLossesSurfaceDbService, useValue: { getAllWithObservable: () => of([{ id: 3, surface: 'Vertical Cylinders', conditionFactor: 1.394 }]) } },
-        { provide: ProcessHeatingResultsService, useValue: { getResultCategories: () => categories() } },
+        {
+          provide: ProcessHeatingResultsService,
+          useValue: {
+            scenarioResultCategories: (scenario: string) => scenario === 'baseline' ? categories() : modificationOverrides.categories ?? categories(),
+          },
+        },
       ],
     });
     service = TestBed.inject(InputSummaryResultsService);
@@ -172,6 +184,53 @@ describe('InputSummaryResultsService', () => {
       const efficiency = row('Heat System Efficiency', 'Heat System Efficiency');
       expect(efficiency.baseline.value).toBe(70);
       expect(efficiency.modifications[0].value).toBe(75);
+    });
+  });
+
+  describe('baseline and modification with different energy sources', () => {
+    beforeEach(() => {
+      const losses = { flueGasLosses: [{ flueGasType: 'By Volume', flueGasByVolume: { flueGasTemperature: 500 } }] } as Losses;
+      scenarios['baseline'] = buildPhast({ losses });
+      scenarios['mod1'] = buildPhast({ losses, systemEfficiency: 75 });
+      categories.set({ ...NO_CATEGORIES, showFlueGas: true });
+      modificationOverrides = {
+        settings: { energySourceType: 'Steam', furnaceType: null },
+        categories: { ...NO_CATEGORIES, showSystemEff: true },
+      };
+    });
+
+    it("shows each scenario's own energy source", () => {
+      const energySource = row('Operations', 'Energy Source');
+      expect(energySource.baseline.value).toBe('Fuel');
+      expect(energySource.modifications[0].value).toBe('Steam');
+    });
+
+    it("shows the sections of every scenario's energy source", () => {
+      expect(section('Flue Gas Loss 1')).toBeDefined();
+      expect(section('Heat System Efficiency')).toBeDefined();
+    });
+
+    it("leaves a scenario's column empty for a loss its energy source doesn't use, even with data kept from before the switch", () => {
+      const temperature = row('Flue Gas Loss 1', 'Flue Gas Temperature');
+      expect(temperature.baseline.value).toBe(500);
+      expect(temperature.modifications[0].value).toBeNull();
+    });
+
+    it("leaves a scenario's column empty for a scenario-level section its energy source doesn't use", () => {
+      scenarios['baseline'] = buildPhast({ ...scenarios['baseline'], systemEfficiency: 70 });
+      const efficiency = row('Heat System Efficiency', 'Heat System Efficiency');
+      expect(efficiency.baseline.value).toBeNull();
+      expect(efficiency.modifications[0].value).toBe(75);
+    });
+
+    it('shows Gas Leakage only for the fuel-fired scenario', () => {
+      const leakageLosses = [{ id: 'leak-1', draftPressure: 0.1 }] as LeakageLoss[];
+      scenarios['baseline'] = buildPhast({ ...scenarios['baseline'], losses: { ...scenarios['baseline'].losses, leakageLosses } });
+      scenarios['mod1'] = buildPhast({ ...scenarios['mod1'], losses: { ...scenarios['mod1'].losses, leakageLosses } });
+
+      const draftPressure = row('Gas Leakage Loss 1', 'Furnace Draft Pressure');
+      expect(draftPressure?.baseline.value).toBe(0.1);
+      expect(draftPressure?.modifications[0].value).toBeNull();
     });
   });
 

@@ -71,6 +71,8 @@ export interface Modification {
   phast?: PHAST;
   id: string,
   notes?: Notes;
+  /** Set on an export copy whose energy source the JUSTIFI export can't calculate; never saved. */
+  exportWithoutResults?: boolean;
   exploreOpportunities?: boolean;
   exploreOppsShowFlueGas?: SavingsOpportunity;
   exploreOppsShowAirTemp?: SavingsOpportunity;

@@ -2,24 +2,29 @@ import { DialogRef } from '@angular/cdk/dialog';
 import { NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { of, Subject } from 'rxjs';
+import { of } from 'rxjs';
 import { SettingsService } from '../../settings/settings.service';
 import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { Settings } from '../../shared/models/settings';
 import { SnackbarService } from '../../shared/snackbar-notification/snackbar.service';
 import { UnitsChangeAction, UnitsChangeDialogComponent } from '../../shared/units-change-dialog/units-change-dialog.component';
 import { PHAST } from '../models/phast';
+import { ProcessHeatingModification } from '../models/modification';
+import { LossView } from '../models/views';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
 import { AssessmentSettingsComponent } from './assessment-settings.component';
+import { EnergySourceChangeDialogComponent, EnergySourceChangeDialogData } from './energy-source-change-dialog/energy-source-change-dialog.component';
 
-function makeSettings(): Settings {
+function makeSettings(overrides: Partial<Settings> = {}): Settings {
   return {
     id: 1,
     assessmentId: 7,
     unitsOfMeasure: 'Imperial',
     energyResultUnit: 'MMBtu',
+    energySourceType: 'Fuel',
     currency: '$',
     facilityInfo: { facilityName: 'Plant A', facilityContact: { contactName: 'Pat' } },
+    ...overrides,
   } as Settings;
 }
 
@@ -31,6 +36,7 @@ describe('AssessmentSettingsComponent', () => {
   let fixture: ComponentFixture<AssessmentSettingsComponent>;
   let component: AssessmentSettingsComponent;
   let settingsSignal: WritableSignal<Settings>;
+  let processHeatingSignal: WritableSignal<PHAST>;
   let assessmentService: jasmine.SpyObj<ProcessHeatingAssessmentService>;
   let modalDialogService: jasmine.SpyObj<ModalDialogService>;
   let snackbarService: jasmine.SpyObj<SnackbarService>;
@@ -39,14 +45,25 @@ describe('AssessmentSettingsComponent', () => {
     modalDialogService.openModal.and.returnValue({ closed: of(action) } as DialogRef<unknown, unknown>);
   }
 
+  function chooseEnergySourceChange(confirmed: boolean | undefined): void {
+    modalDialogService.openModal.and.returnValue({ closed: of(confirmed) } as DialogRef<unknown, unknown>);
+  }
+
+  function switchToElectricity(): void {
+    component.settingsForm.patchValue({ energySourceType: 'Electricity', furnaceType: 'Electrical Infrared', energyResultUnit: 'kWh' });
+  }
+
   beforeEach(() => {
     settingsSignal = signal(makeSettings());
+    processHeatingSignal = signal(makePhast());
     assessmentService = jasmine.createSpyObj<ProcessHeatingAssessmentService>(
       'ProcessHeatingAssessmentService',
-      ['saveSettings', 'setProcessHeating'],
-      { settingsSignal, processHeatingSignal: signal(makePhast()), assessment$: of({ name: 'Furnace' }) as never },
+      ['saveSettings', 'setProcessHeating', 'getModifications', 'scenarioSettings'],
+      { settingsSignal, processHeatingSignal, assessment$: of({ name: 'Furnace' }) as never },
     );
     assessmentService.saveSettings.and.resolveTo(false);
+    assessmentService.getModifications.and.returnValue([]);
+    assessmentService.scenarioSettings.and.callFake(() => settingsSignal());
     modalDialogService = jasmine.createSpyObj<ModalDialogService>('ModalDialogService', ['openModal']);
     snackbarService = jasmine.createSpyObj<SnackbarService>('SnackbarService', ['setSnackbarMessage']);
 
@@ -147,15 +164,14 @@ describe('AssessmentSettingsComponent', () => {
     });
 
     it('keeps facility info saved while the units dialog was open', async () => {
-      const closed = new Subject<UnitsChangeAction>();
-      modalDialogService.openModal.and.returnValue({ closed } as unknown as DialogRef<unknown, unknown>);
+      const updatedFacilityInfo = { facilityName: 'Plant B', facilityContact: { contactName: 'Pat' } };
+      modalDialogService.openModal.and.callFake(() => {
+        settingsSignal.set({ ...makeSettings(), facilityInfo: updatedFacilityInfo });
+        return { closed: of<UnitsChangeAction>('convert') } as DialogRef<never, never>;
+      });
       component.settingsForm.patchValue({ unitsOfMeasure: 'Metric' });
 
-      const saving = component.saveSettings();
-      const updatedFacilityInfo = { facilityName: 'Plant B', facilityContact: { contactName: 'Pat' } };
-      settingsSignal.set({ ...makeSettings(), facilityInfo: updatedFacilityInfo });
-      closed.next('convert');
-      await saving;
+      await component.saveSettings();
 
       const [saved] = assessmentService.saveSettings.calls.mostRecent().args;
       expect(saved.facilityInfo).toEqual(updatedFacilityInfo);
@@ -195,6 +211,120 @@ describe('AssessmentSettingsComponent', () => {
       expect(assessmentService.saveSettings).not.toHaveBeenCalled();
       expect(component.settingsForm.value.unitsOfMeasure).toBe('Imperial');
       expect(component.settingsForm.value.energyResultUnit).toBe('MMBtu');
+    });
+  });
+
+  describe('energy source change', () => {
+    beforeEach(() => {
+      processHeatingSignal.set({ ...makePhast(), losses: { flueGasLosses: [{}] } });
+    });
+
+    it('lists the hidden and added tabs when the energy source changes', async () => {
+      chooseEnergySourceChange(true);
+      switchToElectricity();
+
+      await component.saveSettings();
+
+      expect(modalDialogService.openModal).toHaveBeenCalledWith(EnergySourceChangeDialogComponent, {
+        data: {
+          scenarioName: 'Baseline',
+          fromEnergySource: 'Fuel-fired',
+          toEnergySource: 'Electrotechnology (Electrical Infrared)',
+          hiddenTabs: [{ view: LossView.FLUE_GAS, label: 'Flue Gas' }, { view: LossView.GAS_LEAKAGE, label: 'Gas Leakage' }],
+          addedTabs: [{ view: LossView.ENERGY_INPUT_EXHAUST_GAS, label: 'Energy Input Exhaust Gas' }],
+          hasInheritingModifications: false,
+          keptEnergySources: [],
+        },
+      });
+    });
+
+    it('saves the new energy source when confirmed', async () => {
+      chooseEnergySourceChange(true);
+      switchToElectricity();
+
+      await component.saveSettings();
+
+      const [saved] = assessmentService.saveSettings.calls.mostRecent().args;
+      expect(saved.energySourceType).toBe('Electricity');
+      expect(saved.furnaceType).toBe('Electrical Infrared');
+    });
+
+    it('restores the form and skips saving when cancelled', async () => {
+      chooseEnergySourceChange(undefined);
+      switchToElectricity();
+
+      await component.saveSettings();
+
+      expect(assessmentService.saveSettings).not.toHaveBeenCalled();
+      expect(component.settingsForm.value.energySourceType).toBe('Fuel');
+      expect(component.settingsForm.value.energyResultUnit).toBe('MMBtu');
+    });
+
+    it('asks when only a modification exists and notes that it inherits the change', async () => {
+      processHeatingSignal.set(makePhast());
+      assessmentService.getModifications.and.returnValue([{ id: 'mod-1' } as ProcessHeatingModification]);
+      chooseEnergySourceChange(true);
+      switchToElectricity();
+
+      await component.saveSettings();
+
+      const [, config] = modalDialogService.openModal.calls.mostRecent().args;
+      expect(config.data).toEqual(jasmine.objectContaining({ hasInheritingModifications: true }));
+    });
+
+    it('omits the inheriting note when every modification has its own energy source', async () => {
+      assessmentService.getModifications.and.returnValue([
+        { id: 'mod-1', energySource: { energySourceType: 'Steam', furnaceType: null } } as ProcessHeatingModification,
+      ]);
+      chooseEnergySourceChange(true);
+      switchToElectricity();
+
+      await component.saveSettings();
+
+      const [, config] = modalDialogService.openModal.calls.mostRecent().args;
+      expect(config.data).toEqual(jasmine.objectContaining({ hasInheritingModifications: false }));
+    });
+
+    it('lists each modification with its own energy source selection, including one matching the new baseline source', async () => {
+      assessmentService.getModifications.and.returnValue([
+        { id: 'mod-1', scenarioOverrides: { name: 'Steam Option' }, energySource: { energySourceType: 'Steam', furnaceType: null } },
+        { id: 'mod-2', scenarioOverrides: { name: 'Infrared Option' }, energySource: { energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' } },
+        { id: 'mod-3', scenarioOverrides: { name: 'Follows Baseline' } },
+      ] as ProcessHeatingModification[]);
+      assessmentService.scenarioSettings.and.callFake(id => id === 'mod-1'
+        ? makeSettings({ energySourceType: 'Steam', furnaceType: null })
+        : makeSettings({ energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' }));
+      chooseEnergySourceChange(true);
+      switchToElectricity();
+
+      await component.saveSettings();
+
+      const [, config] = modalDialogService.openModal.calls.mostRecent().args;
+      expect((config.data as EnergySourceChangeDialogData).keptEnergySources).toEqual([
+        { modificationName: 'Steam Option', energySource: 'Steam-based' },
+        { modificationName: 'Infrared Option', energySource: 'Electrotechnology (Electrical Infrared)' },
+      ]);
+    });
+
+    it('saves without asking when there is no loss data and no modification', async () => {
+      processHeatingSignal.set(makePhast());
+      switchToElectricity();
+
+      await component.saveSettings();
+
+      expect(modalDialogService.openModal).not.toHaveBeenCalled();
+      expect(assessmentService.saveSettings).toHaveBeenCalled();
+    });
+
+    it('saves without asking when the furnace changes within the same configuration', async () => {
+      settingsSignal.set(makeSettings({ energySourceType: 'Electricity', furnaceType: 'Electrical Infrared', energyResultUnit: 'kWh' }));
+      fixture.detectChanges();
+      component.settingsForm.patchValue({ furnaceType: 'Induction Heating and Melting' });
+
+      await component.saveSettings();
+
+      expect(modalDialogService.openModal).not.toHaveBeenCalled();
+      expect(assessmentService.saveSettings).toHaveBeenCalled();
     });
   });
 

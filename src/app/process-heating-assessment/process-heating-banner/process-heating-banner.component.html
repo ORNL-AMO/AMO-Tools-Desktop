@@ -14,7 +14,7 @@
     </div>
     <div class="d-flex flex-column pl-2">
       <div class="h2-name">{{assessment.name}}</div>
-      <div class="h2-name">{{furnaceSubtitle()}}</div>
+      <div class="energy-source-subtitle">{{furnaceSubtitle()}}</div>
       <div class="h2-name">
         <span class="small">Last modified: {{assessment.modifiedDate | date:'mediumDate'}}</span>
       </div>
@@ -27,7 +27,7 @@
     </div>
     <div class="d-flex flex-column pl-2">
       <div class="h2-name">{{assessment.name}}</div>
-      <div class="h2-name" [class.collapse]="bannerCollapsed">{{furnaceSubtitle()}}</div>
+      <div class="energy-source-subtitle" [class.collapse]="bannerCollapsed">{{furnaceSubtitle()}}</div>
       <div class="h2-name" [class.collapse]="bannerCollapsed">
         <span class="small">Last modified: {{assessment.modifiedDate | date:'mediumDate'}}</span>
       </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { UntypedFormGroup } from '@angular/forms';
+import { ELECTROTECHNOLOGY_FURNACE_TYPES } from './electrotechnology-furnace-types';
 
 @Component({
     selector: 'app-phast-settings',
@@ -37,14 +38,7 @@ export class PhastSettingsComponent implements OnInit {
     'Custom Fuel Furnace'
   ];
 
-  electrotechOptions: Array<string> = [
-    'Electrical Infrared',
-    'Induction Heating and Melting',
-    'Electrical Resistance',
-    'Vacuum Furnace',
-    'Electric Arc Furnace (EAF)',
-    'Custom Electrotechnology'
-  ];
+  electrotechOptions: readonly string[] = ELECTROTECHNOLOGY_FURNACE_TYPES;
 
   // electricOptions: Array<string>;
   energyResultOptions: Array<any>;

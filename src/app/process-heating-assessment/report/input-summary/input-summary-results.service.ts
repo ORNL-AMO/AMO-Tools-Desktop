@@ -12,6 +12,7 @@ import { PHAST } from '../../models/phast';
 import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
+import { combineResultCategories, ResultCategories } from '../../models/result-rows';
 import { EMPTY_LOOKUPS, FieldDefinition, InputSummaryLookups, resolveUnit, SECTION_DEFINITIONS, SectionDefinition, SummaryValue } from './input-summary-definitions';
 
 /** One summary definition's sections; `count` is the number of item entries and is omitted for scenario-level definitions. */
@@ -24,6 +25,12 @@ export interface InputSummaryCategory {
 export interface InputSummaryUI {
   modificationNames: ModificationNameCell[];
   categories: InputSummaryCategory[];
+}
+
+interface SummaryScenario {
+  phast: PHAST;
+  settings: Settings;
+  categories: ResultCategories;
 }
 
 /** Builds read-only input tables for baseline and every modification from live scenario data. */
@@ -49,8 +56,12 @@ export class InputSummaryResultsService {
       return undefined;
     }
     const modifications = this.modificationService.modifications();
-    const scenarios: PHAST[] = [baseline, ...modifications.map(modification => this.assessmentService.scenarioPhastSignal(modification.id))];
-    const categories = this.resultsService.getResultCategories(settings);
+    const scenarios: SummaryScenario[] = ['baseline', ...modifications.map(modification => modification.id)].map(scenario => ({
+      phast: this.assessmentService.scenarioPhastSignal(scenario),
+      settings: this.assessmentService.scenarioSettings(scenario),
+      categories: this.resultsService.scenarioResultCategories(scenario),
+    }));
+    const categories = combineResultCategories(scenarios.map(scenario => scenario.categories));
     const lookups = this.lookups();
 
     const summaryCategories = SECTION_DEFINITIONS
@@ -67,17 +78,20 @@ export class InputSummaryResultsService {
     };
   });
 
-  private buildSections(definition: SectionDefinition, scenarios: PHAST[], settings: Settings, lookups: InputSummaryLookups): InputSummarySection[] {
+  /** A section a scenario's energy source doesn't use shows nothing in that scenario's column. */
+  private buildSections(definition: SectionDefinition, scenarios: SummaryScenario[], settings: Settings, lookups: InputSummaryLookups): InputSummarySection[] {
+    const usesSection = (scenario: SummaryScenario) => !definition.isVisible || definition.isVisible(scenario.categories);
     if (definition.kind === 'scenario') {
-      return [{ label: definition.label, rows: this.buildRows(definition.fields, scenarios, settings, lookups, scenario => scenario) }];
+      const rows = this.buildRows(definition.fields, scenarios, scenarios, settings, lookups, scenario => usesSection(scenario) ? scenario.phast : undefined);
+      return [{ label: definition.label, rows }];
     }
-    const itemsByScenario = scenarios.map(scenario => definition.items(scenario.losses, scenario) ?? []);
+    const itemsByScenario = scenarios.map(scenario => usesSection(scenario) ? definition.items(scenario.phast.losses, scenario.phast) ?? [] : []);
     return this.getEntryKeys(itemsByScenario).map((key, index) => {
       const selectEntry = (items: Array<{ id?: string; name?: string }>) => items.find((item, itemIndex) => this.entryKey(item, itemIndex) === key);
       const name = itemsByScenario.map(items => selectEntry(items)?.name).find(Boolean);
       return {
         label: `${definition.label} ${index + 1}${name ? `: ${name}` : ''}`,
-        rows: this.buildRows(definition.fields, itemsByScenario, settings, lookups, selectEntry),
+        rows: this.buildRows(definition.fields, itemsByScenario, scenarios, settings, lookups, selectEntry),
       };
     });
   }
@@ -94,18 +108,23 @@ export class InputSummaryResultsService {
     return [...keys];
   }
 
+  /**
+   * @param sources one per scenario column, in the same order as `scenarios`
+   * @param settings assessment settings, for units
+   */
   private buildRows<TSource, TItem>(
     fields: FieldDefinition<TItem>[],
     sources: TSource[],
+    scenarios: SummaryScenario[],
     settings: Settings,
     lookups: InputSummaryLookups,
     selectItem: (source: TSource) => TItem | undefined
   ): ReportTableRow[] {
     return fields
       .map(field => {
-        const cells: ReportColumnCell[] = sources.map(source => {
+        const cells: ReportColumnCell[] = sources.map((source, index) => {
           const item = selectItem(source);
-          return this.toCell(item === undefined ? undefined : field.value(item, settings, lookups));
+          return this.toCell(item === undefined ? undefined : field.value(item, scenarios[index].settings, lookups));
         });
         const [baseline, ...modifications] = cells;
         return { label: field.label, units: resolveUnit(field.unit, settings), className: 'default' as const, baseline, modifications };

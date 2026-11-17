@@ -14,8 +14,8 @@ describe('ReportSankeyResultsService', () => {
   beforeEach(() => {
     savings = signal({ baseline: { costSavings: 0, energySavings: 0 }, mod1: { costSavings: 10000, energySavings: 2000 } });
     scenarios = [
-      { id: 'baseline', name: 'Baseline', phast: { name: 'baseline' } as SharedPHAST },
-      { id: 'mod1', name: 'Scenario 1', phast: { name: 'mod1' } as SharedPHAST },
+      { id: 'baseline', name: 'Baseline', phast: { name: 'baseline' } as SharedPHAST, settings: { energyResultUnit: 'MMBtu' } as Settings },
+      { id: 'mod1', name: 'Scenario 1', phast: { name: 'mod1' } as SharedPHAST, settings: { energyResultUnit: 'MMBtu' } as Settings },
     ];
     TestBed.configureTestingModule({
       providers: [

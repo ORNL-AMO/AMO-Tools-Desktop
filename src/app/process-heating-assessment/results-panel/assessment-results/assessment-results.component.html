@@ -1,6 +1,5 @@
 @let base = baselineResults();
 @let mod = modificationResults();
-@let cats = showResultsCats();
 <div class="output-summary">
   <table #copyTable class="table table-hover table-striped panel-table">
     <thead>
@@ -32,217 +31,21 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Charge Materials</td>
-        <td>@if (base?.totalChargeMaterialLoss) { {{base.totalChargeMaterialLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        @if (modification()) {
-          <td>@if (mod?.totalChargeMaterialLoss) { {{mod.totalChargeMaterialLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        }
-      </tr>
-      <tr>
-        <td>Fixtures, trays etc.</td>
-        <td>@if (base?.totalFixtureLoss) { {{base.totalFixtureLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        @if (modification()) {
-          <td>@if (mod?.totalFixtureLoss) { {{mod.totalFixtureLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        }
-      </tr>
-      <tr>
-        <td>Wall Losses</td>
-        <td>@if (base?.totalWallLoss) { {{base.totalWallLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        @if (modification()) {
-          <td>@if (mod?.totalWallLoss) { {{mod.totalWallLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        }
-      </tr>
-      <tr>
-        <td>Cooling Losses</td>
-        <td>@if (base?.totalCoolingLoss) { {{base.totalCoolingLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        @if (modification()) {
-          <td>@if (mod?.totalCoolingLoss) { {{mod.totalCoolingLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        }
-      </tr>
-      <tr>
-        <td>Atmosphere Losses</td>
-        <td>@if (base?.totalAtmosphereLoss) { {{base.totalAtmosphereLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        @if (modification()) {
-          <td>@if (mod?.totalAtmosphereLoss) { {{mod.totalAtmosphereLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        }
-      </tr>
-      <tr>
-        <td>Opening Losses</td>
-        <td>@if (base?.totalOpeningLoss) { {{base.totalOpeningLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        @if (modification()) {
-          <td>@if (mod?.totalOpeningLoss) { {{mod.totalOpeningLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        }
-      </tr>
-      <tr>
-        <td>Leakage Losses</td>
-        <td>@if (base?.totalLeakageLoss) { {{base.totalLeakageLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        @if (modification()) {
-          <td>@if (mod?.totalLeakageLoss) { {{mod.totalLeakageLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        }
-      </tr>
-      <tr>
-        <td>Extended Surface Losses</td>
-        <td>@if (base?.totalExtSurfaceLoss) { {{base.totalExtSurfaceLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        @if (modification()) {
-          <td>@if (mod?.totalExtSurfaceLoss) { {{mod.totalExtSurfaceLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        }
-      </tr>
-      @if (cats.showSlag) {
-        <tr>
-          <td>Slag Losses</td>
-          <td>@if (base?.totalSlag) { {{base.totalSlag | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
+      @for (row of rows(); track $index) {
+        <tr [class.tr-underline]="row.definition.separator === 'below'" [class.tr-border]="row.definition.separator === 'above'"
+          [class.gross-heat-input]="row.definition.isTotal">
+          <td>
+            {{ row.definition.label }}
+            @if (row.marker; as marker) {
+              <span role="img" [class]="'energy-source-marker fa ' + marker.icon" [attr.title]="marker.label" [attr.aria-label]="marker.label"></span>
+            }
+          </td>
+          <td>@if (row.baseline) { {{ row.baseline | number: row.format }}{{ row.suffix }} } @else {&mdash; &mdash;}</td>
           @if (modification()) {
-            <td>@if (mod?.totalSlag) { {{mod.totalSlag | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
+            <td>@if (row.modification) { {{ row.modification | number: row.format }}{{ row.suffix }} } @else {&mdash; &mdash;}</td>
           }
         </tr>
       }
-      <tr class="tr-underline">
-        <td>Other Losses</td>
-        <td>@if (base?.totalOtherLoss) { {{base.totalOtherLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        @if (modification()) {
-          <td>@if (mod?.totalOtherLoss) { {{mod.totalOtherLoss | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        }
-      </tr>
-      <tr>
-        <td>Total Available Heat Required</td>
-        <td>@if (base?.totalInput) { {{base.totalInput | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        @if (modification()) {
-          <td>@if (mod?.totalInput) { {{mod.totalInput | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        }
-      </tr>
-      @if (cats.showFlueGas) {
-        <tr>
-          <td>Available Heat (%)</td>
-          <td>@if (base?.flueGasAvailableHeat) { {{base.flueGasAvailableHeat | number: '2.1-1'}}% } @else {&mdash; &mdash;}</td>
-          @if (modification()) {
-            <td>@if (mod?.flueGasAvailableHeat) { {{mod.flueGasAvailableHeat | number: '2.1-1'}}% } @else {&mdash; &mdash;}</td>
-          }
-        </tr>
-        <tr>
-          <td>Flue Gas Losses</td>
-          <td>@if (base?.flueGasSystemLosses) { {{base.flueGasSystemLosses | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          @if (modification()) {
-            <td>@if (mod?.flueGasSystemLosses) { {{mod.flueGasSystemLosses | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          }
-        </tr>
-      }
-      <tr>
-        <td>Exothermic Heat from Process</td>
-        <td>@if (base?.exothermicHeat) { {{base.exothermicHeat | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        @if (modification()) {
-          <td>@if (mod?.exothermicHeat) { {{mod.exothermicHeat | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        }
-      </tr>
-      @if (cats.showEnInput2) {
-        <tr class="tr-border">
-          <td>Fuel Input Available Heat</td>
-          <td>@if (base?.availableHeatPercent) { {{base.availableHeatPercent | number: '1.0-0'}}% } @else {&mdash; &mdash;}</td>
-          @if (modification()) {
-            <td>@if (mod?.availableHeatPercent) { {{mod.availableHeatPercent | number: '1.0-0'}}% } @else {&mdash; &mdash;}</td>
-          }
-        </tr>
-        <tr>
-          <td>Exhaust Gas Losses</td>
-          <td>@if (base?.totalExhaustGas) { {{base.totalExhaustGas | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          @if (modification()) {
-            <td>@if (mod?.totalExhaustGas) { {{mod.totalExhaustGas | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          }
-        </tr>
-      }
-      @if (cats.showExGas) {
-        <tr>
-          <td>Exhaust Gas Losses</td>
-          <td>@if (base?.totalExhaustGasEAF) { {{base.totalExhaustGasEAF | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          @if (modification()) {
-            <td>@if (mod?.totalExhaustGasEAF) { {{mod.totalExhaustGasEAF | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          }
-        </tr>
-      }
-      @if (cats.showSystemEff) {
-        <tr>
-          <td>System Efficiency</td>
-          <td>@if (base?.heatingSystemEfficiency) { {{base.heatingSystemEfficiency | number: '1.0-0'}}% } @else {&mdash; &mdash;}</td>
-          @if (modification()) {
-            <td>@if (mod?.heatingSystemEfficiency) { {{mod.heatingSystemEfficiency | number: '1.0-0'}}% } @else {&mdash; &mdash;}</td>
-          }
-        </tr>
-        <tr>
-          <td>Total System Losses</td>
-          <td>@if (base?.totalSystemLosses) { {{base.totalSystemLosses | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          @if (modification()) {
-            <td>@if (mod?.totalSystemLosses) { {{mod.totalSystemLosses | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          }
-        </tr>
-      }
-      @if (cats.showHeatDelivered) {
-        <tr>
-          <td>Fuel Heat Delivered</td>
-          <td>@if (base?.energyInputHeatDelivered) { {{base.energyInputHeatDelivered | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          @if (modification()) {
-            <td>@if (mod?.energyInputHeatDelivered) { {{mod.energyInputHeatDelivered | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          }
-        </tr>
-      }
-      @if (cats.showEnInput2) {
-        <tr>
-          <td>Total Additional Fuel Heat</td>
-          <td>@if (base?.totalAdditionalFuelHeat) { {{base.totalAdditionalFuelHeat | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          @if (modification()) {
-            <td>@if (mod?.totalAdditionalFuelHeat) { {{mod.totalAdditionalFuelHeat | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          }
-        </tr>
-      }
-      @if (cats.showElectricalDelivered && isEaf()) {
-        <tr>
-          <td>Electrical Heat Delivered</td>
-          <td>@if (base?.energyInputHeatDelivered) { {{base.energyInputHeatDelivered | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          @if (modification()) {
-            <td>@if (mod?.energyInputHeatDelivered) { {{mod.energyInputHeatDelivered | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          }
-        </tr>
-      }
-      @if (cats.showChemicalEnergyDelivered) {
-        <tr>
-          <td>Chemical Energy Delivered</td>
-          <td>@if (base?.energyInputTotalChemEnergy) { {{base.energyInputTotalChemEnergy | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          @if (modification()) {
-            <td>@if (mod?.energyInputTotalChemEnergy) { {{mod.energyInputTotalChemEnergy | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          }
-        </tr>
-      }
-      @if (cats.showElectricalDelivered && !isEaf()) {
-        <tr class="tr-border">
-          <td>Electrical Heat Delivered</td>
-          <td>@if (base?.electricalHeatDelivered) { {{base.electricalHeatDelivered | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          @if (modification()) {
-            <td>@if (mod?.electricalHeatDelivered) { {{mod.electricalHeatDelivered | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          }
-        </tr>
-      }
-      @if (cats.showEnInput2) {
-        <tr>
-          <td>Electrical Heater Losses</td>
-          <td>@if (base?.electricalHeaterLosses) { {{base.electricalHeaterLosses | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          @if (modification()) {
-            <td>@if (mod?.electricalHeaterLosses) { {{mod.electricalHeaterLosses | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          }
-        </tr>
-        <tr>
-          <td>Total Provided Electrical Heat</td>
-          <td>@if (base?.totalProvidedElectricalHeat) { {{base.totalProvidedElectricalHeat | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          @if (modification()) {
-            <td>@if (mod?.totalProvidedElectricalHeat) { {{mod.totalProvidedElectricalHeat | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-          }
-        </tr>
-      }
-      <tr class="tr-border gross-heat-input">
-        <td>Gross Heat Input</td>
-        <td>@if (base?.grossHeatInput) { {{base.grossHeatInput | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        @if (modification()) {
-          <td>@if (mod?.grossHeatInput) { {{mod.grossHeatInput | number: decimalCount()}} } @else {&mdash; &mdash;}</td>
-        }
-      </tr>
       @if (showOperationalImpacts()) {
         <tr>
           <td>
@@ -275,7 +78,21 @@
       }
     </tbody>
   </table>
+  @if (legendMarkers().length) {
+    <div class="energy-source-legend">
+      <div class="energy-source-legend-title">Results specific to Energy Source Type</div>
+      <ul>
+        @for (marker of legendMarkers(); track marker.label) {
+          <li>
+            <span aria-hidden="true" [class]="'energy-source-legend-icon fa ' + marker.icon"></span>
+            {{ marker.energySource }} - {{ marker.scenarioName }}
+          </li>
+        }
+      </ul>
+    </div>
+  }
 </div>
 
 <app-exportable-results-table [tableString]="copyTableString"
   (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+

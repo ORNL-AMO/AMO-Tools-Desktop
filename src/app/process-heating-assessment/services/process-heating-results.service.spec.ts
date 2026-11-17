@@ -8,15 +8,18 @@ import { Settings } from '../../shared/models/settings';
 import { Losses, PHAST, PhastResults } from '../models/phast';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingResultsService } from './process-heating-results.service';
+import { combineResultCategories, ResultCategories } from '../models/result-rows';
 
 describe('ProcessHeatingResultsService', () => {
   let service: ProcessHeatingResultsService;
   let settings: WritableSignal<Partial<Settings>>;
+  let mod1EnergySource: WritableSignal<Partial<Settings> | undefined>;
   let scenarios: Record<string, WritableSignal<PHAST | undefined>>;
   let legacyGetResults: jasmine.Spy;
 
   beforeEach(() => {
     settings = signal<Partial<Settings>>({ unitsOfMeasure: 'Imperial' });
+    mod1EnergySource = signal<Partial<Settings> | undefined>(undefined);
     scenarios = {
       baseline: signal<PHAST>({ name: 'baseline', losses: {} as Losses }),
       mod1: signal<PHAST>({ name: 'mod1', losses: {} as Losses }),
@@ -28,11 +31,17 @@ describe('ProcessHeatingResultsService', () => {
         ProcessHeatingResultsService,
         {
           provide: ProcessHeatingAssessmentService,
-          useValue: { settingsSignal: settings, scenarioPhastSignal: (scenario: string) => scenarios[scenario]() },
+          useValue: {
+            settingsSignal: settings,
+            scenarioPhastSignal: (scenario: string) => scenarios[scenario](),
+            scenarioSettings: (scenario: string) => (scenario === 'mod1' ? { ...settings(), ...mod1EnergySource() } : settings()),
+          },
         },
         {
           provide: PhastResultsService,
-          useValue: { getResults: legacyGetResults, getResultCategories: () => ({ showAuxPower: true, showSlag: true } as ShowResultsCategories) },
+          useValue: { getResults: legacyGetResults, getResultCategories: (scenarioSettings: Settings) => ({
+            showAuxPower: true, showSlag: true, showElectricalDelivered: scenarioSettings.energySourceType === 'Electricity',
+          } as ShowResultsCategories) },
         },
         { provide: MeteredEnergyService, useValue: {} },
         { provide: DesignedEnergyService, useValue: {} },
@@ -70,6 +79,16 @@ describe('ProcessHeatingResultsService', () => {
       expect(legacyGetResults.calls.mostRecent().args[1]).toEqual({ unitsOfMeasure: 'Metric' });
     });
 
+    it("calculates each scenario with its own energy source", () => {
+      mod1EnergySource.set({ energySourceType: 'Electricity' });
+
+      service.scenarioResults('baseline');
+      expect(legacyGetResults.calls.mostRecent().args[1]).toEqual({ unitsOfMeasure: 'Imperial' });
+
+      service.scenarioResults('mod1');
+      expect(legacyGetResults.calls.mostRecent().args[1]).toEqual({ unitsOfMeasure: 'Imperial', energySourceType: 'Electricity' });
+    });
+
     it('is undefined when the scenario has no losses', () => {
       scenarios.mod1.set({ name: 'mod1' } as PHAST);
       expect(service.scenarioResults('mod1')).toBeUndefined();
@@ -90,6 +109,56 @@ describe('ProcessHeatingResultsService', () => {
 
     it('never shows the auxiliary power result category', () => {
       expect(service.getResultCategories(settings() as Settings)).toEqual(jasmine.objectContaining({ showAuxPower: false, showSlag: true }));
+    });
+  });
+
+  describe('hidden losses', () => {
+    const losses = { leakageLosses: [{ name: 'Leak' }], slagLosses: [{ name: 'Slag' }], wallLosses: [] } as Losses;
+
+    it('leaves out losses of tabs the energy source hides', () => {
+      service.getResults({ name: 'mod1', losses }, { energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' } as Settings);
+
+      const legacyLosses = legacyGetResults.calls.mostRecent().args[0].losses;
+      expect(legacyLosses.leakageLosses).toBeUndefined();
+      expect(legacyLosses.slagLosses).toBeUndefined();
+      expect(legacyLosses.wallLosses).toEqual([]);
+      expect(losses.leakageLosses.length).toBe(1);
+    });
+
+    it('keeps losses the energy source uses', () => {
+      service.getResults({ name: 'baseline', losses }, { energySourceType: 'Fuel' } as Settings);
+
+      const legacyLosses = legacyGetResults.calls.mostRecent().args[0].losses;
+      expect(legacyLosses.leakageLosses).toEqual(losses.leakageLosses);
+      expect(legacyLosses.slagLosses).toBeUndefined();
+    });
+  });
+
+  describe('result categories', () => {
+    it('splits Electrical Heat Delivered between EAF and other electric furnaces', () => {
+      const eaf = service.getResultCategories({ energySourceType: 'Electricity', furnaceType: 'Electric Arc Furnace (EAF)' } as Settings);
+      const induction = service.getResultCategories({ energySourceType: 'Electricity', furnaceType: 'Induction Heating and Melting' } as Settings);
+      const fuel = service.getResultCategories({ energySourceType: 'Fuel' } as Settings);
+
+      expect([eaf.showEafElectricalDelivered, eaf.showStandardElectricalDelivered]).toEqual([true, false]);
+      expect([induction.showEafElectricalDelivered, induction.showStandardElectricalDelivered]).toEqual([false, true]);
+      expect([fuel.showEafElectricalDelivered, fuel.showStandardElectricalDelivered]).toEqual([false, false]);
+    });
+
+    it("reads each scenario's own energy source", () => {
+      mod1EnergySource.set({ energySourceType: 'Electricity' });
+
+      expect(service.scenarioResultCategories('baseline').showElectricalDelivered).toBeFalse();
+      expect(service.scenarioResultCategories('mod1').showElectricalDelivered).toBeTrue();
+    });
+
+    it('combines categories so a flag is set when any scenario sets it', () => {
+      const none = { showSlag: false, showFlueGas: false } as ResultCategories;
+      const combined = combineResultCategories([none, { ...none, showSlag: true }, { ...none, showFlueGas: true }]);
+
+      expect(combined.showSlag).toBeTrue();
+      expect(combined.showFlueGas).toBeTrue();
+      expect(combineResultCategories([none]).showSlag).toBeFalse();
     });
   });
 

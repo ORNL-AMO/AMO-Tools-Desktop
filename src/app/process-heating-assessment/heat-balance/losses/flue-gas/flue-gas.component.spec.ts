@@ -46,7 +46,13 @@ describe('FlueGasComponent', () => {
       declarations: [FlueGasComponent, FlueGasVolumeFormStubComponent, FlueGasMassFormStubComponent],
       providers: [
         { provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } },
-        { provide: ProcessHeatingAssessmentService, useValue: { settingsSignal: signal(MOCK_SETTINGS), scenarioPhastSignal: () => phast() } },
+        {
+          provide: ProcessHeatingAssessmentService,
+          useValue: {
+            scenarioSettings: (scenario: string) => (scenario === 'baseline' ? MOCK_SETTINGS : { ...MOCK_SETTINGS, energySourceType: 'Fuel' }),
+            scenarioPhastSignal: () => phast(),
+          },
+        },
         { provide: ProcessHeatingResultsService, useValue: resultsServiceSpy },
       ],
       schemas: [NO_ERRORS_SCHEMA],
@@ -166,6 +172,16 @@ describe('FlueGasComponent', () => {
       const text = fixture.nativeElement.querySelector('.loss-results').textContent;
       expect(text).toContain('Gross Heat 100.000 Btu/hr');
       expect(text).toContain('Flue Gas Losses 25.0000 Btu/hr');
+    });
+
+    it("calculates gross heat with the scenario's own settings", () => {
+      fixture.componentRef.setInput('scenario', 'mod-1');
+      phast.set({});
+      resultsServiceSpy.getResults.and.returnValue({ totalInput: 75, exothermicHeat: 0 } as never);
+      result.set(RESULT);
+      fixture.detectChanges();
+
+      expect(resultsServiceSpy.getResults).toHaveBeenCalledWith({}, { ...MOCK_SETTINGS, energySourceType: 'Fuel' });
     });
   });
 
