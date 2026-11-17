@@ -13,6 +13,8 @@ import { InvalidModification, ProcessHeatingValidityService } from '../../servic
 /** Marks a result row only one column's energy source uses. */
 interface EnergySourceMarker {
   icon: string;
+  energySource: string;
+  scenarioName: string;
   label: string;
 }
 
@@ -129,21 +131,27 @@ export class AssessmentResultsComponent {
     });
   });
 
+  /** Each marker the table shows, once, in row order. */
+  readonly legendMarkers: Signal<EnergySourceMarker[]> = computed(() =>
+    [...new Set(this.rows().map(row => row.marker).filter(marker => !!marker))]
+  );
+
   readonly lossUnit: Signal<string> = computed(() => `${this.settings().energyResultUnit}/hr`);
 
   readonly decimalCount: Signal<string> = computed(() =>
-    ['MMBtu', 'GJ', 'kWh'].includes(this.settings().energyResultUnit?.trim()) ? '1.2-2' : '1.0-0'
+    ['MMBtu', 'GJ', 'kWh'].includes(this.settings().energyResultUnit?.trim() ?? '') ? '1.2-2' : '1.0-0'
   );
 
   private energySourceMarker(scenario: AssessmentScenario, scenarioName: string): EnergySourceMarker {
     const settings = this.assessmentService.scenarioSettings(scenario);
-    return { icon: getEnergySourceIcon(settings), label: `Only used by ${scenarioName} (${getEnergySourceLabel(settings)})` };
+    const energySource = getEnergySourceLabel(settings);
+    return { icon: getEnergySourceIcon(settings), energySource, scenarioName, label: `Only used by ${scenarioName} (${energySource})` };
   }
 
   private readonly copyTable = viewChild<ElementRef<HTMLTableElement>>('copyTable');
-  copyTableString: string;
+  copyTableString = '';
 
   updateCopyTableString(): void {
-    this.copyTableString = this.copyTable()?.nativeElement.innerText;
+    this.copyTableString = this.copyTable()?.nativeElement.innerText ?? '';
   }
 }

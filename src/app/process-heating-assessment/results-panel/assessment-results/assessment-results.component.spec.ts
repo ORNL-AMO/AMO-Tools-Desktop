@@ -29,7 +29,7 @@ function makeResults(overrides: Partial<PhastResults> = {}): PhastResults {
   return { totalWallLoss: 10, totalInput: 30, grossHeatInput: 40, ...overrides } as PhastResults;
 }
 
-function co2(hourlyTotalEmissionOutput: number): PhastResults['co2EmissionsOutput'] {
+function co2(hourlyTotalEmissionOutput: number | undefined): PhastResults['co2EmissionsOutput'] {
   return { hourlyTotalEmissionOutput } as PhastResults['co2EmissionsOutput'];
 }
 
@@ -45,8 +45,8 @@ describe('AssessmentResultsComponent', () => {
   let showOperationalImpacts: WritableSignal<boolean>;
   let resultsService: jasmine.SpyObj<ProcessHeatingResultsService>;
 
-  function text(el: Element | null): string {
-    return el?.textContent.replace(/\s+/g, ' ').trim() ?? '';
+  function text(el: Element | null | undefined): string {
+    return (el?.textContent ?? '').replace(/\s+/g, ' ').trim();
   }
 
   function headerCells(): string[] {
@@ -204,7 +204,7 @@ describe('AssessmentResultsComponent', () => {
       baselineResults.set(makeResults({ energyInputHeatDelivered: 8, electricalHeatDelivered: 9 }));
       render();
       expect(rowCells('Electrical Heat Delivered')).toEqual(['8.00']);
-      expect(row('Electrical Heat Delivered').classList).not.toContain('tr-border');
+      expect(row('Electrical Heat Delivered')?.classList).not.toContain('tr-border');
     });
 
     it('reads non-EAF electrical heat from electrical heat delivered with a top border', () => {
@@ -212,7 +212,7 @@ describe('AssessmentResultsComponent', () => {
       baselineResults.set(makeResults({ energyInputHeatDelivered: 8, electricalHeatDelivered: 9 }));
       render();
       expect(rowCells('Electrical Heat Delivered')).toEqual(['9.00']);
-      expect(row('Electrical Heat Delivered').classList).toContain('tr-border');
+      expect(row('Electrical Heat Delivered')?.classList).toContain('tr-border');
     });
   });
 
@@ -246,12 +246,31 @@ describe('AssessmentResultsComponent', () => {
       modificationEnergySource.set({ energySourceType: 'Steam' });
       render('mod-1');
 
-      const flueGasMarker = row('Flue Gas Losses').querySelector('.energy-source-marker');
-      const efficiencyMarker = row('System Efficiency').querySelector('.energy-source-marker');
-      expect(flueGasMarker.classList).toContain('fa-fire');
-      expect(flueGasMarker.getAttribute('title')).toBe('Only used by Baseline (Fuel-fired)');
-      expect(efficiencyMarker.classList).toContain('fa-cloud');
-      expect(efficiencyMarker.getAttribute('title')).toBe('Only used by Better Walls (Steam-based)');
+      const flueGasMarker = row('Flue Gas Losses')?.querySelector('.energy-source-marker');
+      const efficiencyMarker = row('System Efficiency')?.querySelector('.energy-source-marker');
+      expect(flueGasMarker?.classList).toContain('fa-fire');
+      expect(flueGasMarker?.getAttribute('title')).toBe('Only used by Baseline (Fuel-fired)');
+      expect(efficiencyMarker?.classList).toContain('fa-cloud');
+      expect(efficiencyMarker?.getAttribute('title')).toBe('Only used by Better Walls (Steam-based)');
+    });
+
+    it('explains each icon the table uses in a titled legend below it, as energy source then scenario', () => {
+      modificationEnergySource.set({ energySourceType: 'Steam' });
+      render('mod-1');
+
+      const items = [...fixture.nativeElement.querySelectorAll('.energy-source-legend li')] as HTMLElement[];
+      expect(text(fixture.nativeElement.querySelector('.energy-source-legend-title'))).toBe('Results specific to Energy Source Type');
+      expect(items.map(item => text(item))).toEqual(['Fuel-fired - Baseline', 'Steam-based - Better Walls']);
+      expect(items[0].querySelector('.energy-source-legend-icon')?.classList).toContain('fa-fire');
+      expect(items[1].querySelector('.energy-source-legend-icon')?.classList).toContain('fa-cloud');
+    });
+
+    it('keeps a marked row the same height as an unmarked one', () => {
+      modificationEnergySource.set({ energySourceType: 'Steam' });
+      render('mod-1');
+
+      expect(row('Flue Gas Losses')?.querySelector('.energy-source-marker')).not.toBeNull();
+      expect(row('Flue Gas Losses')?.getBoundingClientRect().height).toBe(row('Wall Losses')?.getBoundingClientRect().height);
     });
 
     it('leaves the markers out of the copied table text', () => {
@@ -263,11 +282,12 @@ describe('AssessmentResultsComponent', () => {
   });
 
   describe('energy source markers', () => {
-    it('marks no row while both columns use the same rows', () => {
+    it('marks no row and shows no legend while both columns use the same rows', () => {
       categories.set({ ...NO_CATEGORIES, showFlueGas: true });
       render('mod-1');
 
       expect(fixture.nativeElement.querySelector('.energy-source-marker')).toBeNull();
+      expect(fixture.nativeElement.querySelector('.energy-source-legend')).toBeNull();
     });
 
     it('marks no row on Baseline steps', () => {
@@ -282,8 +302,8 @@ describe('AssessmentResultsComponent', () => {
   describe('separators', () => {
     it('underlines Other Losses and borders Gross Heat Input', () => {
       render();
-      expect(row('Other Losses').classList).toContain('tr-underline');
-      expect(row('Gross Heat Input').classList).toContain('tr-border');
+      expect(row('Other Losses')?.classList).toContain('tr-underline');
+      expect(row('Gross Heat Input')?.classList).toContain('tr-border');
     });
   });
 
@@ -297,7 +317,7 @@ describe('AssessmentResultsComponent', () => {
       showOperationalImpacts.set(true);
       baselineResults.set(makeResults({ co2EmissionsOutput: co2(12.345) }));
       render();
-      expect(text(row('CO2 Emissions').cells[0])).toBe('CO2 Emissions (ton CO2)');
+      expect(text(row('CO2 Emissions')?.cells[0])).toBe('CO2 Emissions (ton CO2)');
       expect(rowCells('CO2 Emissions')).toEqual(['12.35']);
     });
 
@@ -305,7 +325,7 @@ describe('AssessmentResultsComponent', () => {
       showOperationalImpacts.set(true);
       settings.set({ energyResultUnit: 'GJ', emissionsUnit: 'Metric' });
       render();
-      expect(text(row('CO2 Emissions').cells[0])).toBe('CO2 Emissions (tonne CO2)');
+      expect(text(row('CO2 Emissions')?.cells[0])).toBe('CO2 Emissions (tonne CO2)');
     });
 
     it('omits the savings row on Baseline steps', () => {
@@ -323,7 +343,7 @@ describe('AssessmentResultsComponent', () => {
       render('mod-1');
       expect(resultsService.getCo2EmissionsSavings).toHaveBeenCalledWith(baseline, modification, 'hourlyTotalEmissionOutput');
       expect(rowCells('CO2 Emissions Savings')).toEqual(['— —', '2.5']);
-      expect(row('CO2 Emissions Savings').classList).toContain('tr-underline');
+      expect(row('CO2 Emissions Savings')?.classList).toContain('tr-underline');
     });
 
     it('shows placeholders when the modification emissions object has no hourly value', () => {

@@ -78,6 +78,19 @@
       }
     </tbody>
   </table>
+  @if (legendMarkers().length) {
+    <div class="energy-source-legend">
+      <div class="energy-source-legend-title">Results specific to Energy Source Type</div>
+      <ul>
+        @for (marker of legendMarkers(); track marker.label) {
+          <li>
+            <span aria-hidden="true" [class]="'energy-source-legend-icon fa ' + marker.icon"></span>
+            {{ marker.energySource }} - {{ marker.scenarioName }}
+          </li>
+        }
+      </ul>
+    </div>
+  }
 </div>
 
 <app-exportable-results-table [tableString]="copyTableString"
