@@ -234,13 +234,14 @@ export class TreasureHuntPptTableService {
         let utilityUnit: string;
         if (opportunity.mixedIndividualResults) {
             opportunity.mixedIndividualResults.forEach((opp, index) => {
+                // shared costs, additional savings, and the combined payback (from the parent summary) go on the first utility row only
                 let includeSharedFinancials: boolean = index === 0;
                 let additionalSavings: number = 0;
                 if (includeSharedFinancials && opp.opportunityCost.additionalAnnualSavings) {
                     additionalSavings = opp.opportunityCost.additionalAnnualSavings.cost;
                 }
                 utilityUnit = this.getUtilityUnit(opp.utilityType, settings);
-                rows.push([opp.opportunityName, opp.utilityType, this.roundValToFormatString(opp.totalEnergySavings), utilityUnit, this.roundValToCurrency(opp.costSavings + additionalSavings), this.roundValToCurrency(includeSharedFinancials ? opp.opportunityCost.material : 0), this.roundValToCurrency(includeSharedFinancials ? opp.opportunityCost.labor : 0), includeSharedFinancials ? this.getOtherCost(opp.opportunityCost) : '', this.roundValToCurrency(includeSharedFinancials ? opp.totalCost : 0), this.roundValToFormatString(includeSharedFinancials ? opp.payback : 0)]);
+                rows.push([opp.opportunityName, opp.utilityType, this.roundValToFormatString(opp.totalEnergySavings), utilityUnit, this.roundValToCurrency(opp.costSavings + additionalSavings), this.roundValToCurrency(includeSharedFinancials ? opp.opportunityCost.material : 0), this.roundValToCurrency(includeSharedFinancials ? opp.opportunityCost.labor : 0), includeSharedFinancials ? this.getOtherCost(opp.opportunityCost) : '', this.roundValToCurrency(includeSharedFinancials ? opp.totalCost : 0), includeSharedFinancials ? this.roundValToFormatString(opportunity.payback) : '']);
             });
         } else {
             let additionalSavings: number = 0;

@@ -176,10 +176,11 @@ export class WaterReductionTreasureHuntService {
   convertWaterReduction(reduction: WaterReductionData, oldSettings: Settings, newSettings: Settings): WaterReductionData {
     //imperial: $/gal, metric: $/L
     reduction.waterCost = this.convertUnitsService.convertDollarsPerGalAndLiter(reduction.waterCost, oldSettings, newSettings);
-    //imperial: gpm, metric: L/min
-    reduction.meteredFlowMethodData.meterReading = this.convertUnitsService.convertGallonPerMinuteAndLiterPerSecondValue(reduction.meteredFlowMethodData.meterReading, oldSettings, newSettings);
-    reduction.volumeMeterMethodData.finalMeterReading = this.convertUnitsService.convertGallonPerMinuteAndLiterPerSecondValue(reduction.volumeMeterMethodData.finalMeterReading, oldSettings, newSettings);
-    reduction.volumeMeterMethodData.initialMeterReading = this.convertUnitsService.convertGallonPerMinuteAndLiterPerSecondValue(reduction.volumeMeterMethodData.initialMeterReading, oldSettings, newSettings);
+    //imperial: gpm, metric: L/min (same factor as gal -> L)
+    reduction.meteredFlowMethodData.meterReading = this.convertUnitsService.convertGalAndLiterValue(reduction.meteredFlowMethodData.meterReading, oldSettings, newSettings);
+    //imperial: gal, metric: L
+    reduction.volumeMeterMethodData.finalMeterReading = this.convertUnitsService.convertGalAndLiterValue(reduction.volumeMeterMethodData.finalMeterReading, oldSettings, newSettings);
+    reduction.volumeMeterMethodData.initialMeterReading = this.convertUnitsService.convertGalAndLiterValue(reduction.volumeMeterMethodData.initialMeterReading, oldSettings, newSettings);
     //imperial: gal, metric: L
     reduction.bucketMethodData.bucketVolume = this.convertUnitsService.convertGalAndLiterValue(reduction.bucketMethodData.bucketVolume, oldSettings, newSettings);
     //imperial: gal/yr, metric: m3/yr

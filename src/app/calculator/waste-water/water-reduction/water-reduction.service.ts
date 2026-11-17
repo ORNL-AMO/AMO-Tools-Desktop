@@ -220,7 +220,9 @@ export class WaterReductionService {
   setWastewaterResults(results: WaterReductionResult, settings: Settings) {
     // waterUse is kgal (Imperial) or m3 (Metric); waterWasteCost is $/gal or $/L, so x1000 in both systems
     results.wastewaterDisposal = results.waterUse;
-    results.wastewaterCost = results.waterUse * 1000 * (settings.waterWasteCost || 0);
+    // same fallback as the "Wastewater" type: settings rate, else 0.005 $/gal in display units
+    let wastewaterUnitCost: number = this.getDefaultWaterCostForForm(settings, 'wastewater');
+    results.wastewaterCost = results.waterUse * 1000 * wastewaterUnitCost;
   }
 
   calculate(input: Array<WaterReductionData>, settings: Settings): WaterReductionResult {
