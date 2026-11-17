@@ -5,6 +5,7 @@ import { Settings } from '../../shared/models/settings';
 import { PhastResultsService } from '../phast-results.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Co2SavingsPhastService } from '../losses/operations/co2-savings-phast/co2-savings-phast.service';
+import { getElectricalEnergyUsed } from '../electrical-energy-used.util';
 @Injectable()
 export class ExecutiveSummaryService {
 
@@ -89,7 +90,7 @@ export class ExecutiveSummaryService {
             totalHeatInput += loss.totalHeatInput
           });
         }
-        resultsSummary.annualElectricityCost = phastResults.electricalHeatDelivered * phast.operatingHours.hoursPerYear * phast.operatingCosts.electricityCost;
+        resultsSummary.annualElectricityCost = getElectricalEnergyUsed(phastResults, settings) * phast.operatingHours.hoursPerYear * phast.operatingCosts.electricityCost;
         resultsSummary.annualTotalFuelCost = totalHeatInput * phast.operatingHours.hoursPerYear * phast.operatingCosts.fuelCost;
       }
 

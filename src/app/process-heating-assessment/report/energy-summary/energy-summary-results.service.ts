@@ -65,7 +65,9 @@ export class EnergySummaryResultsService {
   readonly energyComparison: Signal<EnergyComparisonRow[]> = computed(() => {
     const settings = this.assessmentService.settingsSignal();
     const phast = this.assessmentService.scenarioPhastSignal('baseline');
-    const { baseEnergyUnit, energyPerMassUnit } = this.units();
+    // EAF's report-data units are for its fuel inputs; the comparison values are in the energy result unit
+    const energyUsedUnit = this.getBaseEnergyUnit(settings);
+    const energyIntensityUnit = this.getEnergyPerMassUnit(settings);
     const calculated = this.resultsService.scenarioResults('baseline') ? this.resultsService.getCalculatedByPhast(phast, settings) : undefined;
     const metered = this.resultsService.getMeteredEnergyResults(phast, settings);
     const designed = this.resultsService.getDesignedEnergyResults(phast, settings);
@@ -73,8 +75,8 @@ export class EnergySummaryResultsService {
     const auxiliaryEquipmentResults = this.auxiliaryEquipmentResultsService.scenarioResults('baseline');
     const auxiliaryEquipmentPower = auxiliaryEquipmentResults.isComplete ? auxiliaryEquipmentResults.totalPower : undefined;
     return [
-      { label: 'Energy Used', unit: baseEnergyUnit, calculated: calculated?.fuelEnergyUsed, metered: metered?.metered.hourlyEnergy, designed: designed?.designed.hourlyEnergy },
-      { label: 'Energy Intensity for Charge Materials', unit: energyPerMassUnit, calculated: calculated?.energyIntensity, metered: metered?.metered.energyIntensity, designed: designed?.designed.energyIntensity },
+      { label: 'Energy Used', unit: energyUsedUnit, calculated: calculated?.fuelEnergyUsed, metered: metered?.metered.hourlyEnergy, designed: designed?.designed.hourlyEnergy },
+      { label: 'Energy Intensity for Charge Materials', unit: energyIntensityUnit, calculated: calculated?.energyIntensity, metered: metered?.metered.energyIntensity, designed: designed?.designed.energyIntensity },
       {
         label: 'Auxiliary Electricity Used',
         unit: 'kW',

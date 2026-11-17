@@ -36,6 +36,7 @@ export class ExecutiveSummaryComponent implements OnInit {
   selectedModificationIndex: number;
   notes: Array<SummaryNote>;
   timeUnit: string;
+  eafFuelUnit: string;
   energyUnit: string;
   numMods: number = 0;
 
@@ -82,6 +83,7 @@ export class ExecutiveSummaryComponent implements OnInit {
     }
 
     this.timeUnit = this.settings.energyResultUnit + '/yr';
+    this.eafFuelUnit = this.settings.unitsOfMeasure === 'Metric' ? 'GJ/yr' : 'MMBtu/yr';
     if (this.settings.energyResultUnit === 'MMBtu') {
       this.energyUnit = 'Btu/lb';
     }else if (this.settings.energyResultUnit === 'GJ') {

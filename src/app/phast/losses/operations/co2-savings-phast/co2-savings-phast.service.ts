@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { PHAST, PhastCo2EmissionsOutput, PhastCo2SavingsData, PhastResults } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
+import { getElectricalEnergyUsed } from '../../../electrical-energy-used.util';
 @Injectable()
 export class Co2SavingsPhastService {
 
@@ -248,7 +249,7 @@ export class Co2SavingsPhastService {
             fuelHeatInputTotal += exGas.totalHeatInput;
           });
         }
-        phastCopy.co2SavingsData.electricityUse = resultsCopy.electricalHeatDelivered + resultsCopy.electricalHeaterLosses;
+        phastCopy.co2SavingsData.electricityUse = getElectricalEnergyUsed(resultsCopy, settings) + resultsCopy.electricalHeaterLosses;
         let hourlyElectricityEmissionOutput: number = this.getHourlyTotalEmissionsOutput(phastCopy.co2SavingsData, settings);
         fuelHeatInputTotal = this.checkConvertEnergyResultValue(fuelHeatInputTotal, settings.energyResultUnit, settings);
         let hourlyFuelEmissionOutput = fuelHeatInputTotal * phastCopy.co2SavingsData.totalFuelEmissionOutputRate;

@@ -100,12 +100,12 @@ export function deriveScenarioOverridesFromLegacyModification(modificationPhast:
 type WithId = { id?: string };
 
 /** Loss types matched between baseline and modification by item id. */
-const ID_MATCHED_LOSS_KEYS = ['wallLosses', 'extendedSurfaces', 'atmosphereLosses', 'fixtureLosses', 'coolingLosses', 'openingLosses', 'leakageLosses', 'flueGasLosses', 'auxiliaryPowerLosses', 'energyInputExhaustGasLoss', 'slagLosses', 'energyInputEAF', 'exhaustGasEAF', 'otherLosses'] as const satisfies readonly (keyof Losses)[];
+const ID_MATCHED_LOSS_KEYS = ['chargeMaterials', 'wallLosses', 'extendedSurfaces', 'atmosphereLosses', 'fixtureLosses', 'coolingLosses', 'openingLosses', 'leakageLosses', 'flueGasLosses', 'auxiliaryPowerLosses', 'energyInputExhaustGasLoss', 'slagLosses', 'energyInputEAF', 'exhaustGasEAF', 'otherLosses'] as const satisfies readonly (keyof Losses)[];
 
-// These loss types have always shipped with an optional `id` (unlike chargeMaterials, which
-// requires one), so assessments predating the per-item Explore Opportunities comparison can
-// have entries with no id at all. Backfills one, preserving the array reference when every item
-// already has one so idempotency checks elsewhere (`scenarioOverrides === existing`) still hold.
+// These loss types have always shipped with an optional `id`, so assessments predating the
+// per-item Explore Opportunities comparison can have entries with no id at all. Backfills one,
+// preserving the array reference when every item already has one so idempotency checks elsewhere
+// (`scenarioOverrides === existing`) still hold.
 function ensureLossIds<T extends WithId>(items: T[] | undefined): T[] | undefined {
   if (!items || items.every(item => item.id)) {
     return items;
@@ -123,6 +123,22 @@ function alignOverrideLossIds<T extends WithId>(baselineItems: T[] | undefined, 
     return overrideItems;
   }
   return overrideItems.map((item, index) => (item.id ? item : { ...item, id: baselineItems?.[index]?.id ?? getNewIdString() }));
+}
+
+// Before charge material ids were backfilled on load, each scenario gave its id-less materials fresh
+// ids independently, so a material saved on both sides ended up under unrelated ids. Re-keying by
+// position is safe only for charge materials: adding or removing them is locked once a modification
+// exists, so both lists still hold the same materials in the same order. Other loss types can be
+// added or removed per modification, where unrelated ids are a real difference.
+function realignUnrelatedChargeMaterialIds<T extends WithId>(baselineItems: T[] | undefined, overrideItems: T[] | undefined): T[] | undefined {
+  if (!baselineItems?.length || !overrideItems || overrideItems.length !== baselineItems.length) {
+    return overrideItems;
+  }
+  const baselineIds = new Set(baselineItems.map(item => item.id));
+  if (overrideItems.some(item => baselineIds.has(item.id))) {
+    return overrideItems;
+  }
+  return overrideItems.map((item, index) => ({ ...item, id: baselineItems[index].id }));
 }
 
 // Backfills missing ids on baseline's id-matched loss types, then aligns any modification override
@@ -148,7 +164,10 @@ export function ensureLossIdsForPhast(phast: PHAST): PHAST {
     const alignedLosses: Losses = { ...overrideLosses };
     let overrideChanged = false;
     for (const key of ID_MATCHED_LOSS_KEYS) {
-      const aligned = alignOverrideLossIds<WithId>(baselineLosses[key], overrideLosses?.[key]);
+      let aligned = alignOverrideLossIds<WithId>(baselineLosses[key], overrideLosses?.[key]);
+      if (key === 'chargeMaterials') {
+        aligned = realignUnrelatedChargeMaterialIds<WithId>(baselineLosses[key], aligned);
+      }
       if (aligned !== overrideLosses?.[key]) {
         alignedLosses[key] = aligned as never;
         overrideChanged = true;

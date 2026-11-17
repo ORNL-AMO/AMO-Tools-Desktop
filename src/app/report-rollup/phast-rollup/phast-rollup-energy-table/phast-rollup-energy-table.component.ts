@@ -10,6 +10,7 @@ import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../shared/mod
 import { PhastReportRollupService } from '../../phast-report-rollup.service';
 import { FlueGasMaterialDbService } from '../../../indexedDb/flue-gas-material-db.service';
 import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-material-db.service';
+import { getElectricalEnergyUsed } from '../../../phast/electrical-energy-used.util';
 
 @Component({
   selector: 'app-phast-rollup-energy-table',
@@ -67,7 +68,7 @@ export class PhastRollupEnergyTableComponent implements OnInit {
       if (result.settings.furnaceType === 'Electric Arc Furnace (EAF)') {
         electricityTotalEnergy += this.convertUnitsService.value(result.baselineResultData.hourlyEAFResults.electricEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
       } else {
-        electricityTotalEnergy += this.convertUnitsService.value(result.baselineResultData.electricalHeatDelivered).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
+        electricityTotalEnergy += this.convertUnitsService.value(getElectricalEnergyUsed(result.baselineResultData, result.settings)).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
       }
       electricityCost += result.assessment.phast.operatingCosts.electricityCost;
     })

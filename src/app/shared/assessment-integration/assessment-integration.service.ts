@@ -52,7 +52,7 @@ export class AssessmentIntegrationService {
       integratedAssessment.assessment = assessment;
       let assessmentSettings: Settings = this.settingsDbService.getByAssessmentId(assessment);
       if (assessmentType === 'PHAST') {
-        this.phastIntegrationService.setIntegratedAssessmentData(integratedAssessment, assessmentSettings, treasureHuntSettings);
+        await this.phastIntegrationService.setIntegratedAssessmentData(integratedAssessment, assessmentSettings, treasureHuntSettings);
       } else if (assessmentType === 'PSAT') {
         this.psatService.setIntegratedAssessmentData(integratedAssessment, assessmentSettings);
       } else if (assessmentType === 'FSAT') {

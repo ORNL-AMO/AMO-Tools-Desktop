@@ -91,6 +91,19 @@ describe('EnergySummaryResultsService', () => {
     expect(ui().sources[2].energyUsed).toBe(2);
   });
 
+  it('labels EAF fuel rows with the hourly fuel unit and the energy comparison rows with the energy result unit', () => {
+    settings.update(current => ({ ...current, energySourceType: 'Electricity', furnaceType: 'Electric Arc Furnace (EAF)', energyResultUnit: 'kWh' }));
+    results = { grossHeatInput: 10, hourlyEAFResults: { coalCarbonUsed: 1, electrodeEnergyUsed: 2, otherFuelUsed: 3 } } as Partial<PhastResults>;
+    resultsService.getEnergyUseReportData.and.returnValue({
+      fuelName: 'Natural Gas', fuelEnergyUsed: 10, fuelHeatingValue: 1000, energyPerMassUnit: 'Btu/lb', baseEnergyUnit: 'MMBtu/hr', steamEnergyUsed: undefined,
+    });
+
+    const fuelUnits = ui().sources.filter(source => ['Natural Gas', 'Coal Carbon', 'Electrode', 'Other Fuels'].includes(source.name)).map(source => source.energyUsedUnit);
+    expect(fuelUnits).toEqual(['MMBtu/hr', 'MMBtu/hr', 'MMBtu/hr', 'MMBtu/hr']);
+    expect(ui().comparison[0].unit).toBe('kWh');
+    expect(ui().comparison[1].unit).toBe('kWh/lb');
+  });
+
   it('compares calculated, metered, and designed energy, with auxiliary electricity from the auxiliary equipment step in every column', () => {
     resultsService.getMeteredEnergyResults.and.returnValue({ metered: { hourlyEnergy: 9, energyIntensity: 8, hourlyElectricity: 1 } } as never);
     resultsService.getDesignedEnergyResults.and.returnValue({ designed: { hourlyEnergy: 11, energyIntensity: 12, hourlyElectricity: 3 } } as never);

@@ -11,6 +11,7 @@ import { ModificationService } from '../../services/modification.service';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
 import { AuxiliaryEquipmentResultsService } from '../../services/auxiliary-equipment-results.service';
+import { getElectricalEnergyUsed } from '../../../phast/electrical-energy-used.util';
 
 export interface ExecutiveSummaryUI {
   modificationNames: ModificationNameCell[];
@@ -160,7 +161,7 @@ export class ExecutiveSummaryResultsService {
     return {
       modificationNames: validModifications.map(modification => ({ id: modification.id, name: getModificationName(modification) })),
       summaryRows: this.buildSummaryRows(baseline, mods, settings, showCo2, validModifications, baselinePhast),
-      eafEnergyRows: scenarios.some(isEafScenario) ? this.buildEafEnergyRows(baseline, mods) : [],
+      eafEnergyRows: scenarios.some(isEafScenario) ? this.buildEafEnergyRows(baseline, mods, settings) : [],
       co2Rows: showCo2 && scenarios.some(isElectricScenario) ? this.buildCo2Rows(baseline, mods, settings) : [],
       costRows: scenarios.some(isElectricScenario) ? this.buildCostRows(baseline, mods, settings) : [],
       notes: this.buildNotes(validModifications),
@@ -244,8 +245,8 @@ export class ExecutiveSummaryResultsService {
         summary.annualTotalFuelCost = summary.annualNaturalGasCost + summary.annualCarbonCoalCost + summary.annualElectrodeCost + summary.annualOtherFuelCost;
       } else {
         const totalHeatInput = (phast.losses.energyInputExhaustGasLoss ?? []).reduce((sum, loss) => sum + loss.totalHeatInput, 0);
-        const electricalHeatDeliveredKwh = new ConvertValue(results.electricalHeatDelivered, settings.energyResultUnit, 'kWh').convertedValue;
-        summary.annualElectricityCost = electricalHeatDeliveredKwh * operatingHours.hoursPerYear * operatingCosts.electricityCost;
+        const electricalEnergyUsedKwh = new ConvertValue(getElectricalEnergyUsed(results, settings), settings.energyResultUnit, 'kWh').convertedValue;
+        summary.annualElectricityCost = electricalEnergyUsedKwh * operatingHours.hoursPerYear * operatingCosts.electricityCost;
         summary.annualTotalFuelCost = totalHeatInput * operatingHours.hoursPerYear * operatingCosts.fuelCost;
       }
       summary.annualCost = summary.annualTotalFuelCost + summary.annualElectricityCost;
@@ -313,15 +314,16 @@ export class ExecutiveSummaryResultsService {
     return rows;
   }
 
-  private buildEafEnergyRows(baseline: ScenarioSummary, mods: ScenarioSummary[]): ReportTableRow[] {
-    const unit = 'kWh/yr';
+  private buildEafEnergyRows(baseline: ScenarioSummary, mods: ScenarioSummary[], settings: Settings): ReportTableRow[] {
+    // EAF fuel inputs are entered in MMBtu or GJ regardless of the kWh energy result unit
+    const fuelUnit = settings.unitsOfMeasure === 'Metric' ? 'GJ/yr' : 'MMBtu/yr';
     const eaf = (field: keyof EAFResults) => valueIfApplies(isEafScenario, scenario => scenario.results.annualEAFResults?.[field]);
     return [
-      this.scenarioRow('Electrical', unit, baseline, mods, eaf('electricEnergyUsed'), 'whole'),
-      this.scenarioRow('Natural Gas', unit, baseline, mods, eaf('naturalGasUsed'), 'whole'),
-      this.scenarioRow('Coal Carbon', unit, baseline, mods, eaf('coalCarbonUsed'), 'whole'),
-      this.scenarioRow('Electrode', unit, baseline, mods, eaf('electrodeEnergyUsed'), 'whole'),
-      this.scenarioRow('Other Fuel', unit, baseline, mods, eaf('otherFuelUsed'), 'whole'),
+      this.scenarioRow('Electrical', 'kWh/yr', baseline, mods, eaf('electricEnergyUsed'), 'whole'),
+      this.scenarioRow('Natural Gas', fuelUnit, baseline, mods, eaf('naturalGasUsed'), 'whole'),
+      this.scenarioRow('Coal Carbon', fuelUnit, baseline, mods, eaf('coalCarbonUsed'), 'whole'),
+      this.scenarioRow('Electrode', fuelUnit, baseline, mods, eaf('electrodeEnergyUsed'), 'whole'),
+      this.scenarioRow('Other Fuel', fuelUnit, baseline, mods, eaf('otherFuelUsed'), 'whole'),
     ];
   }
 
