@@ -6,6 +6,7 @@ import { EnergyUseItem } from '../shared/models/treasure-hunt';
 import { ExecutiveSummaryService } from './phast-report/executive-summary.service';
 import { PhastResultsService } from './phast-results.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { getElectricalEnergyUsed } from './electrical-energy-used.util';
 
 @Injectable({
   providedIn: 'root'
@@ -28,10 +29,7 @@ export class PhastIntegrationService {
     let baselineExecutiveSummary = this.executiveSummaryService.getSummary(phast, false, settings, phast);
     let baselineEnergies: EnergyUseItem[] = this.setEnergyUseItems(phast, energyUsed, baselinePhastResults, baselineExecutiveSummary, settings, treasureHuntSettings);
     let {energyValue, treasureHuntUnit} = this.checkConvertEnergy(baselinePhastResults.grossHeatInput, settings, treasureHuntSettings);
-
-    if (settings.furnaceType !== 'Electric Arc Furnace (EAF)') {
-      energyValue = energyValue * phast.operatingHours.hoursPerYear;
-    }
+    energyValue = energyValue * phast.operatingHours.hoursPerYear;
 
     energyOptions.baseline = {
       name: phast.name,
@@ -51,10 +49,7 @@ export class PhastIntegrationService {
         let modificationExecutiveSummary: ExecutiveSummary = this.executiveSummaryService.getSummary(modification.phast, true, settings, phast);
         let modificationEnergyUseItems: EnergyUseItem[] = this.setEnergyUseItems(modification.phast, energyUsed, modificationPhastResults, modificationExecutiveSummary, settings, treasureHuntSettings);
         let {energyValue, treasureHuntUnit} = this.checkConvertEnergy(modificationPhastResults.grossHeatInput, settings, treasureHuntSettings);
-
-        if (settings.furnaceType !== 'Electric Arc Furnace (EAF)') {
-          energyValue = energyValue * phast.operatingHours.hoursPerYear;
-        }
+        energyValue = energyValue * modification.phast.operatingHours.hoursPerYear;
 
         energyOptions.modifications.push({
           name: modification.phast.name,
@@ -120,7 +115,7 @@ export class PhastIntegrationService {
         energies.push(energyUseItem);
       }
 
-      let annualElectricityEnergyUsed: number = phastResults.electricalHeatDelivered * phast.operatingHours.hoursPerYear;
+      let annualElectricityEnergyUsed: number = getElectricalEnergyUsed(phastResults, settings) * phast.operatingHours.hoursPerYear;
       // units in kW only
       let electricity: EnergyUseItem = {
         type: 'Electricity',

@@ -70,6 +70,8 @@ export class EnergyUsedComponent implements OnInit {
   energyCostUnit: string;
   fuelUsedUnit: string;
   baseEnergyUnit: string;
+  sourceEnergyUnit: string;
+  heatingValueUnit: string;
   electricityHeatingValue: number;
 
   phastResults: PhastResults;
@@ -102,8 +104,8 @@ export class EnergyUsedComponent implements OnInit {
 
   setEnergyUsed() {
     this.energyUsed = this.phastResultsService.getEnergyUseReportData(this.phast, this.phastResults, this.settings);
-    this.baseEnergyUnit = this.energyUsed.baseEnergyUnit;
-    this.energyPerMassUnit = this.energyUsed.energyPerMassUnit;
+    this.sourceEnergyUnit = this.energyUsed.baseEnergyUnit ?? this.baseEnergyUnit;
+    this.heatingValueUnit = this.energyUsed.energyPerMassUnit ?? this.energyPerMassUnit;
   }
 
   getUnits() {

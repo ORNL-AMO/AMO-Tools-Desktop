@@ -10,6 +10,7 @@ import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar
 import { PhastResultsService } from '../../phast/phast-results.service';
 import { PhastReportRollupService } from '../phast-report-rollup.service';
 import { ReportRollupService } from '../report-rollup.service';
+import { getElectricalEnergyUsed } from '../../phast/electrical-energy-used.util';
 @Component({
     selector: 'app-phast-rollup',
     templateUrl: './phast-rollup.component.html',
@@ -236,7 +237,7 @@ export class PhastRollupComponent implements OnInit {
         } else {
           electrotechFuelEnergyUsed = result.baselineResultData.energyInputHeatDelivered + result.baselineResultData.totalExhaustGas;
           electrotechFuelEnergyUsed = this.convertUnitsService.value(electrotechFuelEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
-          electrotechElectricityEnergyUsed = result.baselineResultData.electricalHeatDelivered;
+          electrotechElectricityEnergyUsed = getElectricalEnergyUsed(result.baselineResultData, result.settings);
         }
 
         electrotechElectricityEnergyUsed = this.convertUnitsService.value(electrotechElectricityEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);

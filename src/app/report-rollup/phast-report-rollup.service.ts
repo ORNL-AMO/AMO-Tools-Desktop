@@ -7,6 +7,7 @@ import { ExecutiveSummaryService } from '../phast/phast-report/executive-summary
 import { ExecutiveSummary } from '../shared/models/phast/phast';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { getElectricalEnergyUsed } from '../phast/electrical-energy-used.util';
 
 @Injectable()
 export class PhastReportRollupService {
@@ -163,8 +164,8 @@ export class PhastReportRollupService {
           modificationFuelEnergy = this.convertEAFFuelEnergy(resultCopy.modificationResultData.annualEAFResults.totalFuelEnergyUsed, result.settings, settings.phastRollupUnit);
           baselineFuelEnergy = this.convertEAFFuelEnergy(resultCopy.baselineResultData.annualEAFResults.totalFuelEnergyUsed, result.settings, settings.phastRollupUnit);
         } else {
-          modificationElectricalEnergy = this.convertUnitsService.value(resultCopy.modificationResultData.electricalHeatDelivered).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
-          baselineElectricalEnergy = this.convertUnitsService.value(resultCopy.baselineResultData.electricalHeatDelivered).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+          modificationElectricalEnergy = this.convertUnitsService.value(getElectricalEnergyUsed(resultCopy.modificationResultData, result.settings)).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+          baselineElectricalEnergy = this.convertUnitsService.value(getElectricalEnergyUsed(resultCopy.baselineResultData, result.settings)).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
           
           modificationFuelEnergy = resultCopy.modificationResultData.energyInputHeatDelivered + resultCopy.modificationResultData.totalExhaustGas;
           baselineFuelEnergy = resultCopy.baselineResultData.energyInputHeatDelivered + resultCopy.baselineResultData.totalExhaustGas;

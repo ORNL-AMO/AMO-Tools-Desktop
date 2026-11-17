@@ -16,6 +16,7 @@ import { EnergyExhaustGasOutput } from '../tools-suite-api/process-heating-api.s
 import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.service';
 import { firstValueFrom } from 'rxjs';
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
+import { getElectricalEnergyUsed } from './electrical-energy-used.util';
 
 
 @Injectable()
@@ -268,9 +269,8 @@ export class PhastResultsService {
       results.co2EmissionsOutput = this.co2SavingPhastService.setCo2EmissionsResults(phast, results, settings);
     }
 
-    // * IMPORTANT - grossHeatInput is in differing units/time depending on energy source type.
-    // Electrotech (non -eaf) - kWh/hr
-    // EAF - kWh/yr
+    // * IMPORTANT - grossHeatInput is in differing units depending on energy source type, always per hour.
+    // Electrotech (including EAF) - kWh/hr
     // fuel fired / steam - MMBtu/hr
 
     return results;
@@ -289,7 +289,7 @@ export class PhastResultsService {
     };
 
     if (settings.energySourceType === 'Electricity') {
-      energyUseReportData.electricEnergyUsed = phastResults.electricalHeatDelivered;
+      energyUseReportData.electricEnergyUsed = getElectricalEnergyUsed(phastResults, settings);
       if (settings.furnaceType === 'Electric Arc Furnace (EAF)') {
         energyUseReportData.fuelName = 'Natural Gas';
         energyUseReportData.electricEnergyUsed = phastResults.hourlyEAFResults.electricEnergyUsed;
@@ -297,10 +297,10 @@ export class PhastResultsService {
         energyUseReportData.fuelEnergyUsed = phastResults.hourlyEAFResults.naturalGasUsed;
         if (settings.unitsOfMeasure == 'Imperial') {
           energyUseReportData.energyPerMassUnit = 'Btu/lb';
-          energyUseReportData.baseEnergyUnit = 'MMBtu';
+          energyUseReportData.baseEnergyUnit = 'MMBtu/hr';
         } else {
           energyUseReportData.energyPerMassUnit = 'kJ/kg';
-          energyUseReportData.baseEnergyUnit = 'GJ';
+          energyUseReportData.baseEnergyUnit = 'GJ/hr';
         }
       } else {
         energyUseReportData.fuelEnergyUsed = phastResults.energyInputHeatDelivered + phastResults.totalExhaustGas;

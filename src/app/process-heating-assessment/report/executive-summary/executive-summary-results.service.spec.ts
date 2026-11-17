@@ -200,6 +200,25 @@ describe('ExecutiveSummaryResultsService', () => {
     });
   });
 
+  describe('custom electrotechnology', () => {
+    beforeEach(() => {
+      settings.update(current => ({ ...current, energySourceType: 'Electricity', furnaceType: 'Custom Electrotechnology', energyResultUnit: 'kWh' }));
+      resultsByName['baseline'] = { grossHeatInput: 10 };
+      resultsByName['mod1'] = { grossHeatInput: 8 };
+    });
+
+    it('prices gross heat input as electricity, since electrical heat delivered is never set', () => {
+      // 10 kW * 1000 h * 0.1
+      expect(rowOf(ui().summaryRows, 'Cost').baseline.value).toBe(1000);
+      expect(ui().costRows[0].baseline.value).toBe(1000);
+    });
+
+    it('reports cost savings against baseline', () => {
+      // (10 - 8) kW * 1000 h * 0.1
+      expect(service.scenarioSavings()['mod1'].costSavings).toBe(200);
+    });
+  });
+
   describe('electric arc furnace', () => {
     beforeEach(() => {
       settings.update(current => ({
@@ -219,6 +238,15 @@ describe('ExecutiveSummaryResultsService', () => {
     it('builds the EAF energy table', () => {
       expect(ui().eafEnergyRows.map(row => row.label)).toEqual(['Electrical', 'Natural Gas', 'Coal Carbon', 'Electrode', 'Other Fuel']);
       expect(ui().eafEnergyRows[0].baseline.value).toBe(1000);
+    });
+
+    it('labels electricity in kWh/yr and the fuels in MMBtu/yr for imperial', () => {
+      expect(ui().eafEnergyRows.map(row => row.units)).toEqual(['kWh/yr', 'MMBtu/yr', 'MMBtu/yr', 'MMBtu/yr', 'MMBtu/yr']);
+    });
+
+    it('labels the fuels in GJ/yr for metric', () => {
+      settings.update(current => ({ ...current, unitsOfMeasure: 'Metric' }));
+      expect(ui().eafEnergyRows.map(row => row.units)).toEqual(['kWh/yr', 'GJ/yr', 'GJ/yr', 'GJ/yr', 'GJ/yr']);
     });
 
     it('breaks cost down by source', () => {

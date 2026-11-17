@@ -189,7 +189,7 @@ export class PhastReportAdapter implements ReportDataAdapter {
     }];
 
     if (isEAF) {
-      sections.push(this.buildEAFEnergyUsedSection(baseline, modBundles, headers));
+      sections.push(this.buildEAFEnergyUsedSection(baseline, modBundles, headers, settings));
     }
     if (settings.energySourceType === 'Electricity') {
       if (showCO2) {
@@ -228,14 +228,15 @@ export class PhastReportAdapter implements ReportDataAdapter {
     return displays.length ? displays.join(', ') : '—';
   }
 
-  private buildEAFEnergyUsedSection(baseline: ScenarioBundle, modBundles: ScenarioBundle[], headers: string[]): SummaryTableSection {
+  private buildEAFEnergyUsedSection(baseline: ScenarioBundle, modBundles: ScenarioBundle[], headers: string[], settings: Settings): SummaryTableSection {
     const fmt = (v: number | undefined) => v ? formatNumber(v, 0) : '—';
+    const fuelUnit = settings.unitsOfMeasure === 'Metric' ? 'GJ/yr' : 'MMBtu/yr';
     const rows: string[][] = [
       ['Electrical (kWh/yr)', fmt(baseline.results.annualEAFResults?.electricEnergyUsed), ...modBundles.map(m => fmt(m.results.annualEAFResults?.electricEnergyUsed))],
-      ['Natural Gas (kWh/yr)', fmt(baseline.results.annualEAFResults?.naturalGasUsed), ...modBundles.map(m => fmt(m.results.annualEAFResults?.naturalGasUsed))],
-      ['Coal Carbon (kWh/yr)', fmt(baseline.results.annualEAFResults?.coalCarbonUsed), ...modBundles.map(m => fmt(m.results.annualEAFResults?.coalCarbonUsed))],
-      ['Electrode (kWh/yr)', fmt(baseline.results.annualEAFResults?.electrodeEnergyUsed), ...modBundles.map(m => fmt(m.results.annualEAFResults?.electrodeEnergyUsed))],
-      ['Other Fuel (kWh/yr)', fmt(baseline.results.annualEAFResults?.otherFuelUsed), ...modBundles.map(m => fmt(m.results.annualEAFResults?.otherFuelUsed))],
+      [`Natural Gas (${fuelUnit})`, fmt(baseline.results.annualEAFResults?.naturalGasUsed), ...modBundles.map(m => fmt(m.results.annualEAFResults?.naturalGasUsed))],
+      [`Coal Carbon (${fuelUnit})`, fmt(baseline.results.annualEAFResults?.coalCarbonUsed), ...modBundles.map(m => fmt(m.results.annualEAFResults?.coalCarbonUsed))],
+      [`Electrode (${fuelUnit})`, fmt(baseline.results.annualEAFResults?.electrodeEnergyUsed), ...modBundles.map(m => fmt(m.results.annualEAFResults?.electrodeEnergyUsed))],
+      [`Other Fuel (${fuelUnit})`, fmt(baseline.results.annualEAFResults?.otherFuelUsed), ...modBundles.map(m => fmt(m.results.annualEAFResults?.otherFuelUsed))],
     ];
     return { type: 'summary-table', title: 'Annual Electrical and Chemical Energy Used', group: 'executiveSummary', headers, rows };
   }
@@ -307,18 +308,20 @@ export class PhastReportAdapter implements ReportDataAdapter {
     const fmt = (v: number | undefined, dec = 2) => v ? formatNumber(v, dec) : '—';
     const withUnit = (v: number | undefined, unit: string, dec = 2) => v ? `${fmt(v, dec)} ${unit}` : '—';
 
+    const sourceEnergyUnit = energyUsed.baseEnergyUnit ?? units.baseEnergyUnit;
+    const heatingValueUnit = energyUsed.energyPerMassUnit ?? units.energyPerMassUnit;
     const sourcesHeaders = ['Energy Name', 'Energy Used', 'Heating Value (HHV)', 'Cost per Unit'];
     const sourcesRows: string[][] = [
-      [energyUsed.fuelName || 'Fuel', withUnit(energyUsed.fuelEnergyUsed, units.baseEnergyUnit),
-        withUnit(energyUsed.fuelHeatingValue, units.energyPerMassUnit), `${this.fmtUSD(phast.operatingCosts?.fuelCost)} ${units.energyCostUnit}`],
+      [energyUsed.fuelName || 'Fuel', withUnit(energyUsed.fuelEnergyUsed, sourceEnergyUnit),
+        withUnit(energyUsed.fuelHeatingValue, heatingValueUnit), `${this.fmtUSD(phast.operatingCosts?.fuelCost)} ${units.energyCostUnit}`],
     ];
     if (settings.furnaceType === 'Electric Arc Furnace (EAF)') {
       sourcesRows.push(
-        ['Coal Carbon', withUnit(phastResults.hourlyEAFResults?.coalCarbonUsed, units.baseEnergyUnit),
-          withUnit(phastResults.hourlyEAFResults?.coalHeatingValue, units.energyPerMassUnit), `${this.fmtUSD(phast.operatingCosts?.coalCarbonCost)} ${units.energyCostUnit}`],
-        ['Electrode', withUnit(phastResults.hourlyEAFResults?.electrodeEnergyUsed, units.baseEnergyUnit),
-          withUnit(phastResults.hourlyEAFResults?.electrodeHeatingValue, units.energyPerMassUnit), `${this.fmtUSD(phast.operatingCosts?.electrodeCost)} ${units.energyCostUnit}`],
-        ['Other Fuels', withUnit(phastResults.hourlyEAFResults?.otherFuelUsed, units.baseEnergyUnit), '—', `${this.fmtUSD(phast.operatingCosts?.otherFuelCost)} ${units.energyCostUnit}`],
+        ['Coal Carbon', withUnit(phastResults.hourlyEAFResults?.coalCarbonUsed, sourceEnergyUnit),
+          withUnit(phastResults.hourlyEAFResults?.coalHeatingValue, heatingValueUnit), `${this.fmtUSD(phast.operatingCosts?.coalCarbonCost)} ${units.energyCostUnit}`],
+        ['Electrode', withUnit(phastResults.hourlyEAFResults?.electrodeEnergyUsed, sourceEnergyUnit),
+          withUnit(phastResults.hourlyEAFResults?.electrodeHeatingValue, heatingValueUnit), `${this.fmtUSD(phast.operatingCosts?.electrodeCost)} ${units.energyCostUnit}`],
+        ['Other Fuels', withUnit(phastResults.hourlyEAFResults?.otherFuelUsed, sourceEnergyUnit), '—', `${this.fmtUSD(phast.operatingCosts?.otherFuelCost)} ${units.energyCostUnit}`],
       );
     }
     if (settings.energySourceType === 'Electricity') {

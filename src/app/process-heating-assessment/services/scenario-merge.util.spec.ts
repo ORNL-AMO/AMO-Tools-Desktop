@@ -295,6 +295,69 @@ describe('ensureLossIdsForPhast', () => {
     expect(migratedModification.scenarioOverrides.losses.otherLosses[0].id).toBe(migrated.losses.otherLosses[0].id);
   });
 
+  it('backfills missing ids on baseline charge materials and aligns a legacy modification override to them by position', () => {
+    const modification: ProcessHeatingModification = {
+      id: 'mod-1',
+      scenarioOverrides: { losses: { chargeMaterials: [{ name: 'Steel' }, { name: 'Aluminum (preheated)' }] } },
+    };
+    const phast: PHAST = {
+      losses: { chargeMaterials: [{ name: 'Steel' }, { name: 'Aluminum' }] },
+      modifications: [modification],
+    };
+
+    const migrated = ensureLossIdsForPhast(phast);
+    const migratedModification = migrated.modifications[0] as unknown as ProcessHeatingModification;
+    const [baselineFirst, baselineSecond] = migrated.losses.chargeMaterials;
+    const [overrideFirst, overrideSecond] = migratedModification.scenarioOverrides.losses.chargeMaterials;
+
+    expect(baselineFirst.id).toBeTruthy();
+    expect(baselineSecond.id).toBeTruthy();
+    expect(overrideFirst.id).toBe(baselineFirst.id);
+    expect(overrideSecond.id).toBe(baselineSecond.id);
+  });
+
+  it('re-keys modification charge materials saved under ids unrelated to baseline by position', () => {
+    const modification: ProcessHeatingModification = {
+      id: 'mod-1',
+      scenarioOverrides: { losses: { chargeMaterials: [{ id: 'mod-a', name: 'Steel' }, { id: 'mod-b', name: 'Aluminum' }] } },
+    };
+    const phast: PHAST = {
+      losses: { chargeMaterials: [{ id: 'base-a', name: 'Steel' }, { id: 'base-b', name: 'Aluminum' }] },
+      modifications: [modification],
+    };
+
+    const migrated = ensureLossIdsForPhast(phast);
+    const migratedModification = migrated.modifications[0] as unknown as ProcessHeatingModification;
+
+    expect(migratedModification.scenarioOverrides.losses.chargeMaterials.map(material => material.id)).toEqual(['base-a', 'base-b']);
+  });
+
+  it('leaves modification charge material ids alone when any of them already matches baseline', () => {
+    const chargeMaterials = [{ id: 'base-a', name: 'Steel' }, { id: 'mod-b', name: 'Aluminum' }];
+    const modification: ProcessHeatingModification = { id: 'mod-1', scenarioOverrides: { losses: { chargeMaterials } } };
+    const phast: PHAST = {
+      losses: { chargeMaterials: [{ id: 'base-a', name: 'Steel' }, { id: 'base-b', name: 'Aluminum' }] },
+      modifications: [modification],
+    };
+
+    const migrated = ensureLossIdsForPhast(phast);
+
+    expect(migrated).toBe(phast);
+  });
+
+  it('does not re-key unrelated ids for loss types that can be added or removed per modification', () => {
+    const wallLosses = [{ id: 'mod-wall', surfaceArea: 300 }] as never;
+    const modification: ProcessHeatingModification = { id: 'mod-1', scenarioOverrides: { losses: { wallLosses } } };
+    const phast: PHAST = {
+      losses: { wallLosses: [{ id: 'base-wall', surfaceArea: 100 } as never] },
+      modifications: [modification],
+    };
+
+    const migrated = ensureLossIdsForPhast(phast);
+
+    expect(migrated).toBe(phast);
+  });
+
   it('assigns distinct ids to multiple id-less wall losses instead of leaving them all undefined', () => {
     const phast: PHAST = {
       losses: { wallLosses: [{ surfaceArea: 100 } as never, { surfaceArea: 200 } as never] },
