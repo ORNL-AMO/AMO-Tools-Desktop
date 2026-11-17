@@ -280,20 +280,6 @@ export class StandaloneSuiteApiService {
     return results;
   }
 
-  // pneumaticValveCalculateFlowRate(input: PneumaticValveFlowRateInput): PneumaticValveFlowRateOutput {
-  //   let PneumaticValve = new this.toolsSuiteApiService.ToolsSuiteModule.PneumaticValve(input.inletPressure, input.outletPressure);
-  //   let output: PneumaticValveFlowRateOutput = PneumaticValve.calculate();
-  //   PneumaticValve.delete();
-  //   return output;
-  // }
-
-  // pneumaticValve(input: PneumaticValve): PneumaticValveFlowCoefficient {
-  //   let PneumaticValve = new this.toolsSuiteApiService.ToolsSuiteModule.PneumaticValve(input.inletPressure, input.outletPressure, input.flowRate);
-  //   let output: PneumaticValveFlowCoefficient = PneumaticValve.calculate();
-  //   PneumaticValve.delete();
-  //   return output;
-  // }
-
   /**
    * Calculate Bag Method for air leak or pressure reduction
    * @returns BagMethodOutput - totalFlowRate is in scfm, annualTotalFlowRate is in kscf, energy in mWh
