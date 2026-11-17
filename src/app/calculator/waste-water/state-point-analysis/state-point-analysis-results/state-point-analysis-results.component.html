@@ -1,109 +1,155 @@
 <table #copyTable class="table mt-3">
-    <tbody>
-      <tr>
-        <td></td>
-        <td class="bold text-center">Baseline</td>
-        <td class="bold text-center">Modification</td>
-      </tr>
-      <tr>
-        <td class="bold">Total Clarifier Area 
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+  <tbody>
+    <tr>
+      <td></td>
+      <td class="bold text-center">Baseline</td>
+      <td class="bold text-center">Modification</td>
+    </tr>
+    <tr>
+      <td class="bold">Total Clarifier Area
+        @if (settings.unitsOfMeasure == 'Imperial') {
+          <span>
             (ft<sup>2</sup>)
           </span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+        }
+        @if (settings.unitsOfMeasure == 'Metric') {
+          <span>
             (m<sup>2</sup>)
           </span>
-        </td>
-        <td class="text-center">
-          <span *ngIf="output.baseline.TotalAreaClarifier">
+        }
+      </td>
+      <td class="text-center">
+        @if (output.baseline.TotalAreaClarifier) {
+          <span>
             {{output.baseline.TotalAreaClarifier | number:'1.0-0'}}
           </span>
-          <span *ngIf="!output.baseline.TotalAreaClarifier">
+        }
+        @if (!output.baseline.TotalAreaClarifier) {
+          <span>
             &mdash;
           </span>
-        </td>
-        <td class="text-center">
-          <span *ngIf="output.modification.TotalAreaClarifier">
+        }
+      </td>
+      <td class="text-center">
+        @if (output.modification.TotalAreaClarifier) {
+          <span>
             {{output.modification.TotalAreaClarifier | number:'1.0-0'}}
-        </span>
-        <span *ngIf="!output.modification.TotalAreaClarifier">
-          &mdash;</span>
-        </td>
-      </tr>
-      <tr>
-        <td class="bold">Surface Overflow Rate 
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-              (gal/ft<sup>2</sup>d)
-            </span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-              (L/m<sup>2</sup>d)
-            </span>
-        </td>
-        <td class="text-center">
-          <span *ngIf="output.baseline.SurfaceOverflow">
+          </span>
+        }
+        @if (!output.modification.TotalAreaClarifier) {
+          <span>
+            &mdash;</span>
+        }
+      </td>
+    </tr>
+    <tr>
+      <td class="bold">Surface Overflow Rate
+        @if (settings.unitsOfMeasure == 'Imperial') {
+          <span>
+            (gal/ft<sup>2</sup>d)
+          </span>
+        }
+        @if (settings.unitsOfMeasure == 'Metric') {
+          <span>
+            (L/m<sup>2</sup>d)
+          </span>
+        }
+      </td>
+      <td class="text-center">
+        @if (output.baseline.SurfaceOverflow) {
+          <span>
             {{output.baseline.SurfaceOverflow | number:'1.0-2'}}
           </span>
-          <span *ngIf="!output.baseline.SurfaceOverflow">
+        }
+        @if (!output.baseline.SurfaceOverflow) {
+          <span>
             &mdash;
           </span>
-        </td>
-        <td class="text-center">
-          <span *ngIf="output.modification.SurfaceOverflow">
+        }
+      </td>
+      <td class="text-center">
+        @if (output.modification.SurfaceOverflow) {
+          <span>
             {{output.modification.SurfaceOverflow | number:'1.0-2'}}
           </span>
-          <span *ngIf="!output.modification.SurfaceOverflow">
+        }
+        @if (!output.modification.SurfaceOverflow) {
+          <span>
             &mdash;
           </span>
-        </td>
-      </tr>
-      <tr>
-        <td class="bold">Applied Solids Loading 
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-              (lb/ft<sup>2</sup>d)
-            </span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-              (kg/m<sup>2</sup>d)
-            </span>
-        </td>
-        <td class="text-center">
-          <span *ngIf="output.baseline.AppliedSolidsLoading">
+        }
+      </td>
+    </tr>
+    <tr>
+      <td class="bold">Applied Solids Loading
+        @if (settings.unitsOfMeasure == 'Imperial') {
+          <span>
+            (lb/ft<sup>2</sup>d)
+          </span>
+        }
+        @if (settings.unitsOfMeasure == 'Metric') {
+          <span>
+            (kg/m<sup>2</sup>d)
+          </span>
+        }
+      </td>
+      <td class="text-center">
+        @if (output.baseline.AppliedSolidsLoading) {
+          <span>
             {{output.baseline.AppliedSolidsLoading | number:'1.0-4'}}
           </span>
-          <span *ngIf="!output.baseline.AppliedSolidsLoading">
+        }
+        @if (!output.baseline.AppliedSolidsLoading) {
+          <span>
             &mdash;
           </span>
-        </td>
-        <td class="text-center">
-          <span *ngIf="output.modification.AppliedSolidsLoading">
+        }
+      </td>
+      <td class="text-center">
+        @if (output.modification.AppliedSolidsLoading) {
+          <span>
             {{output.modification.AppliedSolidsLoading | number:'1.0-4'}}
           </span>
-          <span *ngIf="!output.modification.AppliedSolidsLoading">
+        }
+        @if (!output.modification.AppliedSolidsLoading) {
+          <span>
             &mdash;
           </span>
-        </td>
-      </tr>
-      <tr>
-        <td class="bold">RAS SS Concentration (mg/L)
-        </td>
-        <td class="text-center">
-          <span *ngIf="output.baseline.RasConcentration">
+        }
+      </td>
+    </tr>
+    <tr>
+      <td class="bold">RAS SS Concentration (mg/L)
+      </td>
+      <td class="text-center">
+        @if (output.baseline.RasConcentration) {
+          <span>
             {{output.baseline.RasConcentration | number:'1.0-4'}}
           </span>
-          <span *ngIf="!output.baseline.RasConcentration">
+        }
+        @if (!output.baseline.RasConcentration) {
+          <span>
             &mdash;
           </span>
-        </td>
-        <td class="text-center">
-          <span *ngIf="output.modification.RasConcentration">
+        }
+      </td>
+      <td class="text-center">
+        @if (output.modification.RasConcentration) {
+          <span>
             {{output.modification.RasConcentration | number:'1.0-4'}}
           </span>
-          <span *ngIf="!output.modification.RasConcentration">
+        }
+        @if (!output.modification.RasConcentration) {
+          <span>
             &mdash;
           </span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  
-  <app-exportable-results-table *ngIf="modificationExists" [tableString]="tableString"
+        }
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+@if (modificationExists) {
+  <app-exportable-results-table [tableString]="tableString"
     (updateTableString)="updateTableString()"></app-exportable-results-table>
+}

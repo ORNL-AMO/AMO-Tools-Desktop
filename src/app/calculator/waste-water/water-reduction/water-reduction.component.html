@@ -10,19 +10,21 @@
       </div>
     </div>
 
-    <div class="d-flex pr-2 pl-2" *ngIf="inTreasureHunt">
-      <div class="d-none d-lg-flex help-holder">
-        <p class="help-text treasure-hunt-help">Click the save icon to add the treasure to your chest!
-          Click cancel to discard the opportunity and
-          return to method selection.</p>
+    @if (inTreasureHunt) {
+      <div class="d-flex pr-2 pl-2">
+        <div class="d-none d-lg-flex help-holder">
+          <p class="help-text treasure-hunt-help">Click the save icon to add the treasure to your chest!
+            Click cancel to discard the opportunity and
+            return to method selection.</p>
+        </div>
+        <div class="pl-2 pr-2 border-right border-left action-item" (click)="save()">
+          <span class="fa fa-save"></span>
+        </div>
+        <div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
+          <span class="fa fa-times"></span>
+        </div>
       </div>
-      <div class="pl-2 pr-2 border-right border-left action-item" (click)="save()">
-        <span class="fa fa-save"></span>
-      </div>
-      <div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
-        <span class="fa fa-times"></span>
-      </div>
-    </div>
+    }
   </div>
 
   <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
@@ -52,13 +54,15 @@
 
       <div class="d-flex flex-column mx-2 mb-4">
         <!-- app form -->
-        <div *ngFor="let data of baselineData; let i = index;">
-          <app-water-reduction-form [index]="i" [settings]="settings" [data]="data" [isBaseline]="true"
-            (emitCalculate)="updateBaselineData($event, i)" (emitChangeField)="changeField($event)"
-            (emitRemoveEquipment)="removeBaselineEquipment($event)" [selected]="baselineSelected"
-            [isWastewater]="baselineData[0].isWastewater">
-          </app-water-reduction-form>
-        </div>
+        @for (data of baselineData; track data; let i = $index) {
+          <div>
+            <app-water-reduction-form [index]="i" [settings]="settings" [data]="data" [isBaseline]="true"
+              (emitCalculate)="updateBaselineData($event, i)" (emitChangeField)="changeField($event)"
+              (emitRemoveEquipment)="removeBaselineEquipment($event)" [selected]="baselineSelected"
+              [isWastewater]="baselineData[0].isWastewater">
+            </app-water-reduction-form>
+          </div>
+        }
         <div class="w-100 justify content-center btn-group btn-group-sm">
           <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active" (click)="btnResetData()">
             Reset Data
@@ -80,25 +84,31 @@
         <a class="click-link pull-right small add-fixture" (click)="addModificationEquipment()">+Add Equipment</a>
       </div>
       <!-- forms -->
-      <div *ngIf="modificationExists" class="d-flex flex-column mx-2 mb-4">
-        <div *ngFor="let data of modificationData; let i = index;">
-          <!-- app form -->
-          <app-water-reduction-form [index]="i" [settings]="settings" [data]="data" [isBaseline]="false"
-            (emitCalculate)="updateModificationData($event, i)" (emitChangeField)="changeField($event)"
-            (emitRemoveEquipment)="removeModificationEquipment($event)" [selected]="!baselineSelected"
-            [isWastewater]="baselineData[0].isWastewater">
-          </app-water-reduction-form>
+      @if (modificationExists) {
+        <div class="d-flex flex-column mx-2 mb-4">
+          @for (data of modificationData; track data; let i = $index) {
+            <div>
+              <!-- app form -->
+              <app-water-reduction-form [index]="i" [settings]="settings" [data]="data" [isBaseline]="false"
+                (emitCalculate)="updateModificationData($event, i)" (emitChangeField)="changeField($event)"
+                (emitRemoveEquipment)="removeModificationEquipment($event)" [selected]="!baselineSelected"
+                [isWastewater]="baselineData[0].isWastewater">
+              </app-water-reduction-form>
+            </div>
+          }
         </div>
-      </div>
+      }
       <!-- no content message -->
-      <div *ngIf="!modificationExists">
-        <div class="p-3 no-data">
-          <h3>Once you have set up your baseline..</h3>
-          <button type="button" class="btn btn-primary active" (click)="createModification()">Add Modified
-            Condition</button>
-          <p>Data will be copied from your current baseline condition.</p>
+      @if (!modificationExists) {
+        <div>
+          <div class="p-3 no-data">
+            <h3>Once you have set up your baseline..</h3>
+            <button type="button" class="btn btn-primary active" (click)="createModification()">Add Modified
+              Condition</button>
+            <p>Data will be copied from your current baseline condition.</p>
+          </div>
         </div>
-      </div>
+      }
     </div>
 
 
@@ -122,14 +132,18 @@
 
         <div class="p-2">
           <!-- app results if results tab -->
-          <app-water-reduction-results *ngIf="tabSelect === 'results'" [settings]="settings"
-            [waterReductionResults]="waterReductionResults" [modificationExists]="modificationExists">
-          </app-water-reduction-results>
+          @if (tabSelect === 'results') {
+            <app-water-reduction-results [settings]="settings"
+              [waterReductionResults]="waterReductionResults" [modificationExists]="modificationExists">
+            </app-water-reduction-results>
+          }
 
           <!-- app help if help tab -->
-          <app-water-reduction-help *ngIf="tabSelect === 'help'" [settings]="settings" [currentField]="currentField"
-            [isWastewater]="isWastewater">
-          </app-water-reduction-help>
+          @if (tabSelect === 'help') {
+            <app-water-reduction-help [settings]="settings" [currentField]="currentField"
+              [isWastewater]="isWastewater">
+            </app-water-reduction-help>
+          }
         </div>
 
       </div>
