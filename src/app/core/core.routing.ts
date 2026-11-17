@@ -130,6 +130,8 @@ import { compressedAirAssessmentRoutes } from '../compressed-air-assessment/rout
 import { CompressedAirInventoryComponent } from '../compressed-air-inventory/compressed-air-inventory.component';
 import { compressedAirInventoryRoutes } from '../compressed-air-inventory/compressed-air-inventory.routing';
 import { SteamLeakSurveyComponent } from '../calculator/steam/steam-leak/steam-leak-survey.component';
+import { CompressedAirDryerComponent } from '../calculator/compressed-air/compressed-air-dryer/compressed-air-dryer.component';
+
 export const coreRoutes: Routes = [
   {
     path: '',
@@ -239,6 +241,10 @@ export const coreRoutes: Routes = [
           {
             path: 'bleed-test',
             component: BleedTestComponent
+          },
+          {
+            path: 'compressed-air-dryer',
+            component: CompressedAirDryerComponent
           },
           {
             path: 'operating-cost',
