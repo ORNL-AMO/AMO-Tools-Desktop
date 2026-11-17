@@ -5,6 +5,7 @@ import { EnergyInputItem, EnergyInputService } from './energy-input.service';
 import { EnergyInputFormService, EnergyInputWarnings } from './energy-input-form.service';
 import { SharedPipesModule } from '../../../../shared/shared-pipes/shared-pipes.module';
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { ProcessHeatingValidityService } from '../../../services/process-heating-validity.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../../shared/models/settings';
 
@@ -19,6 +20,7 @@ describe('EnergyInputComponent', () => {
   let fixture: ComponentFixture<EnergyInputComponent>;
   let assessmentServiceSpy: jasmine.SpyObj<ProcessHeatingAssessmentService>;
   let energyInputServiceSpy: jasmine.SpyObj<EnergyInputService>;
+  let validityServiceSpy: jasmine.SpyObj<ProcessHeatingValidityService>;
   let settingsSignal: WritableSignal<Settings>;
   let lossesSignal: WritableSignal<EnergyInputItem[]>;
   let totalSignal: WritableSignal<number>;
@@ -45,11 +47,15 @@ describe('EnergyInputComponent', () => {
       },
     );
 
+    validityServiceSpy = jasmine.createSpyObj('ProcessHeatingValidityService', ['requiresEnergyEntry']);
+    validityServiceSpy.requiresEnergyEntry.and.returnValue(false);
+
     await TestBed.configureTestingModule({
       declarations: [EnergyInputComponent],
       imports: [SharedPipesModule],
       providers: [
         { provide: ProcessHeatingAssessmentService, useValue: assessmentServiceSpy },
+        { provide: ProcessHeatingValidityService, useValue: validityServiceSpy },
         EnergyInputFormService,
         ConvertUnitsService,
       ],
@@ -82,6 +88,24 @@ describe('EnergyInputComponent', () => {
       modFixture.detectChanges();
 
       expect(energyInputServiceSpy.initialize).toHaveBeenCalledWith('mod-1');
+    });
+  });
+
+  describe('empty state', () => {
+    it('invites adding a loss when the entry is optional', () => {
+      expect(fixture.nativeElement.querySelector('.energy-entry-required')).toBeNull();
+      expect(fixture.nativeElement.querySelector('.no-data .text-muted')).not.toBeNull();
+    });
+
+    it('says the entry is required for a modification on a different energy source than the baseline', () => {
+      validityServiceSpy.requiresEnergyEntry.and.returnValue(true);
+      const modFixture = TestBed.createComponent(EnergyInputComponent);
+      modFixture.componentRef.setInput('scenario', 'mod-1');
+      modFixture.detectChanges();
+
+      expect(validityServiceSpy.requiresEnergyEntry).toHaveBeenCalledWith('mod-1');
+      expect(modFixture.nativeElement.querySelector('.energy-entry-required')).not.toBeNull();
+      expect(modFixture.nativeElement.querySelector('.no-data .text-muted')).toBeNull();
     });
   });
 

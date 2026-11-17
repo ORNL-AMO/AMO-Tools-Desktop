@@ -275,6 +275,14 @@ describe('ProcessHeatingValidityService', () => {
       expect(service.scenarioValidity('baseline').energyInputValid).toBeTrue();
       expect(service.scenarioValidity('mod1').energyInputValid).toBeTrue();
     });
+
+    it('reports the requirement only for a modification on another energy source', () => {
+      expect(service.requiresEnergyEntry('mod1')).toBeFalse();
+
+      scenarioSettings.mod1.set(ELECTRO_STANDARD);
+      expect(service.requiresEnergyEntry('mod1')).toBeTrue();
+      expect(service.requiresEnergyEntry('baseline')).toBeFalse();
+    });
   });
 
   describe('isStepValid', () => {

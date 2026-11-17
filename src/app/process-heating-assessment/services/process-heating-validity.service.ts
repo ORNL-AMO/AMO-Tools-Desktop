@@ -215,14 +215,20 @@ export class ProcessHeatingValidityService {
   /**
    * A modification on a different energy source than the baseline needs that source's energy entry: without one its gross heat is 0,
    * so the whole baseline energy reads as savings. The baseline, and a modification on its energy source, keep legacy's optional entry.
+   * @param scenario 'baseline' or a modification id
+   * @returns whether the scenario's energy entry (Flue Gas, Energy Input or Energy Input Exhaust Gas) can't be left empty
    */
-  private hasRequiredEnergyEntry(scenario: AssessmentScenario, entries: unknown[] | undefined): boolean {
+  requiresEnergyEntry(scenario: AssessmentScenario): boolean {
     if (scenario === 'baseline') {
-      return true;
+      return false;
     }
     const configuration = deriveHeatingEquipmentConfiguration(this.assessmentService.scenarioSettings(scenario));
     const baselineConfiguration = deriveHeatingEquipmentConfiguration(this.assessmentService.scenarioSettings('baseline'));
-    return configuration === baselineConfiguration || !!entries?.length;
+    return configuration !== baselineConfiguration;
+  }
+
+  private hasRequiredEnergyEntry(scenario: AssessmentScenario, entries: unknown[] | undefined): boolean {
+    return !this.requiresEnergyEntry(scenario) || !!entries?.length;
   }
 
   /** The electricity input can't fall below what the scenario's other inputs require. */

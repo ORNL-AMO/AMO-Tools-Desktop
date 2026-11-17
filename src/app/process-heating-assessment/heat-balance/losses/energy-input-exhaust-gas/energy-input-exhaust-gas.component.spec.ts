@@ -5,6 +5,7 @@ import { EnergyInputExhaustGasItem, EnergyInputExhaustGasService } from './energ
 import { EnergyInputExhaustGasFormService } from './energy-input-exhaust-gas-form.service';
 import { SharedPipesModule } from '../../../../shared/shared-pipes/shared-pipes.module';
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { ProcessHeatingValidityService } from '../../../services/process-heating-validity.service';
 import { Settings } from '../../../../shared/models/settings';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
@@ -18,6 +19,7 @@ describe('EnergyInputExhaustGasComponent', () => {
   let fixture: ComponentFixture<EnergyInputExhaustGasComponent>;
   let assessmentServiceSpy: jasmine.SpyObj<ProcessHeatingAssessmentService>;
   let energyInputExhaustGasServiceSpy: jasmine.SpyObj<EnergyInputExhaustGasService>;
+  let validityServiceSpy: jasmine.SpyObj<ProcessHeatingValidityService>;
   let settingsSignal: WritableSignal<Settings>;
   let lossesSignal: WritableSignal<EnergyInputExhaustGasItem[]>;
   let totalSignal: WritableSignal<number>;
@@ -41,11 +43,15 @@ describe('EnergyInputExhaustGasComponent', () => {
       },
     );
 
+    validityServiceSpy = jasmine.createSpyObj('ProcessHeatingValidityService', ['requiresEnergyEntry']);
+    validityServiceSpy.requiresEnergyEntry.and.returnValue(false);
+
     await TestBed.configureTestingModule({
       declarations: [EnergyInputExhaustGasComponent],
       imports: [SharedPipesModule],
       providers: [
         { provide: ProcessHeatingAssessmentService, useValue: assessmentServiceSpy },
+        { provide: ProcessHeatingValidityService, useValue: validityServiceSpy },
         EnergyInputExhaustGasFormService,
       ],
       schemas: [NO_ERRORS_SCHEMA],
@@ -77,6 +83,24 @@ describe('EnergyInputExhaustGasComponent', () => {
       modFixture.detectChanges();
 
       expect(energyInputExhaustGasServiceSpy.initialize).toHaveBeenCalledWith('mod-1');
+    });
+  });
+
+  describe('empty state', () => {
+    it('invites adding a loss when the entry is optional', () => {
+      expect(fixture.nativeElement.querySelector('.energy-entry-required')).toBeNull();
+      expect(fixture.nativeElement.querySelector('.no-data .text-muted')).not.toBeNull();
+    });
+
+    it('says the entry is required for a modification on a different energy source than the baseline', () => {
+      validityServiceSpy.requiresEnergyEntry.and.returnValue(true);
+      const modFixture = TestBed.createComponent(EnergyInputExhaustGasComponent);
+      modFixture.componentRef.setInput('scenario', 'mod-1');
+      modFixture.detectChanges();
+
+      expect(validityServiceSpy.requiresEnergyEntry).toHaveBeenCalledWith('mod-1');
+      expect(modFixture.nativeElement.querySelector('.energy-entry-required')).not.toBeNull();
+      expect(modFixture.nativeElement.querySelector('.no-data .text-muted')).toBeNull();
     });
   });
 
