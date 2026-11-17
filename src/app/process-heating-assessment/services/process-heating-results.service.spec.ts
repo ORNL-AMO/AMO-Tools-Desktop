@@ -112,6 +112,28 @@ describe('ProcessHeatingResultsService', () => {
     });
   });
 
+  describe('hidden losses', () => {
+    const losses = { leakageLosses: [{ name: 'Leak' }], slagLosses: [{ name: 'Slag' }], wallLosses: [] } as Losses;
+
+    it('leaves out losses of tabs the energy source hides', () => {
+      service.getResults({ name: 'mod1', losses }, { energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' } as Settings);
+
+      const legacyLosses = legacyGetResults.calls.mostRecent().args[0].losses;
+      expect(legacyLosses.leakageLosses).toBeUndefined();
+      expect(legacyLosses.slagLosses).toBeUndefined();
+      expect(legacyLosses.wallLosses).toEqual([]);
+      expect(losses.leakageLosses.length).toBe(1);
+    });
+
+    it('keeps losses the energy source uses', () => {
+      service.getResults({ name: 'baseline', losses }, { energySourceType: 'Fuel' } as Settings);
+
+      const legacyLosses = legacyGetResults.calls.mostRecent().args[0].losses;
+      expect(legacyLosses.leakageLosses).toEqual(losses.leakageLosses);
+      expect(legacyLosses.slagLosses).toBeUndefined();
+    });
+  });
+
   describe('result categories', () => {
     it('splits Electrical Heat Delivered between EAF and other electric furnaces', () => {
       const eaf = service.getResultCategories({ energySourceType: 'Electricity', furnaceType: 'Electric Arc Furnace (EAF)' } as Settings);

@@ -214,6 +214,13 @@ describe('InputSummaryResultsService', () => {
       expect(temperature.baseline.value).toBe(500);
       expect(temperature.modifications[0].value).toBeNull();
     });
+
+    it("leaves a scenario's column empty for a scenario-level section its energy source doesn't use", () => {
+      scenarios['baseline'] = buildPhast({ ...scenarios['baseline'], systemEfficiency: 70 });
+      const efficiency = row('Heat System Efficiency', 'Heat System Efficiency');
+      expect(efficiency.baseline.value).toBeNull();
+      expect(efficiency.modifications[0].value).toBe(75);
+    });
   });
 
   describe('operating cost units', () => {

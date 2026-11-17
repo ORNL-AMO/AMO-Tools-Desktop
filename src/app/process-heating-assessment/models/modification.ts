@@ -20,11 +20,14 @@ export interface ScenarioEnergySource {
 // Picked from Settings so both assessment settings and a ScenarioEnergySource fit; Settings marks these fields optional.
 type EnergySourceFields = Pick<Settings, 'energySourceType' | 'furnaceType' | 'customFurnaceName'>;
 
-/** Missing furnace type and custom name count as equal, since saved data mixes `null` and `undefined`. */
+/**
+ * An empty furnace type or custom name matches whether saved as `null` or `undefined`, since saved data mixes both.
+ * The custom name is compared only for Custom Electrotechnology, since switching away keeps the name already typed.
+ */
 export function isSameEnergySource(first: EnergySourceFields, second: EnergySourceFields): boolean {
   return first.energySourceType === second.energySourceType
     && (first.furnaceType ?? null) === (second.furnaceType ?? null)
-    && (first.customFurnaceName ?? null) === (second.customFurnaceName ?? null);
+    && (first.furnaceType !== 'Custom Electrotechnology' || (first.customFurnaceName ?? null) === (second.customFurnaceName ?? null));
 }
 
 export interface ProcessHeatingModification extends Modification {

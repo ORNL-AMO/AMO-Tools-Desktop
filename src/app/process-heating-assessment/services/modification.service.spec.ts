@@ -211,6 +211,26 @@ describe('ModificationService', () => {
       expect(service.selectedModification()?.energySource).toBeUndefined();
     });
 
+    it('ignores a leftover custom furnace name when the furnace type is not Custom Electrotechnology', () => {
+      const id = service.addModification();
+      service.setEnergySource(id, { energySourceType: 'Steam', furnaceType: null });
+
+      service.setEnergySource(id, { energySourceType: 'Fuel', furnaceType: null, customFurnaceName: 'Kiln' });
+
+      expect(service.selectedModification()?.energySource).toBeUndefined();
+    });
+
+    it('keeps a Custom Electrotechnology energy source whose name differs from the baseline', () => {
+      const assessmentService = TestBed.inject(ProcessHeatingAssessmentService) as unknown as FakeProcessHeatingAssessmentService;
+      const custom = { energySourceType: 'Electricity', furnaceType: 'Custom Electrotechnology' };
+      assessmentService.settingsSignal.set({ ...custom, customFurnaceName: 'Kiln' } as Settings);
+      const id = service.addModification();
+
+      service.setEnergySource(id, { ...custom, customFurnaceName: 'Oven' });
+
+      expect(service.selectedModification()?.energySource).toEqual({ ...custom, customFurnaceName: 'Oven' });
+    });
+
     it('clears the energy source when given undefined', () => {
       const id = service.addModification();
       service.setEnergySource(id, { energySourceType: 'Steam', furnaceType: null });

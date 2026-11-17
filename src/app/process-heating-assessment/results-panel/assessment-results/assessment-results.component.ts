@@ -6,7 +6,7 @@ import { Settings } from '../../../shared/models/settings';
 import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
-import { combineResultCategories, ResultCategories, ResultColumn, ResultRowDefinition, resultRowValue, visibleResultRows } from '../../models/result-rows';
+import { combineResultCategories, ResultCategories, resultCategoryKeys, ResultColumn, ResultRowDefinition, resultRowValue, visibleResultRows } from '../../models/result-rows';
 import { ModificationService } from '../../services/modification.service';
 import { InvalidModification, ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
 
@@ -99,7 +99,7 @@ export class AssessmentResultsComponent {
     const baselineMarker = this.energySourceMarker('baseline', 'Baseline');
     const modificationMarker = this.energySourceMarker(this.scenario(), this.modificationName());
     const markers: Partial<Record<keyof ResultCategories, EnergySourceMarker>> = {};
-    for (const key of Object.keys(baselineCategories) as (keyof ResultCategories)[]) {
+    for (const key of resultCategoryKeys(baselineCategories)) {
       if (baselineCategories[key] && !modificationCategories[key]) {
         markers[key] = baselineMarker;
       } else if (modificationCategories[key] && !baselineCategories[key]) {

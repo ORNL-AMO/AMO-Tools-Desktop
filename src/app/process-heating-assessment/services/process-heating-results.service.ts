@@ -1,14 +1,14 @@
 import { computed, inject, Injectable, Signal } from '@angular/core';
 import { PHAST, PhastResults } from '../models/phast';
-import { CalculatedByPhast, EnergyUseReportData } from '../../shared/models/phast/phast';
+import { CalculatedByPhast, EnergyUseReportData, PHAST as SharedPHAST } from '../../shared/models/phast/phast';
 import { DesignedEnergyResults } from '../../shared/models/phast/designedEnergy';
 import { MeteredEnergyResults } from '../../shared/models/phast/meteredEnergy';
 import { Settings } from '../../shared/models/settings';
 import { PhastResultsService } from '../../phast/phast-results.service';
 import { MeteredEnergyService } from '../../phast/metered-energy/metered-energy.service';
 import { DesignedEnergyService } from '../../phast/designed-energy/designed-energy.service';
-import { AssessmentScenario, ProcessHeatingAssessmentService } from './process-heating-assessment.service';
-import { toLegacyPhast } from './legacy-phast.util';
+import { AssessmentScenario, deriveHeatingEquipmentConfiguration, ProcessHeatingAssessmentService } from './process-heating-assessment.service';
+import { toLegacyPhast, withoutHiddenLosses } from './legacy-phast.util';
 import { ResultCategories } from '../models/result-rows';
 
 @Injectable()
@@ -20,7 +20,7 @@ export class ProcessHeatingResultsService {
 
   getResults(phast: PHAST, settings: Settings): PhastResults | undefined {
     if (!phast || !settings || !phast.losses) return undefined;
-    return this.phastResultsService.getResults(toLegacyPhast(phast), settings);
+    return this.phastResultsService.getResults(this.toLegacyScenario(phast, settings), settings);
   }
 
   private readonly scenarioResultsCache = new Map<AssessmentScenario, Signal<PhastResults | undefined>>();
@@ -81,13 +81,13 @@ export class ProcessHeatingResultsService {
   getEnergyUseReportData(phast: PHAST, results: PhastResults, settings: Settings): EnergyUseReportData {
     // Legacy reads flueGasLosses[0] whenever the array exists, which throws on an empty array.
     const flueGasLosses = phast.losses.flueGasLosses?.length ? phast.losses.flueGasLosses : undefined;
-    const legacyPhast = toLegacyPhast({ ...phast, losses: { ...phast.losses, flueGasLosses } });
+    const legacyPhast = this.toLegacyScenario({ ...phast, losses: { ...phast.losses, flueGasLosses } }, settings);
     return this.phastResultsService.getEnergyUseReportData(legacyPhast, results as never, settings);
   }
 
   /** @returns energy used, energy intensity, and auxiliary electricity calculated by the heat balance */
   getCalculatedByPhast(phast: PHAST, settings: Settings): CalculatedByPhast {
-    return this.phastResultsService.calculatedByPhast(toLegacyPhast(phast), settings);
+    return this.phastResultsService.calculatedByPhast(this.toLegacyScenario(phast, settings), settings);
   }
 
   /** @returns the metered energy comparison, or undefined when no metered energy was entered */
@@ -96,7 +96,7 @@ export class ProcessHeatingResultsService {
     if (!metered?.meteredEnergyElectricity && !metered?.meteredEnergySteam && !metered?.meteredEnergyFuel) {
       return undefined;
     }
-    return this.meteredEnergyService.calculateMeteredEnergy(toLegacyPhast(phast), settings);
+    return this.meteredEnergyService.calculateMeteredEnergy(this.toLegacyScenario(phast, settings), settings);
   }
 
   /** @returns the designed energy comparison, or undefined when no designed energy was entered */
@@ -104,6 +104,10 @@ export class ProcessHeatingResultsService {
     if (!phast.designedEnergy) {
       return undefined;
     }
-    return this.designedEnergyService.calculateDesignedEnergy(toLegacyPhast(phast), settings);
+    return this.designedEnergyService.calculateDesignedEnergy(this.toLegacyScenario(phast, settings), settings);
+  }
+
+  private toLegacyScenario(phast: PHAST, settings: Settings): SharedPHAST {
+    return toLegacyPhast(withoutHiddenLosses(phast, deriveHeatingEquipmentConfiguration(settings)));
   }
 }

@@ -7,6 +7,11 @@ export interface ResultCategories extends ShowResultsCategories {
   showStandardElectricalDelivered: boolean;
 }
 
+/** @returns the flag names set on `categories`, typed as result category keys */
+export function resultCategoryKeys(categories: ResultCategories): (keyof ResultCategories)[] {
+  return Object.keys(categories) as (keyof ResultCategories)[];
+}
+
 /**
  * @param categories each scenario's result categories
  * @returns a flag set wherever any scenario sets it, so a table shows every row some column uses
@@ -15,7 +20,7 @@ export function combineResultCategories(categories: ResultCategories[]): ResultC
   const [first, ...rest] = categories;
   const combined: ResultCategories = { ...first };
   for (const next of rest) {
-    for (const key of Object.keys(next) as (keyof ResultCategories)[]) {
+    for (const key of resultCategoryKeys(next)) {
       combined[key] = !!combined[key] || !!next[key];
     }
   }

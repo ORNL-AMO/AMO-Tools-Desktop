@@ -1,4 +1,4 @@
-import { Notes } from './phast';
+import { Losses, Notes } from './phast';
 
 export const MainView = {
   BASELINE: 'baseline',
@@ -96,6 +96,24 @@ export const LOSS_VIEW_NOTES_KEY: Partial<Record<ProcessHeatingView, keyof Notes
   [LossView.EXHAUST_GAS]: 'exhaustGasNotes',
   [LossView.SLAG]: 'slagNotes',
   [LossView.HEAT_SYSTEM_EFFICIENCY]: 'heatSystemEfficiencyNotes',
+};
+
+/** Losses entry list edited on each loss tab. */
+export const LOSS_VIEW_KEYS: Partial<Record<string, keyof Losses>> = {
+  [LossView.CHARGE_MATERIAL]: 'chargeMaterials',
+  [LossView.FLUE_GAS]: 'flueGasLosses',
+  [LossView.WALL_LOSSES]: 'wallLosses',
+  [LossView.EXTENDED_SURFACE]: 'extendedSurfaces',
+  [LossView.ATMOSPHERE]: 'atmosphereLosses',
+  [LossView.FIXTURE]: 'fixtureLosses',
+  [LossView.COOLING]: 'coolingLosses',
+  [LossView.OPENING]: 'openingLosses',
+  [LossView.OTHER]: 'otherLosses',
+  [LossView.GAS_LEAKAGE]: 'leakageLosses',
+  [LossView.ENERGY_INPUT_EXHAUST_GAS]: 'energyInputExhaustGasLoss',
+  [LossView.ENERGY_INPUT]: 'energyInputEAF',
+  [LossView.EXHAUST_GAS]: 'exhaustGasEAF',
+  [LossView.SLAG]: 'slagLosses',
 };
 
 export const HeatingEquipmentConfiguration = {

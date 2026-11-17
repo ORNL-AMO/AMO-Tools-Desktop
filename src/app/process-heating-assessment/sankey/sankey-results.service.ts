@@ -4,8 +4,8 @@ import { PHAST as SharedPHAST, PhastValid as SharedPhastValid } from '../../shar
 import { Settings } from '../../shared/models/settings';
 import { getModificationName } from '../models/modification';
 import { ModificationService } from '../services/modification.service';
-import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
-import { toLegacyPhast } from '../services/legacy-phast.util';
+import { deriveHeatingEquipmentConfiguration, ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { toLegacyPhast, withoutHiddenLosses } from '../services/legacy-phast.util';
 import { ProcessHeatingValidityService } from '../services/process-heating-validity.service';
 
 export interface SankeyScenario {
@@ -29,12 +29,15 @@ export class SankeyResultsService {
     [
       { id: 'baseline', name: 'Baseline' },
       ...this.modificationService.modifications().map(modification => ({ id: modification.id, name: getModificationName(modification) })),
-    ].map(({ id, name }) => ({
-      id,
-      name,
-      phast: toLegacyPhast(this.assessmentService.scenarioPhastSignal(id)),
-      settings: this.assessmentService.scenarioSettings(id),
-    }))
+    ].map(({ id, name }) => {
+      const settings = this.assessmentService.scenarioSettings(id);
+      return {
+        id,
+        name,
+        phast: toLegacyPhast(withoutHiddenLosses(this.assessmentService.scenarioPhastSignal(id), deriveHeatingEquipmentConfiguration(settings))),
+        settings,
+      };
+    })
   );
 }
 

@@ -4,8 +4,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
 import { resolveSelectedModificationId } from '../models/modification';
-import { Losses, Notes } from '../models/phast';
-import { AssessmentView, AUXILIARY_EQUIPMENT_VIEW, AUXILIARY_EQUIPMENT_VIEW_LINK, BaselineView, EnergyValidationView, EXPERT_VIEW_LOSS_VIEWS, FUEL_SWITCHING_VIEW_LINK, HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, isViewVisibleForConfiguration, LossView, MainView, ProcessHeatingView, ReportView, ViewLink } from '../models/views';
+import { Notes } from '../models/phast';
+import { AssessmentView, AUXILIARY_EQUIPMENT_VIEW, AUXILIARY_EQUIPMENT_VIEW_LINK, BaselineView, EnergyValidationView, EXPERT_VIEW_LOSS_VIEWS, FUEL_SWITCHING_VIEW_LINK, HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, isViewVisibleForConfiguration, LOSS_VIEW_KEYS, LossView, MainView, ProcessHeatingView, ReportView, ViewLink } from '../models/views';
 import { ProcessHeatingRouteData, STEPPED_ROUTES } from '../routing/stepped-routes';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingValidityService } from './process-heating-validity.service';
@@ -24,23 +24,6 @@ export class ProcessHeatingUiService {
   private readonly REQUIRES_VALID_BASELINE_VIEWS: ReadonlySet<string> = new Set<string>([
     MainView.ASSESSMENT, MainView.DIAGRAM, MainView.REPORT, MainView.SANKEY, ...Object.values(AssessmentView), ...Object.values(ReportView),
   ]);
-
-  private readonly LOSS_VIEW_KEYS: Partial<Record<string, keyof Losses>> = {
-    [LossView.CHARGE_MATERIAL]: 'chargeMaterials',
-    [LossView.FLUE_GAS]: 'flueGasLosses',
-    [LossView.WALL_LOSSES]: 'wallLosses',
-    [LossView.EXTENDED_SURFACE]: 'extendedSurfaces',
-    [LossView.ATMOSPHERE]: 'atmosphereLosses',
-    [LossView.FIXTURE]: 'fixtureLosses',
-    [LossView.COOLING]: 'coolingLosses',
-    [LossView.OPENING]: 'openingLosses',
-    [LossView.OTHER]: 'otherLosses',
-    [LossView.GAS_LEAKAGE]: 'leakageLosses',
-    [LossView.ENERGY_INPUT_EXHAUST_GAS]: 'energyInputExhaustGasLoss',
-    [LossView.ENERGY_INPUT]: 'energyInputEAF',
-    [LossView.EXHAUST_GAS]: 'exhaustGasEAF',
-    [LossView.SLAG]: 'slagLosses',
-  };
 
   // Derived from assessment settings — energySourceType + furnaceType determine the active tab set
   readonly heatingSystemConfigurationSignal: Signal<HeatingEquipmentConfiguration> =
@@ -275,7 +258,7 @@ export class ProcessHeatingUiService {
     if (view === AUXILIARY_EQUIPMENT_VIEW) {
       return this.processHeatingAssessmentService.scenarioPhastSignal(scenario)?.auxiliaryEquipment?.length ?? 0;
     }
-    const lossKey = this.LOSS_VIEW_KEYS[view];
+    const lossKey = LOSS_VIEW_KEYS[view];
     return lossKey ? this.processHeatingAssessmentService.lossSignal(scenario, lossKey)?.length ?? 0 : undefined;
   }
 
