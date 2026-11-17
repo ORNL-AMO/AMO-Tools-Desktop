@@ -26,7 +26,8 @@ describe('PhastIntegrationService', () => {
     resultsByPhast = new Map();
     const phastResultsService = jasmine.createSpyObj<PhastResultsService>('PhastResultsService', ['getResults', 'getEnergyUseReportData']);
     phastResultsService.getResults.and.callFake(phast => resultsByPhast.get(phast) as PhastResults);
-    phastResultsService.getEnergyUseReportData.and.returnValue({} as never);
+    // Resolves on a later task, so energy options are only complete if every modification's results are awaited
+    phastResultsService.getEnergyUseReportData.and.callFake(() => new Promise(resolve => setTimeout(() => resolve({}))) as never);
     const executiveSummaryService = jasmine.createSpyObj<ExecutiveSummaryService>('ExecutiveSummaryService', ['getSummary']);
     executiveSummaryService.getSummary.and.returnValue({ annualCost: 0, co2EmissionsOutput: {} } as ExecutiveSummary);
     service = new PhastIntegrationService(executiveSummaryService, jasmine.createSpyObj<ConvertUnitsService>('ConvertUnitsService', ['convertValue']), phastResultsService);
@@ -44,8 +45,6 @@ describe('PhastIntegrationService', () => {
     const integratedAssessment = { assessment: { phast } as Assessment } as IntegratedAssessment;
 
     await service.setIntegratedAssessmentData(integratedAssessment, settings, treasureHuntSettings);
-    // modification energy options are pushed after an un-awaited async callback
-    await new Promise(resolve => setTimeout(resolve));
 
     expect(integratedAssessment.energyOptions.baseline.annualEnergy).toBe(10 * 8000);
     expect(integratedAssessment.energyOptions.modifications[0].annualEnergy).toBe(8 * 4000);

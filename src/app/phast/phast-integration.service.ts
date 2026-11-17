@@ -43,7 +43,7 @@ export class PhastIntegrationService {
     if (integratedAssessment.hasModifications) {
       let modificationEnergyOptions: Array<ModificationEnergyOption> = [];
 
-      phast.modifications.map(async modification => {
+      await Promise.all(phast.modifications.map(async modification => {
         let modificationPhastResults: PhastResults = this.phastResultService.getResults(modification.phast, settings);
         let energyUsed: EnergyUseReportData = await this.phastResultService.getEnergyUseReportData(modification.phast, modificationPhastResults, settings);
         let modificationExecutiveSummary: ExecutiveSummary = this.executiveSummaryService.getSummary(modification.phast, true, settings, phast);
@@ -64,7 +64,7 @@ export class PhastIntegrationService {
             modificationId: modification.id,
             energies: modificationEnergyUseItems
           })
-      });
+      }));
       integratedAssessment.modificationEnergyUseItems = modificationEnergyOptions;
     }
 
