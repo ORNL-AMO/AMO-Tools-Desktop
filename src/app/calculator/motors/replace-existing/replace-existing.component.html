@@ -6,23 +6,29 @@
         <img src="assets/images/calculator-icons/motor-icons/replace.png">
       </div>
       <div class="mx-auto">
-        <h3 *ngIf="inTreasureHunt">Replace Existing Motor - Efficiency Upgrade</h3>
-        <h3 *ngIf="!inTreasureHunt">Replace vs Rewind</h3>
+        @if (inTreasureHunt) {
+          <h3>Replace Existing Motor - Efficiency Upgrade</h3>
+        }
+        @if (!inTreasureHunt) {
+          <h3>Replace vs Rewind</h3>
+        }
       </div>
     </div>
-    <div class="d-flex pr-2 pl-2" *ngIf="inTreasureHunt">
-      <div class="d-none d-lg-flex help-holder">
-        <p class="help-text treasure-hunt-help">Click the save icon to add the
-          treasure to your chest! Click cancel to discard the opportunity and return
-          to method selection.</p>
+    @if (inTreasureHunt) {
+      <div class="d-flex pr-2 pl-2">
+        <div class="d-none d-lg-flex help-holder">
+          <p class="help-text treasure-hunt-help">Click the save icon to add the
+            treasure to your chest! Click cancel to discard the opportunity and return
+            to method selection.</p>
+        </div>
+        <div class="pl-2 pr-2 border-right border-left action-item" (click)="save()">
+          <span class="fa fa-save"></span>
+        </div>
+        <div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
+          <span class="fa fa-times"></span>
+        </div>
       </div>
-      <div class="pl-2 pr-2 border-right border-left action-item" (click)="save()">
-        <span class="fa fa-save"></span>
-      </div>
-      <div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
-        <span class="fa fa-times"></span>
-      </div>
-    </div>
+    }
   </div>
   <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
     <div class="nav-item" (click)="setSmallScreenTab('form')"
@@ -76,11 +82,15 @@
           </div>
         </div>
         <div class="d-flex justify-content-center px-2">
-          <app-replace-existing-help *ngIf="tabSelect == 'help'" [currentField]="currentField">
-          </app-replace-existing-help>
-          <app-replace-existing-results class="p-2" *ngIf="tabSelect == 'results'" [results]="results"
-            [inTreasureHunt]="inTreasureHunt">
-          </app-replace-existing-results>
+          @if (tabSelect == 'help') {
+            <app-replace-existing-help [currentField]="currentField">
+            </app-replace-existing-help>
+          }
+          @if (tabSelect == 'results') {
+            <app-replace-existing-results class="p-2" [results]="results"
+              [inTreasureHunt]="inTreasureHunt">
+            </app-replace-existing-results>
+          }
         </div>
       </div>
     </div>
