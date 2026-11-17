@@ -1,182 +1,278 @@
 <label class="group-label">Baseline Results</label>
 <table #copyTable0 class="table table-hover table-striped">
-    <tbody>
-        <tr>
-            <td class="bold w-50">Head Loss</td>
-            <td *ngIf="output.baselineOutputs.headLoss" class="text-center w-50">
-                {{output.baselineOutputs.headLoss | number:'1.0-2'}}
-                <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon">ft</span>
-                <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon">m</span>
-            </td>
-            <td *ngIf="!output.baselineOutputs.headLoss" class="text-center w-50">
-                &mdash; &mdash;
-            </td>
-        </tr>
-        <tr>
-            <td class="bold w-50">Friction Losses</td>
-            <td *ngIf="output.baselineOutputs.powerLossFrictional" class="text-center w-50">
-                {{output.baselineOutputs.powerLossFrictional | number:'1.0-2'}}
-                <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon">hp</span>
-                <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon">kW</span>
-            </td>
-            <td *ngIf="!output.baselineOutputs.powerLossFrictional" class="text-center w-50">
-                &mdash; &mdash;
-            </td>
-        </tr>
-        <tr>
-            <td class="bold w-50">Electrical Loss</td>
-            <td *ngIf="output.baselineOutputs.powerLossElectrical" class="text-center w-50">
-                {{output.baselineOutputs.powerLossElectrical | number:'1.0-2'}}
-                <span class="input-group-addon">kW</span>
-            </td>
-            <td *ngIf="!output.baselineOutputs.powerLossElectrical" class="text-center w-50">
-                &mdash; &mdash;
-            </td>
-        </tr>
-        <tr>
-            <td class="bold w-50">Annual Energy Usage</td>
-            <td *ngIf="output.baselineOutputs.annualEnergyLoss" class="text-center w-50">
-                {{output.baselineOutputs.annualEnergyLoss | number:'1.0-2'}}
-                <span class="input-group-addon">kWh</span>
-            </td>
-            <td *ngIf="!output.baselineOutputs.annualEnergyLoss" class="text-center w-50">
-                &mdash; &mdash;
-            </td>
-        </tr>
-        <tr>
-            <td class="bold w-50">Annual Energy Cost</td>
-            <td *ngIf="output.baselineOutputs.annualEnergyCost" class="text-center w-50">
-                {{output.baselineOutputs.annualEnergyCost | currency:'USD':'symbol':'1.2-2'}}
-            </td>
-            <td *ngIf="!output.baselineOutputs.annualEnergyCost" class="text-center w-50">
-                &mdash; &mdash;
-            </td>
-        </tr>
-    </tbody>
+  <tbody>
+    <tr>
+      <td class="bold w-50">Head Loss</td>
+      @if (output.baselineOutputs.headLoss) {
+        <td class="text-center w-50">
+          {{output.baselineOutputs.headLoss | number:'1.0-2'}}
+          @if (settings.unitsOfMeasure === 'Imperial') {
+            <span class="input-group-addon">ft</span>
+          }
+          @if (settings.unitsOfMeasure === 'Metric') {
+            <span class="input-group-addon">m</span>
+          }
+        </td>
+      }
+      @if (!output.baselineOutputs.headLoss) {
+        <td class="text-center w-50">
+          &mdash; &mdash;
+        </td>
+      }
+    </tr>
+    <tr>
+      <td class="bold w-50">Friction Losses</td>
+      @if (output.baselineOutputs.powerLossFrictional) {
+        <td class="text-center w-50">
+          {{output.baselineOutputs.powerLossFrictional | number:'1.0-2'}}
+          @if (settings.unitsOfMeasure === 'Imperial') {
+            <span class="input-group-addon">hp</span>
+          }
+          @if (settings.unitsOfMeasure === 'Metric') {
+            <span class="input-group-addon">kW</span>
+          }
+        </td>
+      }
+      @if (!output.baselineOutputs.powerLossFrictional) {
+        <td class="text-center w-50">
+          &mdash; &mdash;
+        </td>
+      }
+    </tr>
+    <tr>
+      <td class="bold w-50">Electrical Loss</td>
+      @if (output.baselineOutputs.powerLossElectrical) {
+        <td class="text-center w-50">
+          {{output.baselineOutputs.powerLossElectrical | number:'1.0-2'}}
+          <span class="input-group-addon">kW</span>
+        </td>
+      }
+      @if (!output.baselineOutputs.powerLossElectrical) {
+        <td class="text-center w-50">
+          &mdash; &mdash;
+        </td>
+      }
+    </tr>
+    <tr>
+      <td class="bold w-50">Annual Energy Usage</td>
+      @if (output.baselineOutputs.annualEnergyLoss) {
+        <td class="text-center w-50">
+          {{output.baselineOutputs.annualEnergyLoss | number:'1.0-2'}}
+          <span class="input-group-addon">kWh</span>
+        </td>
+      }
+      @if (!output.baselineOutputs.annualEnergyLoss) {
+        <td class="text-center w-50">
+          &mdash; &mdash;
+        </td>
+      }
+    </tr>
+    <tr>
+      <td class="bold w-50">Annual Energy Cost</td>
+      @if (output.baselineOutputs.annualEnergyCost) {
+        <td class="text-center w-50">
+          {{output.baselineOutputs.annualEnergyCost | currency:'USD':'symbol':'1.2-2'}}
+        </td>
+      }
+      @if (!output.baselineOutputs.annualEnergyCost) {
+        <td class="text-center w-50">
+          &mdash; &mdash;
+        </td>
+      }
+    </tr>
+  </tbody>
 </table>
 <!-- export table component -->
 <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
 </app-exportable-results-table>
 
 
-<label class="group-label" *ngIf="modificationExists">Modification Results</label>
-<table *ngIf="modificationExists" #copyTable1 class="table table-hover table-striped">
+@if (modificationExists) {
+  <label class="group-label">Modification Results</label>
+}
+@if (modificationExists) {
+  <table #copyTable1 class="table table-hover table-striped">
     <tbody>
-        <tr>
-            <td class="bold w-50">Head Loss</td>
-            <td *ngIf="output.modificationOutputs.headLoss" class="text-center w-50">
-                {{output.modificationOutputs.headLoss | number:'1.0-2'}}
-                <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon">ft</span>
-                <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon">m</span>
-            </td>
-            <td *ngIf="!output.modificationOutputs.headLoss" class="text-center w-50">
-                &mdash; &mdash;
-            </td>
-        </tr>
-        <tr>
-            <td class="bold w-50">Friction Losses</td>
-            <td *ngIf="output.modificationOutputs.powerLossFrictional" class="text-center w-50">
-                {{output.modificationOutputs.powerLossFrictional | number:'1.0-2'}}
-                <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon">hp</span>
-                <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon">kW</span>
-            </td>
-            <td *ngIf="!output.modificationOutputs.powerLossFrictional" class="text-center w-50">
-                &mdash; &mdash;
-            </td>
-        </tr>
-        <tr>
-            <td class="bold w-50">Electrical Loss</td>
-            <td *ngIf="output.modificationOutputs.powerLossElectrical" class="text-center w-50">
-                {{output.modificationOutputs.powerLossElectrical | number:'1.0-2'}}
-                <span class="input-group-addon">kW</span>
-            </td>
-            <td *ngIf="!output.modificationOutputs.powerLossElectrical" class="text-center w-50">
-                &mdash; &mdash;
-            </td>
-        </tr>
-        <tr>
-            <td class="bold w-50">Annual Energy Usage</td>
-            <td *ngIf="output.modificationOutputs.annualEnergyLoss" class="text-center w-50">
-                {{output.modificationOutputs.annualEnergyLoss | number:'1.0-2'}}
-                <span class="input-group-addon">kWh</span>
-            </td>
-            <td *ngIf="!output.modificationOutputs.annualEnergyLoss" class="text-center w-50">
-                &mdash; &mdash;
-            </td>
-        </tr>
-        <tr>
-            <td class="bold w-50">Annual Energy Cost</td>
-            <td *ngIf="output.modificationOutputs.annualEnergyCost" class="text-center w-50">
-                {{output.modificationOutputs.annualEnergyCost | currency:'USD':'symbol':'1.2-2'}}
-            </td>
-            <td *ngIf="!output.modificationOutputs.annualEnergyCost" class="text-center w-50">
-                &mdash; &mdash;
-            </td>
-        </tr>
+      <tr>
+        <td class="bold w-50">Head Loss</td>
+        @if (output.modificationOutputs.headLoss) {
+          <td class="text-center w-50">
+            {{output.modificationOutputs.headLoss | number:'1.0-2'}}
+            @if (settings.unitsOfMeasure === 'Imperial') {
+              <span class="input-group-addon">ft</span>
+            }
+            @if (settings.unitsOfMeasure === 'Metric') {
+              <span class="input-group-addon">m</span>
+            }
+          </td>
+        }
+        @if (!output.modificationOutputs.headLoss) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Friction Losses</td>
+        @if (output.modificationOutputs.powerLossFrictional) {
+          <td class="text-center w-50">
+            {{output.modificationOutputs.powerLossFrictional | number:'1.0-2'}}
+            @if (settings.unitsOfMeasure === 'Imperial') {
+              <span class="input-group-addon">hp</span>
+            }
+            @if (settings.unitsOfMeasure === 'Metric') {
+              <span class="input-group-addon">kW</span>
+            }
+          </td>
+        }
+        @if (!output.modificationOutputs.powerLossFrictional) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Electrical Loss</td>
+        @if (output.modificationOutputs.powerLossElectrical) {
+          <td class="text-center w-50">
+            {{output.modificationOutputs.powerLossElectrical | number:'1.0-2'}}
+            <span class="input-group-addon">kW</span>
+          </td>
+        }
+        @if (!output.modificationOutputs.powerLossElectrical) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Annual Energy Usage</td>
+        @if (output.modificationOutputs.annualEnergyLoss) {
+          <td class="text-center w-50">
+            {{output.modificationOutputs.annualEnergyLoss | number:'1.0-2'}}
+            <span class="input-group-addon">kWh</span>
+          </td>
+        }
+        @if (!output.modificationOutputs.annualEnergyLoss) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Annual Energy Cost</td>
+        @if (output.modificationOutputs.annualEnergyCost) {
+          <td class="text-center w-50">
+            {{output.modificationOutputs.annualEnergyCost | currency:'USD':'symbol':'1.2-2'}}
+          </td>
+        }
+        @if (!output.modificationOutputs.annualEnergyCost) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
     </tbody>
-</table>
-<app-exportable-results-table *ngIf="modificationExists" [tableString]="table1String"
+  </table>
+}
+@if (modificationExists) {
+  <app-exportable-results-table [tableString]="table1String"
     (updateTableString)="updateTable1String()"></app-exportable-results-table>
+}
 
-<label class="group-label" *ngIf="modificationExists">Reductions</label>
-<table *ngIf="modificationExists" #copyTable2 class="table table-hover table-striped">
+@if (modificationExists) {
+  <label class="group-label">Reductions</label>
+}
+@if (modificationExists) {
+  <table #copyTable2 class="table table-hover table-striped">
     <tbody>
-        <tr>
-            <td class="bold w-50">Head Loss</td>
-            <td *ngIf="output.modificationOutputs.headLoss" class="text-center w-50">
-                {{output.baselineOutputs.headLoss - output.modificationOutputs.headLoss | number:'1.0-2'}}
-                <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon">ft</span>
-                <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon">m</span>
-            </td>
-            <td *ngIf="!output.modificationOutputs.headLoss" class="text-center w-50">
-                &mdash; &mdash;
-            </td>
-        </tr>
-        <tr>
-            <td class="bold w-50">Friction Losses</td>
-            <td *ngIf="output.modificationOutputs.powerLossFrictional" class="text-center w-50">
-                {{output.baselineOutputs.powerLossFrictional - output.modificationOutputs.powerLossFrictional |
-                number:'1.0-2'}}
-                <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon">hp</span>
-                <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon">kW</span>
-            </td>
-            <td *ngIf="!output.modificationOutputs.powerLossFrictional" class="text-center w-50">
-                &mdash; &mdash;
-            </td>
-        </tr>
-        <tr>
-            <td class="bold w-50">Electrical Loss</td>
-            <td *ngIf="output.modificationOutputs.powerLossElectrical" class="text-center w-50">
-                {{output.baselineOutputs.powerLossElectrical - output.modificationOutputs.powerLossElectrical |
-                number:'1.0-2'}}
-                <span class="input-group-addon">kW</span>
-            </td>
-            <td *ngIf="!output.modificationOutputs.powerLossElectrical" class="text-center w-50">
-                &mdash; &mdash;
-            </td>
-        </tr>
-        <tr>
-            <td class="bold w-50">Annual Energy Usage</td>
-            <td *ngIf="output.modificationOutputs.annualEnergyLoss" class="text-center w-50">
-                {{output.baselineOutputs.annualEnergyLoss - output.modificationOutputs.annualEnergyLoss |
-                number:'1.0-2'}}
-                <span class="input-group-addon">kWh</span>
-            </td>
-            <td *ngIf="!output.modificationOutputs.annualEnergyLoss" class="text-center w-50">
-                &mdash; &mdash;
-            </td>
-        </tr>
-        <tr>
-            <td class="bold w-50">Annual Energy Cost</td>
-            <td *ngIf="output.modificationOutputs.annualEnergyCost" class="text-center w-50">
-                {{output.baselineOutputs.annualEnergyCost - output.modificationOutputs.annualEnergyCost |
-                currency:'USD':'symbol':'1.2-2'}}
-            </td>
-            <td *ngIf="!output.modificationOutputs.annualEnergyCost" class="text-center w-50">
-                &mdash; &mdash;
-            </td>
-        </tr>
+      <tr>
+        <td class="bold w-50">Head Loss</td>
+        @if (output.modificationOutputs.headLoss) {
+          <td class="text-center w-50">
+            {{output.baselineOutputs.headLoss - output.modificationOutputs.headLoss | number:'1.0-2'}}
+            @if (settings.unitsOfMeasure === 'Imperial') {
+              <span class="input-group-addon">ft</span>
+            }
+            @if (settings.unitsOfMeasure === 'Metric') {
+              <span class="input-group-addon">m</span>
+            }
+          </td>
+        }
+        @if (!output.modificationOutputs.headLoss) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Friction Losses</td>
+        @if (output.modificationOutputs.powerLossFrictional) {
+          <td class="text-center w-50">
+            {{output.baselineOutputs.powerLossFrictional - output.modificationOutputs.powerLossFrictional |
+              number:'1.0-2'}}
+            @if (settings.unitsOfMeasure === 'Imperial') {
+              <span class="input-group-addon">hp</span>
+            }
+            @if (settings.unitsOfMeasure === 'Metric') {
+              <span class="input-group-addon">kW</span>
+            }
+          </td>
+        }
+        @if (!output.modificationOutputs.powerLossFrictional) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Electrical Loss</td>
+        @if (output.modificationOutputs.powerLossElectrical) {
+          <td class="text-center w-50">
+            {{output.baselineOutputs.powerLossElectrical - output.modificationOutputs.powerLossElectrical |
+              number:'1.0-2'}}
+            <span class="input-group-addon">kW</span>
+          </td>
+        }
+        @if (!output.modificationOutputs.powerLossElectrical) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Annual Energy Usage</td>
+        @if (output.modificationOutputs.annualEnergyLoss) {
+          <td class="text-center w-50">
+            {{output.baselineOutputs.annualEnergyLoss - output.modificationOutputs.annualEnergyLoss |
+              number:'1.0-2'}}
+            <span class="input-group-addon">kWh</span>
+          </td>
+        }
+        @if (!output.modificationOutputs.annualEnergyLoss) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Annual Energy Cost</td>
+        @if (output.modificationOutputs.annualEnergyCost) {
+          <td class="text-center w-50">
+            {{output.baselineOutputs.annualEnergyCost - output.modificationOutputs.annualEnergyCost |
+              currency:'USD':'symbol':'1.2-2'}}
+          </td>
+        }
+        @if (!output.modificationOutputs.annualEnergyCost) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
     </tbody>
-</table>
-<app-exportable-results-table *ngIf="modificationExists" [tableString]="table2String"
+  </table>
+}
+@if (modificationExists) {
+  <app-exportable-results-table [tableString]="table2String"
     (updateTableString)="updateTable2String()"></app-exportable-results-table>
+}

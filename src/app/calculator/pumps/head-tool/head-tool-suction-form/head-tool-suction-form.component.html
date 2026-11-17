@@ -7,10 +7,16 @@
         <input type="number" min="0" class="form-control" formControlName="specificGravity" id="specificGravity"
           (keyup)="calc()" onfocus="this.select();" (focus)="focusField('specificGravity')">
       </div>
-      <span class="alert-danger pull-right small" *ngIf="headToolSuctionForm.controls.specificGravity.invalid && !headToolSuctionForm.controls.specificGravity.pristine">
-        <span *ngIf="headToolSuctionForm.controls.specificGravity.errors.required">Value required.</span>
-        <span *ngIf="headToolSuctionForm.controls.specificGravity.errors.min">Value can't be less than 0.</span>
-      </span>
+      @if (headToolSuctionForm.controls.specificGravity.invalid && !headToolSuctionForm.controls.specificGravity.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (headToolSuctionForm.controls.specificGravity.errors.required) {
+            <span>Value required.</span>
+          }
+          @if (headToolSuctionForm.controls.specificGravity.errors.min) {
+            <span>Value can't be less than 0.</span>
+          }
+        </span>
+      }
     </div>
 
 
@@ -23,11 +29,17 @@
           {{settings.flowMeasurement}}
         </span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="headToolSuctionForm.controls.flowRate.invalid && !headToolSuctionForm.controls.flowRate.pristine">
-        <span *ngIf="headToolSuctionForm.controls.flowRate.errors.required">Value required.</span>
-        <span *ngIf="headToolSuctionForm.controls.flowRate.errors.min">Value can't be less than 0
-          {{settings.flowMeasurement}}.</span>
-      </span>
+      @if (headToolSuctionForm.controls.flowRate.invalid && !headToolSuctionForm.controls.flowRate.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (headToolSuctionForm.controls.flowRate.errors.required) {
+            <span>Value required.</span>
+          }
+          @if (headToolSuctionForm.controls.flowRate.errors.min) {
+            <span>Value can't be less than 0
+              {{settings.flowMeasurement}}.</span>
+          }
+        </span>
+      }
     </div>
   </div>
 
@@ -41,14 +53,22 @@
             (keyup)="calc()" onfocus="this.select();" (focus)="focusField('suctionPipeDiameter')">
           <span class="input-group-addon units">{{smallUnit}}</span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="headToolSuctionForm.controls.suctionPipeDiameter.invalid && !headToolSuctionForm.controls.suctionPipeDiameter.pristine">
-          <span *ngIf="diameterSuctionError !== null">
-            {{diameterSuctionError}}
+        @if (headToolSuctionForm.controls.suctionPipeDiameter.invalid && !headToolSuctionForm.controls.suctionPipeDiameter.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (diameterSuctionError !== null) {
+              <span>
+                {{diameterSuctionError}}
+              </span>
+            }
+            @if (headToolSuctionForm.controls.suctionPipeDiameter.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (headToolSuctionForm.controls.suctionPipeDiameter.errors.min) {
+              <span>Value can't be less than 0
+                {{smallUnit}}.</span>
+            }
           </span>
-          <span *ngIf="headToolSuctionForm.controls.suctionPipeDiameter.errors.required">Value required.</span>
-          <span *ngIf="headToolSuctionForm.controls.suctionPipeDiameter.errors.min">Value can't be less than 0
-            {{smallUnit}}.</span>
-        </span>
+        }
       </div>
 
       <div class="form-group">
@@ -60,12 +80,18 @@
             {{settings.pressureMeasurement}}
           </span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="headToolSuctionForm.controls.suctionTankGasOverPressure.invalid && !headToolSuctionForm.controls.suctionTankGasOverPressure.pristine">
-          <span *ngIf="pressureError !== null">
-            {{pressureError}}
+        @if (headToolSuctionForm.controls.suctionTankGasOverPressure.invalid && !headToolSuctionForm.controls.suctionTankGasOverPressure.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (pressureError !== null) {
+              <span>
+                {{pressureError}}
+              </span>
+            }
+            @if (headToolSuctionForm.controls.suctionTankGasOverPressure.errors.required) {
+              <span>Value required.</span>
+            }
           </span>
-          <span *ngIf="headToolSuctionForm.controls.suctionTankGasOverPressure.errors.required">Value required.</span>
-        </span>
+        }
       </div>
 
 
@@ -78,9 +104,13 @@
             {{settings.distanceMeasurement}}
           </span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="headToolSuctionForm.controls.suctionTankFluidSurfaceElevation.invalid && !headToolSuctionForm.controls.suctionTankFluidSurfaceElevation.pristine">
-          <span *ngIf="headToolSuctionForm.controls.suctionTankFluidSurfaceElevation.errors.required">Value required.</span>
-        </span>
+        @if (headToolSuctionForm.controls.suctionTankFluidSurfaceElevation.invalid && !headToolSuctionForm.controls.suctionTankFluidSurfaceElevation.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (headToolSuctionForm.controls.suctionTankFluidSurfaceElevation.errors.required) {
+              <span>Value required.</span>
+            }
+          </span>
+        }
       </div>
 
 
@@ -90,9 +120,13 @@
           <input type="number" min="0" class="form-control" [ngClass]="{'w-100': inAssessment != true}" formControlName="suctionLineLossCoefficients"
             id="suctionLineLossCoefficients" (keyup)="calc()" onfocus="this.select();" (focus)="focusField('suctionLineLossCoefficients')">
         </div>
-        <span class="alert-danger pull-right small" *ngIf="headToolSuctionForm.controls.suctionLineLossCoefficients.invalid && !headToolSuctionForm.controls.suctionLineLossCoefficients.pristine">
-          <span *ngIf="headToolSuctionForm.controls.suctionLineLossCoefficients.errors.required">Value required.</span>
-        </span>
+        @if (headToolSuctionForm.controls.suctionLineLossCoefficients.invalid && !headToolSuctionForm.controls.suctionLineLossCoefficients.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (headToolSuctionForm.controls.suctionLineLossCoefficients.errors.required) {
+              <span>Value required.</span>
+            }
+          </span>
+        }
       </div>
     </div>
 
@@ -107,14 +141,22 @@
             {{smallUnit}}
           </span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="headToolSuctionForm.controls.dischargePipeDiameter.invalid && !headToolSuctionForm.controls.dischargePipeDiameter.pristine">
-          <span *ngIf="diameterSuctionErrorOut !== null">
-            {{diameterSuctionErrorOut}}
+        @if (headToolSuctionForm.controls.dischargePipeDiameter.invalid && !headToolSuctionForm.controls.dischargePipeDiameter.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (diameterSuctionErrorOut !== null) {
+              <span>
+                {{diameterSuctionErrorOut}}
+              </span>
+            }
+            @if (headToolSuctionForm.controls.dischargePipeDiameter.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (headToolSuctionForm.controls.dischargePipeDiameter.errors.min) {
+              <span>Value can't be less than 0
+                {{smallUnit}}.</span>
+            }
           </span>
-          <span *ngIf="headToolSuctionForm.controls.dischargePipeDiameter.errors.required">Value required.</span>
-          <span *ngIf="headToolSuctionForm.controls.dischargePipeDiameter.errors.min">Value can't be less than 0
-            {{smallUnit}}.</span>
-        </span>
+        }
       </div>
 
       <div class="form-group">
@@ -126,12 +168,18 @@
             {{settings.pressureMeasurement}}
           </span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="headToolSuctionForm.controls.dischargeGaugePressure.invalid && !headToolSuctionForm.controls.dischargeGaugePressure.pristine">
-          <span *ngIf="pressureError !== null">
-            {{pressureError}}
+        @if (headToolSuctionForm.controls.dischargeGaugePressure.invalid && !headToolSuctionForm.controls.dischargeGaugePressure.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (pressureError !== null) {
+              <span>
+                {{pressureError}}
+              </span>
+            }
+            @if (headToolSuctionForm.controls.dischargeGaugePressure.errors.required) {
+              <span>Value required.</span>
+            }
           </span>
-          <span *ngIf="headToolSuctionForm.controls.dischargeGaugePressure.errors.required">Value required.</span>
-        </span>
+        }
       </div>
 
       <div class="form-group">
@@ -143,9 +191,13 @@
             {{settings.distanceMeasurement}}
           </span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="headToolSuctionForm.controls.dischargeGaugeElevation.invalid && !headToolSuctionForm.controls.dischargeGaugeElevation.pristine">
-          <span *ngIf="headToolSuctionForm.controls.dischargeGaugeElevation.errors.required">Value required.</span>
-        </span>
+        @if (headToolSuctionForm.controls.dischargeGaugeElevation.invalid && !headToolSuctionForm.controls.dischargeGaugeElevation.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (headToolSuctionForm.controls.dischargeGaugeElevation.errors.required) {
+              <span>Value required.</span>
+            }
+          </span>
+        }
       </div>
 
       <div class="form-group">
@@ -154,9 +206,13 @@
           <input type="number" min="0" class="form-control" [ngClass]="{'w-100': inAssessment != true}" formControlName="dischargeLineLossCoefficients"
             id="dischargeLineLossCoefficients" (keyup)="calc()" onfocus="this.select();" (focus)="focusField('dischargeLineLossCoefficients')">
         </div>
-        <span class="alert-danger pull-right small" *ngIf="headToolSuctionForm.controls.dischargeLineLossCoefficients.invalid && !headToolSuctionForm.controls.dischargeLineLossCoefficients.pristine">
-          <span *ngIf="headToolSuctionForm.controls.dischargeLineLossCoefficients.errors.required">Value required.</span>
-        </span>
+        @if (headToolSuctionForm.controls.dischargeLineLossCoefficients.invalid && !headToolSuctionForm.controls.dischargeLineLossCoefficients.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (headToolSuctionForm.controls.dischargeLineLossCoefficients.errors.required) {
+              <span>Value required.</span>
+            }
+          </span>
+        }
       </div>
     </div>
   </div>
