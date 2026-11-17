@@ -13,8 +13,23 @@
 
 
 <form *ngIf="displayForm" class="p-1" [formGroup]="motorForm">
-    <!--Efficiency type: efficiencyClass-->
+    <!--motor supply: stored in numberOfPhases and currentType, first since it sets which fields apply-->
     <div class="form-group">
+        <label for="motorSupply">Motor Supply
+            <span class="form-text">
+                <span class="fa fa-question-circle" (click)="focusHelp('motorSupply')"></span>
+            </span>
+        </label>
+        <select name="motorSupply" class="form-control" id="motorSupply" (change)="changeMotorSupply($event.target.value)"
+            (focus)="focusField('motorSupply')">
+            <option *ngFor="let option of motorSupplyOptions" [value]="option.value"
+                [selected]="option.value == motorSupply"
+                [disabled]="connectedItems?.length && option.value != 'threePhase'">{{option.display}}<ng-container
+                    *ngIf="connectedItems?.length && option.value != 'threePhase'"> (disconnect first)</ng-container></option>
+        </select>
+    </div>
+    <!--Efficiency type: efficiencyClass-->
+    <div class="form-group" *ngIf="motorSupply != 'dc'">
         <label for="efficiencyClass">Efficiency Class</label>
         <select name="efficiencyClass" class="form-control select-input-field" id="efficiencyClass"
             formControlName="efficiencyClass" (change)="save()" (focus)="focusField('efficiencyClass')">
@@ -27,7 +42,7 @@
         <label for="nominalEfficiency">Est. Nominal Efficiency
             <span class="form-text">
                 <a class="small click-link" (click)="estimateNominalEfficiency()"
-                    [ngClass]="{'disabled': !displayOptions.fullLoadSpeed}">Estimate Efficiency</a>
+                    [ngClass]="{'disabled': !displayOptions.fullLoadSpeed || motorSupply != 'threePhase'}">Estimate Efficiency</a>
                 <span class="fa fa-question-circle" (click)="focusHelp('nominalEfficiency')"></span>
             </span>
         </label>
@@ -62,7 +77,7 @@
         </span>
     </div>
     <!--line frequency: lineFrequency-->
-    <div class="form-group">
+    <div class="form-group" *ngIf="motorSupply != 'dc'">
         <label for="lineFrequency">Line Frequency</label>
         <select name="lineFrequency" class="form-control" id="lineFrequency" formControlName="lineFrequency"
             (change)="save()" (focus)="focusField('lineFrequency')">
@@ -154,15 +169,6 @@
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg</span></span>
         </span>
     </div>
-    <!-- numberOfPhases -->
-    <div class="form-group" *ngIf="displayOptions.numberOfPhases">
-        <label for="numberOfPhases">Number of Phases</label>
-        <select class="form-control" (focus)="focusField('numberOfPhases')" (change)="save()"
-            formControlName="numberOfPhases" id="numberOfPhases">
-            <option [ngValue]="1">1</option>
-            <option [ngValue]="3">3</option>
-        </select>
-    </div>
     <!-- fullLoadSpeed -->
     <div class="form-group" *ngIf="displayOptions.fullLoadSpeed">
         <label for="fullLoadSpeed">Full-Load Speed</label>
@@ -183,7 +189,7 @@
         <label for="fullLoadAmps">Full-Load Amps
             <span class="form-text">
                 <a class="small click-link" (click)="calculateFullLoadAmps()"
-                    [ngClass]="{'disabled': !displayOptions.fullLoadSpeed || !displayOptions.ratedVoltage}">Estimate
+                    [ngClass]="{'disabled': !displayOptions.fullLoadSpeed || !displayOptions.ratedVoltage || motorSupply != 'threePhase'}">Estimate
                     Full-Load Amps</a>
                 <span class="fa fa-question-circle" (click)="focusHelp('fullLoadAmps')"></span>
             </span>

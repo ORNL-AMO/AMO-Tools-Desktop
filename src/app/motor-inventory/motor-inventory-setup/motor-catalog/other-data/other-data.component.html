@@ -13,7 +13,7 @@
         </select>
     </div>
     <!-- isVFD -->
-    <div class="form-group" *ngIf="displayOptions.isVFD">
+    <div class="form-group" *ngIf="displayOptions.isVFD && motorSupply != 'dc'">
         <label for="isVFD">Is VFD?</label>
         <select class="form-control" (focus)="focusField('isVFD')" (change)="save()" formControlName="isVFD" id="isVFD">
             <option [ngValue]="true">Yes</option>
@@ -30,7 +30,7 @@
         </select>
     </div>
     <!-- voltageConnectionType -->
-    <div class="form-group" *ngIf="displayOptions.voltageConnectionType">
+    <div class="form-group" *ngIf="displayOptions.voltageConnectionType && motorSupply == 'threePhase'">
         <label for="voltageConnectionType">Voltage Connection Type</label>
         <select class="form-control" (focus)="focusField('voltageConnectionType')" (change)="save()"
             formControlName="voltageConnectionType" id="voltageConnectionType">

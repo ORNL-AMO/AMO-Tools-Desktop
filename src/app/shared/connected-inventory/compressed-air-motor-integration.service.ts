@@ -14,6 +14,7 @@ import { MotorInventoryDepartment, MotorItem } from '../../motor-inventory/motor
 import { copyObject } from '../helperFunctions';
 import { CompressorInventoryItem } from '../models/compressed-air-assessment';
 import { Assessment } from '../models/assessment';
+import { getMotorSupplyType, getNonThreePhaseMotors } from '../../motor-inventory/motor-inventory-setup/motor-catalog/motor-supply';
 
 @Injectable()
 export class CompressedAirMotorIntegrationService {
@@ -35,7 +36,8 @@ export class CompressedAirMotorIntegrationService {
       let catalogItemOptions = inventory.motorInventoryData.departments.map(department => {
         return {
           department: department.name,
-          catalog: department.catalog
+          catalog: department.catalog,
+          disabledItems: getNonThreePhaseMotors(department.catalog)
         }
       });
       return {
@@ -50,6 +52,10 @@ export class CompressedAirMotorIntegrationService {
 
   async setCompressedAirMotorConnectedItem(selectedCompressor: CompressedAirItem, connectedInventoryData: ConnectedInventoryData, currentSettings: Settings) {
     let selectedMotorItem: MotorItem = this.getConnectedMotorItem(connectedInventoryData.connectedItem, currentSettings);
+    if (selectedMotorItem && getMotorSupplyType(selectedMotorItem) != 'threePhase') {
+      connectedInventoryData.canConnect = false;
+      return;
+    }
     let integrationState: IntegrationState = {
       status: undefined,
       msgHTML: undefined,

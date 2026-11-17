@@ -28,6 +28,9 @@ export class MotorInventorySummaryService {
     }];
     //nameplate
     let nameplateFields: Array<MotorField> = this.getNameplateDataFields(displayOptions.nameplateDataOptions, settings);
+    //motor supply is read from numberOfPhases and currentType, so it's only a table column and not a graph option
+    let ratedPowerIndex: number = nameplateFields.findIndex(field => field.value == 'ratedMotorPower');
+    nameplateFields.splice(ratedPowerIndex + 1, 0, { display: 'Motor Supply', value: 'motorSupply', group: 'nameplateData' });
     fields = fields.concat(nameplateFields);
     //load characteristics
     let loadCharactersticOptions: Array<MotorField> = this.getLoadCharacteristicsFields(displayOptions.loadCharactersticOptions);
@@ -92,9 +95,6 @@ export class MotorInventorySummaryService {
       }
       fields.push({ display: 'Weight', value: 'weight', group: 'nameplateData', unit: weightUnit });
     }
-    if (nameplateDataOptions.numberOfPhases) {
-      fields.push({ display: 'Number of Phases', value: 'numberOfPhases', group: 'nameplateData' });
-    }
     if (nameplateDataOptions.fullLoadSpeed) {
       fields.push({ display: 'Full Load Speed', value: 'fullLoadSpeed', group: 'nameplateData', unit: 'rpm' });
     }
@@ -133,9 +133,6 @@ export class MotorInventorySummaryService {
       }
      if (manualSpecificationOptions.poles) {
         fields.push({ display: 'Poles', value: 'poles', group: 'manualSpecificationData' });
-      }
-      if (manualSpecificationOptions.currentType) {
-        fields.push({ display: 'Current Type', value: 'currentType', group: 'manualSpecificationData' });
       }
     }
     return fields;

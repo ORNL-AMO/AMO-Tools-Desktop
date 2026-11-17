@@ -11,6 +11,7 @@ import { PsatService } from '../../../../psat/psat.service';
 import { ConnectedItem } from '../../../../shared/connected-inventory/integrations';
 import { PumpMotorIntegrationService } from '../../../../shared/connected-inventory/pump-motor-integration.service';
 import { CompressedAirMotorIntegrationService } from '../../../../shared/connected-inventory/compressed-air-motor-integration.service';
+import { getMotorSupplyType, MotorSupplyType, motorSupplyOptions, setMotorSupplyType } from '../motor-supply';
 
 @Component({
     selector: 'app-nameplate-data',
@@ -31,6 +32,8 @@ export class NameplateDataComponent implements OnInit {
   voltageRatingOptions: Array<number> = [200, 208, 220, 230, 440, 460, 575, 796, 2300, 4000, 6600];
   connectedItem: ConnectedItem;
   connectedItems: Array<ConnectedItem>;
+  motorSupply: MotorSupplyType;
+  motorSupplyOptions: Array<{ value: MotorSupplyType, display: string }> = motorSupplyOptions;
   constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
     private pumpMotorIntegrationService: PumpMotorIntegrationService,
     private nameplateDataService: NameplateDataService, private psatService: PsatService,  private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService) { }
@@ -48,6 +51,7 @@ export class NameplateDataComponent implements OnInit {
         this.pumpMotorIntegrationService.setPumpConnectedItems(selectedMotor);
         this.compressedAirMotorIntegrationService.setMotorConnectedItems(selectedMotor);
         this.connectedItems = selectedMotor.connectedItems;
+        this.motorSupply = getMotorSupplyType(selectedMotor);
       }
     });
     this.displayOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions.nameplateDataOptions;
@@ -62,6 +66,15 @@ export class NameplateDataComponent implements OnInit {
     let selectedMotor: MotorItem = this.motorCatalogService.selectedMotorItem.getValue();
     selectedMotor.nameplateData = this.nameplateDataService.updateNameplateDataFromForm(this.motorForm, selectedMotor.nameplateData);
     this.motorInventoryService.updateMotorItem(selectedMotor);
+  }
+
+  changeMotorSupply(motorSupply: MotorSupplyType) {
+    let selectedMotor: MotorItem = this.motorCatalogService.selectedMotorItem.getValue();
+    selectedMotor.nameplateData = this.nameplateDataService.updateNameplateDataFromForm(this.motorForm, selectedMotor.nameplateData);
+    selectedMotor = setMotorSupplyType(selectedMotor, motorSupply);
+    this.motorInventoryService.updateMotorItem(selectedMotor);
+    //other sections show or hide fields based on the supply type, so they need the updated motor
+    this.motorCatalogService.selectedMotorItem.next(selectedMotor);
   }
 
   focusField(str: string, integrationDataGroup?: boolean) {
@@ -80,7 +93,7 @@ export class NameplateDataComponent implements OnInit {
 
 
   estimateNominalEfficiency() {
-    if (this.displayOptions.fullLoadSpeed) {
+    if (this.displayOptions.fullLoadSpeed && this.motorSupply == 'threePhase') {
       let efficiency: number = this.motorCatalogService.estimateEfficiency(100, false);
       this.motorForm.controls.nominalEfficiency.patchValue(efficiency);
       this.save();
@@ -88,7 +101,7 @@ export class NameplateDataComponent implements OnInit {
   }
 
   calculateFullLoadAmps() {
-    if (this.displayOptions.fullLoadSpeed && this.displayOptions.ratedVoltage) {
+    if (this.displayOptions.fullLoadSpeed && this.displayOptions.ratedVoltage && this.motorSupply == 'threePhase') {
       let motorPower: number = this.motorForm.controls.ratedMotorPower.value;
       let motorRPM: number = this.motorForm.controls.fullLoadSpeed.value;
       let lineFrequency: number = this.motorForm.controls.lineFrequency.value;
