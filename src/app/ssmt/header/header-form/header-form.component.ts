@@ -1,10 +1,13 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { UntypedFormGroup, Validators, ValidatorFn } from '@angular/forms';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Settings } from '../../../shared/models/settings';
 import { HeaderService, HeaderRanges, HeaderWarnings} from '../header.service';
 import { SsmtService } from '../../ssmt.service';
-import { BoilerInput, HeaderNotHighestPressure, HeaderWithHighestPressure, SSMT } from '../../../shared/models/steam/ssmt';
+import { BoilerInput, HeaderNotHighestPressure, HeaderWithHighestPressure, ProcessSteamUsageData, SSMT } from '../../../shared/models/steam/ssmt';
 import { CompareService } from '../../compare.service';
+import { ProcessSteamUsageModalComponent } from '../process-steam-usage-modal/process-steam-usage-modal.component';
+import { ProcessSteamUsageService, SteamHeaderPressureLevel } from '../process-steam-usage-modal/process-steam-usage.service';
 
 @Component({
     selector: 'app-header-form',
@@ -22,7 +25,7 @@ export class HeaderFormComponent implements OnInit {
   @Output('emitSave')
   emitSave = new EventEmitter<HeaderNotHighestPressure | HeaderWithHighestPressure>();
   @Input()
-  pressureLevel: string;
+  pressureLevel: SteamHeaderPressureLevel;
   @Input()
   numberOfHeaders: number;
   @Input()
@@ -37,15 +40,25 @@ export class HeaderFormComponent implements OnInit {
   boilerInput: BoilerInput;
   @Input()
   ssmt: SSMT;
+  @ViewChild('processSteamUsageModal', { static: false }) processSteamUsageModal: ModalDirective;
+  @ViewChild(ProcessSteamUsageModalComponent) processSteamUsageCalculator: ProcessSteamUsageModalComponent;
 
   warnings: HeaderWarnings;
   headerLabel: string;
   minPressureErrorMsg: string;
   maxPressureErrorMsg: string;
   showProcessSteamUsage: boolean = true;
-  constructor(private headerService: HeaderService, private ssmtService: SsmtService, private compareService: CompareService) { }
+  processSteamUsageData: ProcessSteamUsageData;
+  processSteamUsageDataCopy: ProcessSteamUsageData;
+  constructor(
+    private headerService: HeaderService,
+    private ssmtService: SsmtService,
+    private compareService: CompareService,
+    private processSteamUsageService: ProcessSteamUsageService
+  ) { }
 
   ngOnInit() {
+    this.processSteamUsageData = this.headerInput?.processSteamUsageData;
     this.warnings = this.headerService.checkHeaderWarnings(this.ssmt, this.pressureLevel, this.settings);
     if (this.selected === false) {
       this.disableForm();
@@ -61,6 +74,9 @@ export class HeaderFormComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes.headerInput && !changes.headerInput.isFirstChange()) {
+      this.processSteamUsageData = changes.headerInput.currentValue?.processSteamUsageData;
+    }
     if (changes.selected && !changes.selected.isFirstChange()) {
       if (this.selected === false) {
         this.disableForm();
@@ -120,10 +136,12 @@ export class HeaderFormComponent implements OnInit {
   save() {
     if (this.pressureLevel === 'highPressure') {
       let tmpHeader: HeaderWithHighestPressure = this.headerService.getHighestPressureObjFromForm(this.headerForm);
+      tmpHeader.processSteamUsageData = this.processSteamUsageData;
       this.ssmt.headerInput.highPressureHeader = tmpHeader;
       this.emitSave.emit(tmpHeader);
     } else {
       let tmpHeader: HeaderNotHighestPressure = this.headerService.initHeaderObjFromForm(this.headerForm);
+      tmpHeader.processSteamUsageData = this.processSteamUsageData;
       if(this.pressureLevel  == 'mediumPressure'){
         this.ssmt.headerInput.mediumPressureHeader = tmpHeader;
       }else{
@@ -132,6 +150,46 @@ export class HeaderFormComponent implements OnInit {
       this.emitSave.emit(tmpHeader);
     }
     this.warnings = this.headerService.checkHeaderWarnings(this.ssmt, this.pressureLevel, this.settings);
+  }
+
+  showProcessSteamUsageModal() {
+    if (!this.selected || !this.showProcessSteamUsage) {
+      return;
+    }
+    const data = this.processSteamUsageData
+      ? JSON.parse(JSON.stringify(this.processSteamUsageData))
+      : this.processSteamUsageService.getDefaultData(
+        this.headerForm.controls.processSteamUsage.value,
+        this.headerForm.controls.condensationRecoveryRate.value
+      );
+    this.processSteamUsageDataCopy = this.processSteamUsageService.updateCalculatedLosses(data, this.pressureLevel, this.settings);
+    this.ssmtService.modalOpen.next(true);
+    this.processSteamUsageModal.show();
+  }
+
+  hideProcessSteamUsageModal() {
+    this.ssmtService.modalOpen.next(false);
+    this.processSteamUsageModal.hide();
+    this.processSteamUsageDataCopy = undefined;
+  }
+
+  applyProcessSteamUsageData() {
+    if (!this.processSteamUsageCalculator || this.processSteamUsageCalculator.form.invalid) {
+      this.processSteamUsageCalculator?.form.markAllAsTouched();
+      return;
+    }
+    this.processSteamUsageData = this.processSteamUsageService.updateCalculatedLosses(
+      this.processSteamUsageCalculator.getData(),
+      this.pressureLevel,
+      this.settings
+    );
+    const totals = this.processSteamUsageService.calculateTotals(this.processSteamUsageData);
+    this.headerForm.patchValue({
+      processSteamUsage: totals.processSteamUsage,
+      condensationRecoveryRate: totals.condensateRecoveryRate
+    });
+    this.save();
+    this.hideProcessSteamUsageModal();
   }
 
   setDesuperheatSteam() {
@@ -153,6 +211,13 @@ export class HeaderFormComponent implements OnInit {
   setCustomProcessUsage() {
     this.headerForm.controls.useBaselineProcessSteamUsage.patchValue(false);
     this.showProcessSteamUsage = true;
+    if (this.processSteamUsageData) {
+      const totals = this.processSteamUsageService.calculateTotals(this.processSteamUsageData);
+      this.headerForm.patchValue({
+        processSteamUsage: totals.processSteamUsage,
+        condensationRecoveryRate: totals.condensateRecoveryRate
+      });
+    }
     this.save();
   }
 

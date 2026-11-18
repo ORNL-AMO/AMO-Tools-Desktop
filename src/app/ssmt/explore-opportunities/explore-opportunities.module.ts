@@ -21,6 +21,8 @@ import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module
 import { SsmtSankeyModule } from '../../shared/ssmt-sankey/ssmt-sankey.module';
 import { SnackbarModule } from '../../shared/snackbar-notification/snackbar.module';
 import { StackLossModule } from '../../calculator/steam/stack-loss/stack-loss.module';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { ProcessSteamUsageModalModule } from '../header/process-steam-usage-modal/process-steam-usage-modal.module';
 
 @NgModule({
   imports: [
@@ -34,7 +36,9 @@ import { StackLossModule } from '../../calculator/steam/stack-loss/stack-loss.mo
     SharedPipesModule,
     SsmtSankeyModule,
     SnackbarModule,
-    StackLossModule
+    StackLossModule,
+    ModalModule,
+    ProcessSteamUsageModalModule
   ],
   declarations: [ExploreOpportunitiesComponent, ExploreOpportunitiesFormComponent, ExploreOpportunitiesHelpComponent, OperationsFormComponent, BoilerFormComponent, HeaderFormComponent, CondensateHandlingFormComponent, TurbineFormComponent, ExploreCondensingTurbineFormComponent, ExplorePressureTurbineFormComponent, ExploreTurbineFormComponent],
   exports: [ExploreOpportunitiesComponent],
