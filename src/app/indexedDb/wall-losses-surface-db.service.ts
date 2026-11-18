@@ -58,4 +58,20 @@ export class WallLossesSurfaceDbService {
     }
     return true;
   }
+
+  /** Refreshes `dbWallLossesSurfaceMaterials` from the database. */
+  async setAllMaterialsFromDb(): Promise<void> {
+    const allMaterials: Array<WallLossesSurface> = await firstValueFrom(this.getAllWithObservable());
+    this.dbWallLossesSurfaceMaterials.next(allMaterials);
+  }
+
+  /**
+   * Saves a material and refreshes `dbWallLossesSurfaceMaterials`.
+   * @returns the new material's id
+   */
+  async addMaterial(material: WallLossesSurface): Promise<number> {
+    const inserted: WallLossesSurface = await firstValueFrom(this.addWithObservable(material));
+    await this.setAllMaterialsFromDb();
+    return inserted.id;
+  }
 }

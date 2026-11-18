@@ -105,6 +105,7 @@ describe('FlueGasVolumeFormComponent', () => {
       expect(modalDialogServiceSpy.openModal).toHaveBeenCalled();
 
       const added = { ...MOCK_MATERIALS[1], id: 3, substance: 'Custom' } as FlueGasMaterial;
+      dbServiceSpy.dbFlueGasMaterials.next([...MOCK_MATERIALS, added]);
       dialogClosed.next(added);
 
       expect(component.form().controls.materialId.value).toBe(3);

@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flushMicrotasks, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
-import { of, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { ChargeMaterialSolidFormComponent } from './charge-material-solid-form.component';
 import { SolidMaterialFormService } from './solid-material-form.service';
 import { SolidLoadMaterialDbService } from '../../../../../indexedDb/solid-load-material-db.service';
@@ -49,8 +49,7 @@ describe('ChargeMaterialSolidFormComponent', () => {
   let dialogClosed: Subject<SolidLoadChargeMaterial | undefined>;
 
   beforeEach(async () => {
-    dbServiceSpy = jasmine.createSpyObj('SolidLoadMaterialDbService', ['getAllWithObservable', 'addWithObservable']);
-    dbServiceSpy.getAllWithObservable.and.returnValue(of(MOCK_MATERIALS));
+    dbServiceSpy = jasmine.createSpyObj('SolidLoadMaterialDbService', ['addMaterial'], { dbSolidLoadChargeMaterials: new BehaviorSubject<SolidLoadChargeMaterial[]>(MOCK_MATERIALS) });
 
     dialogClosed = new Subject<SolidLoadChargeMaterial | undefined>();
     modalDialogServiceSpy = jasmine.createSpyObj('ModalDialogService', ['openModal']);
@@ -84,7 +83,6 @@ describe('ChargeMaterialSolidFormComponent', () => {
   describe('initialization', () => {
     it('loads materials from the database into the material selector', () => {
       setInputsAndInit();
-      expect(dbServiceSpy.getAllWithObservable).toHaveBeenCalled();
       expect(component.materialSelector.materialTypes()).toEqual(MOCK_MATERIALS);
     });
 
@@ -149,6 +147,7 @@ describe('ChargeMaterialSolidFormComponent', () => {
       expect(modalDialogServiceSpy.openModal).toHaveBeenCalled();
 
       const newMaterial: SolidLoadChargeMaterial = { id: 3, substance: 'Copper', specificHeatSolid: 0.09, specificHeatLiquid: 0.15, latentHeat: 80, meltingPoint: 1981 };
+      dbServiceSpy.dbSolidLoadChargeMaterials.next([...MOCK_MATERIALS, newMaterial]);
       dialogClosed.next(newMaterial);
 
       expect(component.form().controls.materialId.value).toBe(3);
@@ -156,23 +155,23 @@ describe('ChargeMaterialSolidFormComponent', () => {
       expect(component.materialSelector.materialTypes()).toContain(newMaterial);
     });
 
-    it('restores a deleted material record and clears the missing-material flag', () => {
+    it('restores a deleted material record and clears the missing-material flag', fakeAsync(() => {
       setInputsAndInit(makeSolidForm(solidFormService, { materialId: 999, specificHeatSolid: 5, specificHeatLiquid: 6, latentHeat: 7, meltingPoint: 8 }));
-      const restored: SolidLoadChargeMaterial = { id: 999, substance: 'Custom Material', specificHeatSolid: 5, specificHeatLiquid: 6, latentHeat: 7, meltingPoint: 8, isDefault: false };
-      dbServiceSpy.addWithObservable.and.returnValue(of(restored));
+      dbServiceSpy.addMaterial.and.resolveTo(999);
 
       component.materialSelector.restoreDeletedMaterial();
+      flushMicrotasks();
 
-      expect(dbServiceSpy.addWithObservable).toHaveBeenCalledWith(jasmine.objectContaining({ id: 999, substance: 'Custom Material' }));
+      expect(dbServiceSpy.addMaterial).toHaveBeenCalledWith(jasmine.objectContaining({ id: 999, substance: 'Custom Material' }));
       expect(component.materialSelector.missingMaterialId()).toBeNull();
       expect(component.form().controls.materialId.value).toBe(999);
-    });
+    }));
 
     it('dismisses the missing-material warning without restoring a record', () => {
       setInputsAndInit(makeSolidForm(solidFormService, { materialId: 999 }));
       component.materialSelector.dismissMissingMaterial();
       expect(component.materialSelector.missingMaterialId()).toBeNull();
-      expect(dbServiceSpy.addWithObservable).not.toHaveBeenCalled();
+      expect(dbServiceSpy.addMaterial).not.toHaveBeenCalled();
     });
   });
 

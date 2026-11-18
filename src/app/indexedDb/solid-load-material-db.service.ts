@@ -56,4 +56,20 @@ export class SolidLoadMaterialDbService {
     }
     return true;
   }
+
+  /** Refreshes `dbSolidLoadChargeMaterials` from the database. */
+  async setAllMaterialsFromDb(): Promise<void> {
+    const allMaterials: Array<SolidLoadChargeMaterial> = await firstValueFrom(this.getAllWithObservable());
+    this.dbSolidLoadChargeMaterials.next(allMaterials);
+  }
+
+  /**
+   * Saves a material and refreshes `dbSolidLoadChargeMaterials`.
+   * @returns the new material's id
+   */
+  async addMaterial(material: SolidLoadChargeMaterial): Promise<number> {
+    const inserted: SolidLoadChargeMaterial = await firstValueFrom(this.addWithObservable(material));
+    await this.setAllMaterialsFromDb();
+    return inserted.id;
+  }
 }

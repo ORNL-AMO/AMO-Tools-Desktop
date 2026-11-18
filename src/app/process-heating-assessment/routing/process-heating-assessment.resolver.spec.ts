@@ -1,3 +1,4 @@
+import { ProviderToken } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, convertToParamMap, Router } from '@angular/router';
 import { firstValueFrom, of } from 'rxjs';
@@ -5,6 +6,11 @@ import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { AtmosphereDbService } from '../../indexedDb/atmosphere-db.service';
+import { GasLoadMaterialDbService } from '../../indexedDb/gas-load-material-db.service';
+import { LiquidLoadMaterialDbService } from '../../indexedDb/liquid-load-material-db.service';
+import { SolidLoadMaterialDbService } from '../../indexedDb/solid-load-material-db.service';
+import { WallLossesSurfaceDbService } from '../../indexedDb/wall-losses-surface-db.service';
 import { AppErrorService } from '../../shared/errors/app-error.service';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
 import { PHAST } from '../models/phast';
@@ -21,6 +27,8 @@ class FakeAssessmentDbService {
 }
 
 class FakeSettingsDbService {}
+
+const MATERIAL_DB_SERVICES: ProviderToken<{ setAllMaterialsFromDb(): Promise<void> }>[] = [SolidLoadMaterialDbService, LiquidLoadMaterialDbService, GasLoadMaterialDbService, AtmosphereDbService, WallLossesSurfaceDbService];
 
 class FakeAppErrorService {
   handleAppError(): void {}
@@ -58,6 +66,10 @@ function configure(assessment: Assessment): FakeProcessHeatingAssessmentService 
       { provide: AppErrorService, useClass: FakeAppErrorService },
       { provide: ProcessHeatingAssessmentService, useValue: fakeAssessmentService },
       { provide: Router, useValue: { navigate: () => {} } },
+      ...MATERIAL_DB_SERVICES.map(service => ({
+        provide: service,
+        useFactory: () => jasmine.createSpyObj('MaterialDbService', { setAllMaterialsFromDb: Promise.resolve() }),
+      })),
     ],
   });
   return fakeAssessmentService;
@@ -69,6 +81,20 @@ describe('ProcessHeatingAssessmentResolver', () => {
     systemEfficiency: 80,
     losses: { chargeMaterials: [{ id: 'material-1', name: 'Steel' } as never] },
   };
+
+  it('reloads every material list on open, including when the assessment is already loaded', async () => {
+    const fakeAssessmentService = configure({ id: 1, phast: baselinePhast } as unknown as Assessment);
+    const resolver = TestBed.inject(ProcessHeatingAssessmentResolver);
+    const refreshSpies = MATERIAL_DB_SERVICES.map(service => TestBed.inject(service).setAllMaterialsFromDb);
+
+    await firstValueFrom(resolver.resolve(buildRoute('1')));
+    refreshSpies.forEach(spy => expect(spy).toHaveBeenCalledTimes(1));
+
+    fakeAssessmentService.assessmentValue = { id: 1 } as Assessment;
+    fakeAssessmentService.settingsValue = settings;
+    await firstValueFrom(resolver.resolve(buildRoute('1')));
+    refreshSpies.forEach(spy => expect(spy).toHaveBeenCalledTimes(2));
+  });
 
   it('migrates scenarioOverrides for a legacy modification (phast clone, no scenarioOverrides)', async () => {
     const legacyModificationPhast = {

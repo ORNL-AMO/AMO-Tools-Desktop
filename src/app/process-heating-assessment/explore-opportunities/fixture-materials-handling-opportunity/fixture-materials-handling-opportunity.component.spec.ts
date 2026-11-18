@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { SolidLoadMaterialDbService } from '../../../indexedDb/solid-load-material-db.service';
 import { SolidLoadChargeMaterial } from '../../../shared/models/materials';
 import { FixtureLoss } from '../../../shared/models/phast/losses/fixtureLoss';
@@ -43,7 +43,7 @@ describe('FixtureMaterialsHandlingOpportunityComponent', () => {
         ModificationService,
         { provide: ProcessHeatingAssessmentService, useValue: new FakeProcessHeatingAssessmentService(BASELINE) },
         { provide: ProcessHeatingUiService, useClass: FakeProcessHeatingUiService },
-        { provide: SolidLoadMaterialDbService, useValue: { getAllWithObservable: () => of(MATERIALS) } },
+        { provide: SolidLoadMaterialDbService, useValue: { dbSolidLoadChargeMaterials: new BehaviorSubject(MATERIALS) } },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     });

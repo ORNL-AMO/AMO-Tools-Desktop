@@ -14,6 +14,7 @@ import { CHARGE_MATERIAL_UNITS } from '../charge-material-units';
 import { ChargeMaterial, LiquidChargeMaterial } from '../../../../../shared/models/phast/losses/chargeMaterial';
 import { LossFieldDifferences, nestedDifferences } from '../../loss-compare.util';
 import { ProcessHeatingUiService } from '../../../../services/process-heating-ui.service';
+import { adaptLiquidLoadMaterialDb } from '../material-db.adapters';
 
 @Component({
   selector: 'app-charge-material-liquid-form',
@@ -37,7 +38,7 @@ export class ChargeMaterialLiquidFormComponent implements OnInit {
   readonly materialSelector = new MaterialSelector<LiquidLoadChargeMaterial, LiquidMaterialForm>({
     form: this.form,
     settings: this.settings,
-    dbService: inject(LiquidLoadMaterialDbService),
+    dbService: adaptLiquidLoadMaterialDb(inject(LiquidLoadMaterialDbService)),
     destroyRef: this.destroyRef,
     modalDialogService: inject(ModalDialogService),
     injector: inject(Injector),
@@ -48,6 +49,7 @@ export class ChargeMaterialLiquidFormComponent implements OnInit {
       latentHeatOfVaporization: convertDbValue(material.latentHeat, CHARGE_MATERIAL_UNITS.latentHeat, settings),
       vaporizingTemperature: convertDbValue(material.vaporizationTemperature, CHARGE_MATERIAL_UNITS.temperature, settings),
     }),
+    needsMaterialProperties: form => form.controls.specificHeatOfLiquid.value == null,
     buildRecoveryProperties: (v, settings) => ({
       specificHeatLiquid: convertForSave(v.specificHeatOfLiquid, CHARGE_MATERIAL_UNITS.specificHeat, settings),
       specificHeatVapor: convertForSave(v.specificHeatOfVapor, CHARGE_MATERIAL_UNITS.specificHeat, settings),
@@ -57,13 +59,7 @@ export class ChargeMaterialLiquidFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.materialSelector.loadMaterials(materials => {
-      const materialId = this.form().controls.materialId.value;
-      const material = materials.find(m => m.id === materialId);
-      if (material && this.form().controls.specificHeatOfLiquid.value == null) {
-        this.materialSelector.applyMaterial(material);
-      }
-    });
+    this.materialSelector.loadMaterials();
 
     this.form().controls.chargeMaterialDischargeTemperature.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef),

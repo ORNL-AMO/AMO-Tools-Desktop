@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flushMicrotasks, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
-import { of, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { ChargeMaterialGasFormComponent } from './charge-material-gas-form.component';
 import { GasMaterialFormService } from './gas-material-form.service';
 import { GasLoadMaterialDbService } from '../../../../../indexedDb/gas-load-material-db.service';
@@ -44,8 +44,7 @@ describe('ChargeMaterialGasFormComponent', () => {
   let dialogClosed: Subject<GasLoadChargeMaterial | undefined>;
 
   beforeEach(async () => {
-    dbServiceSpy = jasmine.createSpyObj('GasLoadMaterialDbService', ['getAllWithObservable', 'addWithObservable']);
-    dbServiceSpy.getAllWithObservable.and.returnValue(of(MOCK_MATERIALS));
+    dbServiceSpy = jasmine.createSpyObj('GasLoadMaterialDbService', ['addMaterial'], { dbGasLoadChargeMaterials: new BehaviorSubject<GasLoadChargeMaterial[]>(MOCK_MATERIALS) });
 
     dialogClosed = new Subject<GasLoadChargeMaterial | undefined>();
     modalDialogServiceSpy = jasmine.createSpyObj('ModalDialogService', ['openModal']);
@@ -79,7 +78,6 @@ describe('ChargeMaterialGasFormComponent', () => {
   describe('initialization', () => {
     it('loads materials from the database into the material selector', () => {
       setInputsAndInit();
-      expect(dbServiceSpy.getAllWithObservable).toHaveBeenCalled();
       expect(component.materialSelector.materialTypes()).toEqual(MOCK_MATERIALS);
     });
 
@@ -123,6 +121,7 @@ describe('ChargeMaterialGasFormComponent', () => {
       expect(modalDialogServiceSpy.openModal).toHaveBeenCalled();
 
       const newMaterial: GasLoadChargeMaterial = { id: 3, substance: 'Hydrogen', specificHeatVapor: 3.4 };
+      dbServiceSpy.dbGasLoadChargeMaterials.next([...MOCK_MATERIALS, newMaterial]);
       dialogClosed.next(newMaterial);
 
       expect(component.form().controls.materialId.value).toBe(3);
@@ -130,23 +129,23 @@ describe('ChargeMaterialGasFormComponent', () => {
       expect(component.materialSelector.materialTypes()).toContain(newMaterial);
     });
 
-    it('restores a deleted material record and clears the missing-material flag', () => {
+    it('restores a deleted material record and clears the missing-material flag', fakeAsync(() => {
       setInputsAndInit(makeGasForm(gasFormService, { materialId: 999, specificHeatVapor: 5 }));
-      const restored: GasLoadChargeMaterial = { id: 999, substance: 'Custom Material', specificHeatVapor: 5, isDefault: false };
-      dbServiceSpy.addWithObservable.and.returnValue(of(restored));
+      dbServiceSpy.addMaterial.and.resolveTo(999);
 
       component.materialSelector.restoreDeletedMaterial();
+      flushMicrotasks();
 
-      expect(dbServiceSpy.addWithObservable).toHaveBeenCalledWith(jasmine.objectContaining({ id: 999, substance: 'Custom Material' }));
+      expect(dbServiceSpy.addMaterial).toHaveBeenCalledWith(jasmine.objectContaining({ id: 999, substance: 'Custom Material' }));
       expect(component.materialSelector.missingMaterialId()).toBeNull();
       expect(component.form().controls.materialId.value).toBe(999);
-    });
+    }));
 
     it('dismisses the missing-material warning without restoring a record', () => {
       setInputsAndInit(makeGasForm(gasFormService, { materialId: 999 }));
       component.materialSelector.dismissMissingMaterial();
       expect(component.materialSelector.missingMaterialId()).toBeNull();
-      expect(dbServiceSpy.addWithObservable).not.toHaveBeenCalled();
+      expect(dbServiceSpy.addMaterial).not.toHaveBeenCalled();
     });
   });
 

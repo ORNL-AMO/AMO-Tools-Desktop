@@ -8,7 +8,7 @@ import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-materia
 import { FlueGasMaterial } from '../../../../shared/models/materials';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
 import { MaterialModalData } from '../../../models/material-modal-data';
-import { adaptFlueGasMaterialDb } from './flue-gas-material-db.adapter';
+import { adaptFlueGasMaterialDb } from '../charge-material/material-db.adapters';
 import { DIFFERENCE_TOLERANCE_PERCENT, FLUE_GAS_COMPONENTS, PERCENT_VALIDATORS } from './flue-gas-form.service';
 
 @Component({
@@ -66,7 +66,7 @@ export class AddFlueGasMaterialModalComponent {
   });
 
   constructor() {
-    this.materialDb.getAllWithObservable().pipe(take(1), takeUntilDestroyed()).subscribe(materials => this.materials.set(materials));
+    this.materialDb.materials().pipe(take(1), takeUntilDestroyed()).subscribe(materials => this.materials.set(materials));
   }
 
   /** Starts a new fuel from an existing one, marked "(mod)" so the name stays distinct. */
@@ -83,7 +83,7 @@ export class AddFlueGasMaterialModalComponent {
     const { substance, ...composition } = this.form.getRawValue();
     const heatingValues = this.processHeatingApiService.flueGasByVolumeCalculateHeatingValue(composition);
     const material: FlueGasMaterial = { substance, ...composition, ...heatingValues, isDefault: false };
-    const saved: Observable<FlueGasMaterial> = this.materialDb.addWithObservable(material);
+    const saved: Observable<FlueGasMaterial> = this.materialDb.addMaterial(material);
     saved.subscribe(inserted => this.dialogRef.close(inserted));
   }
 

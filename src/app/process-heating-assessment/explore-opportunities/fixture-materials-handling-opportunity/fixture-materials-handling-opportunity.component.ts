@@ -27,10 +27,7 @@ export class FixtureMaterialsHandlingOpportunityComponent {
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
 
   readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
-  readonly materials: Signal<SolidLoadChargeMaterial[]> = toSignal(
-    inject(SolidLoadMaterialDbService).getAllWithObservable(),
-    { initialValue: [] },
-  );
+  readonly materials: Signal<SolidLoadChargeMaterial[]> = toSignal(inject(SolidLoadMaterialDbService).dbSolidLoadChargeMaterials, { requireSync: true });
 
   private readonly state = createSectionedOpportunityState<'fixtureLosses', FixtureMaterialsHandlingField, FixtureMaterialsHandlingSection>({
     lossKey: 'fixtureLosses',

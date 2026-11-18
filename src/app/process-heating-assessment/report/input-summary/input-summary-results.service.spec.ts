@@ -1,6 +1,6 @@
 import { OperatingCosts, OperatingHours } from '../../../shared/models/operations';
 import { signal, WritableSignal } from '@angular/core';
-import { of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { GasLoadMaterialDbService } from '../../../indexedDb/gas-load-material-db.service';
 import { LiquidLoadMaterialDbService } from '../../../indexedDb/liquid-load-material-db.service';
 import { SolidLoadMaterialDbService } from '../../../indexedDb/solid-load-material-db.service';
@@ -77,10 +77,10 @@ describe('InputSummaryResultsService', () => {
           },
         },
         { provide: ModificationService, useValue: { modifications } },
-        { provide: SolidLoadMaterialDbService, useValue: { getAllWithObservable: () => of([{ id: 7, substance: 'Carbon Steel' }]) } },
-        { provide: LiquidLoadMaterialDbService, useValue: { getAllWithObservable: () => of([{ id: 7, substance: 'Water' }]) } },
-        { provide: GasLoadMaterialDbService, useValue: { getAllWithObservable: () => of([{ id: 7, substance: 'Nitrogen' }]) } },
-        { provide: WallLossesSurfaceDbService, useValue: { getAllWithObservable: () => of([{ id: 3, surface: 'Vertical Cylinders', conditionFactor: 1.394 }]) } },
+        { provide: SolidLoadMaterialDbService, useValue: { dbSolidLoadChargeMaterials: new BehaviorSubject([{ id: 7, substance: 'Carbon Steel' }]) } },
+        { provide: LiquidLoadMaterialDbService, useValue: { dbLiquidLoadChargeMaterials: new BehaviorSubject([{ id: 7, substance: 'Water' }]) } },
+        { provide: GasLoadMaterialDbService, useValue: { dbGasLoadChargeMaterials: new BehaviorSubject([{ id: 7, substance: 'Nitrogen' }]) } },
+        { provide: WallLossesSurfaceDbService, useValue: { dbWallLossesSurfaceMaterials: new BehaviorSubject([{ id: 3, surface: 'Vertical Cylinders', conditionFactor: 1.394 }]) } },
         {
           provide: ProcessHeatingResultsService,
           useValue: {

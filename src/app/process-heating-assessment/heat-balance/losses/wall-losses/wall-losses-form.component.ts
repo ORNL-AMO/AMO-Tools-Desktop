@@ -24,7 +24,7 @@ export class WallLossesFormComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly uiService = inject(ProcessHeatingUiService);
 
-  readonly surfaceOptions = computed(() => this.wallLossesService.surfaceOptions());
+  readonly surfaceOptions = this.wallLossesService.surfaceOptions;
   readonly form = computed(() => this.item().form as WallLossForm);
   readonly controlIds = computed(() => generateFormControlIds(this.form().controls));
 

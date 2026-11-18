@@ -7,6 +7,11 @@ import { computeMigratedExploreOpportunityFlags, LegacyModification } from '../m
 import { Settings } from '../../shared/models/settings';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { AtmosphereDbService } from '../../indexedDb/atmosphere-db.service';
+import { GasLoadMaterialDbService } from '../../indexedDb/gas-load-material-db.service';
+import { LiquidLoadMaterialDbService } from '../../indexedDb/liquid-load-material-db.service';
+import { SolidLoadMaterialDbService } from '../../indexedDb/solid-load-material-db.service';
+import { WallLossesSurfaceDbService } from '../../indexedDb/wall-losses-surface-db.service';
 import { AppErrorService } from '../../shared/errors/app-error.service';
 import { MeasurAppError } from '../../shared/errors/errors';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
@@ -28,6 +33,11 @@ export class ProcessHeatingAssessmentResolver implements Resolve<ProcessHeatingR
   private readonly settingsDbService = inject(SettingsDbService);
   private readonly processHeatingAssessmentService = inject(ProcessHeatingAssessmentService);
   private readonly router = inject(Router);
+  private readonly solidLoadMaterialDbService = inject(SolidLoadMaterialDbService);
+  private readonly liquidLoadMaterialDbService = inject(LiquidLoadMaterialDbService);
+  private readonly gasLoadMaterialDbService = inject(GasLoadMaterialDbService);
+  private readonly atmosphereDbService = inject(AtmosphereDbService);
+  private readonly wallLossesSurfaceDbService = inject(WallLossesSurfaceDbService);
 
   resolve(route: ActivatedRouteSnapshot): Observable<ProcessHeatingResolverData> {
     const id = route.paramMap.get('assessmentId');
@@ -41,7 +51,10 @@ export class ProcessHeatingAssessmentResolver implements Resolve<ProcessHeatingR
     const settingsValue = this.processHeatingAssessmentService.settingsValue;
 
     if (assessmentValue && isIdMatch && settingsValue) {
-      return of({ assessment: assessmentValue, settings: settingsValue });
+      return from(this.refreshMaterialLists()).pipe(
+        map(() => ({ assessment: assessmentValue, settings: settingsValue })),
+        catchError(error => this.failResolve(error)),
+      );
     }
 
     let assessment = this.assessmentDbService.findById(Number(id));
@@ -66,6 +79,7 @@ export class ProcessHeatingAssessmentResolver implements Resolve<ProcessHeatingR
     }
 
     return getAssessment$.pipe(
+      switchMap(assessment => from(this.refreshMaterialLists()).pipe(map(() => assessment))),
       switchMap(assessment => {
         this.processHeatingAssessmentService.setAssessment(assessment);
         // Module load-time entry point: `assessment.phast` is still typed against the shared,
@@ -105,10 +119,23 @@ export class ProcessHeatingAssessmentResolver implements Resolve<ProcessHeatingR
           )
         );
       }),
-      catchError(error => {
-        this.appErrorService.handleAppError('ProcessHeatingAssessmentResolver error', error);
-        return throwError(() => new MeasurAppError('ProcessHeatingAssessmentResolver error', error));
-      })
+      catchError(error => this.failResolve(error)),
     );
+  }
+
+  /** Reloads the material lists the loss forms and Input Summary read, so materials added or deleted elsewhere since the last open show up. */
+  private async refreshMaterialLists(): Promise<void> {
+    await Promise.all([
+      this.solidLoadMaterialDbService.setAllMaterialsFromDb(),
+      this.liquidLoadMaterialDbService.setAllMaterialsFromDb(),
+      this.gasLoadMaterialDbService.setAllMaterialsFromDb(),
+      this.atmosphereDbService.setAllMaterialsFromDb(),
+      this.wallLossesSurfaceDbService.setAllMaterialsFromDb(),
+    ]);
+  }
+
+  private failResolve(error: Error): Observable<never> {
+    this.appErrorService.handleAppError('ProcessHeatingAssessmentResolver error', error);
+    return throwError(() => new MeasurAppError('ProcessHeatingAssessmentResolver error', error));
   }
 }

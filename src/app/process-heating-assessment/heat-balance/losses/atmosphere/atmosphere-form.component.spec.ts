@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flushMicrotasks, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
-import { of, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { AtmosphereFormComponent } from './atmosphere-form.component';
 import { AtmosphereFormService } from './atmosphere-form.service';
 import { AtmosphereItem } from './atmosphere.service';
@@ -46,8 +46,7 @@ describe('AtmosphereFormComponent', () => {
   let dialogClosed: Subject<AtmosphereSpecificHeat | undefined>;
 
   beforeEach(async () => {
-    dbServiceSpy = jasmine.createSpyObj('AtmosphereDbService', ['getAllWithObservable', 'addWithObservable']);
-    dbServiceSpy.getAllWithObservable.and.returnValue(of(MOCK_MATERIALS));
+    dbServiceSpy = jasmine.createSpyObj('AtmosphereDbService', ['addMaterial'], { dbAtmospherSpecificHeatMaterials: new BehaviorSubject<AtmosphereSpecificHeat[]>(MOCK_MATERIALS) });
 
     dialogClosed = new Subject<AtmosphereSpecificHeat | undefined>();
     modalDialogServiceSpy = jasmine.createSpyObj('ModalDialogService', ['openModal']);
@@ -81,7 +80,6 @@ describe('AtmosphereFormComponent', () => {
   describe('initialization', () => {
     it('loads materials from the database into the material selector', () => {
       setInputsAndInit();
-      expect(dbServiceSpy.getAllWithObservable).toHaveBeenCalled();
       expect(component.materialSelector.materialTypes()).toEqual(MOCK_MATERIALS);
     });
 
@@ -142,6 +140,7 @@ describe('AtmosphereFormComponent', () => {
       expect(modalDialogServiceSpy.openModal).toHaveBeenCalled();
 
       const newMaterial: AtmosphereSpecificHeat = { id: 3, substance: 'Hydrogen', specificHeat: 3.4 };
+      dbServiceSpy.dbAtmospherSpecificHeatMaterials.next([...MOCK_MATERIALS, newMaterial]);
       dialogClosed.next(newMaterial);
 
       expect(component.form().controls.materialId.value).toBe(3);
@@ -149,23 +148,23 @@ describe('AtmosphereFormComponent', () => {
       expect(component.materialSelector.materialTypes()).toContain(newMaterial);
     });
 
-    it('restores a deleted material record and clears the missing-material flag', () => {
+    it('restores a deleted material record and clears the missing-material flag', fakeAsync(() => {
       setInputsAndInit(makeAtmosphereItem(formService, { atmosphereGas: 999, specificHeat: 5 }));
-      const restored: AtmosphereSpecificHeat = { id: 999, substance: 'Custom Material', specificHeat: 5, isDefault: false };
-      dbServiceSpy.addWithObservable.and.returnValue(of(restored));
+      dbServiceSpy.addMaterial.and.resolveTo(999);
 
       component.materialSelector.restoreDeletedMaterial();
+      flushMicrotasks();
 
-      expect(dbServiceSpy.addWithObservable).toHaveBeenCalledWith(jasmine.objectContaining({ id: 999, substance: 'Custom Material' }));
+      expect(dbServiceSpy.addMaterial).toHaveBeenCalledWith(jasmine.objectContaining({ id: 999, substance: 'Custom Material' }));
       expect(component.materialSelector.missingMaterialId()).toBeNull();
       expect(component.form().controls.materialId.value).toBe(999);
-    });
+    }));
 
     it('dismisses the missing-material warning without restoring a record', () => {
       setInputsAndInit(makeAtmosphereItem(formService, { atmosphereGas: 999 }));
       component.materialSelector.dismissMissingMaterial();
       expect(component.materialSelector.missingMaterialId()).toBeNull();
-      expect(dbServiceSpy.addWithObservable).not.toHaveBeenCalled();
+      expect(dbServiceSpy.addMaterial).not.toHaveBeenCalled();
     });
   });
 

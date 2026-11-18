@@ -8,6 +8,7 @@ import { LiquidLoadMaterialDbService } from '../../../../../indexedDb/liquid-loa
 import { MaterialModalData } from '../../../../models/material-modal-data';
 import { convertDbValue, convertForSave } from '../charge-material-db-material.util';
 import { CHARGE_MATERIAL_UNITS } from '../charge-material-units';
+import { adaptLiquidLoadMaterialDb } from '../material-db.adapters';
 
 @Component({
   selector: 'app-add-liquid-material-modal',
@@ -20,7 +21,7 @@ export class AddLiquidMaterialModalComponent {
   readonly data: MaterialModalData = inject(DIALOG_DATA);
   private readonly dialogRef = inject(DialogRef<LiquidLoadChargeMaterial>);
   private readonly formBuilder = inject(FormBuilder);
-  private readonly liquidLoadMaterialDbService = inject(LiquidLoadMaterialDbService);
+  private readonly materialDb = adaptLiquidLoadMaterialDb(inject(LiquidLoadMaterialDbService));
 
   readonly settings = this.data.settings;
 
@@ -35,7 +36,7 @@ export class AddLiquidMaterialModalComponent {
   readonly materials = signal<LiquidLoadChargeMaterial[]>([]);
 
   constructor() {
-    this.liquidLoadMaterialDbService.getAllWithObservable().pipe(take(1), takeUntilDestroyed()).subscribe(materials => this.materials.set(materials));
+    this.materialDb.materials().pipe(take(1), takeUntilDestroyed()).subscribe(materials => this.materials.set(materials));
   }
 
   /** Starts a new material from an existing one, marked "(mod)" so the name stays distinct. */
@@ -61,7 +62,7 @@ export class AddLiquidMaterialModalComponent {
       vaporizationTemperature: convertForSave(v.vaporizationTemperature, CHARGE_MATERIAL_UNITS.temperature, this.settings),
       isDefault: false,
     };
-    this.liquidLoadMaterialDbService.addWithObservable(material).subscribe(inserted => {
+    this.materialDb.addMaterial(material).subscribe(inserted => {
       this.dialogRef.close(inserted);
     });
   }

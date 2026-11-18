@@ -57,4 +57,19 @@ export class AtmosphereDbService {
     return true;
   }
 
+  /** Refreshes `dbAtmospherSpecificHeatMaterials` from the database. */
+  async setAllMaterialsFromDb(): Promise<void> {
+    const allMaterials: Array<AtmosphereSpecificHeat> = await firstValueFrom(this.getAllWithObservable());
+    this.dbAtmospherSpecificHeatMaterials.next(allMaterials);
+  }
+
+  /**
+   * Saves a material and refreshes `dbAtmospherSpecificHeatMaterials`.
+   * @returns the new material's id
+   */
+  async addMaterial(material: AtmosphereSpecificHeat): Promise<number> {
+    const inserted: AtmosphereSpecificHeat = await firstValueFrom(this.addWithObservable(material));
+    await this.setAllMaterialsFromDb();
+    return inserted.id;
+  }
 }

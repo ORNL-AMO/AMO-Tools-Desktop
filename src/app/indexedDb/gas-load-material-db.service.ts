@@ -58,6 +58,19 @@ export class GasLoadMaterialDbService {
     return true;
   }
 
+  /** Refreshes `dbGasLoadChargeMaterials` from the database. */
+  async setAllMaterialsFromDb(): Promise<void> {
+    const allMaterials: Array<GasLoadChargeMaterial> = await firstValueFrom(this.getAllWithObservable());
+    this.dbGasLoadChargeMaterials.next(allMaterials);
+  }
 
-
+  /**
+   * Saves a material and refreshes `dbGasLoadChargeMaterials`.
+   * @returns the new material's id
+   */
+  async addMaterial(material: GasLoadChargeMaterial): Promise<number> {
+    const inserted: GasLoadChargeMaterial = await firstValueFrom(this.addWithObservable(material));
+    await this.setAllMaterialsFromDb();
+    return inserted.id;
+  }
 }

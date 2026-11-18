@@ -8,7 +8,7 @@ import { SolidLiquidMaterialDbService } from '../../../../indexedDb/solid-liquid
 import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
 import { MaterialModalData } from '../../../models/material-modal-data';
-import { adaptSolidLiquidFlueGasMaterialDb } from './flue-gas-material-db.adapter';
+import { adaptSolidLiquidFlueGasMaterialDb } from '../charge-material/material-db.adapters';
 import { DIFFERENCE_TOLERANCE_PERCENT, FLUE_GAS_FUEL_ANALYSIS, PERCENT_VALIDATORS } from './flue-gas-form.service';
 
 @Component({
@@ -59,7 +59,7 @@ export class AddSolidLiquidFlueGasMaterialModalComponent {
   });
 
   constructor() {
-    this.materialDb.getAllWithObservable().pipe(take(1), takeUntilDestroyed()).subscribe(materials => this.materials.set(materials));
+    this.materialDb.materials().pipe(take(1), takeUntilDestroyed()).subscribe(materials => this.materials.set(materials));
   }
 
   /** Starts a new fuel from an existing one, marked "(mod)" so the name stays distinct. */
@@ -76,7 +76,7 @@ export class AddSolidLiquidFlueGasMaterialModalComponent {
     const { substance, ...analysis } = this.form.getRawValue();
     const heatingValue = this.processHeatingApiService.flueGasByMassCalculateHeatingValue(analysis);
     const material: SolidLiquidFlueGasMaterial = { substance, ...analysis, heatingValue, isDefault: false };
-    this.materialDb.addWithObservable(material).subscribe(inserted => this.dialogRef.close(inserted));
+    this.materialDb.addMaterial(material).subscribe(inserted => this.dialogRef.close(inserted));
   }
 
   close(): void {

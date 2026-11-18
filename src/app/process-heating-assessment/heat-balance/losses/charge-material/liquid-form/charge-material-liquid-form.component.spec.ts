@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flushMicrotasks, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
-import { of, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { ChargeMaterialLiquidFormComponent } from './charge-material-liquid-form.component';
 import { LiquidMaterialFormService } from './liquid-material-form.service';
 import { LiquidLoadMaterialDbService } from '../../../../../indexedDb/liquid-load-material-db.service';
@@ -47,8 +47,7 @@ describe('ChargeMaterialLiquidFormComponent', () => {
   let dialogClosed: Subject<LiquidLoadChargeMaterial | undefined>;
 
   beforeEach(async () => {
-    dbServiceSpy = jasmine.createSpyObj('LiquidLoadMaterialDbService', ['getAllWithObservable', 'addWithObservable']);
-    dbServiceSpy.getAllWithObservable.and.returnValue(of(MOCK_MATERIALS));
+    dbServiceSpy = jasmine.createSpyObj('LiquidLoadMaterialDbService', ['addMaterial'], { dbLiquidLoadChargeMaterials: new BehaviorSubject<LiquidLoadChargeMaterial[]>(MOCK_MATERIALS) });
 
     dialogClosed = new Subject<LiquidLoadChargeMaterial | undefined>();
     modalDialogServiceSpy = jasmine.createSpyObj('ModalDialogService', ['openModal']);
@@ -82,7 +81,6 @@ describe('ChargeMaterialLiquidFormComponent', () => {
   describe('initialization', () => {
     it('loads materials from the database into the material selector', () => {
       setInputsAndInit();
-      expect(dbServiceSpy.getAllWithObservable).toHaveBeenCalled();
       expect(component.materialSelector.materialTypes()).toEqual(MOCK_MATERIALS);
     });
 
@@ -146,6 +144,7 @@ describe('ChargeMaterialLiquidFormComponent', () => {
       expect(modalDialogServiceSpy.openModal).toHaveBeenCalled();
 
       const newMaterial: LiquidLoadChargeMaterial = { id: 3, substance: 'Solvent', specificHeatLiquid: 0.6, specificHeatVapor: 0.3, latentHeat: 200, vaporizationTemperature: 300 };
+      dbServiceSpy.dbLiquidLoadChargeMaterials.next([...MOCK_MATERIALS, newMaterial]);
       dialogClosed.next(newMaterial);
 
       expect(component.form().controls.materialId.value).toBe(3);
@@ -153,23 +152,23 @@ describe('ChargeMaterialLiquidFormComponent', () => {
       expect(component.materialSelector.materialTypes()).toContain(newMaterial);
     });
 
-    it('restores a deleted material record and clears the missing-material flag', () => {
+    it('restores a deleted material record and clears the missing-material flag', fakeAsync(() => {
       setInputsAndInit(makeLiquidForm(liquidFormService, { materialId: 999, specificHeatLiquid: 5, specificHeatVapor: 6, latentHeat: 7, vaporizationTemperature: 8 }));
-      const restored: LiquidLoadChargeMaterial = { id: 999, substance: 'Custom Material', specificHeatLiquid: 5, specificHeatVapor: 6, latentHeat: 7, vaporizationTemperature: 8, isDefault: false };
-      dbServiceSpy.addWithObservable.and.returnValue(of(restored));
+      dbServiceSpy.addMaterial.and.resolveTo(999);
 
       component.materialSelector.restoreDeletedMaterial();
+      flushMicrotasks();
 
-      expect(dbServiceSpy.addWithObservable).toHaveBeenCalledWith(jasmine.objectContaining({ id: 999, substance: 'Custom Material' }));
+      expect(dbServiceSpy.addMaterial).toHaveBeenCalledWith(jasmine.objectContaining({ id: 999, substance: 'Custom Material' }));
       expect(component.materialSelector.missingMaterialId()).toBeNull();
       expect(component.form().controls.materialId.value).toBe(999);
-    });
+    }));
 
     it('dismisses the missing-material warning without restoring a record', () => {
       setInputsAndInit(makeLiquidForm(liquidFormService, { materialId: 999 }));
       component.materialSelector.dismissMissingMaterial();
       expect(component.materialSelector.missingMaterialId()).toBeNull();
-      expect(dbServiceSpy.addWithObservable).not.toHaveBeenCalled();
+      expect(dbServiceSpy.addMaterial).not.toHaveBeenCalled();
     });
   });
 

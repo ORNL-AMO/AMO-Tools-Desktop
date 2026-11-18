@@ -8,6 +8,7 @@ import { SolidLoadMaterialDbService } from '../../../../../indexedDb/solid-load-
 import { MaterialModalData } from '../../../../models/material-modal-data';
 import { convertDbValue, convertForSave } from '../charge-material-db-material.util';
 import { CHARGE_MATERIAL_UNITS } from '../charge-material-units';
+import { adaptSolidLoadMaterialDb } from '../material-db.adapters';
 
 @Component({
   selector: 'app-add-solid-material-modal',
@@ -20,7 +21,7 @@ export class AddSolidMaterialModalComponent {
   readonly data: MaterialModalData = inject(DIALOG_DATA);
   private readonly dialogRef = inject(DialogRef<SolidLoadChargeMaterial>);
   private readonly formBuilder = inject(FormBuilder);
-  private readonly solidLoadMaterialDbService = inject(SolidLoadMaterialDbService);
+  private readonly materialDb = adaptSolidLoadMaterialDb(inject(SolidLoadMaterialDbService));
 
   readonly settings = this.data.settings;
 
@@ -35,7 +36,7 @@ export class AddSolidMaterialModalComponent {
   readonly materials = signal<SolidLoadChargeMaterial[]>([]);
 
   constructor() {
-    this.solidLoadMaterialDbService.getAllWithObservable().pipe(take(1), takeUntilDestroyed()).subscribe(materials => this.materials.set(materials));
+    this.materialDb.materials().pipe(take(1), takeUntilDestroyed()).subscribe(materials => this.materials.set(materials));
   }
 
   /** Starts a new material from an existing one, marked "(mod)" so the name stays distinct. */
@@ -61,7 +62,7 @@ export class AddSolidMaterialModalComponent {
       meltingPoint: convertForSave(v.meltingPoint, CHARGE_MATERIAL_UNITS.temperature, this.settings),
       isDefault: false,
     };
-    this.solidLoadMaterialDbService.addWithObservable(material).subscribe(inserted => {
+    this.materialDb.addMaterial(material).subscribe(inserted => {
       this.dialogRef.close(inserted);
     });
   }

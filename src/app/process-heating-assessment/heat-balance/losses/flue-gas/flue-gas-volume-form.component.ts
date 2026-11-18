@@ -6,7 +6,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { ModalDialogService } from '../../../../shared/modal-dialog.service';
 import { MaterialSelector } from '../charge-material/material-selector';
 import { AddFlueGasMaterialModalComponent } from './add-flue-gas-material-modal.component';
-import { adaptFlueGasMaterialDb } from './flue-gas-material-db.adapter';
+import { adaptFlueGasMaterialDb } from '../charge-material/material-db.adapters';
 import { FLUE_GAS_COMPONENTS, FlueGasVolumeForm } from './flue-gas-form.service';
 import { FlueGas, FlueGasWarnings, FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
 import { LossFieldDifferences, nestedDifferences } from '../loss-compare.util';
@@ -44,6 +44,7 @@ export class FlueGasVolumeFormComponent implements OnInit {
       heatingValue: roundVal(material.heatingValue, 4),
       heatingValueVolume: roundVal(material.heatingValueVolume, 4),
     }),
+    needsMaterialProperties: form => form.controls.CH4.value == null,
     buildRecoveryProperties: values => ({
       ...Object.fromEntries(FLUE_GAS_COMPONENTS.map(component => [component, values[component]])),
       specificGravity: values.specificGravity,
@@ -53,12 +54,7 @@ export class FlueGasVolumeFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.materialSelector.loadMaterials(materials => {
-      const material = materials.find(m => m.id === this.form().controls.materialId.value);
-      if (material && this.form().controls.CH4.value == null) {
-        this.materialSelector.applyMaterial(material);
-      }
-    });
+    this.materialSelector.loadMaterials();
   }
 
   focusField(field: string): void {
