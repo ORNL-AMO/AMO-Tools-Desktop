@@ -87,7 +87,7 @@ export const PERCENT_VALIDATORS = [Validators.required, Validators.min(0), Valid
 const MAX_O2_IN_FLUE_GAS = 20.5;
 const DEFAULT_TEMP_F = 65;
 const DEFAULT_FLUE_GAS_TEMP_F = 212;
-/** Percent moisture in combustion air (legacy default). */
+/** Legacy default for the moisture in combustion air field, which is entered in percent (0.0077 %). Looks like a lb/lb humidity ratio (0.77 %); kept as is for legacy parity. */
 const DEFAULT_MOISTURE_PERCENT = 0.0077;
 /** Legacy default: the first entry in the flue gas material database. */
 const DEFAULT_MATERIAL_ID = 1;

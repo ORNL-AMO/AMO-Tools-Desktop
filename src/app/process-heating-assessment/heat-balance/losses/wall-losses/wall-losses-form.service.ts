@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { WallLoss } from '../../../models/wall-loss';
+import { DEFAULT_SURFACE_EMISSIVITY } from '../../../constants/surface-emissivity';
 
 export type WallLossForm = FormGroup<{
   surfaceArea: FormControl<number | null>;
@@ -13,8 +14,11 @@ export type WallLossForm = FormGroup<{
   correctionFactor: FormControl<number | null>;
 }>;
 
+/** Legacy starting condition factor (unitless); selecting a wall surface replaces it with that surface's factor. */
+const DEFAULT_CONDITION_FACTOR = 1.394;
+
 /** Starting values for a new entry; a saved entry rebuilds from exactly what was saved so a cleared field stays invalid. */
-export const NEW_WALL_LOSS: WallLoss = { windVelocity: 0, conditionFactor: 1.394, surfaceEmissivity: 0.9, correctionFactor: 1.0 };
+export const NEW_WALL_LOSS: WallLoss = { windVelocity: 0, conditionFactor: DEFAULT_CONDITION_FACTOR, surfaceEmissivity: DEFAULT_SURFACE_EMISSIVITY, correctionFactor: 1.0 };
 
 @Injectable()
 export class WallLossesFormService {

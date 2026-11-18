@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { PHAST } from '../models/phast';
 import { HeatingEquipmentConfiguration } from '../models/views';
 import { deriveHeatingSystemEnergyType } from './process-heating-assessment.service';
+import { HOURS_PER_YEAR } from '../../shared/app-constants';
 
 export interface OperationsForm {
   hoursPerYear: FormControl<number>;
@@ -22,7 +23,7 @@ export class ProcessHeatingOperationsFormService {
     const costs = phast.operatingCosts;
 
     const form = this.formBuilder.group({
-      hoursPerYear:    [phast.operatingHours?.hoursPerYear ?? null, [Validators.required, Validators.min(0), Validators.max(8760)]],
+      hoursPerYear:    [phast.operatingHours?.hoursPerYear ?? null, [Validators.required, Validators.min(0), Validators.max(HOURS_PER_YEAR)]],
       fuelCost:        [costs?.fuelCost        ?? null],
       steamCost:       [costs?.steamCost       ?? null],
       electricityCost: [costs?.electricityCost ?? null],

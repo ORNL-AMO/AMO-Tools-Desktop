@@ -2,9 +2,8 @@ import { getNewIdString } from '../../shared/helperFunctions';
 import { AuxEquipment, AuxiliaryEquipmentItem } from '../../shared/models/phast/auxEquipment';
 import { PHAST } from '../models/phast';
 import { AuxiliaryEquipmentMeasurementMethod } from '../models/auxiliary-equipment';
-
-/** Annual hours used when a scenario has no operating hours, matching the Electricity Reduction calculator default. */
-const DEFAULT_HOURS_PER_YEAR = 8760;
+import { HOURS_PER_YEAR } from '../../shared/app-constants';
+import { DEFAULT_LINE_FREQUENCY_HZ, DEFAULT_MOTOR_AND_DRIVE_EFFICIENCY_PERCENT } from '../auxiliary-equipment/auxiliary-equipment-form.service';
 
 /**
  * Legacy "Calculated" equipment is a multimeter reading and "Rated" is nameplate data in hp at a percent of
@@ -30,8 +29,8 @@ function toAuxiliaryEquipmentItem(equipment: AuxEquipment, hoursPerYear: number,
       ratedMotorPower: equipment.totalConnectedPower,
       variableSpeedMotor: false,
       operationalFrequency: undefined,
-      lineFrequency: 60,
-      motorAndDriveEfficiency: 100,
+      lineFrequency: DEFAULT_LINE_FREQUENCY_HZ,
+      motorAndDriveEfficiency: DEFAULT_MOTOR_AND_DRIVE_EFFICIENCY_PERCENT,
       loadFactor: equipment.ratedCapacity,
     },
     powerMeterData: { power: undefined },
@@ -53,7 +52,8 @@ export function migrateLegacyAuxEquipment<T extends PHAST | undefined>(phast: T,
   if (!phast?.auxEquipment || phast.auxiliaryEquipment !== undefined) {
     return phast;
   }
-  const hoursPerYear = phast.operatingHours?.hoursPerYear ?? DEFAULT_HOURS_PER_YEAR;
+  // Full-year default matches the Electricity Reduction calculator.
+  const hoursPerYear = phast.operatingHours?.hoursPerYear ?? HOURS_PER_YEAR;
   const auxiliaryEquipment = phast.auxEquipment.map((equipment, index) =>
     toAuxiliaryEquipmentItem(equipment, hoursPerYear, idSource?.[index]?.id ?? getNewIdString()));
   return { ...phast, auxiliaryEquipment };

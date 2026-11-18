@@ -9,11 +9,9 @@ import { OperatingHoursComponent, OperatingHoursDialogData } from '../../../shar
 import { ExploreOpportunityCategory, PHAST } from '../../models/phast';
 import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
+import { HOURS_PER_YEAR } from '../../../shared/app-constants';
 
 export const OPERATIONS_DISPLAY_NAME = 'Adjust Operational Data';
-
-// Hours in a non-leap year (hrs/yr); matches the cap on the setup Operations form.
-const MAX_HOURS_PER_YEAR = 8760;
 
 export type OperationsOpportunitySection = 'operatingHours' | 'fuelCost' | 'steamCost' | 'electricityCost';
 // Derived so the cost sections stay in step with the section union.
@@ -37,14 +35,14 @@ const SECTION_DEFINITIONS: readonly OperationsSectionDefinition[] = [
 const ALL_SECTIONS: readonly OperationsOpportunitySection[] = SECTION_DEFINITIONS.map(({ section }) => section);
 
 const OUT_OF_RANGE_WARNINGS: Record<OperationsOpportunitySection, string> = {
-  operatingHours: `Operating hours must be between 0 and ${MAX_HOURS_PER_YEAR}. The entered value is not applied.`,
+  operatingHours: `Operating hours must be between 0 and ${HOURS_PER_YEAR}. The entered value is not applied.`,
   fuelCost: 'Fuel cost must be 0 or greater. The entered value is not applied.',
   steamCost: 'Steam cost must be 0 or greater. The entered value is not applied.',
   electricityCost: 'Electricity cost must be 0 or greater. The entered value is not applied.',
 };
 
 function isWithinBounds(section: OperationsOpportunitySection, value: number): boolean {
-  return value >= 0 && (section !== 'operatingHours' || value <= MAX_HOURS_PER_YEAR);
+  return value >= 0 && (section !== 'operatingHours' || value <= HOURS_PER_YEAR);
 }
 
 function readSectionValue(phast: PHAST | undefined, section: OperationsOpportunitySection): number | undefined {
