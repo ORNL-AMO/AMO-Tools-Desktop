@@ -1,99 +1,145 @@
 <app-cooling-tower-fan-chart [settings]="settings" [output]="output"></app-cooling-tower-fan-chart>
 
 <label class="group-label">Baseline</label>
-<table *ngIf="output" #copyTable0 class="table table-hover table-striped">
-  <tbody>
-    <tr>
-      <td class="bold w-50">Power Consumption</td>
-      <td *ngIf="output.baselinePower" class="text-center w-50">
-        {{output.baselinePower | number:'1.0-2'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
-      </td>
-      <td *ngIf="!output.baselinePower" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Energy Consumption</td>
-      <td *ngIf="output.baselineEnergy" class="text-center w-50">
-        {{output.baselineEnergy | number:'1.0-2'}} kWh
-      </td>
-      <td *ngIf="!output.baselineEnergy" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Energy Cost</td>
-      <td *ngIf="output.baselineEnergyCost" class="text-center w-50">
-        {{output.baselineEnergyCost | currency:'USD':'symbol':'0.0-0'}}
-      </td>
-      <td *ngIf="!output.baselineEnergyCost" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-  </tbody>
-</table>
+@if (output) {
+  <table #copyTable0 class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold w-50">Power Consumption</td>
+        @if (output.baselinePower) {
+          <td class="text-center w-50">
+            {{output.baselinePower | number:'1.0-2'}}
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>hp</span>
+            }
+            @if (settings.unitsOfMeasure == 'Metric') {
+              <span>kW</span>
+            }
+          </td>
+        }
+        @if (!output.baselinePower) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Energy Consumption</td>
+        @if (output.baselineEnergy) {
+          <td class="text-center w-50">
+            {{output.baselineEnergy | number:'1.0-2'}} kWh
+          </td>
+        }
+        @if (!output.baselineEnergy) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Energy Cost</td>
+        @if (output.baselineEnergyCost) {
+          <td class="text-center w-50">
+            {{output.baselineEnergyCost | currency:'USD':'symbol':'0.0-0'}}
+          </td>
+        }
+        @if (!output.baselineEnergyCost) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+    </tbody>
+  </table>
+}
 
 <label class="group-label">Modification</label>
-<table *ngIf="output" #copyTable1 class="table table-hover table-striped">
-  <tbody>
-    <tr>
-      <td class="bold w-50">Power Consumption</td>
-      <td *ngIf="output.modPower" class="text-center w-50">
-        {{output.modPower | number:'1.0-2'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
-      </td>
-      <td *ngIf="!output.modPower" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Energy Consumption</td>
-      <td *ngIf="output.modEnergy" class="text-center w-50">
-        {{output.modEnergy | number:'1.0-2'}} kWh
-      </td>
-      <td *ngIf="!output.modEnergy" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Energy Cost</td>
-      <td *ngIf="output.modEnergyCost" class="text-center w-50">
-        {{output.modEnergyCost | currency:'USD':'symbol':'0.0-0'}}
-      </td>
-      <td *ngIf="!output.modEnergyCost" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-  </tbody>
-</table>
+@if (output) {
+  <table #copyTable1 class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold w-50">Power Consumption</td>
+        @if (output.modPower) {
+          <td class="text-center w-50">
+            {{output.modPower | number:'1.0-2'}}
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>hp</span>
+            }
+            @if (settings.unitsOfMeasure == 'Metric') {
+              <span>kW</span>
+            }
+          </td>
+        }
+        @if (!output.modPower) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Energy Consumption</td>
+        @if (output.modEnergy) {
+          <td class="text-center w-50">
+            {{output.modEnergy | number:'1.0-2'}} kWh
+          </td>
+        }
+        @if (!output.modEnergy) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Energy Cost</td>
+        @if (output.modEnergyCost) {
+          <td class="text-center w-50">
+            {{output.modEnergyCost | currency:'USD':'symbol':'0.0-0'}}
+          </td>
+        }
+        @if (!output.modEnergyCost) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+    </tbody>
+  </table>
+}
 
 
 <label class="group-label">Savings</label>
-<table *ngIf="output" #copyTable2 class="table table-hover table-striped">
-  <tbody>
-    <tr>
-      <td class="bold w-50">Annual Energy Savings</td>
-      <td *ngIf="output.savingsEnergy" class="text-center w-50">
-        {{output.savingsEnergy}} kWh
-      </td>
-      <td *ngIf="!output.savingsEnergy" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Annual Energy Cost Savings</td>
-      <td *ngIf="output.annualCostSaving" class="text-center w-50">
-        {{output.annualCostSaving | currency:'USD':'symbol':'0.0-0'}}
-      </td>
-      <td *ngIf="!output.annualCostSaving" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-  </tbody>
-</table>
+@if (output) {
+  <table #copyTable2 class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold w-50">Annual Energy Savings</td>
+        @if (output.savingsEnergy) {
+          <td class="text-center w-50">
+            {{output.savingsEnergy}} kWh
+          </td>
+        }
+        @if (!output.savingsEnergy) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Annual Energy Cost Savings</td>
+        @if (output.annualCostSaving) {
+          <td class="text-center w-50">
+            {{output.annualCostSaving | currency:'USD':'symbol':'0.0-0'}}
+          </td>
+        }
+        @if (!output.annualCostSaving) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+    </tbody>
+  </table>
+}
 <!-- export table component -->
 <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
 </app-exportable-results-table>

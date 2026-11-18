@@ -1,196 +1,242 @@
 
-<div *ngIf="output">
-  <div *ngFor="let chillerPower of output.chillerLoadResults; let i = index">
-    <label class="group-label">Chiller {{i + 1}} Power Consumption</label>
-    <table #copyTable0 class="table table-hover table-striped">
-    <tbody>
-      <tr>
-        <td class="bold w-50">Baseline Power Consumption</td>
-        <td *ngIf="chillerPower.baseline" class="text-center w-50">
-          {{chillerPower.baseline | number:'1.0-2'}} kW
-        </td>
-        <td *ngIf="!chillerPower.baseline" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50">Modification Power Consumption</td>
-        <td *ngIf="chillerPower.modification" class="text-center w-50">
-          {{chillerPower.modification | number:'1.0-2'}} kW
-        </td>
-        <td *ngIf="!chillerPower.modification" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+@if (output) {
+  <div>
+    @for (chillerPower of output.chillerLoadResults; track chillerPower; let i = $index) {
+      <div>
+        <label class="group-label">Chiller {{i + 1}} Power Consumption</label>
+        <table #copyTable0 class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <td class="bold w-50">Baseline Power Consumption</td>
+              @if (chillerPower.baseline) {
+                <td class="text-center w-50">
+                  {{chillerPower.baseline | number:'1.0-2'}} kW
+                </td>
+              }
+              @if (!chillerPower.baseline) {
+                <td class="text-center w-50">
+                  &mdash; &mdash;
+                </td>
+              }
+            </tr>
+            <tr>
+              <td class="bold w-50">Modification Power Consumption</td>
+              @if (chillerPower.modification) {
+                <td class="text-center w-50">
+                  {{chillerPower.modification | number:'1.0-2'}} kW
+                </td>
+              }
+              @if (!chillerPower.modification) {
+                <td class="text-center w-50">
+                  &mdash; &mdash;
+                </td>
+              }
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    }
 
-<label class="group-label">Total Consumption and Savings</label>
-<table *ngIf="output" #copyTable2 class="table table-hover table-striped">
-  <tbody>
-    <tr>
-      <td class="bold w-50">Total Baseline Power Consumption</td>
-      <td *ngIf="output.baselineTotalPower" class="text-center w-50">
-        {{output.baselineTotalPower | number:'1.0-2'}} kW
-      </td>
-      <td *ngIf="!output.baselineTotalPower" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Total Baseline Energy Consumption</td>
-      <td *ngIf="output.baselineTotalEnergy" class="text-center w-50">
-        {{output.baselineTotalEnergy | number:'1.0-2'}} kWh
-      </td>
-      <td *ngIf="!output.baselineTotalEnergy" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Total Baseline Energy Cost</td>
-      <td *ngIf="output.baselineCost" class="text-center w-50">
-        {{output.baselineCost | currency:'USD':'symbol':'0.0-0'}}
-      </td>
-      <td *ngIf="!output.baselineCost" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Total Modification Power Consumption</td>
-      <td *ngIf="output.modTotalPower" class="text-center w-50">
-        {{output.modTotalPower | number:'1.0-2'}} kW
-      </td>
-      <td *ngIf="!output.modTotalPower" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Total Modification Energy Consumption</td>
-      <td *ngIf="output.modTotalEnergy" class="text-center w-50">
-        {{output.modTotalEnergy | number:'1.0-2'}} kWh
-      </td>
-      <td *ngIf="!output.modTotalEnergy" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Total Modification Energy Cost</td>
-      <td *ngIf="output.modificationCost" class="text-center w-50">
-        {{output.modificationCost | currency:'USD':'symbol':'0.0-0'}}
-      </td>
-      <td *ngIf="!output.modificationCost" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Annual Energy Savings</td>
-      <td *ngIf="output.savingsEnergy" class="text-center w-50">
-        {{output.savingsEnergy | number:'1.0-0'}} kWh
-      </td>
-      <td *ngIf="!output.savingsEnergy" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Annual Energy Cost Savings</td>
-      <td *ngIf="output.costSavings" class="text-center w-50">
-        {{output.costSavings | currency:'USD':'symbol':'0.0-0'}}
-      </td>
-      <td *ngIf="!output.costSavings" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-  </tbody>
-</table>
+    <label class="group-label">Total Consumption and Savings</label>
+    @if (output) {
+      <table #copyTable2 class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <td class="bold w-50">Total Baseline Power Consumption</td>
+            @if (output.baselineTotalPower) {
+              <td class="text-center w-50">
+                {{output.baselineTotalPower | number:'1.0-2'}} kW
+              </td>
+            }
+            @if (!output.baselineTotalPower) {
+              <td class="text-center w-50">
+                &mdash; &mdash;
+              </td>
+            }
+          </tr>
+          <tr>
+            <td class="bold w-50">Total Baseline Energy Consumption</td>
+            @if (output.baselineTotalEnergy) {
+              <td class="text-center w-50">
+                {{output.baselineTotalEnergy | number:'1.0-2'}} kWh
+              </td>
+            }
+            @if (!output.baselineTotalEnergy) {
+              <td class="text-center w-50">
+                &mdash; &mdash;
+              </td>
+            }
+          </tr>
+          <tr>
+            <td class="bold w-50">Total Baseline Energy Cost</td>
+            @if (output.baselineCost) {
+              <td class="text-center w-50">
+                {{output.baselineCost | currency:'USD':'symbol':'0.0-0'}}
+              </td>
+            }
+            @if (!output.baselineCost) {
+              <td class="text-center w-50">
+                &mdash; &mdash;
+              </td>
+            }
+          </tr>
+          <tr>
+            <td class="bold w-50">Total Modification Power Consumption</td>
+            @if (output.modTotalPower) {
+              <td class="text-center w-50">
+                {{output.modTotalPower | number:'1.0-2'}} kW
+              </td>
+            }
+            @if (!output.modTotalPower) {
+              <td class="text-center w-50">
+                &mdash; &mdash;
+              </td>
+            }
+          </tr>
+          <tr>
+            <td class="bold w-50">Total Modification Energy Consumption</td>
+            @if (output.modTotalEnergy) {
+              <td class="text-center w-50">
+                {{output.modTotalEnergy | number:'1.0-2'}} kWh
+              </td>
+            }
+            @if (!output.modTotalEnergy) {
+              <td class="text-center w-50">
+                &mdash; &mdash;
+              </td>
+            }
+          </tr>
+          <tr>
+            <td class="bold w-50">Total Modification Energy Cost</td>
+            @if (output.modificationCost) {
+              <td class="text-center w-50">
+                {{output.modificationCost | currency:'USD':'symbol':'0.0-0'}}
+              </td>
+            }
+            @if (!output.modificationCost) {
+              <td class="text-center w-50">
+                &mdash; &mdash;
+              </td>
+            }
+          </tr>
+          <tr>
+            <td class="bold w-50">Annual Energy Savings</td>
+            @if (output.savingsEnergy) {
+              <td class="text-center w-50">
+                {{output.savingsEnergy | number:'1.0-0'}} kWh
+              </td>
+            }
+            @if (!output.savingsEnergy) {
+              <td class="text-center w-50">
+                &mdash; &mdash;
+              </td>
+            }
+          </tr>
+          <tr>
+            <td class="bold w-50">Annual Energy Cost Savings</td>
+            @if (output.costSavings) {
+              <td class="text-center w-50">
+                {{output.costSavings | currency:'USD':'symbol':'0.0-0'}}
+              </td>
+            }
+            @if (!output.costSavings) {
+              <td class="text-center w-50">
+                &mdash; &mdash;
+              </td>
+            }
+          </tr>
+        </tbody>
+      </table>
+    }
 
-<!-- <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
-</app-exportable-results-table> -->
+    <!-- <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+      </app-exportable-results-table> -->
 
-</div>
-<!-- 
+  </div>
+}
+<!--
   <label class="group-label">Baseline</label>
   <table *ngIf="output" #copyTable0 class="table table-hover table-striped">
-    <tbody>
-      <tr *ngFor="let chillerPower of output.baselinePowerList; let i = index">
-        <td class="bold w-50">Chiller {{i + 1}} Power Consumption</td>
-        <td *ngIf="chillerPower" class="text-center w-50">
-          {{chillerPower | number:'1.0-2'}} kW
-      </td>
-      <td *ngIf="!chillerPower" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Total Power Consumption</td>
-      <td *ngIf="output.baselineTotalPower" class="text-center w-50">
-        {{output.baselineTotalPower | number:'1.0-2'}} kW
-      </td>
-      <td *ngIf="!output.baselineTotalPower" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Total Energy Consumption</td>
-      <td *ngIf="output.baselineTotalEnergy" class="text-center w-50">
-        {{output.baselineTotalEnergy | number:'1.0-2'}} kWh
-      </td>
-      <td *ngIf="!output.baselineTotalEnergy" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<label class="group-label">Modification</label>
-<table *ngIf="output" #copyTable1 class="table table-hover table-striped">
   <tbody>
-    <tr *ngFor="let chillerPower of output.modPowerList; let i = index">
-      <td class="bold w-50">Chiller {{i + 1}} Power Consumption</td>
-      <td *ngIf="chillerPower" class="text-center w-50">
-        {{chillerPower | number:'1.0-2'}} kW
-      </td>
-      <td *ngIf="!chillerPower" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Total Power Consumption</td>
-      <td *ngIf="output.modTotalPower" class="text-center w-50">
-        {{output.modTotalPower | number:'1.0-2'}} kW
-      </td>
-      <td *ngIf="!output.modTotalPower" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Total Energy Consumption</td>
-      <td *ngIf="output.modTotalEnergy" class="text-center w-50">
-        {{output.modTotalEnergy | number:'1.0-2'}} kWh
-      </td>
-      <td *ngIf="!output.modTotalEnergy" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
+  <tr *ngFor="let chillerPower of output.baselinePowerList; let i = index">
+  <td class="bold w-50">Chiller {{i + 1}} Power Consumption</td>
+  <td *ngIf="chillerPower" class="text-center w-50">
+  {{chillerPower | number:'1.0-2'}} kW
+  </td>
+  <td *ngIf="!chillerPower" class="text-center w-50">
+  &mdash; &mdash;
+  </td>
+  </tr>
+  <tr>
+  <td class="bold w-50">Total Power Consumption</td>
+  <td *ngIf="output.baselineTotalPower" class="text-center w-50">
+  {{output.baselineTotalPower | number:'1.0-2'}} kW
+  </td>
+  <td *ngIf="!output.baselineTotalPower" class="text-center w-50">
+  &mdash; &mdash;
+  </td>
+  </tr>
+  <tr>
+  <td class="bold w-50">Total Energy Consumption</td>
+  <td *ngIf="output.baselineTotalEnergy" class="text-center w-50">
+  {{output.baselineTotalEnergy | number:'1.0-2'}} kWh
+  </td>
+  <td *ngIf="!output.baselineTotalEnergy" class="text-center w-50">
+  &mdash; &mdash;
+  </td>
+  </tr>
   </tbody>
-</table>
+  </table>
 
-
-
-<label class="group-label">Savings</label>
-<table *ngIf="output" #copyTable2 class="table table-hover table-striped">
+  <label class="group-label">Modification</label>
+  <table *ngIf="output" #copyTable1 class="table table-hover table-striped">
   <tbody>
-    <tr>
-      <td class="bold w-50">Annual Energy Savings</td>
-      <td *ngIf="output.savingsEnergy" class="text-center w-50">
-        {{output.savingsEnergy | number:'1.0-0'}} kWh
-      </td>
-      <td *ngIf="!output.savingsEnergy" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
+  <tr *ngFor="let chillerPower of output.modPowerList; let i = index">
+  <td class="bold w-50">Chiller {{i + 1}} Power Consumption</td>
+  <td *ngIf="chillerPower" class="text-center w-50">
+  {{chillerPower | number:'1.0-2'}} kW
+  </td>
+  <td *ngIf="!chillerPower" class="text-center w-50">
+  &mdash; &mdash;
+  </td>
+  </tr>
+  <tr>
+  <td class="bold w-50">Total Power Consumption</td>
+  <td *ngIf="output.modTotalPower" class="text-center w-50">
+  {{output.modTotalPower | number:'1.0-2'}} kW
+  </td>
+  <td *ngIf="!output.modTotalPower" class="text-center w-50">
+  &mdash; &mdash;
+  </td>
+  </tr>
+  <tr>
+  <td class="bold w-50">Total Energy Consumption</td>
+  <td *ngIf="output.modTotalEnergy" class="text-center w-50">
+  {{output.modTotalEnergy | number:'1.0-2'}} kWh
+  </td>
+  <td *ngIf="!output.modTotalEnergy" class="text-center w-50">
+  &mdash; &mdash;
+  </td>
+  </tr>
   </tbody>
-</table>
+  </table>
 
-<app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
-</app-exportable-results-table> -->
+
+
+  <label class="group-label">Savings</label>
+  <table *ngIf="output" #copyTable2 class="table table-hover table-striped">
+  <tbody>
+  <tr>
+  <td class="bold w-50">Annual Energy Savings</td>
+  <td *ngIf="output.savingsEnergy" class="text-center w-50">
+  {{output.savingsEnergy | number:'1.0-0'}} kWh
+  </td>
+  <td *ngIf="!output.savingsEnergy" class="text-center w-50">
+  &mdash; &mdash;
+  </td>
+  </tr>
+  </tbody>
+  </table>
+
+  <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+  </app-exportable-results-table> -->

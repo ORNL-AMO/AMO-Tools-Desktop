@@ -1,181 +1,245 @@
-<ng-container *ngIf="!isShowingWeatherResults && output.results && !inTreasureHunt">
+@if (!isShowingWeatherResults && output.results && !inTreasureHunt) {
   <label class="group-label">Baseline</label>
   <table #copyTable0 class="table table-hover table-striped">
     <tbody>
       <tr>
         <td class="bold w-50">Power Consumption</td>
-        <td *ngIf="output.results.baselinePower" class="text-center w-50">
-          {{output.results.baselinePower | number:'1.0-2'}}
-          <!-- <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span> -->
-          <!-- <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span> -->
-          <span>kW</span>
-        </td>
-        <td *ngIf="!output.results.baselinePower" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
+        @if (output.results.baselinePower) {
+          <td class="text-center w-50">
+            {{output.results.baselinePower | number:'1.0-2'}}
+            <!-- <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span> -->
+            <!-- <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span> -->
+            <span>kW</span>
+          </td>
+        }
+        @if (!output.results.baselinePower) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
       </tr>
       <tr>
         <td class="bold w-50">Energy Consumption</td>
-        <td *ngIf="output.results.baselineEnergy" class="text-center w-50">
-          {{output.results.baselineEnergy | number:'1.0-2'}} kWh
-        </td>
-        <td *ngIf="!output.results.baselineEnergy" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
+        @if (output.results.baselineEnergy) {
+          <td class="text-center w-50">
+            {{output.results.baselineEnergy | number:'1.0-2'}} kWh
+          </td>
+        }
+        @if (!output.results.baselineEnergy) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
       </tr>
       <tr>
         <td class="bold w-50">Energy Cost</td>
-        <td *ngIf="output.results.baselineEnergyCost" class="text-center w-50">
-          {{output.results.baselineEnergyCost | currency:'USD':'symbol':'0.0-0'}}
-        </td>
-        <td *ngIf="!output.results.baselineEnergyCost" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
+        @if (output.results.baselineEnergyCost) {
+          <td class="text-center w-50">
+            {{output.results.baselineEnergyCost | currency:'USD':'symbol':'0.0-0'}}
+          </td>
+        }
+        @if (!output.results.baselineEnergyCost) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
       </tr>
     </tbody>
   </table>
 
   <label class="group-label">Modification</label>
-  <table *ngIf="output.results" #copyTable1 class="table table-hover table-striped">
-    <tbody>
-      <tr>
-        <td class="bold w-50">Power Consumption</td>
-        <td *ngIf="output.results.modPower" class="text-center w-50">
-          {{output.results.modPower | number:'1.0-2'}}
-          <!-- <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span> -->
-          <!-- <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span> -->
-          <span>kW</span>
-        </td>
-        <td *ngIf="!output.results.modPower" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50">Energy Consumption</td>
-        <td *ngIf="output.results.modEnergy" class="text-center w-50">
-          {{output.results.modEnergy | number:'1.0-2'}} kWh
-        </td>
-        <td *ngIf="!output.results.modEnergy" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50">Energy Cost</td>
-        <td *ngIf="output.results.modEnergyCost" class="text-center w-50">
-          {{output.results.modEnergyCost | currency:'USD':'symbol':'0.0-0'}}
-        </td>
-        <td *ngIf="!output.results.modEnergyCost" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  @if (output.results) {
+    <table #copyTable1 class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td class="bold w-50">Power Consumption</td>
+          @if (output.results.modPower) {
+            <td class="text-center w-50">
+              {{output.results.modPower | number:'1.0-2'}}
+              <!-- <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span> -->
+              <!-- <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span> -->
+              <span>kW</span>
+            </td>
+          }
+          @if (!output.results.modPower) {
+            <td class="text-center w-50">
+              &mdash; &mdash;
+            </td>
+          }
+        </tr>
+        <tr>
+          <td class="bold w-50">Energy Consumption</td>
+          @if (output.results.modEnergy) {
+            <td class="text-center w-50">
+              {{output.results.modEnergy | number:'1.0-2'}} kWh
+            </td>
+          }
+          @if (!output.results.modEnergy) {
+            <td class="text-center w-50">
+              &mdash; &mdash;
+            </td>
+          }
+        </tr>
+        <tr>
+          <td class="bold w-50">Energy Cost</td>
+          @if (output.results.modEnergyCost) {
+            <td class="text-center w-50">
+              {{output.results.modEnergyCost | currency:'USD':'symbol':'0.0-0'}}
+            </td>
+          }
+          @if (!output.results.modEnergyCost) {
+            <td class="text-center w-50">
+              &mdash; &mdash;
+            </td>
+          }
+        </tr>
+      </tbody>
+    </table>
+  }
 
   <label class="group-label">Savings</label>
-  <table *ngIf="output.results" #copyTable2 class="table table-hover table-striped">
-    <tbody>
-      <tr>
-        <td class="bold w-50">Annual Energy Savings</td>
-        <td *ngIf="output.results.savingsEnergy" class="text-center w-50">
-          {{output.results.savingsEnergy | number:'1.0-3'}} kWh
-        </td>
-        <td *ngIf="!output.results.savingsEnergy" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50">Annual Energy Cost Savings</td>
-        <td *ngIf="output.results.annualCostSaving" class="text-center w-50">
-          {{output.results.annualCostSaving | currency:'USD':'symbol':'0.0-0'}}
-        </td>
-        <td *ngIf="!output.results.annualCostSaving" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  @if (output.results) {
+    <table #copyTable2 class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td class="bold w-50">Annual Energy Savings</td>
+          @if (output.results.savingsEnergy) {
+            <td class="text-center w-50">
+              {{output.results.savingsEnergy | number:'1.0-3'}} kWh
+            </td>
+          }
+          @if (!output.results.savingsEnergy) {
+            <td class="text-center w-50">
+              &mdash; &mdash;
+            </td>
+          }
+        </tr>
+        <tr>
+          <td class="bold w-50">Annual Energy Cost Savings</td>
+          @if (output.results.annualCostSaving) {
+            <td class="text-center w-50">
+              {{output.results.annualCostSaving | currency:'USD':'symbol':'0.0-0'}}
+            </td>
+          }
+          @if (!output.results.annualCostSaving) {
+            <td class="text-center w-50">
+              &mdash; &mdash;
+            </td>
+          }
+        </tr>
+      </tbody>
+    </table>
+  }
 
   <!-- export table component -->
   <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
   </app-exportable-results-table>
-</ng-container>
+}
 
 
-<ng-container *ngIf="output.weatherBinnedChartData && (inTreasureHunt || isShowingWeatherResults)">
+@if (output.weatherBinnedChartData && (inTreasureHunt || isShowingWeatherResults)) {
   <app-cooling-weather-chart
     [weatherBinnedChartData]="output.weatherBinnedChartData">
   </app-cooling-weather-chart>
 
 
-   <label class="group-label mt-3">Total Annual Results</label>
-  <table *ngIf="output.totalResults" class="table table-hover table-striped">
-    <tbody>
-      <tr>
-        <td class="bold w-50">Baseline Energy Consumption</td>
-        <td *ngIf="output.totalResults.baselineEnergy" class="text-center w-50">
-          {{output.totalResults.baselineEnergy | number:'1.0-2'}} kWh
-        </td>
-        <td *ngIf="!output.totalResults.baselineEnergy" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50">Baseline Energy Cost</td>
-        <td *ngIf="output.totalResults.baselineEnergyCost" class="text-center w-50">
-          {{output.totalResults.baselineEnergyCost | currency:'USD':'symbol':'0.0-0'}}
-        </td>
-        <td *ngIf="!output.totalResults.baselineEnergyCost" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50">Modification Energy Consumption</td>
-        <td *ngIf="output.totalResults.modEnergy" class="text-center w-50">
-          {{output.totalResults.modEnergy | number:'1.0-2'}} kWh
-        </td>
-        <td *ngIf="!output.totalResults.modEnergy" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50">Modification Energy Cost</td>
-        <td *ngIf="output.totalResults.modEnergyCost" class="text-center w-50">
-          {{output.totalResults.modEnergyCost | currency:'USD':'symbol':'0.0-0'}}
-        </td>
-        <td *ngIf="!output.totalResults.modEnergyCost" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50">Annual Energy Savings</td>
-        <td *ngIf="output.totalResults.savingsEnergy" class="text-center w-50">
-          {{output.totalResults.savingsEnergy | number:'1.0-3'}} kWh
-        </td>
-        <td *ngIf="!output.totalResults.savingsEnergy" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50">Annual Energy Cost Savings</td>
-        <td *ngIf="output.totalResults.annualCostSaving" class="text-center w-50">
-          {{output.totalResults.annualCostSaving | currency:'USD':'symbol':'0.0-0'}}
-        </td>
-        <td *ngIf="!output.totalResults.annualCostSaving" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <label class="group-label mt-3">Total Annual Results</label>
+  @if (output.totalResults) {
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td class="bold w-50">Baseline Energy Consumption</td>
+          @if (output.totalResults.baselineEnergy) {
+            <td class="text-center w-50">
+              {{output.totalResults.baselineEnergy | number:'1.0-2'}} kWh
+            </td>
+          }
+          @if (!output.totalResults.baselineEnergy) {
+            <td class="text-center w-50">
+              &mdash; &mdash;
+            </td>
+          }
+        </tr>
+        <tr>
+          <td class="bold w-50">Baseline Energy Cost</td>
+          @if (output.totalResults.baselineEnergyCost) {
+            <td class="text-center w-50">
+              {{output.totalResults.baselineEnergyCost | currency:'USD':'symbol':'0.0-0'}}
+            </td>
+          }
+          @if (!output.totalResults.baselineEnergyCost) {
+            <td class="text-center w-50">
+              &mdash; &mdash;
+            </td>
+          }
+        </tr>
+        <tr>
+          <td class="bold w-50">Modification Energy Consumption</td>
+          @if (output.totalResults.modEnergy) {
+            <td class="text-center w-50">
+              {{output.totalResults.modEnergy | number:'1.0-2'}} kWh
+            </td>
+          }
+          @if (!output.totalResults.modEnergy) {
+            <td class="text-center w-50">
+              &mdash; &mdash;
+            </td>
+          }
+        </tr>
+        <tr>
+          <td class="bold w-50">Modification Energy Cost</td>
+          @if (output.totalResults.modEnergyCost) {
+            <td class="text-center w-50">
+              {{output.totalResults.modEnergyCost | currency:'USD':'symbol':'0.0-0'}}
+            </td>
+          }
+          @if (!output.totalResults.modEnergyCost) {
+            <td class="text-center w-50">
+              &mdash; &mdash;
+            </td>
+          }
+        </tr>
+        <tr>
+          <td class="bold w-50">Annual Energy Savings</td>
+          @if (output.totalResults.savingsEnergy) {
+            <td class="text-center w-50">
+              {{output.totalResults.savingsEnergy | number:'1.0-3'}} kWh
+            </td>
+          }
+          @if (!output.totalResults.savingsEnergy) {
+            <td class="text-center w-50">
+              &mdash; &mdash;
+            </td>
+          }
+        </tr>
+        <tr>
+          <td class="bold w-50">Annual Energy Cost Savings</td>
+          @if (output.totalResults.annualCostSaving) {
+            <td class="text-center w-50">
+              {{output.totalResults.annualCostSaving | currency:'USD':'symbol':'0.0-0'}}
+            </td>
+          }
+          @if (!output.totalResults.annualCostSaving) {
+            <td class="text-center w-50">
+              &mdash; &mdash;
+            </td>
+          }
+        </tr>
+      </tbody>
+    </table>
+  }
 
-  <ng-container *ngIf="weatherBinnedResults && selectedWeatherBinResult">
+  @if (weatherBinnedResults && selectedWeatherBinResult) {
     <form class="w-75 pt-3 pb-1 mx-auto">
       <div class="form-group">
         <div class="input-group">
           <select class="form-control" name="selectedWeatherBinResult" id="selectedWeatherBinResult"
             [(ngModel)]="selectedWeatherBinResult" (change)="setSelectedWeatherResult()">
-            <option *ngFor="let result of weatherBinnedResults" [ngValue]="result"
-            [selected]="result.caseName == this.selectedWeatherBinResult.caseName"
-              [innerHTML]="result.caseName"></option>
+            @for (result of weatherBinnedResults; track result) {
+              <option [ngValue]="result"
+                [selected]="result.caseName == this.selectedWeatherBinResult.caseName"
+                [innerHTML]="result.caseName"></option>
+            }
           </select>
         </div>
       </div>
@@ -190,69 +254,92 @@
       <tbody>
         <tr>
           <td class="bold w-50">Power Consumption</td>
-          <td *ngIf="selectedWeatherBinResult.results.baselinePower" class="text-center w-50">
-            {{selectedWeatherBinResult.results.baselinePower | number:'1.0-2'}}
-            <!-- <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span> -->
-            <!-- <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span> -->
-            <span>kW</span>
-          </td>
-          <td *ngIf="!selectedWeatherBinResult.results.baselinePower" class="text-center w-50">
-            &mdash; &mdash;
-          </td>
+          @if (selectedWeatherBinResult.results.baselinePower) {
+            <td class="text-center w-50">
+              {{selectedWeatherBinResult.results.baselinePower | number:'1.0-2'}}
+              <!-- <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span> -->
+              <!-- <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span> -->
+              <span>kW</span>
+            </td>
+          }
+          @if (!selectedWeatherBinResult.results.baselinePower) {
+            <td class="text-center w-50">
+              &mdash; &mdash;
+            </td>
+          }
         </tr>
         <tr>
           <td class="bold w-50">Energy Consumption</td>
-          <td *ngIf="selectedWeatherBinResult.results.baselineEnergy" class="text-center w-50">
-            {{selectedWeatherBinResult.results.baselineEnergy | number:'1.0-2'}} kWh
-          </td>
-          <td *ngIf="!selectedWeatherBinResult.results.baselineEnergy" class="text-center w-50">
-            &mdash; &mdash;
-          </td>
+          @if (selectedWeatherBinResult.results.baselineEnergy) {
+            <td class="text-center w-50">
+              {{selectedWeatherBinResult.results.baselineEnergy | number:'1.0-2'}} kWh
+            </td>
+          }
+          @if (!selectedWeatherBinResult.results.baselineEnergy) {
+            <td class="text-center w-50">
+              &mdash; &mdash;
+            </td>
+          }
         </tr>
       </tbody>
     </table>
 
     <label class="group-label">Modification</label>
-    <table *ngIf="selectedWeatherBinResult.results" #copyTable1 class="table table-hover table-striped">
-      <tbody>
-        <tr>
-          <td class="bold w-50">Power Consumption</td>
-          <td *ngIf="selectedWeatherBinResult.results.modPower" class="text-center w-50">
-            {{selectedWeatherBinResult.results.modPower | number:'1.0-2'}}
-            <!-- <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span> -->
-            <!-- <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span> -->
-            <span>kW</span>
-          </td>
-          <td *ngIf="!selectedWeatherBinResult.results.modPower" class="text-center w-50">
-            &mdash; &mdash;
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Energy Consumption</td>
-          <td *ngIf="selectedWeatherBinResult.results.modEnergy" class="text-center w-50">
-            {{selectedWeatherBinResult.results.modEnergy | number:'1.0-2'}} kWh
-          </td>
-          <td *ngIf="!selectedWeatherBinResult.results.modEnergy" class="text-center w-50">
-            &mdash; &mdash;
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    @if (selectedWeatherBinResult.results) {
+      <table #copyTable1 class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <td class="bold w-50">Power Consumption</td>
+            @if (selectedWeatherBinResult.results.modPower) {
+              <td class="text-center w-50">
+                {{selectedWeatherBinResult.results.modPower | number:'1.0-2'}}
+                <!-- <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span> -->
+                <!-- <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span> -->
+                <span>kW</span>
+              </td>
+            }
+            @if (!selectedWeatherBinResult.results.modPower) {
+              <td class="text-center w-50">
+                &mdash; &mdash;
+              </td>
+            }
+          </tr>
+          <tr>
+            <td class="bold w-50">Energy Consumption</td>
+            @if (selectedWeatherBinResult.results.modEnergy) {
+              <td class="text-center w-50">
+                {{selectedWeatherBinResult.results.modEnergy | number:'1.0-2'}} kWh
+              </td>
+            }
+            @if (!selectedWeatherBinResult.results.modEnergy) {
+              <td class="text-center w-50">
+                &mdash; &mdash;
+              </td>
+            }
+          </tr>
+        </tbody>
+      </table>
+    }
 
     <label class="group-label">Bin Savings</label>
-    <table *ngIf="selectedWeatherBinResult.results" #copyTable2 class="table table-hover table-striped">
-      <tbody>
-        <tr>
-          <td class="bold w-50">Annual Energy Savings</td>
-          <td *ngIf="selectedWeatherBinResult.results.savingsEnergy" class="text-center w-50">
-            {{selectedWeatherBinResult.results.savingsEnergy | number:'1.0-3'}} kWh
-          </td>
-          <td *ngIf="!selectedWeatherBinResult.results.savingsEnergy" class="text-center w-50">
-            &mdash; &mdash;
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </ng-container>
-
-</ng-container>
+    @if (selectedWeatherBinResult.results) {
+      <table #copyTable2 class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <td class="bold w-50">Annual Energy Savings</td>
+            @if (selectedWeatherBinResult.results.savingsEnergy) {
+              <td class="text-center w-50">
+                {{selectedWeatherBinResult.results.savingsEnergy | number:'1.0-3'}} kWh
+              </td>
+            }
+            @if (!selectedWeatherBinResult.results.savingsEnergy) {
+              <td class="text-center w-50">
+                &mdash; &mdash;
+              </td>
+            }
+          </tr>
+        </tbody>
+      </table>
+    }
+  }
+}

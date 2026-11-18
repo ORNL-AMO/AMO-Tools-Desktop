@@ -10,9 +10,11 @@
         <label for="towerType">Tower Type</label>
         <select class="form-control" id="towerType" formControlName="towerType" (change)="calculate()"
           (focus)="focusField('towerType')">
-          <option *ngFor="let towerType of towerTypes" [ngValue]="towerType.value">
-            {{towerType.display}}
-          </option>
+          @for (towerType of towerTypes; track towerType) {
+            <option [ngValue]="towerType.value">
+              {{towerType.display}}
+            </option>
+          }
         </select>
       </div>
 
@@ -22,12 +24,17 @@
           <input class="form-control" name="numCells" id="numCells" formControlName="numCells" type="number"
             (input)="calculate()" (focus)="focusField('numCells')" onfocus="this.select();">
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.numCells.invalid && !form.controls.numCells.pristine">
-          <span *ngIf="form.controls.numCells.errors.required">Value required.</span>
-          <span *ngIf="form.controls.numCells.errors.min">Value can't be less than
-            {{form.controls.numCells.errors.min.min}}.</span>
-        </span>
+        @if (form.controls.numCells.invalid && !form.controls.numCells.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (form.controls.numCells.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.numCells.errors.min) {
+              <span>Value can't be less than
+                {{form.controls.numCells.errors.min.min}}.</span>
+            }
+          </span>
+        }
       </div>
 
       <div class="form-group">
@@ -35,30 +42,48 @@
         <div class="input-group">
           <input class="form-control" name="ratedFanPower" id="ratedFanPower" formControlName="ratedFanPower"
             type="number" (input)="calculate()" (focus)="focusField('ratedFanPower')" onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kW</span>
+          @if (settings.unitsOfMeasure == 'Imperial') {
+            <span class="input-group-addon units">hp</span>
+          }
+          @if (settings.unitsOfMeasure == 'Metric') {
+            <span class="input-group-addon units">kW</span>
+          }
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.ratedFanPower.invalid && !form.controls.ratedFanPower.pristine">
-          <span *ngIf="form.controls.ratedFanPower.errors.required">Value required.</span>
-          <span *ngIf="form.controls.ratedFanPower.errors.min">Value can't be less than
-            {{form.controls.ratedFanPower.errors.min.min}}.</span>
-        </span>
+        @if (form.controls.ratedFanPower.invalid && !form.controls.ratedFanPower.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (form.controls.ratedFanPower.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.ratedFanPower.errors.min) {
+              <span>Value can't be less than
+                {{form.controls.ratedFanPower.errors.min.min}}.</span>
+            }
+          </span>
+        }
       </div>
       <div class="form-group">
         <label class="small" for="waterFlowRate">Rated Cooling Tower Water Flow Rate</label>
         <div class="input-group">
           <input class="form-control" name="waterFlowRate" id="waterFlowRate" formControlName="waterFlowRate"
             type="number" (input)="calculate()" (focus)="focusField('waterFlowRate')" onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">GPM</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/s</span>
+          @if (settings.unitsOfMeasure == 'Imperial') {
+            <span class="input-group-addon units">GPM</span>
+          }
+          @if (settings.unitsOfMeasure == 'Metric') {
+            <span class="input-group-addon units">m<sup>3</sup>/s</span>
+          }
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.waterFlowRate.invalid && !form.controls.waterFlowRate.pristine">
-          <span *ngIf="form.controls.waterFlowRate.errors.required">Value required.</span>
-            <span *ngIf="form.controls.waterFlowRate.errors.min">Value can't be less than
-              {{form.controls.waterFlowRate.errors.min.min}}.</span>
-        </span>
+        @if (form.controls.waterFlowRate.invalid && !form.controls.waterFlowRate.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (form.controls.waterFlowRate.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.waterFlowRate.errors.min) {
+              <span>Value can't be less than
+                {{form.controls.waterFlowRate.errors.min.min}}.</span>
+            }
+          </span>
+        }
       </div>
     </form>
   </div>
@@ -79,14 +104,21 @@
             type="number" (input)="calculate()" (focus)="focusField('operatingHours')" onfocus="this.select();">
           <span class="units input-group-addon">hrs/yr</span>
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.operatingHours.invalid && !form.controls.operatingHours.pristine">
-          <span *ngIf="form.controls.operatingHours.errors.required">Value required.</span>
-          <span *ngIf="form.controls.operatingHours.errors.max">Value can't be greater than
-            {{form.controls.operatingHours.errors.max.max}}.</span>
-          <span *ngIf="form.controls.operatingHours.errors.min">Value can't be less than
-            {{form.controls.operatingHours.errors.min.min}}.</span>
-        </span>
+        @if (form.controls.operatingHours.invalid && !form.controls.operatingHours.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (form.controls.operatingHours.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.operatingHours.errors.max) {
+              <span>Value can't be greater than
+                {{form.controls.operatingHours.errors.max.max}}.</span>
+            }
+            @if (form.controls.operatingHours.errors.min) {
+              <span>Value can't be less than
+                {{form.controls.operatingHours.errors.min.min}}.</span>
+            }
+          </span>
+        }
       </div>
 
       <div class="form-group">
@@ -97,12 +129,17 @@
             (focus)="focusField('electricityCost')">
           <span class="input-group-addon units">$/kWh</span>
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.electricityCost.invalid && !form.controls.electricityCost.pristine">
-          <span *ngIf="form.controls.electricityCost.errors.required">Value required.</span>
-          <span *ngIf="form.controls.electricityCost.errors.min">Value cannot not be less than
-            {{form.controls.electricityCost.errors.min.min}}.</span>
-        </span>
+        @if (form.controls.electricityCost.invalid && !form.controls.electricityCost.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (form.controls.electricityCost.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.electricityCost.errors.min) {
+              <span>Value cannot not be less than
+                {{form.controls.electricityCost.errors.min.min}}.</span>
+            }
+          </span>
+        }
       </div>
 
       <div class="form-group">
@@ -110,15 +147,24 @@
         <div class="input-group">
           <input class="form-control" name="waterLeavingTemp" id="waterLeavingTemp" formControlName="waterLeavingTemp"
             type="number" (input)="calculate()" (focus)="focusField('waterLeavingTemp')" onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+          @if (settings.unitsOfMeasure == 'Imperial') {
+            <span class="input-group-addon units">&#8457;</span>
+          }
+          @if (settings.unitsOfMeasure == 'Metric') {
+            <span class="input-group-addon units">&#8451;</span>
+          }
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.waterLeavingTemp.invalid && !form.controls.waterLeavingTemp.pristine">
-          <span *ngIf="form.controls.waterLeavingTemp.errors.required">Value required.</span>
-            <span *ngIf="form.controls.waterLeavingTemp.errors.max">Value can't be greater than Entering Water Temperature
-              ({{form.controls.waterLeavingTemp.errors.max.max}}).</span>
-        </span>
+        @if (form.controls.waterLeavingTemp.invalid && !form.controls.waterLeavingTemp.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (form.controls.waterLeavingTemp.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.waterLeavingTemp.errors.max) {
+              <span>Value can't be greater than Entering Water Temperature
+                ({{form.controls.waterLeavingTemp.errors.max.max}}).</span>
+            }
+          </span>
+        }
       </div>
 
       <div class="form-group">
@@ -127,15 +173,24 @@
           <input class="form-control" name="waterEnteringTemp" id="waterEnteringTemp"
             formControlName="waterEnteringTemp" type="number" (input)="calculate()"
             (focus)="focusField('waterEnteringTemp')" onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+          @if (settings.unitsOfMeasure == 'Imperial') {
+            <span class="input-group-addon units">&#8457;</span>
+          }
+          @if (settings.unitsOfMeasure == 'Metric') {
+            <span class="input-group-addon units">&#8451;</span>
+          }
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.waterEnteringTemp.invalid && !form.controls.waterEnteringTemp.pristine">
-          <span *ngIf="form.controls.waterEnteringTemp.errors.required">Value required.</span>
-          <span *ngIf="form.controls.waterEnteringTemp.errors.min">Value can't be less than Leaving Water Temperature
-            {{form.controls.waterEnteringTemp.errors.min.min}}.</span>
-        </span>
+        @if (form.controls.waterEnteringTemp.invalid && !form.controls.waterEnteringTemp.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (form.controls.waterEnteringTemp.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.waterEnteringTemp.errors.min) {
+              <span>Value can't be less than Leaving Water Temperature
+                {{form.controls.waterEnteringTemp.errors.min.min}}.</span>
+            }
+          </span>
+        }
       </div>
 
       <div class="form-group">
@@ -144,15 +199,24 @@
           <input class="form-control" name="operatingTempWetBulb" id="operatingTempWetBulb"
             formControlName="operatingTempWetBulb" type="number" (input)="calculate()"
             (focus)="focusField('operatingTempWetBulb')" onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+          @if (settings.unitsOfMeasure == 'Imperial') {
+            <span class="input-group-addon units">&#8457;</span>
+          }
+          @if (settings.unitsOfMeasure == 'Metric') {
+            <span class="input-group-addon units">&#8451;</span>
+          }
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.operatingTempWetBulb.invalid && !form.controls.operatingTempWetBulb.pristine">
-          <span *ngIf="form.controls.operatingTempWetBulb.errors.required">Value required.</span>
-          <span *ngIf="form.controls.operatingTempWetBulb.errors.max">Value can't be greater than Entering Water Temperature
-            ({{form.controls.operatingTempWetBulb.errors.max.max}}).</span>
-        </span>
+        @if (form.controls.operatingTempWetBulb.invalid && !form.controls.operatingTempWetBulb.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (form.controls.operatingTempWetBulb.errors.required) {
+              <span>Value required.</span>
+            }
+            @if (form.controls.operatingTempWetBulb.errors.max) {
+              <span>Value can't be greater than Entering Water Temperature
+                ({{form.controls.operatingTempWetBulb.errors.max.max}}).</span>
+            }
+          </span>
+        }
       </div>
 
       <br><br>
@@ -160,24 +224,40 @@
       <div class="form-group">
         <label class="small" for="range">Range</label>
         <div class="input-group d-flex justify-content-center small bold" (focus)="focusField('range')">
-          <span class="mr-2" *ngIf="results.range">
-            {{results.range | number:'1.0-2'}}
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
-          </span>
-          <span class="mr-2" *ngIf="!results.range">&mdash; &mdash;</span>
+          @if (results.range) {
+            <span class="mr-2">
+              {{results.range | number:'1.0-2'}}
+              @if (settings.unitsOfMeasure == 'Imperial') {
+                <span>&#8457;</span>
+              }
+              @if (settings.unitsOfMeasure == 'Metric') {
+                <span>&#8451;</span>
+              }
+            </span>
+          }
+          @if (!results.range) {
+            <span class="mr-2">&mdash; &mdash;</span>
+          }
         </div>
       </div>
 
       <div class="form-group">
         <label class="small" for="approach">Approach</label>
         <div class="input-group d-flex justify-content-center small bold" (focus)="focusField('approach')">
-          <span class="mr-2" *ngIf="results.approach">
-            {{results.approach | number:'1.0-2'}}
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
-          </span>
-          <span class="mr-2" *ngIf="!results.approach">&mdash; &mdash;</span>
+          @if (results.approach) {
+            <span class="mr-2">
+              {{results.approach | number:'1.0-2'}}
+              @if (settings.unitsOfMeasure == 'Imperial') {
+                <span>&#8457;</span>
+              }
+              @if (settings.unitsOfMeasure == 'Metric') {
+                <span>&#8451;</span>
+              }
+            </span>
+          }
+          @if (!results.approach) {
+            <span class="mr-2">&mdash; &mdash;</span>
+          }
         </div>
       </div>
 
@@ -202,9 +282,11 @@
         <label for="baselineSpeedType">Fan Control</label>
         <select class="form-control" id="baselineSpeedType" formControlName="baselineSpeedType" (change)="calculate()"
           (focus)="focusField('baselineSpeedType')">
-          <option *ngFor="let fanControlType of fanControlTypes" [ngValue]="fanControlType.value">
-            {{fanControlType.display}}
-          </option>
+          @for (fanControlType of fanControlTypes; track fanControlType) {
+            <option [ngValue]="fanControlType.value">
+              {{fanControlType.display}}
+            </option>
+          }
         </select>
       </div>
     </form>
@@ -220,9 +302,11 @@
         <label for="modSpeedType">Fan Control</label>
         <select class="form-control" id="modSpeedType" formControlName="modSpeedType" (change)="calculate()"
           (focus)="focusField('modSpeedType')">
-          <option *ngFor="let fanControlType of fanControlTypes" [ngValue]="fanControlType.value">
-            {{fanControlType.display}}
-          </option>
+          @for (fanControlType of fanControlTypes; track fanControlType) {
+            <option [ngValue]="fanControlType.value">
+              {{fanControlType.display}}
+            </option>
+          }
         </select>
       </div>
     </form>
@@ -230,6 +314,8 @@
 
 </div>
 
-<app-operating-hours-modal *ngIf="showOpHoursModal" (emitClose)="closeOperatingHoursModal()"
-  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true">
-</app-operating-hours-modal>
+@if (showOpHoursModal) {
+  <app-operating-hours-modal (emitClose)="closeOperatingHoursModal()"
+    (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true">
+  </app-operating-hours-modal>
+}

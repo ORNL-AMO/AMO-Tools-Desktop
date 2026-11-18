@@ -1,15 +1,16 @@
 <div class="p-2 pt-3 d-flex flex-column help-info">
-    <h5>
-      Psychrometric Calculator Help
-      <br>
-      <small class="text-muted">The equations used to calculate moist air properties are from perfect gas relations
-        published in the ASHRAE Fundamentals Handbook.
-        The air properties can be calculated using wet bulb temperature, relative humidity or dew point.
-      </small>
-    </h5>
-    <hr class="my-1 hr-spacer">
+  <h5>
+    Psychrometric Calculator Help
+    <br>
+    <small class="text-muted">The equations used to calculate moist air properties are from perfect gas relations
+      published in the ASHRAE Fundamentals Handbook.
+      The air properties can be calculated using wet bulb temperature, relative humidity or dew point.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
 
-    <div class="my-2" *ngIf="currentField == 'inputType'">
+  @if (currentField == 'inputType') {
+    <div class="my-2">
       <h6>
         Method to Establish Gas Density
         <br>
@@ -44,7 +45,9 @@
         </table>
       </div>
     </div>
-    <div class="my-2" *ngIf="currentField == 'dryBulbTemp'">
+  }
+  @if (currentField == 'dryBulbTemp') {
+    <div class="my-2">
       <h6>
         Dry Bulb Temp
         <br>
@@ -54,7 +57,9 @@
         </small>
       </h6>
     </div>
-    <div class="my-2" *ngIf="currentField == 'barometricPressure'">
+  }
+  @if (currentField == 'barometricPressure') {
+    <div class="my-2">
       <h6>
         Barometric Pressure
         <br>
@@ -64,7 +69,9 @@
         </small>
       </h6>
     </div>
-    <div class="my-2" *ngIf="currentField == 'relativeHumidity'">
+  }
+  @if (currentField == 'relativeHumidity') {
+    <div class="my-2">
       <h6>
         Relative Humidity
         <br>
@@ -75,7 +82,9 @@
         </small>
       </h6>
     </div>
-    <div class="my-2" *ngIf="currentField == 'wetBulbTemp'">
+  }
+  @if (currentField == 'wetBulbTemp') {
+    <div class="my-2">
       <h6>
         Wet Bulb Temp
         <br>
@@ -86,7 +95,9 @@
         </small>
       </h6>
     </div>
-    <div class="my-2" *ngIf="currentField == 'dewPoint'">
+  }
+  @if (currentField == 'dewPoint') {
+    <div class="my-2">
       <h6>
         Dew Point
         <br>
@@ -97,7 +108,9 @@
         </small>
       </h6>
     </div>
-    <div class="my-2" *ngIf="currentField == 'gasDensity'">
+  }
+  @if (currentField == 'gasDensity') {
+    <div class="my-2">
       <h6>
         Gas Density
         <br>
@@ -107,7 +120,9 @@
         </small>
       </h6>
     </div>
-    <div class="my-2" *ngIf="currentField == 'altitude'">
+  }
+  @if (currentField == 'altitude') {
+    <div class="my-2">
       <h6>
         Altitude
         <br>
@@ -117,4 +132,5 @@
         </small>
       </h6>
     </div>
-  </div>
+  }
+</div>

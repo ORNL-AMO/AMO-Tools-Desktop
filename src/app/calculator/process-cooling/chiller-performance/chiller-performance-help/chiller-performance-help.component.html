@@ -1,14 +1,15 @@
 <div class="p-2 pt-3 d-flex flex-column help-info">
-    <h5>
-      Chiller Performance and Temperature Reset Help
-      <br>
-      <small class="text-muted">
-        Determines chiller energy consumption/potential energy savings due to chilled water supply temperature and entering condenser water temperature reset. Algorithm methodology has been adopted by the eQuest energy simulation tool.
-      </small>
-    </h5>
-    <hr class="my-1 hr-spacer">
- 
-    <div class="my-2" *ngIf="currentField == 'chillerType'">
+  <h5>
+    Chiller Performance and Temperature Reset Help
+    <br>
+    <small class="text-muted">
+      Determines chiller energy consumption/potential energy savings due to chilled water supply temperature and entering condenser water temperature reset. Algorithm methodology has been adopted by the eQuest energy simulation tool.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+
+  @if (currentField == 'chillerType') {
+    <div class="my-2">
       <h6>
         Chiller Type
         <small class="text-muted">
@@ -18,8 +19,10 @@
         </small>
       </h6>
     </div>
+  }
 
-    <div class="my-2" *ngIf="currentField == 'condenserCoolingType'">
+  @if (currentField == 'condenserCoolingType') {
+    <div class="my-2">
       <h6>
         Condenser Cooling Type
         <small class="text-muted">
@@ -29,8 +32,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'motorDriveType'">
+  }
+
+  @if (currentField == 'motorDriveType') {
+    <div class="my-2">
       <h6>
         Motor Drive Type
         <small class="text-muted">
@@ -40,8 +45,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'compressorConfigType'">
+  }
+
+  @if (currentField == 'compressorConfigType') {
+    <div class="my-2">
       <h6>
         Compressor Config Type
         <small class="text-muted">
@@ -51,8 +58,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'ariCapacity'">
+  }
+
+  @if (currentField == 'ariCapacity') {
+    <div class="my-2">
       <h6>
         Chiller Capacity &#64; ARI
         <small class="text-muted">
@@ -62,8 +71,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'ariEfficiency'">
+  }
+
+  @if (currentField == 'ariEfficiency') {
+    <div class="my-2">
       <h6>
         Full Load Efficiency &#64; ARI
         <small class="text-muted">
@@ -73,8 +84,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'maxCapacityRatio'">
+  }
+
+  @if (currentField == 'maxCapacityRatio') {
+    <div class="my-2">
       <h6>
         Design/Max Capacity Ratio
         <small class="text-muted">
@@ -84,8 +97,10 @@
         </small>
       </h6>
     </div>
+  }
 
-    <div class="my-2" *ngIf="currentField == 'operatingHours'">
+  @if (currentField == 'operatingHours') {
+    <div class="my-2">
       <h6>
         Annual Operating Hours
         <small class="text-muted">
@@ -95,8 +110,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'waterFlowRate'">
+  }
+
+  @if (currentField == 'waterFlowRate') {
+    <div class="my-2">
       <h6>
         Chilled Water Flow Rate
         <small class="text-muted">
@@ -106,8 +123,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'waterDeltaT'">
+  }
+
+  @if (currentField == 'waterDeltaT') {
+    <div class="my-2">
       <h6>
         Chilled Water &Delta;T
         <small class="text-muted">
@@ -117,8 +136,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'baselineWaterSupplyTemp' || currentField == 'modWaterSupplyTemp'">
+  }
+
+  @if (currentField == 'baselineWaterSupplyTemp' || currentField == 'modWaterSupplyTemp') {
+    <div class="my-2">
       <h6>
         Chilled Water Supply Temperature
         <small class="text-muted">
@@ -128,8 +149,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'baselineWaterEnteringTemp' || currentField == 'modWaterEnteringTemp'">
+  }
+
+  @if (currentField == 'baselineWaterEnteringTemp' || currentField == 'modWaterEnteringTemp') {
+    <div class="my-2">
       <h6>
         Entering Condenser Water Temperature
         <small class="text-muted">
@@ -139,8 +162,10 @@
         </small>
       </h6>
     </div>
+  }
 
-    <div class="my-2" *ngIf="currentField == 'electricityCost'">
+  @if (currentField == 'electricityCost') {
+    <div class="my-2">
       <h6>
         Electricity Cost
         <br>
@@ -150,7 +175,7 @@
         </small>
       </h6>
     </div>
+  }
 
-  </div>
-  
- 
+</div>
+
