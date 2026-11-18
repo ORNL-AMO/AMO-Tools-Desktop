@@ -1,5 +1,5 @@
 
-import { Component, DestroyRef, effect, inject, input, Signal } from "@angular/core";
+import { Component, DestroyRef, inject, input, OnInit, Signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormGroup } from "@angular/forms";
 import { CoolingWaterPumpType, ProcessCoolingAssessment } from "../../../../shared/models/process-cooling-assessment";
@@ -16,7 +16,7 @@ import { PROCESS_COOLING_UNITS } from "../../../constants/process-cooling-units"
   templateUrl: './water-pump.component.html',
   styleUrl: './water-pump.component.css'
 })
-export class WaterPumpComponent {
+export class WaterPumpComponent implements OnInit {
   pumpFormType = input.required<CoolingWaterPumpType>();
 
   private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
@@ -33,14 +33,12 @@ export class WaterPumpComponent {
   processCooling: Signal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
   settings: Signal<Settings> = this.processCoolingAssessmentService.settingsSignal;
 
-  constructor() {
-    effect(() => {
-      const pumpInput = this.processCooling().systemInformation[this.pumpFormType()];
-      this.form = this.systemInformationFormService.getPumpInputForm(pumpInput, this.settings());
-      this.controlIds = generateFormControlIds(this.form.controls);
-      this.observeFormChanges();
-      this.observeIsMotorSizeKnownChanges();
-    });
+  ngOnInit(): void {
+    const pumpInput = this.processCooling().systemInformation[this.pumpFormType()];
+    this.form = this.systemInformationFormService.getPumpInputForm(pumpInput, this.settings());
+    this.controlIds = generateFormControlIds(this.form.controls);
+    this.observeFormChanges();
+    this.observeIsMotorSizeKnownChanges();
   }
 
   observeFormChanges() {
