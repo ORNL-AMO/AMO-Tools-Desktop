@@ -3,7 +3,7 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable, startWith, take } from 'rxjs';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
@@ -24,7 +24,6 @@ export class AddFlueGasMaterialModalComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly processHeatingApiService = inject(ProcessHeatingApiService);
   private readonly materialDb = adaptFlueGasMaterialDb(inject(FlueGasMaterialDbService));
-  private readonly convertUnitsService = inject(ConvertUnitsService);
 
   readonly settings = this.data.settings;
   readonly components = FLUE_GAS_COMPONENTS;
@@ -61,8 +60,8 @@ export class AddFlueGasMaterialModalComponent {
     if (this.settings.unitsOfMeasure !== 'Metric') return result;
     return {
       ...result,
-      heatingValue: this.convertUnitsService.value(result.heatingValue).from('btuLb').to('kJkg'),
-      heatingValueVolume: this.convertUnitsService.value(result.heatingValueVolume).from('btuscf').to('kJNm3'),
+      heatingValue: new ConvertValue(result.heatingValue, 'btuLb', 'kJkg').convertedValue,
+      heatingValueVolume: new ConvertValue(result.heatingValueVolume, 'btuscf', 'kJNm3').convertedValue,
     };
   });
 

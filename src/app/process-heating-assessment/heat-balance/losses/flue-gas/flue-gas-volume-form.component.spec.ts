@@ -3,7 +3,6 @@ import { ComponentFixture, fakeAsync, flushMicrotasks, TestBed } from '@angular/
 import { ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { ModalDialogService } from '../../../../shared/modal-dialog.service';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
 import { Settings } from '../../../../shared/models/settings';
@@ -40,7 +39,6 @@ describe('FlueGasVolumeFormComponent', () => {
       providers: [
         { provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } },
         FlueGasFormService,
-        ConvertUnitsService,
         { provide: FlueGasMaterialDbService, useValue: dbServiceSpy },
         { provide: ModalDialogService, useValue: modalDialogServiceSpy },
       ],

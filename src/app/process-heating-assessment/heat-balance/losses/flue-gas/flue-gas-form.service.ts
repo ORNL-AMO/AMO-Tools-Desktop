@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { FlueGas, FlueGasByMass, FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 
@@ -97,7 +97,6 @@ export const DEFAULT_FLUE_GAS_NAME = 'Flue Gas';
 @Injectable()
 export class FlueGasFormService {
   private readonly fb = inject(FormBuilder);
-  private readonly convertUnitsService = inject(ConvertUnitsService);
 
   getFlueGasVolumeForm(loss: FlueGas = {}, settings: Settings): FlueGasVolumeForm {
     const volume = loss.flueGasByVolume ?? { ...this.newFlueGasConditions(settings), gasTypeId: DEFAULT_MATERIAL_ID };
@@ -254,7 +253,7 @@ export class FlueGasFormService {
 
   private toSettingsTemp(fahrenheit: number, settings: Settings): number {
     return settings?.unitsOfMeasure === 'Metric'
-      ? this.convertUnitsService.value(fahrenheit).from('F').to('C')
+      ? new ConvertValue(fahrenheit, 'F', 'C').convertedValue
       : fahrenheit;
   }
 }

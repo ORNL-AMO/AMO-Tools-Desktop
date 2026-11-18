@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { EnergyInputEAF } from '../../../../shared/models/phast/losses/energyInputEAF';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastResults } from '../../../models/phast';
@@ -13,12 +12,10 @@ const settingsFor = (unitsOfMeasure: string) => ({ unitsOfMeasure } as Settings)
 
 describe('EnergyInputFormService', () => {
   let service: EnergyInputFormService;
-  let convert: ConvertUnitsService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [EnergyInputFormService, ConvertUnitsService] });
+    TestBed.configureTestingModule({ providers: [EnergyInputFormService] });
     service = TestBed.inject(EnergyInputFormService);
-    convert = TestBed.inject(ConvertUnitsService);
   });
 
   it('starts a new entry with Imperial heating values', () => {
@@ -32,7 +29,7 @@ describe('EnergyInputFormService', () => {
   it('starts a new entry with heating values in kJ/kg for Metric', () => {
     const form = service.getEnergyInputForm(service.newEnergyInput(settingsFor('Metric')));
 
-    expect(form.controls.coalHeatingValue.value).toBeCloseTo(convert.value(12000).from('btuLb').to('kJkg'), 6);
+    expect(form.controls.coalHeatingValue.value).toBeCloseTo(27912, 6);
   });
 
   it('keeps a saved heating value that was cleared empty, so the form stays invalid', () => {
@@ -58,6 +55,10 @@ describe('EnergyInputFormService', () => {
     expect(service.calculateHeatInputFromFlowRate(1_000_000, settingsFor('Imperial'))).toBe(1020);
   });
 
+  it('derives Metric natural gas heat input in GJ/hr, rounded to two decimals', () => {
+    expect(service.calculateHeatInputFromFlowRate(1000, settingsFor('Metric'))).toBe(38);
+  });
+
   describe('minimum electricity input', () => {
     const results = (overrides: Partial<PhastResults> = {}): PhastResults =>
       ({ totalInput: 1000, exothermicHeat: -100, energyInputTotalChemEnergy: 300, totalExhaustGasEAF: 0, energyInputHeatDelivered: 500, ...overrides } as PhastResults);
@@ -72,7 +73,7 @@ describe('EnergyInputFormService', () => {
 
     it('converts other energy result units to kW', () => {
       const kw = service.getMinElectricityInput(results(), { energyResultUnit: 'Btu' } as Settings);
-      expect(kw).toBeCloseTo(convert.roundVal(convert.value(600).from('Btu').to('kWh'), 2), 2);
+      expect(kw).toBe(0.18);
     });
 
     it('makes electricity input below the minimum invalid and at or above it valid', () => {

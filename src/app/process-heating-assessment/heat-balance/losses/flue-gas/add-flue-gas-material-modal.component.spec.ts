@@ -4,7 +4,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { SigFigsPipe } from '../../../../shared/shared-pipes/sig-figs.pipe';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
 import { Settings } from '../../../../shared/models/settings';
@@ -39,7 +38,6 @@ describe('AddFlueGasMaterialModalComponent', () => {
       declarations: [AddFlueGasMaterialModalComponent, SigFigsPipe],
       providers: [
         { provide: DIALOG_DATA, useValue: MOCK_DATA },
-        ConvertUnitsService,
         { provide: DialogRef, useValue: dialogRefSpy },
         { provide: FlueGasMaterialDbService, useValue: dbServiceSpy },
         { provide: ProcessHeatingApiService, useValue: apiSpy },

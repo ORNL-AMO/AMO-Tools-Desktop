@@ -6,7 +6,6 @@ import { EnergyInputFormService, EnergyInputWarnings } from './energy-input-form
 import { SharedPipesModule } from '../../../../shared/shared-pipes/shared-pipes.module';
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { ProcessHeatingValidityService } from '../../../services/process-heating-validity.service';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../../shared/models/settings';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
@@ -57,7 +56,6 @@ describe('EnergyInputComponent', () => {
         { provide: ProcessHeatingAssessmentService, useValue: assessmentServiceSpy },
         { provide: ProcessHeatingValidityService, useValue: validityServiceSpy },
         EnergyInputFormService,
-        ConvertUnitsService,
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

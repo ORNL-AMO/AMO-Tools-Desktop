@@ -3,7 +3,7 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { startWith, take } from 'rxjs';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { SolidLiquidMaterialDbService } from '../../../../indexedDb/solid-liquid-material-db.service';
 import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
@@ -24,7 +24,6 @@ export class AddSolidLiquidFlueGasMaterialModalComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly processHeatingApiService = inject(ProcessHeatingApiService);
   private readonly materialDb = adaptSolidLiquidFlueGasMaterialDb(inject(SolidLiquidMaterialDbService));
-  private readonly convertUnitsService = inject(ConvertUnitsService);
 
   readonly settings = this.data.settings;
   readonly fuelAnalysis = FLUE_GAS_FUEL_ANALYSIS;
@@ -55,7 +54,7 @@ export class AddSolidLiquidFlueGasMaterialModalComponent {
     const heatingValue = this.processHeatingApiService.flueGasByMassCalculateHeatingValue(analysis);
     if (Number.isNaN(heatingValue)) return null;
     return this.settings.unitsOfMeasure === 'Metric'
-      ? this.convertUnitsService.value(heatingValue).from('btuLb').to('kJkg')
+      ? new ConvertValue(heatingValue, 'btuLb', 'kJkg').convertedValue
       : heatingValue;
   });
 
