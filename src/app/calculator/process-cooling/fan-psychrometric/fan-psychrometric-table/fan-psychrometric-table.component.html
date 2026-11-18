@@ -28,7 +28,7 @@
   </thead>
   <tbody>
     @if (resultData.length > 0) {
-      @for (result of resultData; track result; let i = $index) {
+      @for (result of resultData; track $index; let i = $index) {
         <tr>
           <td>{{result.dryBulbTemp | number:'1.0-4'}}</td>
           <td>{{result.relativeHumidity | number:'1.0-2' }}</td>
