@@ -40,7 +40,7 @@ export function formValueDiffersFromMaterial(formValue: number, dbValue: number 
 /**
  * Rebuilds a DB record for a materialId referenced by a saved assessment that no longer exists
  * in the material database (e.g. a custom material deleted elsewhere), from the numeric property
- * values still stored on the form. Per spec §5, the recovered record is named "Custom Material".
+ * values still stored on the form. Per spec section 5, the recovered record is named "Custom Material".
  */
 export function rebuildDeletedMaterialRecord<T extends { id?: number; substance?: string; isDefault?: boolean }>(
   materialId: number,

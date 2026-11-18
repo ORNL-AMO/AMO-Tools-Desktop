@@ -7,6 +7,7 @@ import { AuxiliaryEquipmentResultsService } from '../services/auxiliary-equipmen
 import { AuxiliaryEquipmentFormService, newAuxiliaryEquipmentItem } from './auxiliary-equipment-form.service';
 import { AuxiliaryEquipmentComponent } from './auxiliary-equipment.component';
 import { AuxiliaryEquipmentFormItem, AuxiliaryEquipmentService } from './auxiliary-equipment.service';
+import { EM_DASH } from '../constants/display-text';
 
 describe('AuxiliaryEquipmentComponent', () => {
   let fixture: ComponentFixture<AuxiliaryEquipmentComponent>;
@@ -98,7 +99,7 @@ describe('AuxiliaryEquipmentComponent', () => {
       equipment.set([makeItem('aux-1', 'Fan'), makeItem('aux-2', 'Pump')]);
       fixture.detectChanges();
 
-      expect(element().querySelectorAll('.loss-results')[1].textContent).toContain('——');
+      expect(element().querySelectorAll('.loss-results')[1].textContent).toContain(EM_DASH + EM_DASH);
       expect(element().querySelector('.result-totals').textContent).toContain('1,200 kWh/yr');
     });
 

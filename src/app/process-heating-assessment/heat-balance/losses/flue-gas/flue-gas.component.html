@@ -34,23 +34,23 @@
     <div class="loss-results result-strip card-body p-2">
       <div class="result-item">
         <span class="result-label">O<sub>2</sub> In Flue Gas</span>
-        <span class="result-value">@if (result) { {{result.calculatedFlueGasO2 | sigFigs: 6}} % } @else { —— }</span>
+        <span class="result-value">@if (result) { {{result.calculatedFlueGasO2 | sigFigs: 6}} % } @else { &mdash;&mdash; }</span>
       </div>
       <div class="result-item">
         <span class="result-label">Excess Air</span>
-        <span class="result-value">@if (result) { {{result.calculatedExcessAir | sigFigs: 6}} % } @else { —— }</span>
+        <span class="result-value">@if (result) { {{result.calculatedExcessAir | sigFigs: 6}} % } @else { &mdash;&mdash; }</span>
       </div>
       <div class="result-item">
         <span class="result-label">Available Heat</span>
-        <span class="result-value">@if (result) { {{result.availableHeat | sigFigs: 6}} % } @else { —— }</span>
+        <span class="result-value">@if (result) { {{result.availableHeat | sigFigs: 6}} % } @else { &mdash;&mdash; }</span>
       </div>
       <div class="result-item">
         <span class="result-label">Gross Heat</span>
-        <span class="result-value">@if (heatResults) { {{heatResults.grossHeat | sigFigs: 6}} {{resultsUnit}} } @else { —— }</span>
+        <span class="result-value">@if (heatResults) { {{heatResults.grossHeat | sigFigs: 6}} {{resultsUnit}} } @else { &mdash;&mdash; }</span>
       </div>
       <div class="result-item">
         <span class="result-label">Flue Gas Losses</span>
-        <span class="result-value">@if (heatResults) { {{heatResults.systemLosses | sigFigs: 6}} {{resultsUnit}} } @else { —— }</span>
+        <span class="result-value">@if (heatResults) { {{heatResults.systemLosses | sigFigs: 6}} {{resultsUnit}} } @else { &mdash;&mdash; }</span>
       </div>
     </div>
   </div>

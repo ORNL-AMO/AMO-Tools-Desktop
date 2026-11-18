@@ -81,7 +81,7 @@ export class FixtureMaterialsHandlingOpportunityComponent {
   }
 
   /**
-   * Also copies `latentHeat`/`meltingPoint`/`specificHeatLiquid` — hidden fields not shown in this
+   * Also copies `latentHeat`/`meltingPoint`/`specificHeatLiquid` - hidden fields not shown in this
    * form, but read back if the selected material is later deleted, so they can't be left stale from
    * whatever material was previously selected. Matches the recovery fields the main Fixture form's
    * material selector copies (`heat-balance/losses/fixture/fixture-form.component.ts`).

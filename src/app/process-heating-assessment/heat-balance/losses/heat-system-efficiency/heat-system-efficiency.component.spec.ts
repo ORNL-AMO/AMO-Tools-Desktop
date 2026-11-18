@@ -7,6 +7,7 @@ import { ProcessHeatingAssessmentService } from '../../../services/process-heati
 import { ProcessHeatingResultsService } from '../../../services/process-heating-results.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
+import { EM_DASH } from '../../../constants/display-text';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -186,7 +187,7 @@ describe('HeatSystemEfficiencyComponent', () => {
       resultsServiceSpy.getResults.and.returnValue(undefined as never);
       create();
       const text = fixture.nativeElement.querySelector('.loss-results').textContent;
-      expect(text).toContain('——');
+      expect(text).toContain(EM_DASH + EM_DASH);
     });
   });
 

@@ -50,7 +50,7 @@ export class ProcessHeatingAssessmentResolver implements Resolve<ProcessHeatingR
     if (assessment) {
       getAssessment$ = of(assessment);
     } else {
-      // refresh or direct route access — reload DB into memory cache first
+      // refresh or direct route access - reload DB into memory cache first
       getAssessment$ = forkJoin([
         this.assessmentDbService.setAll(),
         this.settingsDbService.setAll()
@@ -80,7 +80,7 @@ export class ProcessHeatingAssessmentResolver implements Resolve<ProcessHeatingR
         // auto-save like any edit would: opening a legacy assessment here rewrites its modifications
         // to the new shape on disk within ~300ms, even without an explicit edit. Accepted as-is
         // rather than suppressed, since `modification.phast` and the legacy `exploreOppsShowX`
-        // fields are never touched (only read) — a migrated record stays fully readable by legacy
+        // fields are never touched (only read) - a migrated record stays fully readable by legacy
         // afterward.
         const migratedModifications = processHeating.modifications?.map(modification => {
           const legacyModification = modification as LegacyModification;

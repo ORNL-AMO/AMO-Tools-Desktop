@@ -7,6 +7,7 @@ import { SlagFormComponent } from './slag-form.component';
 import { SlagFormService } from './slag-form.service';
 import { SlagItem } from './slag.service';
 import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
+import { UNIT_SYMBOL } from '../../../constants/display-text';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -83,13 +84,13 @@ describe('SlagFormComponent', () => {
     it('shows Imperial units by default', () => {
       render();
 
-      expect(fixture.nativeElement.textContent).toContain('℉');
+      expect(fixture.nativeElement.textContent).toContain(UNIT_SYMBOL.fahrenheit);
     });
 
     it('shows Metric units when settings are Metric', () => {
       render(makeItem(formService), { ...MOCK_SETTINGS, unitsOfMeasure: 'Metric' });
 
-      expect(fixture.nativeElement.textContent).toContain('℃');
+      expect(fixture.nativeElement.textContent).toContain(UNIT_SYMBOL.celsius);
     });
   });
 

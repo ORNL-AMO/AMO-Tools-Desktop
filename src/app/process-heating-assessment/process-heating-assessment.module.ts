@@ -588,8 +588,8 @@ export const ROUTES: Route[] = [
     EnergySummaryResultsService,
     ProcessHeatingReportAdapter,
     ProcessHeatingAssessmentResolver,
-    // PhastResultsService remains a temporary bridge for loss types not yet rebuilt (Steps 7, 9–13).
-    // It must only be read from — never edited to expose new fields for this module. As each loss
+    // PhastResultsService remains a temporary bridge for loss types not yet rebuilt (Steps 7, 9-13).
+    // It must only be read from - never edited to expose new fields for this module. As each loss
     // type gets its own local result service (see charge-material-results.service.ts), it stops
     // reading that field from here.
     PhastResultsService,

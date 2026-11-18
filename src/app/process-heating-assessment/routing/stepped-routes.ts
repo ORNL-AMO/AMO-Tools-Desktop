@@ -18,7 +18,7 @@ export const STEPPED_ROUTES = new InjectionToken<SteppedRoute[]>('PROCESS_HEATIN
 /**
  * Derives the module's linear prev/next step order from its `Route[]` tree instead of a second,
  * hand-synced literal: walks the tree, collecting one entry per node with a `data.stepIndex`,
- * ordered by that index. A node's own accumulated path is used as-is — a step whose node has a
+ * ordered by that index. A node's own accumulated path is used as-is - a step whose node has a
  * `redirectTo` child (e.g. `assessment`) relies on the router resolving that on navigation, same as
  * `report` already did, rather than this pre-resolving the leaf path.
  */

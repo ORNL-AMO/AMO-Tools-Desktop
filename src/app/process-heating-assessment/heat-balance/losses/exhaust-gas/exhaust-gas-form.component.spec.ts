@@ -7,6 +7,7 @@ import { ExhaustGasFormComponent } from './exhaust-gas-form.component';
 import { ExhaustGasFormService } from './exhaust-gas-form.service';
 import { ExhaustGasItem } from './exhaust-gas.service';
 import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
+import { UNIT_SYMBOL } from '../../../constants/display-text';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -83,13 +84,13 @@ describe('ExhaustGasFormComponent', () => {
     it('shows Imperial units by default', () => {
       render();
 
-      expect(fixture.nativeElement.textContent).toContain('℉');
+      expect(fixture.nativeElement.textContent).toContain(UNIT_SYMBOL.fahrenheit);
     });
 
     it('shows Metric units when settings are Metric', () => {
       render(makeItem(formService), { ...MOCK_SETTINGS, unitsOfMeasure: 'Metric' });
 
-      expect(fixture.nativeElement.textContent).toContain('℃');
+      expect(fixture.nativeElement.textContent).toContain(UNIT_SYMBOL.celsius);
     });
   });
 

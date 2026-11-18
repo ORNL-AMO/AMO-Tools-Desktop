@@ -6,6 +6,7 @@ import { GasLeakageFormService } from './gas-leakage-form.service';
 import { SharedPipesModule } from '../../../../shared/shared-pipes/shared-pipes.module';
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { Settings } from '../../../../shared/models/settings';
+import { EM_DASH } from '../../../constants/display-text';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -164,7 +165,7 @@ describe('GasLeakageComponent', () => {
       lossesSignal.set([item]);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('.loss-results').textContent).toContain('——');
+      expect(fixture.nativeElement.querySelector('.loss-results').textContent).toContain(EM_DASH + EM_DASH);
     });
 
     it('hides the total when there are no losses', () => {

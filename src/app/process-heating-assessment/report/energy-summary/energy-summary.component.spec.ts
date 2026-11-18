@@ -4,6 +4,7 @@ import { CurrencyPipe } from '@angular/common';
 import { SigFigsPipe } from '../../../shared/shared-pipes/sig-figs.pipe';
 import { EnergySummaryComponent } from './energy-summary.component';
 import { EnergySummaryResultsService, EnergySummaryUI } from './energy-summary-results.service';
+import { EM_DASH } from '../../constants/display-text';
 
 function buildUI(overrides: Partial<EnergySummaryUI> = {}): EnergySummaryUI {
   return {
@@ -43,13 +44,13 @@ describe('EnergySummaryComponent', () => {
 
   it('renders a placeholder for sources without energy used', () => {
     const steamRow = Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('tbody tr')).find(row => row.textContent.includes('Steam'));
-    expect(steamRow.textContent).toContain('— —');
+    expect(steamRow.textContent).toContain(`${EM_DASH} ${EM_DASH}`);
   });
 
   it('renders the calculated vs metered comparison with placeholders for missing designed values', () => {
     const comparisonRow = fixture.nativeElement.querySelectorAll('table')[1].querySelectorAll('tbody tr')[0];
     const cells = Array.from<HTMLElement>(comparisonRow.querySelectorAll('td')).map(cell => cell.textContent.replace(/\s+/g, ' ').trim());
-    expect(cells).toEqual(['Energy Used', '12.500 MMBtu/hr', '9.0000 MMBtu/hr', '— —']);
+    expect(cells).toEqual(['Energy Used', '12.500 MMBtu/hr', '9.0000 MMBtu/hr', `${EM_DASH} ${EM_DASH}`]);
   });
 
   it('renders equipment notes and operating conditions only when present', () => {

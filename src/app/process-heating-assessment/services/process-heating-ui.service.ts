@@ -25,7 +25,7 @@ export class ProcessHeatingUiService {
     MainView.ASSESSMENT, MainView.DIAGRAM, MainView.REPORT, MainView.SANKEY, ...Object.values(AssessmentView), ...Object.values(ReportView),
   ]);
 
-  // Derived from assessment settings — energySourceType + furnaceType determine the active tab set
+  // Derived from assessment settings - energySourceType + furnaceType determine the active tab set
   readonly heatingSystemConfigurationSignal: Signal<HeatingEquipmentConfiguration> =
     this.processHeatingAssessmentService.heatingEquipmentConfiguration;
     

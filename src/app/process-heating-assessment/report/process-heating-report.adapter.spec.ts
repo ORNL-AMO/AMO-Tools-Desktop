@@ -18,6 +18,7 @@ import { ChartSection } from '../../shared/report-builder/models/report-section.
 import { ReportSankeyResultsService, ReportSankeyUI } from './report-sankey/report-sankey-results.service';
 import { InputSummaryResultsService, InputSummaryUI } from './input-summary/input-summary-results.service';
 import { PROCESS_HEATING_SECTION_GROUPS, ProcessHeatingReportAdapter } from './process-heating-report.adapter';
+import { EM_DASH, UNIT_SYMBOL } from '../constants/display-text';
 
 const MODIFICATION_NAMES = [{ id: 'mod1', name: 'Scenario 1' }];
 
@@ -92,7 +93,7 @@ const INPUT_SUMMARY: InputSummaryUI = {
     count: 1,
     sections: [{
       label: 'Wall Loss 1',
-      rows: [{ label: 'Ambient Temperature', units: '℉', baseline: { value: 80 }, modifications: [{ value: 90 }] }],
+      rows: [{ label: 'Ambient Temperature', units: UNIT_SYMBOL.fahrenheit, baseline: { value: 80 }, modifications: [{ value: 90 }] }],
     }],
   }],
 };
@@ -183,7 +184,7 @@ describe('ProcessHeatingReportAdapter', () => {
     const table = section<SummaryTableSection>(await build(), 'Executive Summary');
     expect(table.headers).toEqual(['', 'Baseline', 'Scenario 1']);
     expect(table.rows.map(row => row[0])).toEqual(['Percent Savings (%)', 'Energy Used (MMBtu/yr)', 'Cost Savings ($)', 'Selected Energy Projects', 'Modifications']);
-    expect(table.rows[0]).toEqual(['Percent Savings (%)', '—', '20']);
+    expect(table.rows[0]).toEqual(['Percent Savings (%)', EM_DASH, '20']);
     expect(table.rows[3][2]).toBe('Flue Gas, O2 Trim');
     expect(table.rows[4][2]).toBe('Wall');
     expect(table.emphasisRowsIndices).toEqual([2]);
@@ -198,14 +199,14 @@ describe('ProcessHeatingReportAdapter', () => {
     const document = await build();
     expect(section<SummaryTableSection>(document, 'Annual Costs')).toBeDefined();
     expect(section<SummaryTableSection>(document, 'Annual Emissions')).toBeUndefined();
-    expect(section<KeyValueSection>(document, 'Modification Notes').rows[0]).toEqual({ label: 'Scenario 1 — Wall Losses', value: 'Added insulation' });
+    expect(section<KeyValueSection>(document, 'Modification Notes').rows[0]).toEqual({ label: `Scenario 1 ${EM_DASH} Wall Losses`, value: 'Added insulation' });
   });
 
   it('builds energy sources and comparison tables with placeholders for missing values', async () => {
     const document = await build();
     expect(section<SummaryTableSection>(document, 'Summary of Energy Sources Used').rows[0][1]).toBe('12.5 MMBtu/hr');
     const comparison = section<SummaryTableSection>(document, 'Compare PHA Calculations');
-    expect(comparison.rows[0]).toEqual(['Energy Used', '12.5 MMBtu/hr', '—', '—']);
+    expect(comparison.rows[0]).toEqual(['Energy Used', '12.5 MMBtu/hr', EM_DASH, EM_DASH]);
   });
 
   it('includes equipment notes in the energy summary group', async () => {
@@ -231,7 +232,7 @@ describe('ProcessHeatingReportAdapter', () => {
     const table = section<SummaryTableSection>(await build(), 'Result Data');
     expect(table.group).toBe('results-data');
     expect(table.headers).toEqual(['Hourly Energy Loss/Use (MMBtu/hr)', 'Baseline', 'Scenario 1']);
-    expect(table.rows[0]).toEqual(['Wall Losses', '1.50', '—']);
+    expect(table.rows[0]).toEqual(['Wall Losses', '1.50', EM_DASH]);
     expect(table.rows[1]).toEqual(['Available Heat (%)', '55.5', '60.0']);
     expect(table.emphasisRowsIndices).toEqual([2]);
   });
@@ -240,8 +241,8 @@ describe('ProcessHeatingReportAdapter', () => {
     reportGraphs = buildReportGraphs(2);
     const charts = (await build()).sections.filter(candidate => candidate.group === 'report-graphs') as ChartSection[];
     expect(charts.map(chart => chart.title)).toEqual([
-      'Loss Distribution — Baseline vs. Scenario 1', 'Baseline vs. Scenario 1 Loss Comparison',
-      'Loss Distribution — Baseline vs. Scenario 2', 'Baseline vs. Scenario 2 Loss Comparison',
+      `Loss Distribution ${EM_DASH} Baseline vs. Scenario 1`, 'Baseline vs. Scenario 1 Loss Comparison',
+      `Loss Distribution ${EM_DASH} Baseline vs. Scenario 2`, 'Baseline vs. Scenario 2 Loss Comparison',
     ]);
     expect(charts.map(chart => !!chart.pageBreakBefore)).toEqual([true, false, false, false]);
   });
@@ -249,7 +250,7 @@ describe('ProcessHeatingReportAdapter', () => {
   it('adds a heat delivered chart when any scenario delivers heat', async () => {
     reportGraphs = buildReportGraphs(1, true);
     const titles = (await build()).sections.filter(candidate => candidate.group === 'report-graphs').map(chart => chart.title);
-    expect(titles).toContain('Heat Delivered — Baseline vs. Scenario 1');
+    expect(titles).toContain(`Heat Delivered ${EM_DASH} Baseline vs. Scenario 1`);
   });
 
   it('builds a single distribution chart when there are no modifications', async () => {
@@ -285,7 +286,7 @@ describe('ProcessHeatingReportAdapter', () => {
     const table = section<SummaryTableSection>(await build(), 'Input Summary');
     expect(table.subGroupHeaderIndices).toEqual([0]);
     expect(table.rows[0][0]).toBe('Wall Loss 1');
-    expect(table.rows[1]).toEqual(['Ambient Temperature (℉)', '80', '90']);
+    expect(table.rows[1]).toEqual(['Ambient Temperature (\u00B0F)', '80', '90']);
   });
 
   describe('invalid modifications', () => {
@@ -319,7 +320,7 @@ describe('ProcessHeatingReportAdapter', () => {
 
       expect(table.headers).toEqual(['', 'Baseline', 'Scenario 2']);
       expect(table.rows[0]).toEqual(['Energy Used (MMBtu/yr)', '10,000', 'mod2 value']);
-      expect(section<KeyValueSection>(document, 'Modification Notes').rows).toEqual([{ label: 'Scenario 2 — Wall Losses', value: 'Thicker walls' }]);
+      expect(section<KeyValueSection>(document, 'Modification Notes').rows).toEqual([{ label: `Scenario 2 ${EM_DASH} Wall Losses`, value: 'Thicker walls' }]);
     });
 
     it('leaves them out of the result data table, warning ahead of it with the page break', async () => {
@@ -338,7 +339,7 @@ describe('ProcessHeatingReportAdapter', () => {
       const sections = await groupSections('report-graphs');
 
       expect(sections.map(candidate => candidate.title)).toEqual([
-        'Invalid Modifications (Omitted)', 'Loss Distribution — Baseline vs. Scenario 2', 'Baseline vs. Scenario 2 Loss Comparison',
+        'Invalid Modifications (Omitted)', `Loss Distribution ${EM_DASH} Baseline vs. Scenario 2`, 'Baseline vs. Scenario 2 Loss Comparison',
       ]);
       expect(sections.map(candidate => !!candidate.pageBreakBefore)).toEqual([true, false, false]);
     });

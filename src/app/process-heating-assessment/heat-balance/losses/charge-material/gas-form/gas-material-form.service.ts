@@ -71,5 +71,5 @@ export class GasMaterialFormService {
     return { chargeMaterialType: ChargeMaterialType.Gas, gasChargeMaterial };
   }
 
-  // No warnings for gas — intentional, see spec §4.3.
+  // No warnings for gas - intentional, see spec section 4.3.
 }

@@ -4,6 +4,7 @@ import { InvalidModification, ProcessHeatingValidityService } from '../../servic
 import { ReportTableCellPipe } from '../../../shared/pipes/report-table-cell.pipe';
 import { ExecutiveSummaryComponent } from './executive-summary.component';
 import { ExecutiveSummaryResultsService, ExecutiveSummaryUI } from './executive-summary-results.service';
+import { EM_DASH } from '../../constants/display-text';
 
 function buildUI(overrides: Partial<ExecutiveSummaryUI> = {}): ExecutiveSummaryUI {
   return {
@@ -88,7 +89,7 @@ describe('ExecutiveSummaryComponent', () => {
     ui.set(buildUI({ notes: [{ modificationId: 'mod1', modificationName: 'Scenario 1', lossName: 'Wall Losses', note: 'Added insulation' }] }));
     fixture.detectChanges();
     expect(text()).toContain('Modification Notes');
-    expect(text()).toContain('Scenario 1 — Wall Losses:');
+    expect(text()).toContain(`Scenario 1 ${EM_DASH} Wall Losses:`);
     expect(text()).toContain('Added insulation');
   });
 

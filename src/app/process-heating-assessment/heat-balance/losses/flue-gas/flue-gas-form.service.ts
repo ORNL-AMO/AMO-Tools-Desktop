@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { FlueGas, FlueGasByMass, FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
+import { CHEMICAL_FORMULA } from '../../../constants/display-text';
 
 /** Saved `oxygenCalculationMethod` values. */
 export const OxygenCalculationMethod = {
@@ -30,7 +31,7 @@ export const FLUE_GAS_FUEL_ANALYSIS = [
   { key: 'hydrogen', label: 'Hydrogen' },
   { key: 'sulphur', label: 'Sulphur' },
   { key: 'inertAsh', label: 'Inert Ash' },
-  { key: 'o2', label: 'O₂' },
+  { key: 'o2', label: CHEMICAL_FORMULA.O2 },
   { key: 'moisture', label: 'Moisture' },
   { key: 'nitrogen', label: 'Nitrogen' },
 ] as const;
