@@ -10,18 +10,20 @@
       </div>
     </div>
 
-    <div class="d-flex pr-2 pl-2" *ngIf="inTreasureHunt">
-      <div class="d-none d-lg-flex help-holder">
-        <p class="help-text treasure-hunt-help">Click the save icon to add the treasure to your chest!
-          Click cancel to discard the opportunity and return to method selection.</p>
+    @if (inTreasureHunt) {
+      <div class="d-flex pr-2 pl-2">
+        <div class="d-none d-lg-flex help-holder">
+          <p class="help-text treasure-hunt-help">Click the save icon to add the treasure to your chest!
+            Click cancel to discard the opportunity and return to method selection.</p>
+        </div>
+        <div class="pl-2 pr-2 border-right border-left action-item" (click)="save()">
+          <span class="fa fa-save"></span>
+        </div>
+        <div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
+          <span class="fa fa-times"></span>
+        </div>
       </div>
-      <div class="pl-2 pr-2 border-right border-left action-item" (click)="save()">
-        <span class="fa fa-save"></span>
-      </div>
-      <div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
-        <span class="fa fa-times"></span>
-      </div>
-    </div>
+    }
   </div>
   <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
     <div class="nav-item" (click)="setSmallScreenTab('baseline')"
@@ -47,11 +49,13 @@
         <a class="click-link pull-right small add-fixture" (click)="addCase()">+Add Case</a>
       </div>
       <div class="d-flex flex-column mx-2 mb-4">
-        <div *ngFor="let data of baselineData; let i = index;">
-          <app-cooling-tower-form [index]="i" [settings]="settings" [isBaseline]="true"
-            [operatingHours]="operatingHours" [selected]="baselineSelected">
-          </app-cooling-tower-form>
-        </div>
+        @for (data of baselineData; track data; let i = $index) {
+          <div>
+            <app-cooling-tower-form [index]="i" [settings]="settings" [isBaseline]="true"
+              [operatingHours]="operatingHours" [selected]="baselineSelected">
+            </app-cooling-tower-form>
+          </div>
+        }
         <div class="w-100 justify content-center btn-group btn-group-sm">
           <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
             Reset Data
@@ -70,22 +74,28 @@
       <div class="header mx-2 mb-4">
         <h3>Modification</h3>
       </div>
-      <div *ngIf="modificationExists" class="d-flex flex-column mx-2 mb-4">
-        <div *ngFor="let data of modificationData; let i = index;">
-          <app-cooling-tower-form [index]="i" [settings]="settings" [isBaseline]="false"
-            [operatingHours]="operatingHours" [selected]="!baselineSelected">
-          </app-cooling-tower-form>
+      @if (modificationExists) {
+        <div class="d-flex flex-column mx-2 mb-4">
+          @for (data of modificationData; track data; let i = $index) {
+            <div>
+              <app-cooling-tower-form [index]="i" [settings]="settings" [isBaseline]="false"
+                [operatingHours]="operatingHours" [selected]="!baselineSelected">
+              </app-cooling-tower-form>
+            </div>
+          }
         </div>
-      </div>
+      }
       <!-- no content message -->
-      <div *ngIf="!modificationExists">
-        <div class="p-3 no-data">
-          <h3>Once you have set up your baseline..</h3>
-          <button type="button" class="btn btn-primary active" (click)="createModification()">Add Modified
-            Condition</button>
-          <p>Data will be copied from your current baseline condition.</p>
+      @if (!modificationExists) {
+        <div>
+          <div class="p-3 no-data">
+            <h3>Once you have set up your baseline..</h3>
+            <button type="button" class="btn btn-primary active" (click)="createModification()">Add Modified
+              Condition</button>
+            <p>Data will be copied from your current baseline condition.</p>
+          </div>
         </div>
-      </div>
+      }
     </div>
 
 
@@ -108,10 +118,14 @@
         </div>
 
         <div class="p-2">
-          <app-cooling-tower-results *ngIf="tabSelect === 'results'" [settings]="settings">
-          </app-cooling-tower-results>
+          @if (tabSelect === 'results') {
+            <app-cooling-tower-results [settings]="settings">
+            </app-cooling-tower-results>
+          }
 
-          <app-cooling-tower-help *ngIf="tabSelect === 'help'"></app-cooling-tower-help>
+          @if (tabSelect === 'help') {
+            <app-cooling-tower-help></app-cooling-tower-help>
+          }
         </div>
 
       </div>

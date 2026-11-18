@@ -1,16 +1,17 @@
 <div class="p-2 pt-3 d-flex flex-column help-info">
-    <h5>
-      Cooling Tower Basin Heater Energy Help
+  <h5>
+    Cooling Tower Basin Heater Energy Help
+    <br>
+    <small class="text-muted">
+      Determines cooling tower basin heater energy consumption based on ambient dry bulb, basin temperature setpoint and windspeed. Additionally, this calculator lets the user determine energy savings due to basin heater temperature setpoint optimization. This algorithm follows the methodology adopted by the eQuest energy simulation tool.
       <br>
-      <small class="text-muted">
-        Determines cooling tower basin heater energy consumption based on ambient dry bulb, basin temperature setpoint and windspeed. Additionally, this calculator lets the user determine energy savings due to basin heater temperature setpoint optimization. This algorithm follows the methodology adopted by the eQuest energy simulation tool.
-        <br>
-        Use the Weather Data Calculator to automatically calculate using weather binning approach.
-      </small>
-    </h5>
-    <hr class="my-1 hr-spacer">
- 
-    <div class="my-2" *ngIf="currentField == 'ratedCapacity'">
+      Use the Weather Data Calculator to automatically calculate using weather binning approach.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+
+  @if (currentField == 'ratedCapacity') {
+    <div class="my-2">
       <h6>
         Rated Capacity
         <small class="text-muted">
@@ -20,8 +21,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'ratedTempSetPoint'">
+  }
+
+  @if (currentField == 'ratedTempSetPoint') {
+    <div class="my-2">
       <h6>
         Basin Temperature Setpoint
         <small class="text-muted">
@@ -31,8 +34,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'ratedTempDryBulb'">
+  }
+
+  @if (currentField == 'ratedTempDryBulb') {
+    <div class="my-2">
       <h6>
         Ambient Dry Bulb Temperature
         <small class="text-muted">
@@ -42,8 +47,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'ratedWindSpeed'">
+  }
+
+  @if (currentField == 'ratedWindSpeed') {
+    <div class="my-2">
       <h6>
         Windspeed
         <small class="text-muted">
@@ -53,8 +60,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'panLossRatio'">
+  }
+
+  @if (currentField == 'panLossRatio') {
+    <div class="my-2">
       <h6>
         Pan Loss Ratio
         <small class="text-muted">
@@ -64,8 +73,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'operatingWindSpeed'">
+  }
+
+  @if (currentField == 'operatingWindSpeed') {
+    <div class="my-2">
       <h6>
         Windspeed
         <small class="text-muted">
@@ -75,8 +86,10 @@
         </small>
       </h6>
     </div>
-  
-    <div class="my-2" *ngIf="currentField == 'operatingHours'">
+  }
+
+  @if (currentField == 'operatingHours') {
+    <div class="my-2">
       <h6>
         Annual Operating Hours
         <small class="text-muted">
@@ -86,8 +99,10 @@
         </small>
       </h6>
     </div>
+  }
 
-    <div class="my-2" *ngIf="currentField == 'operatingTempDryBulb'">
+  @if (currentField == 'operatingTempDryBulb') {
+    <div class="my-2">
       <h6>
         Ambient Dry Bulb Temperature
         <small class="text-muted">
@@ -97,8 +112,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'baselineTempSetPoint' || currentField == 'modTempSetPoint'">
+  }
+
+  @if (currentField == 'baselineTempSetPoint' || currentField == 'modTempSetPoint') {
+    <div class="my-2">
       <h6>
         Basin Temperature Setpoint
         <small class="text-muted">
@@ -108,8 +125,8 @@
         </small>
       </h6>
     </div>
-    
- 
-  </div>
-  
- 
+  }
+
+
+</div>
+

@@ -16,33 +16,41 @@
         <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
       </th>
       <th><span class="pr-1">h</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
-        <span *ngIf="settings.unitsOfMeasure != 'Metric'">btu/lb</span>
+        @if (settings.unitsOfMeasure == 'Metric') {
+          <span>kJ/kg</span>
+        }
+        @if (settings.unitsOfMeasure != 'Metric') {
+          <span>btu/lb</span>
+        }
       </th>
       <th class="pr-3"></th>
     </tr>
   </thead>
   <tbody>
-    <ng-container *ngIf="resultData.length > 0">
-      <tr *ngFor="let result of resultData; let i = index">
-        <td>{{result.dryBulbTemp | number:'1.0-4'}}</td>
-        <td>{{result.relativeHumidity | number:'1.0-2' }}</td>
-        <td>{{result.wetBulbTemp | number:'1.0-4'}}</td>
-        <td>{{result.dewPoint | number:'1.0-1'}}</td>
-        <td>{{result.enthalpy | number:'1.0-1'}}</td>
-        <td class="delete-row pr-3" (click)="deleteResult(i)">Delete</td>
+    @if (resultData.length > 0) {
+      @for (result of resultData; track $index; let i = $index) {
+        <tr>
+          <td>{{result.dryBulbTemp | number:'1.0-4'}}</td>
+          <td>{{result.relativeHumidity | number:'1.0-2' }}</td>
+          <td>{{result.wetBulbTemp | number:'1.0-4'}}</td>
+          <td>{{result.dewPoint | number:'1.0-1'}}</td>
+          <td>{{result.enthalpy | number:'1.0-1'}}</td>
+          <td class="delete-row pr-3" (click)="deleteResult(i)">Delete</td>
+        </tr>
+      }
+    }
+    @if (resultData.length === 0) {
+      <tr>
+        <td>&mdash;</td>
+        <td>&mdash;</td>
+        <td>&mdash;</td>
+        <td>&mdash;</td>
+        <td>&mdash;</td>
+        <td>&mdash;</td>
       </tr>
-    </ng-container>
-    <tr *ngIf="resultData.length === 0">
-      <td>&mdash;</td>
-      <td>&mdash;</td>
-      <td>&mdash;</td>
-      <td>&mdash;</td>
-      <td>&mdash;</td>
-      <td>&mdash;</td>
-    </tr>
+    }
   </tbody>
-  </table>
-  
-  <app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()">
-  </app-exportable-results-table>
+</table>
+
+<app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()">
+</app-exportable-results-table>

@@ -1,26 +1,29 @@
 <div class="p-2 pt-3 d-flex flex-column help-info">
-    <h5>
-      Cooling Tower Fan Energy Help
-      <br>
-      <small class="text-muted">
-        Determines the impact of cooling tower operational parameters on fan energy consumption. 
-        This calculator can be used to explore potential energy savings from optimizing cooling tower fan control. Algorithm methodology has been adopted by the eQuest energy simulation tool.
-      </small>
-    </h5>
-    <hr class="my-1 hr-spacer">
-  
-    <div class="my-2" *ngIf="currentField == 'operatingHours'">
+  <h5>
+    Cooling Tower Fan Energy Help
+    <br>
+    <small class="text-muted">
+      Determines the impact of cooling tower operational parameters on fan energy consumption.
+      This calculator can be used to explore potential energy savings from optimizing cooling tower fan control. Algorithm methodology has been adopted by the eQuest energy simulation tool.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+
+  @if (currentField == 'operatingHours') {
+    <div class="my-2">
       <h6>
         Annual Operating Hours
         <small class="text-muted">
           <br>
-          Number of hours per year the chiller is at these conditions. This is not necessarily how many hours the facility is operating. 
+          Number of hours per year the chiller is at these conditions. This is not necessarily how many hours the facility is operating.
           <hr>
         </small>
       </h6>
     </div>
+  }
 
-    <div class="my-2" *ngIf="currentField == 'towerType'">
+  @if (currentField == 'towerType') {
+    <div class="my-2">
       <h6>
         Tower Type
         <small class="text-muted">
@@ -30,8 +33,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'numCells'">
+  }
+
+  @if (currentField == 'numCells') {
+    <div class="my-2">
       <h6>
         Number of Cells
         <small class="text-muted">
@@ -41,8 +46,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'ratedFanPower'">
+  }
+
+  @if (currentField == 'ratedFanPower') {
+    <div class="my-2">
       <h6>
         Rated Fan Power
         <small class="text-muted">
@@ -52,8 +59,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'waterLeavingTemp'">
+  }
+
+  @if (currentField == 'waterLeavingTemp') {
+    <div class="my-2">
       <h6>
         Leaving Cooling Tower Water Temperature
         <small class="text-muted">
@@ -63,8 +72,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'waterEnteringTemp'">
+  }
+
+  @if (currentField == 'waterEnteringTemp') {
+    <div class="my-2">
       <h6>
         Entering Cooling Water Temperature
         <small class="text-muted">
@@ -74,8 +85,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'operatingTempWetBulb'">
+  }
+
+  @if (currentField == 'operatingTempWetBulb') {
+    <div class="my-2">
       <h6>
         Ambient Wet Bulb Temperature
         <small class="text-muted">
@@ -85,8 +98,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'waterFlowRate'">
+  }
+
+  @if (currentField == 'waterFlowRate') {
+    <div class="my-2">
       <h6>
         Water Flow Rate
         <small class="text-muted">
@@ -96,8 +111,10 @@
         </small>
       </h6>
     </div>
-    
-    <div class="my-2" *ngIf="currentField == 'baselineSpeedType' || currentField == 'modSpeedType'">
+  }
+
+  @if (currentField == 'baselineSpeedType' || currentField == 'modSpeedType') {
+    <div class="my-2">
       <h6>
         Fan Control
         <small class="text-muted">
@@ -113,8 +130,10 @@
         </small>
       </h6>
     </div>
+  }
 
-    <div class="my-2" *ngIf="currentField == 'electricityCost'">
+  @if (currentField == 'electricityCost') {
+    <div class="my-2">
       <h6>
         Electricity Cost
         <br>
@@ -124,16 +143,16 @@
         </small>
       </h6>
     </div>
+  }
 
-    <div class="d-flex justify-content-center w-100">
-      <div class="alert alert-info">
-        <p>
-          Note: This calculator assumes the cooling tower has a constant water flow rate and cannot estimate the fan power for variable water flow conditions
-        </p>
-      </div>
+  <div class="d-flex justify-content-center w-100">
+    <div class="alert alert-info">
+      <p>
+        Note: This calculator assumes the cooling tower has a constant water flow rate and cannot estimate the fan power for variable water flow conditions
+      </p>
     </div>
-    
- 
   </div>
-  
- 
+
+
+</div>
+
