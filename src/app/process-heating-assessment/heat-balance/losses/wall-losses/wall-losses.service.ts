@@ -2,7 +2,7 @@ import { inject, Injectable, Signal, signal } from '@angular/core';
 import { take } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { WallLossesSurfaceDbService } from '../../../../indexedDb/wall-losses-surface-db.service';
-import { WallLoss } from '../../../models/wall-loss';
+import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
 import { WallLossesSurface } from '../../../../shared/models/materials';
 import { Losses } from '../../../models/phast';
 import { AssessmentScenario } from '../../../services/process-heating-assessment.service';

@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
-import { WallLoss } from '../../../models/wall-loss';
+import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
 
 @Injectable()
 export class WallLossCalculationService {

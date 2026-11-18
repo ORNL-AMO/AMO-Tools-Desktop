@@ -1,7 +1,7 @@
 import { inject, Injectable, Signal } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { ExtendedSurface } from '../../../models/extended-surface';
-import { WallLoss } from '../../../models/wall-loss';
+import { ExtendedSurface } from '../../../../shared/models/phast/losses/extendedSurface';
+import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
 import { Losses } from '../../../models/phast';
 import { LossFormItem, LossFormListService } from '../loss-form-list.service';
 import { WallLossCalculationService } from '../wall-losses/wall-loss-calculation.service';

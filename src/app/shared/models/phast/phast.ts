@@ -21,7 +21,6 @@ import { SavingsOpportunity } from '../explore-opps';
 
 export interface PHAST {
   name?: string;
-  //phastInputs?: PhastInputs,
   losses?: Losses;
   modifications?: Modification[];
   setupDone?: boolean;
@@ -42,12 +41,6 @@ export interface PHAST {
   selectedModificationId?: string 
 }
 
-
-// export interface PhastInputs {
-//   heatSource?: any,
-//   energySource?: any,
-//   operatingHours?: OperatingHours,
-// }
 
 export interface Losses {
   chargeMaterials?: ChargeMaterial[];

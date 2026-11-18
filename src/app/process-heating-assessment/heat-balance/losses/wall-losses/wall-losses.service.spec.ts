@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import { WallLossesSurfaceDbService } from '../../../../indexedDb/wall-losses-surface-db.service';
 import { Settings } from '../../../../shared/models/settings';
-import { WallLoss } from '../../../models/wall-loss';
+import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { WallLossCalculationService } from './wall-loss-calculation.service';
 import { WallLossesFormService } from './wall-losses-form.service';

@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ExtendedSurface } from '../../../models/extended-surface';
+import { ExtendedSurface } from '../../../../shared/models/phast/losses/extendedSurface';
 import { DEFAULT_SURFACE_EMISSIVITY } from '../../../constants/surface-emissivity';
 
 export type ExtendedSurfaceForm = FormGroup<{

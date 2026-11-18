@@ -3,7 +3,7 @@ import { generateFormControlIds } from '../../../../shared/helperFunctions';
 import { Settings } from '../../../../shared/models/settings';
 import { ExtendedSurfaceForm } from './extended-surface-form.service';
 import { ExtendedSurfaceItem } from './extended-surface.service';
-import { ExtendedSurface } from '../../../models/extended-surface';
+import { ExtendedSurface } from '../../../../shared/models/phast/losses/extendedSurface';
 import { LossFieldDifferences } from '../loss-compare.util';
 import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 

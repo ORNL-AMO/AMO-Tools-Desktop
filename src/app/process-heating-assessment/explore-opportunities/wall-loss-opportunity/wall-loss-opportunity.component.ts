@@ -4,7 +4,7 @@ import { ExploreOpportunityCategory } from '../../models/phast';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { getWallLossSurfaceTemperatureWarning } from '../../heat-balance/losses/wall-losses/wall-loss-warnings';
 import { createSectionedOpportunityState, directField } from '../sectioned-opportunity-state';
-import { WallLoss } from '../../models/wall-loss';
+import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
 
 const OPPORTUNITY_DISPLAY_NAME = 'Add / Improve Wall Insulation';
 

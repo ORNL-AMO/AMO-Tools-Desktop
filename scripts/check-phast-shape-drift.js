@@ -1,10 +1,9 @@
 // Guards against unnoticed drift between the module-owned PHAST shape
 // (src/app/process-heating-assessment/models/phast.ts) and the legacy shared shape it was
-// duplicated from (src/app/shared/models/phast/phast.ts). See
-// .prompts/.process-heating-upgrade/refactor-plan/process-heating-type-structure-improvements.md
-// section 3.6: the two files describe one on-disk/shared-container shape, and TypeScript's
-// structural typing won't flag it if they diverge. This is a plain text/AST diff, not a runtime
-// check: it compares interface member name/optionality/type-text, nothing more.
+// duplicated from (src/app/shared/models/phast/phast.ts). The two files describe one
+// on-disk/shared-container shape, and TypeScript's structural typing won't flag it if they
+// diverge. This is a plain text/AST diff, not a runtime check: it compares interface member
+// name/optionality/type-text, nothing more.
 const fs = require('fs');
 const path = require('path');
 const ts = require('typescript');
@@ -13,9 +12,8 @@ const LOCAL_FILE = path.join(__dirname, '..', 'src/app/process-heating-assessmen
 const SHARED_FILE = path.join(__dirname, '..', 'src/app/shared/models/phast/phast.ts');
 
 // `Modification` is deliberately excluded: process-heating-assessment reshaped its local copy
-// (dropped `phast`, replaced the 15 flat `exploreOppsShowX` fields with `exploreOpportunities`)
-// while the shared/legacy copy keeps the original shape on purpose. See sections 3.2 and 3.3 of
-// the document linked above.
+// (dropped `phast`, replaced the 15 flat `exploreOppsShowX` fields with `exploreOpportunityFlags`)
+// while the shared/legacy copy keeps the original shape on purpose.
 const INTERFACES_TO_COMPARE = [
   'PHAST',
   'Losses',

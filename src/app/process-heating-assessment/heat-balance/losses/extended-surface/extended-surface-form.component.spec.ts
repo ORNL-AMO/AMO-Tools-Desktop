@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ExtendedSurface } from '../../../models/extended-surface';
+import { ExtendedSurface } from '../../../../shared/models/phast/losses/extendedSurface';
 import { Settings } from '../../../../shared/models/settings';
 import { ExtendedSurfaceFormComponent } from './extended-surface-form.component';
 import { ExtendedSurfaceFormService } from './extended-surface-form.service';
