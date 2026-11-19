@@ -126,20 +126,20 @@ describe('AssessmentResultsComponent', () => {
   describe('columns', () => {
     it('shows only the baseline column on Baseline steps', () => {
       render();
-      expect(headerCells()).toEqual(['Hourly Energy Loss/Use', 'Baseline']);
+      expect(headerCells()).toEqual(['Hourly Energy Loss/Use (MMBtu/hr)', 'Baseline']);
       expect(rowCells('Wall Losses')).toEqual(['10.00']);
     });
 
     it('adds the selected modification column alongside baseline', () => {
       render('mod-1');
-      expect(headerCells()).toEqual(['Hourly Energy Loss/Use', 'Baseline', 'Better Walls']);
+      expect(headerCells()).toEqual(['Hourly Energy Loss/Use (MMBtu/hr)', 'Baseline', 'Better Walls']);
       expect(rowCells('Wall Losses')).toEqual(['10.00', '5.00']);
     });
 
-    it('shows the hourly loss unit under each value column', () => {
-      render('mod-1');
-      const units = Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('thead tr:nth-child(2) th')).map(text);
-      expect(units).toEqual(['', 'MMBtu/hr', 'MMBtu/hr']);
+    it('shows the selected energy result unit in the title', () => {
+      settings.set({ energyResultUnit: 'GJ' });
+      render();
+      expect(headerCells()[0]).toBe('Hourly Energy Loss/Use (GJ/hr)');
     });
 
     it('uses whole numbers for units other than MMBtu, GJ, and kWh', () => {
@@ -318,7 +318,7 @@ describe('AssessmentResultsComponent', () => {
       showOperationalImpacts.set(true);
       baselineResults.set(makeResults({ co2EmissionsOutput: co2(12.345) }));
       render();
-      expect(text(row('CO2 Emissions')?.cells[0])).toBe('CO2 Emissions (ton CO2)');
+      expect(text(row('CO2 Emissions')?.cells[0])).toBe('CO2 Emissions (ton CO2/hr)');
       expect(rowCells('CO2 Emissions')).toEqual(['12.35']);
     });
 
@@ -326,7 +326,7 @@ describe('AssessmentResultsComponent', () => {
       showOperationalImpacts.set(true);
       settings.set({ energyResultUnit: 'GJ', emissionsUnit: 'Metric' });
       render();
-      expect(text(row('CO2 Emissions')?.cells[0])).toBe('CO2 Emissions (tonne CO2)');
+      expect(text(row('CO2 Emissions')?.cells[0])).toBe('CO2 Emissions (tonne CO2/hr)');
     });
 
     it('omits the savings row on Baseline steps', () => {
