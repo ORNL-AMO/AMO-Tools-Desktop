@@ -137,6 +137,11 @@ export const EEM_LABELS = {
   installVSDOnCentrifugalCompressors: 'Install VSD on Centrifugal Compressors'
 }
 
+/**
+ * AHRI chiller loading schedule, % of operating hours at 0% to 100% load (10% steps)
+ */
+export const AHRI_LOAD_SCHEDULE: number[] = [0, 0, 1, 5, 13, 23, 26, 19, 9, 3, 1];
+
 export const getDefaultInventoryItem = (): ChillerInventoryItem => {
     return {
         itemId: getNewIdString(),
@@ -152,8 +157,8 @@ export const getDefaultInventoryItem = (): ChillerInventoryItem => {
         useARIloadScheduleByMonthchedule: false,
         refrigerantType: RefrigerantType.R11,
         useSameMonthlyLoading: true,
-        loadScheduleAllMonths: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0],
-        loadScheduleByMonth: Array(12).fill(Array(11).fill(0)),
+        loadScheduleAllMonths: [...AHRI_LOAD_SCHEDULE],
+        loadScheduleByMonth: Array.from({ length: 12 }, () => [...AHRI_LOAD_SCHEDULE]),
         isCustomChiller: false,
         loadAtPercent: [25, 50, 75, 100],
         kWPerTonAtLoad: [],

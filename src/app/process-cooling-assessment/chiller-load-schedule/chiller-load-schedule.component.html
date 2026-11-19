@@ -14,7 +14,7 @@
             <div class="group-label mb-2">{{chiller().name}} Loading: All Months</div>
             <div class="d-flex align-items-center justify-content-between mb-2">
               <small class="form-text text-muted">Enter the percentage of hours the chiller operates at a given load. Total should
-                be 100%.</small>
+                be 100%. Defaults to the AHRI loading schedule (AHRI Standard 550/590-2026).</small>
               <button class="btn btn-link p-0 ml-2" (click)="toggleUseSameLoading()">
                 <span>Enter different schedule for each month</span>
               </button>
@@ -58,7 +58,7 @@
             <div class="group-label mb-2">{{chiller().name}} Loading: By Month</div>
             <div class="d-flex align-items-center justify-content-between mb-2">
               <small class="form-text text-muted">Enter the percentage of hours the chiller operates at a given load each month. Each row should
-                total 100%.</small>
+                total 100%. Defaults to the AHRI loading schedule (AHRI Standard 550/590-2026).</small>
               <button class="btn btn-link p-0 ml-2" (click)="toggleUseSameLoading()">
                 <span>Use same schedule for all months</span>
               </button>
