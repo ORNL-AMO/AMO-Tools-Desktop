@@ -14,6 +14,7 @@ import { ATMOSPHERE_UNITS } from './atmosphere-units';
 import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
 import { LossFieldDifferences } from '../loss-compare.util';
 import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
+import { adaptAtmosphereMaterialDb } from '../charge-material/material-db.adapters';
 
 @Component({
   selector: 'app-atmosphere-form',
@@ -38,7 +39,7 @@ export class AtmosphereFormComponent implements OnInit {
   readonly materialSelector = new MaterialSelector<AtmosphereSpecificHeat, AtmosphereForm>({
     form: this.form,
     settings: this.settings,
-    dbService: inject(AtmosphereDbService),
+    dbService: adaptAtmosphereMaterialDb(inject(AtmosphereDbService)),
     destroyRef: this.destroyRef,
     modalDialogService: inject(ModalDialogService),
     injector: inject(Injector),
@@ -46,19 +47,14 @@ export class AtmosphereFormComponent implements OnInit {
     setProperties: (material, form, settings) => form.patchValue({
       specificHeat: convertDbValue(material.specificHeat, ATMOSPHERE_UNITS.specificHeat, settings),
     }),
+    needsMaterialProperties: form => form.controls.specificHeat.value == null,
     buildRecoveryProperties: (v, settings) => ({
       specificHeat: convertForSave(v.specificHeat, ATMOSPHERE_UNITS.specificHeat, settings),
     }),
   });
 
   ngOnInit(): void {
-    this.materialSelector.loadMaterials(materials => {
-      const materialId = this.form().controls.materialId.value;
-      const material = materials.find(m => m.id === materialId);
-      if (material && this.form().controls.specificHeat.value == null) {
-        this.materialSelector.applyMaterial(material);
-      }
-    });
+    this.materialSelector.loadMaterials();
 
     this.form().controls.inletTemp.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef),

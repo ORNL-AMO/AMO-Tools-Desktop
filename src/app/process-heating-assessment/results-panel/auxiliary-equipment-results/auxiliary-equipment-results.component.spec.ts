@@ -5,6 +5,7 @@ import { ProcessHeatingModification } from '../../models/modification';
 import { AuxiliaryEquipmentResultsService } from '../../services/auxiliary-equipment-results.service';
 import { ModificationService } from '../../services/modification.service';
 import { AuxiliaryEquipmentResultsComponent, buildAuxiliaryEquipmentRows } from './auxiliary-equipment-results.component';
+import { EM_DASH } from '../../constants/display-text';
 
 describe('buildAuxiliaryEquipmentRows', () => {
   const item = (id: string, name: string, energyUse: number): AuxiliaryEquipmentItemResult => ({ id, name, power: 0, energyUse, energyCost: 0 });
@@ -69,8 +70,8 @@ describe('AuxiliaryEquipmentResultsComponent', () => {
 
       expect(element().querySelector('.alert-danger')).toBeNull();
       expect(cells('Total Energy Use (kWh/yr)')).toEqual(['1,000', '600']);
-      expect(cells('Energy Savings (kWh/yr)')).toEqual(['— —', '400']);
-      expect(cells('Cost Savings ($/yr)')).toEqual(['— —', '40']);
+      expect(cells('Energy Savings (kWh/yr)')).toEqual([`${EM_DASH} ${EM_DASH}`, '400']);
+      expect(cells('Cost Savings ($/yr)')).toEqual([`${EM_DASH} ${EM_DASH}`, '40']);
     });
 
     it('shows the alert and hides baseline totals when baseline is missing inputs', () => {
@@ -78,8 +79,8 @@ describe('AuxiliaryEquipmentResultsComponent', () => {
       render('baseline');
 
       expect(element().querySelector('.alert-danger')).not.toBeNull();
-      expect(cells('Total Power (kW)')).toEqual(['— —']);
-      expect(cells('Total Energy Use (kWh/yr)')).toEqual(['— —']);
+      expect(cells('Total Power (kW)')).toEqual([`${EM_DASH} ${EM_DASH}`]);
+      expect(cells('Total Energy Use (kWh/yr)')).toEqual([`${EM_DASH} ${EM_DASH}`]);
     });
 
     it('keeps baseline totals but hides modification totals and savings when only the modification is missing inputs', () => {
@@ -87,10 +88,10 @@ describe('AuxiliaryEquipmentResultsComponent', () => {
       render('mod-1');
 
       expect(element().querySelector('.alert-danger')).not.toBeNull();
-      expect(cells('Total Energy Use (kWh/yr)')).toEqual(['1,000', '— —']);
-      expect(cells('Total Energy Cost ($/yr)')).toEqual(['100', '— —']);
-      expect(cells('Energy Savings (kWh/yr)')).toEqual(['— —', '— —']);
-      expect(cells('Cost Savings ($/yr)')).toEqual(['— —', '— —']);
+      expect(cells('Total Energy Use (kWh/yr)')).toEqual(['1,000', `${EM_DASH} ${EM_DASH}`]);
+      expect(cells('Total Energy Cost ($/yr)')).toEqual(['100', `${EM_DASH} ${EM_DASH}`]);
+      expect(cells('Energy Savings (kWh/yr)')).toEqual([`${EM_DASH} ${EM_DASH}`, `${EM_DASH} ${EM_DASH}`]);
+      expect(cells('Cost Savings ($/yr)')).toEqual([`${EM_DASH} ${EM_DASH}`, `${EM_DASH} ${EM_DASH}`]);
     });
 
     it('hides the savings rows when no modification is compared', () => {

@@ -109,7 +109,7 @@ export abstract class ItemFormListService<TLoss extends LossEntity, TForm extend
     return { ...this.buildLoss(this.buildForm(loss)), id: loss.id, heatLoss: loss.heatLoss };
   }
 
-  /** Swaps an entry's form for one of a different shape (e.g. a cooling loss switching gas ↔ liquid). */
+  /** Swaps an entry's form for one of a different shape (e.g. a cooling loss switching gas <-> liquid). */
   protected replaceForm(id: string, form: TForm): void {
     const item = this.store.get(id);
     if (!item) return;

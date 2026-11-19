@@ -1,10 +1,10 @@
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { WallLossesSurfaceDbService } from '../../../../indexedDb/wall-losses-surface-db.service';
 import { Settings } from '../../../../shared/models/settings';
-import { WallLoss } from '../../../models/wall-loss';
+import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { WallLossCalculationService } from './wall-loss-calculation.service';
 import { WallLossesFormService } from './wall-losses-form.service';
@@ -26,7 +26,7 @@ describe('WallLossesService differingFields', () => {
         WallLossesService,
         WallLossesFormService,
         { provide: WallLossCalculationService, useValue: jasmine.createSpyObj('WallLossCalculationService', { calculate: 10 }) },
-        { provide: WallLossesSurfaceDbService, useValue: { getAllWithObservable: () => of([]) } },
+        { provide: WallLossesSurfaceDbService, useValue: { dbWallLossesSurfaceMaterials: new BehaviorSubject([]) } },
         {
           provide: ProcessHeatingAssessmentService,
           useValue: {

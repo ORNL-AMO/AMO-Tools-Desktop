@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { FlueGas, FlueGasByMass, FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
+import { CHEMICAL_FORMULA } from '../../../constants/display-text';
 
 /** Saved `oxygenCalculationMethod` values. */
 export const OxygenCalculationMethod = {
@@ -30,7 +31,7 @@ export const FLUE_GAS_FUEL_ANALYSIS = [
   { key: 'hydrogen', label: 'Hydrogen' },
   { key: 'sulphur', label: 'Sulphur' },
   { key: 'inertAsh', label: 'Inert Ash' },
-  { key: 'o2', label: 'O₂' },
+  { key: 'o2', label: CHEMICAL_FORMULA.O2 },
   { key: 'moisture', label: 'Moisture' },
   { key: 'nitrogen', label: 'Nitrogen' },
 ] as const;
@@ -86,7 +87,7 @@ export const PERCENT_VALIDATORS = [Validators.required, Validators.min(0), Valid
 const MAX_O2_IN_FLUE_GAS = 20.5;
 const DEFAULT_TEMP_F = 65;
 const DEFAULT_FLUE_GAS_TEMP_F = 212;
-/** Percent moisture in combustion air (legacy default). */
+/** Legacy default for the moisture in combustion air field, which is entered in percent (0.0077 %). Looks like a lb/lb humidity ratio (0.77 %); kept as is for legacy parity. */
 const DEFAULT_MOISTURE_PERCENT = 0.0077;
 /** Legacy default: the first entry in the flue gas material database. */
 const DEFAULT_MATERIAL_ID = 1;
@@ -97,7 +98,6 @@ export const DEFAULT_FLUE_GAS_NAME = 'Flue Gas';
 @Injectable()
 export class FlueGasFormService {
   private readonly fb = inject(FormBuilder);
-  private readonly convertUnitsService = inject(ConvertUnitsService);
 
   getFlueGasVolumeForm(loss: FlueGas = {}, settings: Settings): FlueGasVolumeForm {
     const volume = loss.flueGasByVolume ?? { ...this.newFlueGasConditions(settings), gasTypeId: DEFAULT_MATERIAL_ID };
@@ -254,7 +254,7 @@ export class FlueGasFormService {
 
   private toSettingsTemp(fahrenheit: number, settings: Settings): number {
     return settings?.unitsOfMeasure === 'Metric'
-      ? this.convertUnitsService.value(fahrenheit).from('F').to('C')
+      ? new ConvertValue(fahrenheit, 'F', 'C').convertedValue
       : fahrenheit;
   }
 }

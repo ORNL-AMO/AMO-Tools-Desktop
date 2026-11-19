@@ -72,13 +72,13 @@
               }
             </select>
           </div>
-          @let heatingValueUnit = model.meteredEnergyFuel.fuelDescription === 'gas' ? (isMetric() ? 'kJ/Nm³' : 'Btu/scf') : (isMetric() ? 'kJ/kg' : 'Btu/lb');
+          @let heatingValueUnit = model.meteredEnergyFuel.fuelDescription === 'gas' ? (isMetric() ? 'kJ/Nm&sup3;' : 'Btu/scf') : (isMetric() ? 'kJ/kg' : 'Btu/lb');
           <div class="form-group">
             <label class="small" for="meteredFuelHeatingValue">Heating Value - HHV</label>
             <div class="input-group" [class.invalid]="fuel.heatingValue.invalid">
               <input type="number" step="100" class="form-control" id="meteredFuelHeatingValue" formControlName="heatingValue"
                 (focus)="focusField('fuelHeatingValue')" onfocus="this.select();">
-              <span class="input-group-addon units">{{ heatingValueUnit }}</span>
+              <span class="input-group-addon units" [innerHTML]="heatingValueUnit"></span>
             </div>
             <app-form-control-errors [control]="fuel.heatingValue" [settings]="settings()" [defaultUnit]="heatingValueUnit"></app-form-control-errors>
           </div>
@@ -88,9 +88,9 @@
               <div class="input-group" [class.invalid]="fuel.fuelFlowRateInput.invalid">
                 <input type="number" step="100" class="form-control" id="meteredFuelFlowRate" formControlName="fuelFlowRateInput"
                   (focus)="focusField('fuelFlowRateInput')" onfocus="this.select();">
-                <span class="input-group-addon units">{{ isMetric() ? 'Nm³/hr' : 'scf/hr' }}</span>
+                <span class="input-group-addon units">{{ isMetric() ? 'Nm&sup3;/hr' : 'scf/hr' }}</span>
               </div>
-              <app-form-control-errors [control]="fuel.fuelFlowRateInput" [settings]="settings()" imperialUnit="scf/hr" metricUnit="Nm³/hr"></app-form-control-errors>
+              <app-form-control-errors [control]="fuel.fuelFlowRateInput" [settings]="settings()" imperialUnit="scf/hr" metricUnit="Nm&sup3;/hr"></app-form-control-errors>
             </div>
           }
           <div class="form-group">

@@ -5,7 +5,7 @@
       <div class="input-group" [class.invalid]="form().controls.offGasTemp.invalid" [class.indicate-different]="differingFields()?.has('offGasTemp')">
         <input type="number" step="10" class="form-control"
           id="{{controlIds().offGasTemp}}" formControlName="offGasTemp" (focus)="focusField('offGasTemp')" onfocus="this.select();">
-        <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Imperial' ? '℉' : '℃'}}</span>
+        <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Imperial' ? '&#8457;' : '&#8451;'}}</span>
       </div>
       <app-form-control-errors [control]="form().controls.offGasTemp" [settings]="settings()">
       </app-form-control-errors>

@@ -48,7 +48,7 @@ export function getModificationName(modification: ProcessHeatingModification): s
 // The shape a modification has when it was last written by legacy: a full-clone `phast`, no
 // `scenarioOverrides` yet, and its explore-opportunities curation state as legacy's own flat fields
 // (shared/models/phast/phast.ts) rather than this module's `exploreOpportunityFlags` map. Exists
-// only to name the resolver's unchecked cast boundary (process-heating-assessment.resolver.ts) —
+// only to name the resolver's unchecked cast boundary (process-heating-assessment.resolver.ts) -
 // not a type any other code should construct or hold onto.
 export interface LegacyModification extends ProcessHeatingModification {
   phast?: PHAST;

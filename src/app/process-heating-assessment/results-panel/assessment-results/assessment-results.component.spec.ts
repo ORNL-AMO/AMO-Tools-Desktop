@@ -10,6 +10,7 @@ import { ResultCategories } from '../../models/result-rows';
 import { ModificationService } from '../../services/modification.service';
 import { InvalidModification, ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
 import { AssessmentResultsComponent } from './assessment-results.component';
+import { EM_DASH } from '../../constants/display-text';
 
 const NO_CATEGORIES: ResultCategories = {
   showSlag: false,
@@ -151,12 +152,12 @@ describe('AssessmentResultsComponent', () => {
     it('shows placeholders in the modification column when the modification has no losses', () => {
       modificationResults.set(undefined);
       render('mod-1');
-      expect(rowCells('Wall Losses')).toEqual(['10.00', '— —']);
+      expect(rowCells('Wall Losses')).toEqual(['10.00', `${EM_DASH} ${EM_DASH}`]);
     });
 
     it('shows placeholders for zero values', () => {
       render();
-      expect(rowCells('Charge Materials')).toEqual(['— —']);
+      expect(rowCells('Charge Materials')).toEqual([`${EM_DASH} ${EM_DASH}`]);
     });
   });
 
@@ -232,8 +233,8 @@ describe('AssessmentResultsComponent', () => {
 
     it("shows a placeholder in a column whose energy source doesn't use the row", () => {
       render('mod-1');
-      expect(rowCells('Flue Gas Losses')).toEqual(['3.00', '— —']);
-      expect(rowCells('System Efficiency')).toEqual(['— —', '75%']);
+      expect(rowCells('Flue Gas Losses')).toEqual(['3.00', `${EM_DASH} ${EM_DASH}`]);
+      expect(rowCells('System Efficiency')).toEqual([`${EM_DASH} ${EM_DASH}`, '75%']);
     });
 
     it("shows only the baseline's rows on Baseline steps", () => {
@@ -342,7 +343,7 @@ describe('AssessmentResultsComponent', () => {
       modificationResults.set(modification);
       render('mod-1');
       expect(resultsService.getCo2EmissionsSavings).toHaveBeenCalledWith(baseline, modification, 'hourlyTotalEmissionOutput');
-      expect(rowCells('CO2 Emissions Savings')).toEqual(['— —', '2.5']);
+      expect(rowCells('CO2 Emissions Savings')).toEqual([`${EM_DASH} ${EM_DASH}`, '2.5']);
       expect(row('CO2 Emissions Savings')?.classList).toContain('tr-underline');
     });
 
@@ -352,7 +353,7 @@ describe('AssessmentResultsComponent', () => {
       modificationResults.set(makeResults({ co2EmissionsOutput: co2(undefined) }));
       resultsService.getCo2EmissionsSavings.and.returnValue(undefined);
       render('mod-1');
-      expect(rowCells('CO2 Emissions')).toEqual(['10', '— —']);
+      expect(rowCells('CO2 Emissions')).toEqual(['10', `${EM_DASH} ${EM_DASH}`]);
     });
 
     it('shows a zero modification value', () => {
@@ -369,7 +370,7 @@ describe('AssessmentResultsComponent', () => {
       modificationResults.set(makeResults({ co2EmissionsOutput: co2(7.5) }));
       resultsService.getCo2EmissionsSavings.and.returnValue(undefined);
       render('mod-1');
-      expect(rowCells('CO2 Emissions Savings')).toEqual(['— —', '— —']);
+      expect(rowCells('CO2 Emissions Savings')).toEqual([`${EM_DASH} ${EM_DASH}`, `${EM_DASH} ${EM_DASH}`]);
     });
   });
 

@@ -8,6 +8,7 @@ import { appendSubGroup, buildFacilityInfoSections, decodeHtmlEntities, formatCe
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
 import { AlertSection, ChartSection, KeyValueSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { ModificationNameCell, ReportColumnCell, ReportTableRow } from '../../shared/report-builder/models/report-ui-models';
+import { EM_DASH } from '../constants/display-text';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
 import { ProcessHeatingValidityService } from '../services/process-heating-validity.service';
@@ -17,6 +18,7 @@ import { AUXILIARY_EQUIPMENT_TABLE_TITLE, ResultsDataResultsService, ResultsData
 import { ReportGraphsResultsService, ReportGraphsUI } from './report-graphs/report-graphs-results.service';
 import { ReportSankeyResultsService, ReportSankeyUI } from './report-sankey/report-sankey-results.service';
 import { InputSummaryResultsService, InputSummaryUI } from './input-summary/input-summary-results.service';
+import { toPdfText } from './pdf-text.util';
 
 export const PROCESS_HEATING_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: ROUTE_TOKENS.facilityInfo, label: 'Facility Info', description: 'Facility and contact information' },
@@ -115,7 +117,7 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
       sections.push({
         type: 'key-value-list',
         title: 'Modification Notes',
-        rows: notes.map(note => ({ label: `${note.modificationName} — ${note.lossName}`, value: note.note })),
+        rows: notes.map(note => ({ label: `${note.modificationName} ${EM_DASH} ${note.lossName}`, value: note.note })),
         group: ROUTE_TOKENS.executiveSummary,
       });
     }
@@ -124,7 +126,7 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
 
   private buildEnergySummarySections(ui: EnergySummaryUI): Array<SummaryTableSection | KeyValueSection> {
     const withUnit = (value: number | undefined, unit: string | undefined, decimals = 2): string =>
-      value ? `${formatNumber(value, decimals)} ${unit ?? ''}`.trim() : '—';
+      value ? `${formatNumber(value, decimals)} ${unit ?? ''}`.trim() : EM_DASH;
 
     const sourcesTable: SummaryTableSection = {
       type: 'summary-table',
@@ -235,7 +237,7 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
 
     return [...invalidModifications, ...modifications.flatMap((modification, index) => {
       const sections: ChartSection[] = [{
-        type: 'chart', title: `Loss Distribution — Baseline vs. ${modification.name}`, group, pageBreakBefore: !invalidModifications.length && index === 0,
+        type: 'chart', title: `Loss Distribution ${EM_DASH} Baseline vs. ${modification.name}`, group, pageBreakBefore: !invalidModifications.length && index === 0,
         imageDataProvider: render(this.phastChartsService.buildPieChart([
           { valuesAndLabels: baseline.lossValuesAndLabels, unit: ui.lossUnit, label: 'Baseline' },
           { valuesAndLabels: modification.lossValuesAndLabels, unit: ui.lossUnit, label: modification.name },
@@ -243,7 +245,7 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
       }];
       if (baseline.deliverValuesAndLabels.length || modification.deliverValuesAndLabels.length) {
         sections.push({
-          type: 'chart', title: `Heat Delivered — Baseline vs. ${modification.name}`, group,
+          type: 'chart', title: `Heat Delivered ${EM_DASH} Baseline vs. ${modification.name}`, group,
           imageDataProvider: render(this.phastChartsService.buildPieChart([
             { valuesAndLabels: baseline.deliverValuesAndLabels, unit: ui.deliverUnit, label: 'Baseline' },
             { valuesAndLabels: modification.deliverValuesAndLabels, unit: ui.deliverUnit, label: modification.name },
@@ -279,7 +281,7 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
     const rows: string[][] = [];
     const subGroupHeaderIndices: number[] = [];
     ui.categories.flatMap(category => category.sections).forEach(section => {
-      appendSubGroup(rows, subGroupHeaderIndices, headers.length, decodeHtmlEntities(section.label), section.rows.map(row => this.rowToStrings(row)));
+      appendSubGroup(rows, subGroupHeaderIndices, headers.length, toPdfText(decodeHtmlEntities(section.label)), section.rows.map(row => this.rowToStrings(row)));
     });
     return [{
       type: 'summary-table',
@@ -293,14 +295,14 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
   }
 
   private buildHeaders(modificationNames: ModificationNameCell[]): string[] {
-    return ['', 'Baseline', ...modificationNames.map(modification => decodeHtmlEntities(modification.name))];
+    return ['', 'Baseline', ...modificationNames.map(modification => toPdfText(decodeHtmlEntities(modification.name)))];
   }
 
   private rowToStrings(row: ReportTableRow): string[] {
     const toText = (cell: ReportColumnCell): string =>
-      row.display === 'list' && cell.value ? decodeHtmlEntities(String(cell.value)).split('\n').join(', ') : formatCell(cell);
+      row.display === 'list' && cell.value ? toPdfText(decodeHtmlEntities(String(cell.value))).split('\n').join(', ') : toPdfText(decodeHtmlEntities(formatCell(cell)));
     return [
-      labelWithUnits(row.label, row.units ? `(${row.units})` : undefined),
+      toPdfText(labelWithUnits(row.label, row.units ? `(${row.units})` : undefined)),
       toText(row.baseline),
       ...row.modifications.map(toText),
     ];

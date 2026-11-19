@@ -6,6 +6,7 @@ import { AtmosphereDbService } from '../../../../indexedDb/atmosphere-db.service
 import { MaterialModalData } from '../../../models/material-modal-data';
 import { convertForSave } from '../charge-material/charge-material-db-material.util';
 import { ATMOSPHERE_UNITS } from './atmosphere-units';
+import { adaptAtmosphereMaterialDb } from '../charge-material/material-db.adapters';
 
 @Component({
   selector: 'app-add-atmosphere-material-modal',
@@ -17,13 +18,13 @@ export class AddAtmosphereMaterialModalComponent {
   readonly data: MaterialModalData = inject(DIALOG_DATA);
   private readonly dialogRef = inject(DialogRef<AtmosphereSpecificHeat>);
   private readonly formBuilder = inject(FormBuilder);
-  private readonly atmosphereDbService = inject(AtmosphereDbService);
+  private readonly materialDb = adaptAtmosphereMaterialDb(inject(AtmosphereDbService));
 
   readonly settings = this.data.settings;
 
   readonly form = this.formBuilder.group({
     substance: ['', Validators.required],
-    specificHeat: [null, [Validators.required, Validators.min(0)]],
+    specificHeat: this.formBuilder.control<number | null>(null, [Validators.required, Validators.min(0)]),
   });
 
   save(): void {
@@ -34,7 +35,7 @@ export class AddAtmosphereMaterialModalComponent {
       specificHeat: convertForSave(v.specificHeat, ATMOSPHERE_UNITS.specificHeat, this.settings),
       isDefault: false,
     };
-    this.atmosphereDbService.addWithObservable(material).subscribe(inserted => {
+    this.materialDb.addMaterial(material).subscribe(inserted => {
       this.dialogRef.close(inserted);
     });
   }

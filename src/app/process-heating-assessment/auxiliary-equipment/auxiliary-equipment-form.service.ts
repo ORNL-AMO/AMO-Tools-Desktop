@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 import { GreaterThanValidator } from '../../shared/validators/greater-than';
 import { AuxiliaryEquipmentItem } from '../../shared/models/phast/auxEquipment';
 import { AuxiliaryEquipmentMeasurementMethod } from '../models/auxiliary-equipment';
+import { HOURS_PER_YEAR } from '../../shared/app-constants';
 
 export type MultimeterForm = FormGroup<{
   numberOfPhases: FormControl<number | null>;
@@ -31,8 +32,12 @@ export type AuxiliaryEquipmentForm = FormGroup<{
   userSelectedHP: FormControl<boolean>;
 }>;
 
-/** Annual hours in a year, the most an item can run. */
-const HOURS_PER_YEAR = 8760;
+/** Current phases (1 or 3) for a new item's multimeter reading. */
+const DEFAULT_NUMBER_OF_PHASES = 3;
+/** Supply frequency (Hz) for a new or migrated item. */
+export const DEFAULT_LINE_FREQUENCY_HZ = 60;
+/** Motor and drive efficiency (%) for a new or migrated item. */
+export const DEFAULT_MOTOR_AND_DRIVE_EFFICIENCY_PERCENT = 100;
 
 /**
  * Starting values for a new item, matching the Electricity Reduction calculator defaults.
@@ -44,18 +49,19 @@ export function newAuxiliaryEquipmentItem(hoursPerYear: number, isImperial: bool
   return {
     operatingHours: hoursPerYear,
     measurementMethod: AuxiliaryEquipmentMeasurementMethod.MULTIMETER,
-    multimeterData: { numberOfPhases: 3, supplyVoltage: 0, averageCurrent: 0, powerFactor: 0.85 },
+    // supply voltage V, average current A, power factor unitless (0 to 1)
+    multimeterData: { numberOfPhases: DEFAULT_NUMBER_OF_PHASES, supplyVoltage: 0, averageCurrent: 0, powerFactor: 0.85 },
     nameplateData: {
       // 200 hp, or its kW equivalent
       ratedMotorPower: isImperial ? 200 : 149.14,
       variableSpeedMotor: true,
-      operationalFrequency: 50,
-      lineFrequency: 60,
-      motorAndDriveEfficiency: 100,
-      loadFactor: 10,
+      operationalFrequency: 50, // Hz
+      lineFrequency: DEFAULT_LINE_FREQUENCY_HZ,
+      motorAndDriveEfficiency: DEFAULT_MOTOR_AND_DRIVE_EFFICIENCY_PERCENT,
+      loadFactor: 10, // %
     },
-    powerMeterData: { power: 50 },
-    otherMethodData: { energy: 400000 },
+    powerMeterData: { power: 50 }, // kW
+    otherMethodData: { energy: 400000 }, // kWh/yr
     units: 1,
     userSelectedHP: isImperial,
   };

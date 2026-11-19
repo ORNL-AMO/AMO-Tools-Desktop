@@ -8,6 +8,7 @@ import { GasLoadMaterialDbService } from '../../../../../indexedDb/gas-load-mate
 import { MaterialModalData } from '../../../../models/material-modal-data';
 import { convertDbValue, convertForSave } from '../charge-material-db-material.util';
 import { CHARGE_MATERIAL_UNITS } from '../charge-material-units';
+import { adaptGasLoadMaterialDb } from '../material-db.adapters';
 
 @Component({
   selector: 'app-add-gas-material-modal',
@@ -20,7 +21,7 @@ export class AddGasMaterialModalComponent {
   readonly data: MaterialModalData = inject(DIALOG_DATA);
   private readonly dialogRef = inject(DialogRef<GasLoadChargeMaterial>);
   private readonly formBuilder = inject(FormBuilder);
-  private readonly gasLoadMaterialDbService = inject(GasLoadMaterialDbService);
+  private readonly materialDb = adaptGasLoadMaterialDb(inject(GasLoadMaterialDbService));
 
   readonly settings = this.data.settings;
 
@@ -32,7 +33,7 @@ export class AddGasMaterialModalComponent {
   readonly materials = signal<GasLoadChargeMaterial[]>([]);
 
   constructor() {
-    this.gasLoadMaterialDbService.getAllWithObservable().pipe(take(1), takeUntilDestroyed()).subscribe(materials => this.materials.set(materials));
+    this.materialDb.materials().pipe(take(1), takeUntilDestroyed()).subscribe(materials => this.materials.set(materials));
   }
 
   /** Starts a new material from an existing one, marked "(mod)" so the name stays distinct. */
@@ -52,7 +53,7 @@ export class AddGasMaterialModalComponent {
       specificHeatVapor: convertForSave(v.specificHeatVapor, CHARGE_MATERIAL_UNITS.specificHeat, this.settings),
       isDefault: false,
     };
-    this.gasLoadMaterialDbService.addWithObservable(material).subscribe(inserted => {
+    this.materialDb.addMaterial(material).subscribe(inserted => {
       this.dialogRef.close(inserted);
     });
   }

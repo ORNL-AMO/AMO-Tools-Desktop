@@ -216,7 +216,7 @@ describe('createSectionedOpportunityState', () => {
   });
 });
 
-describe('createSectionedOpportunityState — resetting an undefined baseline field', () => {
+describe('createSectionedOpportunityState - resetting an undefined baseline field', () => {
   const BASELINE_WITH_GAP: PHAST = {
     name: 'Baseline',
     losses: {

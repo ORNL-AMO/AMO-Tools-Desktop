@@ -57,4 +57,19 @@ export class LiquidLoadMaterialDbService {
     return true;
   }
 
+  /** Refreshes `dbLiquidLoadChargeMaterials` from the database. */
+  async setAllMaterialsFromDb(): Promise<void> {
+    const allMaterials: Array<LiquidLoadChargeMaterial> = await firstValueFrom(this.getAllWithObservable());
+    this.dbLiquidLoadChargeMaterials.next(allMaterials);
+  }
+
+  /**
+   * Saves a material and refreshes `dbLiquidLoadChargeMaterials`.
+   * @returns the new material's id
+   */
+  async addMaterial(material: LiquidLoadChargeMaterial): Promise<number> {
+    const inserted: LiquidLoadChargeMaterial = await firstValueFrom(this.addWithObservable(material));
+    await this.setAllMaterialsFromDb();
+    return inserted.id;
+  }
 }

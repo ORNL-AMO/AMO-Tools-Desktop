@@ -65,7 +65,7 @@ export interface Losses {
   energyInputExhaustGasLoss?: EnergyInputExhaustGasLoss[];
 }
 
-// Keys of Losses, kept in sync manually — TypeScript can't derive a runtime array from an interface.
+// Keys of Losses, kept in sync manually - TypeScript can't derive a runtime array from an interface.
 export const LOSS_KEYS: (keyof Losses)[] = [
   'chargeMaterials', 'wallLosses', 'atmosphereLosses', 'fixtureLosses', 'openingLosses',
   'coolingLosses', 'flueGasLosses', 'otherLosses', 'leakageLosses', 'extendedSurfaces',

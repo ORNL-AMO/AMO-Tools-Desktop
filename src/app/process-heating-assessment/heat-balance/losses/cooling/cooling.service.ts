@@ -19,7 +19,7 @@ export class CoolingService extends LossFormListService<CoolingLoss, CoolingForm
   readonly losses: Signal<CoolingItem[]> = this.items;
 
   /**
-   * Air ↔ Other Gas and Water ↔ Other Liquid only change the saved type. Crossing gas ↔ liquid
+   * Air <-> Other Gas and Water <-> Other Liquid only change the saved type. Crossing gas <-> liquid
    * replaces the form, discarding the other medium's values.
    */
   switchMedium(id: string, medium: CoolingMedium): void {

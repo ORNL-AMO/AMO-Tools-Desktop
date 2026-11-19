@@ -6,7 +6,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { ModalDialogService } from '../../../../shared/modal-dialog.service';
 import { MaterialSelector } from '../charge-material/material-selector';
 import { AddSolidLiquidFlueGasMaterialModalComponent } from './add-solid-liquid-flue-gas-material-modal.component';
-import { adaptSolidLiquidFlueGasMaterialDb } from './flue-gas-material-db.adapter';
+import { adaptSolidLiquidFlueGasMaterialDb } from '../charge-material/material-db.adapters';
 import { FLUE_GAS_FUEL_ANALYSIS, FlueGasMassForm } from './flue-gas-form.service';
 import { FlueGas, FlueGasWarnings, FlueGasByMass } from '../../../../shared/models/phast/losses/flueGas';
 import { LossFieldDifferences, nestedDifferences } from '../loss-compare.util';
@@ -42,6 +42,7 @@ export class FlueGasMassFormComponent implements OnInit {
       ...Object.fromEntries(FLUE_GAS_FUEL_ANALYSIS.map(({ key }) => [key, roundVal(material[key], 4)])),
       heatingValue: material.heatingValue,
     }),
+    needsMaterialProperties: form => form.controls.carbon.value == null,
     buildRecoveryProperties: values => ({
       ...Object.fromEntries(FLUE_GAS_FUEL_ANALYSIS.map(({ key }) => [key, values[key]])),
       heatingValue: values.heatingValue,
@@ -49,12 +50,7 @@ export class FlueGasMassFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.materialSelector.loadMaterials(materials => {
-      const material = materials.find(m => m.id === this.form().controls.materialId.value);
-      if (material && this.form().controls.carbon.value == null) {
-        this.materialSelector.applyMaterial(material);
-      }
-    });
+    this.materialSelector.loadMaterials();
   }
 
   focusField(field: string): void {

@@ -6,8 +6,8 @@ import { EnergyInputFormService, EnergyInputWarnings } from './energy-input-form
 import { SharedPipesModule } from '../../../../shared/shared-pipes/shared-pipes.module';
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { ProcessHeatingValidityService } from '../../../services/process-heating-validity.service';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../../shared/models/settings';
+import { EM_DASH } from '../../../constants/display-text';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -57,7 +57,6 @@ describe('EnergyInputComponent', () => {
         { provide: ProcessHeatingAssessmentService, useValue: assessmentServiceSpy },
         { provide: ProcessHeatingValidityService, useValue: validityServiceSpy },
         EnergyInputFormService,
-        ConvertUnitsService,
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
@@ -209,7 +208,7 @@ describe('EnergyInputComponent', () => {
       lossesSignal.set([item]);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('.loss-results').textContent).toContain('——');
+      expect(fixture.nativeElement.querySelector('.loss-results').textContent).toContain(EM_DASH + EM_DASH);
     });
 
     it('shows no warnings by default', () => {

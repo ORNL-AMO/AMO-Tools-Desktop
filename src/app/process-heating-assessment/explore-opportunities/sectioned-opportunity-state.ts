@@ -116,7 +116,7 @@ export function createSectionedOpportunityState<K extends ComparableLossKey, TFi
   });
 
   /**
-   * Maps over this modification's effective items, not raw baseline — else editing one item's
+   * Maps over this modification's effective items, not raw baseline - else editing one item's
    * value discards another item's override.
    */
   function writeModificationItems(mapItem: (item: Item) => Item): void {
@@ -160,7 +160,7 @@ export function createSectionedOpportunityState<K extends ComparableLossKey, TFi
 
     /**
      * The merge no longer gates a loss-type diff on this flag (see scenario-merge.util.ts), so
-     * deselecting has to actively reset the fields — otherwise they keep applying regardless.
+     * deselecting has to actively reset the fields - otherwise they keep applying regardless.
      */
     if (!hasOpportunity) {
       expandedSections.set(mapSections(() => []));

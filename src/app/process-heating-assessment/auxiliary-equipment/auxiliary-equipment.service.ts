@@ -5,9 +5,7 @@ import { ItemFormListService, LossFormItem } from '../heat-balance/losses/loss-f
 import { AssessmentScenario } from '../services/process-heating-assessment.service';
 import { AuxiliaryEquipmentResultsService } from '../services/auxiliary-equipment-results.service';
 import { AuxiliaryEquipmentForm, AuxiliaryEquipmentFormService, newAuxiliaryEquipmentItem } from './auxiliary-equipment-form.service';
-
-/** Annual hours used when the scenario has no operating hours. */
-const DEFAULT_HOURS_PER_YEAR = 8760;
+import { HOURS_PER_YEAR } from '../../shared/app-constants';
 
 /** `heatLoss` holds the item's power (kW) while it is being edited; it is not saved. */
 export type AuxiliaryEquipmentFormItem = LossFormItem<AuxiliaryEquipmentForm>;
@@ -49,7 +47,7 @@ export class AuxiliaryEquipmentService extends ItemFormListService<AuxiliaryEqui
   }
 
   protected override newLoss(): AuxiliaryEquipmentItem {
-    const hoursPerYear = this.assessmentService.scenarioPhastSignal(this.scenario())?.operatingHours?.hoursPerYear ?? DEFAULT_HOURS_PER_YEAR;
+    const hoursPerYear = this.assessmentService.scenarioPhastSignal(this.scenario())?.operatingHours?.hoursPerYear ?? HOURS_PER_YEAR;
     const isImperial = this.assessmentService.settingsSignal()?.unitsOfMeasure === 'Imperial';
     // id is assigned by add() and name by defaultName()
     return newAuxiliaryEquipmentItem(hoursPerYear, isImperial) as AuxiliaryEquipmentItem;

@@ -1,7 +1,6 @@
 import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { EnergyInputEAF } from '../../../../shared/models/phast/losses/energyInputEAF';
 import { Settings } from '../../../../shared/models/settings';
 import { EnergyInputFormComponent } from './energy-input-form.component';
@@ -33,7 +32,7 @@ describe('EnergyInputFormComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [EnergyInputFormComponent],
-      providers: [{ provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } }, EnergyInputFormService, ConvertUnitsService],
+      providers: [{ provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } }, EnergyInputFormService],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

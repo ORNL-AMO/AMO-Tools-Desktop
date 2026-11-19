@@ -12,8 +12,11 @@ export type GasLeakageForm = FormGroup<{
   correctionFactor: FormControl<number | null>;
 }>;
 
+/** Legacy default discharge (flow) coefficient for gas leaking through an opening, unitless. */
+const DEFAULT_DISCHARGE_COEFFICIENT = 0.8052;
+
 /** Starting values for a new entry; a saved entry rebuilds from exactly what was saved so a cleared field stays invalid. */
-export const NEW_LEAKAGE_LOSS: LeakageLoss = { coefficient: 0.8052, specificGravity: 1, correctionFactor: 1 };
+export const NEW_LEAKAGE_LOSS: LeakageLoss = { coefficient: DEFAULT_DISCHARGE_COEFFICIENT, specificGravity: 1, correctionFactor: 1 };
 
 @Injectable()
 export class GasLeakageFormService {

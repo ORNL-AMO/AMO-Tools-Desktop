@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { EnergyInputEAF } from '../../../../shared/models/phast/losses/energyInputEAF';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastResults } from '../../../models/phast';
@@ -25,13 +25,19 @@ const DEFAULT_COAL_HEATING_VALUE_BTU_LB = 12000;
 const DEFAULT_ELECTRODE_HEATING_VALUE_BTU_LB = 14000;
 // Typical higher heating value of pipeline natural gas, in Btu per standard cubic foot
 const NATURAL_GAS_HEATING_VALUE_BTU_SCF = 1020;
-// Btu per MMBtu
-const BTU_PER_MMBTU = Math.pow(10, 6);
+
+/**
+ * Two decimals, as legacy saved these values; the shared `roundVal` would keep three and change saved values.
+ * @param value number to round
+ * @returns value rounded to two decimal places
+ */
+function roundToHundredths(value: number): number {
+  return Math.round(value * 100) / 100;
+}
 
 @Injectable()
 export class EnergyInputFormService {
   private readonly fb = inject(FormBuilder);
-  private readonly convertUnitsService = inject(ConvertUnitsService);
 
   getEnergyInputForm(loss: EnergyInputEAF = {}): EnergyInputForm {
     const nonNegative = [Validators.required, Validators.min(0)];
@@ -74,12 +80,10 @@ export class EnergyInputFormService {
    * @returns heat input in MMBtu/hr (Imperial) or GJ/hr (Metric)
    */
   calculateHeatInputFromFlowRate(flowRate: number, settings: Settings): number {
-    if (settings.unitsOfMeasure === 'Imperial') {
-      return this.convertUnitsService.roundVal(flowRate * (NATURAL_GAS_HEATING_VALUE_BTU_SCF / BTU_PER_MMBTU), 3);
-    }
-    const flowRateScf = this.convertUnitsService.value(flowRate).from('m3').to('ft3');
-    const heatInputMMBtu = flowRateScf * (NATURAL_GAS_HEATING_VALUE_BTU_SCF / BTU_PER_MMBTU);
-    return this.convertUnitsService.roundVal(this.convertUnitsService.value(heatInputMMBtu).from('MMBtu').to('GJ'), 3);
+    const isImperial = settings.unitsOfMeasure === 'Imperial';
+    const flowRateScf = isImperial ? flowRate : new ConvertValue(flowRate, 'm3', 'ft3').convertedValue;
+    const heatInputBtu = flowRateScf * NATURAL_GAS_HEATING_VALUE_BTU_SCF;
+    return roundToHundredths(new ConvertValue(heatInputBtu, 'Btu', isImperial ? 'MMBtu' : 'GJ').convertedValue);
   }
 
   /**
@@ -93,8 +97,8 @@ export class EnergyInputFormService {
     const required = results.totalInput + results.exothermicHeat - results.energyInputTotalChemEnergy;
     const requiredKw = settings.energyResultUnit === 'kWh'
       ? required
-      : this.convertUnitsService.value(required).from(settings.energyResultUnit).to('kWh');
-    return this.convertUnitsService.roundVal(requiredKw, 2);
+      : new ConvertValue(required, settings.energyResultUnit, 'kWh').convertedValue;
+    return roundToHundredths(requiredKw);
   }
 
   /** Replaces the electricity input's validators; `undefined` falls back to non-negative. */
@@ -119,7 +123,7 @@ export class EnergyInputFormService {
 
   private defaultHeatingValue(btuPerLb: number, settings?: Settings): number {
     return settings?.unitsOfMeasure === 'Metric'
-      ? this.convertUnitsService.value(btuPerLb).from('btuLb').to('kJkg')
+      ? new ConvertValue(btuPerLb, 'btuLb', 'kJkg').convertedValue
       : btuPerLb;
   }
 }

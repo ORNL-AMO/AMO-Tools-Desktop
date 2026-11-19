@@ -50,7 +50,7 @@
       <div class="loss-results result-strip card-body p-2">
         <div class="result-item">
           <span class="result-label">Heat Loss</span>
-          <span class="result-value">{{ item.heatLoss != null ? (item.heatLoss | sigFigs: 6) + ' ' + resultsUnit : '——' }}</span>
+          <span class="result-value">@if (item.heatLoss != null) { {{ item.heatLoss | sigFigs: 6 }} {{ resultsUnit }} } @else {&mdash;&mdash;}</span>
         </div>
       </div>
     </div>

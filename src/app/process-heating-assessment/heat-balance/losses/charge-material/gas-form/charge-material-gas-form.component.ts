@@ -13,6 +13,7 @@ import { CHARGE_MATERIAL_UNITS } from '../charge-material-units';
 import { ChargeMaterial, GasChargeMaterial } from '../../../../../shared/models/phast/losses/chargeMaterial';
 import { LossFieldDifferences, nestedDifferences } from '../../loss-compare.util';
 import { ProcessHeatingUiService } from '../../../../services/process-heating-ui.service';
+import { adaptGasLoadMaterialDb } from '../material-db.adapters';
 
 @Component({
   selector: 'app-charge-material-gas-form',
@@ -35,7 +36,7 @@ export class ChargeMaterialGasFormComponent implements OnInit {
   readonly materialSelector = new MaterialSelector<GasLoadChargeMaterial, GasMaterialForm>({
     form: this.form,
     settings: this.settings,
-    dbService: inject(GasLoadMaterialDbService),
+    dbService: adaptGasLoadMaterialDb(inject(GasLoadMaterialDbService)),
     destroyRef: this.destroyRef,
     modalDialogService: inject(ModalDialogService),
     injector: inject(Injector),
@@ -43,19 +44,14 @@ export class ChargeMaterialGasFormComponent implements OnInit {
     setProperties: (material, form, settings) => form.patchValue({
       specificHeatOfGas: convertDbValue(material.specificHeatVapor, CHARGE_MATERIAL_UNITS.specificHeat, settings),
     }),
+    needsMaterialProperties: form => form.controls.specificHeatOfGas.value == null,
     buildRecoveryProperties: (v, settings) => ({
       specificHeatVapor: convertForSave(v.specificHeatOfGas, CHARGE_MATERIAL_UNITS.specificHeat, settings),
     }),
   });
 
   ngOnInit(): void {
-    this.materialSelector.loadMaterials(materials => {
-      const materialId = this.form().controls.materialId.value;
-      const material = materials.find(m => m.id === materialId);
-      if (material && this.form().controls.specificHeatOfGas.value == null) {
-        this.materialSelector.applyMaterial(material);
-      }
-    });
+    this.materialSelector.loadMaterials();
 
     this.form().controls.chargeMaterialDischargeTemperature.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef),

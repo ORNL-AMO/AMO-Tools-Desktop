@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FLUE_GAS_COMPONENTS, FLUE_GAS_FUEL_ANALYSIS, FlueGasFormService, FlueGasType, isFlueGasMassForm, OxygenCalculationMethod } from './flue-gas-form.service';
 
@@ -11,7 +10,7 @@ describe('FlueGasFormService', () => {
   let service: FlueGasFormService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ imports: [ReactiveFormsModule], providers: [FlueGasFormService, ConvertUnitsService] });
+    TestBed.configureTestingModule({ imports: [ReactiveFormsModule], providers: [FlueGasFormService] });
     service = TestBed.inject(FlueGasFormService);
   });
 

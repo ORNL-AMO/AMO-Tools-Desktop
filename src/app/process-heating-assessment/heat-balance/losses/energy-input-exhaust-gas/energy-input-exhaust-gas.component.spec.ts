@@ -7,6 +7,7 @@ import { SharedPipesModule } from '../../../../shared/shared-pipes/shared-pipes.
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { ProcessHeatingValidityService } from '../../../services/process-heating-validity.service';
 import { Settings } from '../../../../shared/models/settings';
+import { EM_DASH } from '../../../constants/display-text';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -188,7 +189,7 @@ describe('EnergyInputExhaustGasComponent', () => {
       lossesSignal.set([item]);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('.loss-results').textContent).toContain('——');
+      expect(fixture.nativeElement.querySelector('.loss-results').textContent).toContain(EM_DASH + EM_DASH);
     });
 
     it('hides the total when there are no losses', () => {

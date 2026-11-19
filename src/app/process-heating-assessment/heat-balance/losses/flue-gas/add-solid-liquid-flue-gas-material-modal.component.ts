@@ -3,12 +3,12 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { startWith, take } from 'rxjs';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { SolidLiquidMaterialDbService } from '../../../../indexedDb/solid-liquid-material-db.service';
 import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
 import { MaterialModalData } from '../../../models/material-modal-data';
-import { adaptSolidLiquidFlueGasMaterialDb } from './flue-gas-material-db.adapter';
+import { adaptSolidLiquidFlueGasMaterialDb } from '../charge-material/material-db.adapters';
 import { DIFFERENCE_TOLERANCE_PERCENT, FLUE_GAS_FUEL_ANALYSIS, PERCENT_VALIDATORS } from './flue-gas-form.service';
 
 @Component({
@@ -24,7 +24,6 @@ export class AddSolidLiquidFlueGasMaterialModalComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly processHeatingApiService = inject(ProcessHeatingApiService);
   private readonly materialDb = adaptSolidLiquidFlueGasMaterialDb(inject(SolidLiquidMaterialDbService));
-  private readonly convertUnitsService = inject(ConvertUnitsService);
 
   readonly settings = this.data.settings;
   readonly fuelAnalysis = FLUE_GAS_FUEL_ANALYSIS;
@@ -55,12 +54,12 @@ export class AddSolidLiquidFlueGasMaterialModalComponent {
     const heatingValue = this.processHeatingApiService.flueGasByMassCalculateHeatingValue(analysis);
     if (Number.isNaN(heatingValue)) return null;
     return this.settings.unitsOfMeasure === 'Metric'
-      ? this.convertUnitsService.value(heatingValue).from('btuLb').to('kJkg')
+      ? new ConvertValue(heatingValue, 'btuLb', 'kJkg').convertedValue
       : heatingValue;
   });
 
   constructor() {
-    this.materialDb.getAllWithObservable().pipe(take(1), takeUntilDestroyed()).subscribe(materials => this.materials.set(materials));
+    this.materialDb.materials().pipe(take(1), takeUntilDestroyed()).subscribe(materials => this.materials.set(materials));
   }
 
   /** Starts a new fuel from an existing one, marked "(mod)" so the name stays distinct. */
@@ -77,7 +76,7 @@ export class AddSolidLiquidFlueGasMaterialModalComponent {
     const { substance, ...analysis } = this.form.getRawValue();
     const heatingValue = this.processHeatingApiService.flueGasByMassCalculateHeatingValue(analysis);
     const material: SolidLiquidFlueGasMaterial = { substance, ...analysis, heatingValue, isDefault: false };
-    this.materialDb.addWithObservable(material).subscribe(inserted => this.dialogRef.close(inserted));
+    this.materialDb.addMaterial(material).subscribe(inserted => this.dialogRef.close(inserted));
   }
 
   close(): void {

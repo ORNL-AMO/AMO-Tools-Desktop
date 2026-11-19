@@ -1,10 +1,8 @@
 // Guards against unnoticed drift between the legacy golden-master fixtures/snapshots
 // (src/app/phast/snapshot-tests/) and the copies ported into process-heating-assessment
-// (src/app/process-heating-assessment/snapshot-tests/). See
-// .prompts/.process-heating-upgrade/refactor-plan/step-4-golden-master-test-infrastructure-plan.md:
-// the new module's suite carries extra fixtures (Steam/EAF/Custom Electrotechnology) legacy doesn't
-// have, so this only compares the filenames present on both sides — it is not a directory-listing
-// equality check.
+// (src/app/process-heating-assessment/snapshot-tests/). The new module's suite carries extra
+// fixtures (Steam/EAF/Custom Electrotechnology) legacy doesn't have, so this only compares the
+// filenames present on both sides — it is not a directory-listing equality check.
 const fs = require('fs');
 const path = require('path');
 const isEqual = require('lodash/isEqual');

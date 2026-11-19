@@ -1,7 +1,6 @@
 import { signal, WritableSignal } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { TestBed } from '@angular/core/testing';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { FlueGas } from '../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../shared/models/settings';
 import { SettingsService } from '../../settings/settings.service';
@@ -84,7 +83,6 @@ describe('ProcessHeatingValidityService', () => {
         GasLeakageFormService, ExtendedSurfaceFormService, OtherFormService, SlagFormService, EnergyInputFormService,
         ExhaustGasFormService, EnergyInputExhaustGasFormService, MeteredEnergyFormService, DesignedEnergyFormService,
         AuxiliaryEquipmentFormService,
-        ConvertUnitsService,
         {
           provide: ProcessHeatingAssessmentService,
           useValue: {

@@ -1,7 +1,6 @@
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FlueGas } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
@@ -39,7 +38,6 @@ describe('FlueGasService', () => {
       providers: [
         FlueGasService,
         FlueGasFormService,
-        ConvertUnitsService,
         { provide: FlueGasCalculationService, useValue: calculationSpy },
         {
           provide: ProcessHeatingAssessmentService,

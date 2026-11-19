@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReportTableCellPipe } from '../../../shared/pipes/report-table-cell.pipe';
 import { InputSummaryComponent } from './input-summary.component';
 import { InputSummaryResultsService, InputSummaryUI } from './input-summary-results.service';
+import { UNIT_SYMBOL } from '../../constants/display-text';
 
 function buildUI(): InputSummaryUI {
   return {
@@ -13,8 +14,8 @@ function buildUI(): InputSummaryUI {
       sections: [{
         label: 'Wall Loss 1: North wall',
         rows: [
-          { label: 'Ambient Temperature', units: '℉', baseline: { value: 80 }, modifications: [{ value: 80 }] },
-          { label: 'Average Surface Temperature', units: '℉', baseline: { value: 300 }, modifications: [{ value: 250 }] },
+          { label: 'Ambient Temperature', units: UNIT_SYMBOL.fahrenheit, baseline: { value: 80 }, modifications: [{ value: 80 }] },
+          { label: 'Average Surface Temperature', units: UNIT_SYMBOL.fahrenheit, baseline: { value: 300 }, modifications: [{ value: 250 }] },
         ],
       }],
     }, {
@@ -56,7 +57,7 @@ describe('InputSummaryComponent', () => {
 
   it('renders section headers and rows with units', () => {
     expect(text()).toContain('Wall Loss 1: North wall');
-    expect(text()).toContain('Ambient Temperature (℉)');
+    expect(text()).toContain(`Ambient Temperature (${UNIT_SYMBOL.fahrenheit})`);
   });
 
   it('renders one card per category with its entry count', () => {

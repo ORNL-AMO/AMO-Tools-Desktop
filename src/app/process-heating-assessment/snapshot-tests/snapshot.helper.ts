@@ -2,14 +2,14 @@
  * snapshot.helper.ts
  *
  * Wires up the full PhastResultsService chain via direct instantiation (no TestBed).
- * All services in the chain take only UntypedFormBuilder and/or ConvertUnitsService —
+ * All services in the chain take only UntypedFormBuilder and/or ConvertUnitsService -
  * no IndexedDB dependencies are needed for the fuel-fired By Volume heating system configuration.
  *
  * ProcessHeatingResultsService.getResults() delegates to this exact PhastResultsService.getResults()
- * call (see services/process-heating-results.service.ts) — these snapshots exercise that same
+ * call (see services/process-heating-results.service.ts) - these snapshots exercise that same
  * calculation surface directly, skipping the thin null-guard wrapper.
  *
- * Usage: call buildPhastServices() in a beforeAll — it initializes WASM internally.
+ * Usage: call buildPhastServices() in a beforeAll - it initializes WASM internally.
  */
 import { UntypedFormBuilder } from '@angular/forms';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
@@ -126,9 +126,9 @@ export async function buildPhastServices(options: PhastServiceOptions = {}): Pro
     convertUnitsService,
     new EnergyInputExhaustGasService(fb),
     new EnergyInputService(fb, convertUnitsService),
-    (options.solidLiquidMaterialDbService ?? createFixtureFuelDb()) as any, // SolidLiquidMaterialDbService — only the By Mass flue gas path uses it
+    (options.solidLiquidMaterialDbService ?? createFixtureFuelDb()) as any, // SolidLiquidMaterialDbService - only the By Mass flue gas path uses it
     new Co2SavingsPhastService(convertUnitsService, fb),
-    null as any, // FlueGasMaterialDbService — not used in getResults()
+    null as any, // FlueGasMaterialDbService - not used in getResults()
   );
 
   return { phastResultsService, phastService, processHeatingApiService, convertUnitsService };

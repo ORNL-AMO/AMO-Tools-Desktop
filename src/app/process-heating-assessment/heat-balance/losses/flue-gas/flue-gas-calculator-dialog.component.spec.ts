@@ -3,7 +3,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SigFigsPipe } from '../../../../shared/shared-pipes/sig-figs.pipe';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FlueGasCalculationService } from './flue-gas-calculation.service';
 import { FlueGasCalculatorDialogComponent } from './flue-gas-calculator-dialog.component';
@@ -30,7 +29,6 @@ describe('FlueGasCalculatorDialogComponent', () => {
       imports: [FormsModule, ReactiveFormsModule],
       declarations: [FlueGasCalculatorDialogComponent, SigFigsPipe],
       providers: [
-        ConvertUnitsService,
         { provide: DialogRef, useValue: dialogRefSpy },
         { provide: DIALOG_DATA, useValue: { settings: MOCK_SETTINGS } },
       ],

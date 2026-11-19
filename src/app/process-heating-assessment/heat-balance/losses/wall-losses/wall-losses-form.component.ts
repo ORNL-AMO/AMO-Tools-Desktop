@@ -4,7 +4,7 @@ import { generateFormControlIds } from '../../../../shared/helperFunctions';
 import { Settings } from '../../../../shared/models/settings';
 import { WallLossForm, WallLossesFormService } from './wall-losses-form.service';
 import { WallLossItem, WallLossesService } from './wall-losses.service';
-import { WallLoss } from '../../../models/wall-loss';
+import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
 import { LossFieldDifferences } from '../loss-compare.util';
 import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 
@@ -24,7 +24,7 @@ export class WallLossesFormComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly uiService = inject(ProcessHeatingUiService);
 
-  readonly surfaceOptions = computed(() => this.wallLossesService.surfaceOptions());
+  readonly surfaceOptions = this.wallLossesService.surfaceOptions;
   readonly form = computed(() => this.item().form as WallLossForm);
   readonly controlIds = computed(() => generateFormControlIds(this.form().controls));
 

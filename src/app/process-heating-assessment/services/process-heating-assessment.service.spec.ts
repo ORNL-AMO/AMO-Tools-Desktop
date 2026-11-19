@@ -171,7 +171,7 @@ describe('ProcessHeatingAssessmentService', () => {
     it('leaves stored data untouched when neither unit changed', async () => {
       const before = service.processHeatingSignal();
 
-      await service.saveSettings({ ...imperial, currency: '€' });
+      await service.saveSettings({ ...imperial, currency: '\u20AC' });
 
       expect(service.processHeatingSignal()).toBe(before);
     });
@@ -203,7 +203,7 @@ describe('ProcessHeatingAssessmentService', () => {
       assessmentDb.updateWithObservable.and.returnValue(throwError(() => new Error('write failed')));
 
       await expectAsync(service.saveSettings(metric)).toBeRejectedWithError('write failed');
-      await service.saveSettings({ ...metric, currency: '€' });
+      await service.saveSettings({ ...metric, currency: '\u20AC' });
 
       expect(settingsDb.updateWithObservable).toHaveBeenCalledTimes(1);
     });
@@ -225,14 +225,14 @@ describe('ProcessHeatingAssessmentService', () => {
     });
 
     it('does not write the assessment immediately when nothing was converted', async () => {
-      await service.saveSettings({ ...imperial, currency: '€' });
+      await service.saveSettings({ ...imperial, currency: '\u20AC' });
 
       expect(assessmentDb.updateWithObservable).not.toHaveBeenCalled();
     });
 
     it('reports whether stored values were converted', async () => {
       expect(await service.saveSettings(metric)).toBeTrue();
-      expect(await service.saveSettings({ ...metric, currency: '€' })).toBeFalse();
+      expect(await service.saveSettings({ ...metric, currency: '\u20AC' })).toBeFalse();
     });
 
     it('reports no conversion when only lossDataUnits changes', async () => {

@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flushMicrotasks, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { AddSolidMaterialModalComponent } from './add-solid-material-modal.component';
 import { SolidLoadMaterialDbService } from '../../../../../indexedDb/solid-load-material-db.service';
 import { MaterialModalData } from '../../../../models/material-modal-data';
@@ -36,8 +36,8 @@ describe('AddSolidMaterialModalComponent', () => {
 
   beforeEach(async () => {
     MOCK_SETTINGS.unitsOfMeasure = 'Imperial';
-    dbServiceSpy = jasmine.createSpyObj('SolidLoadMaterialDbService', ['addWithObservable', 'getAllWithObservable']);
-    dbServiceSpy.getAllWithObservable.and.returnValue(new BehaviorSubject<SolidLoadChargeMaterial[]>([EXISTING_MATERIAL]));
+    dbServiceSpy = jasmine.createSpyObj('SolidLoadMaterialDbService', ['addMaterial'], { dbSolidLoadChargeMaterials: new BehaviorSubject<SolidLoadChargeMaterial[]>([EXISTING_MATERIAL]) });
+    dbServiceSpy.addMaterial.and.resolveTo(3);
     dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
 
     await TestBed.configureTestingModule({
@@ -95,30 +95,30 @@ describe('AddSolidMaterialModalComponent', () => {
   describe('save', () => {
     it('does not call the database service when the form is invalid', () => {
       component.save();
-      expect(dbServiceSpy.addWithObservable).not.toHaveBeenCalled();
+      expect(dbServiceSpy.addMaterial).not.toHaveBeenCalled();
     });
 
     it('adds the material to the database with the form values when valid', () => {
       fillValidForm(component.form);
-      dbServiceSpy.addWithObservable.and.returnValue(of({ id: 3, ...VALID_FORM_VALUE, isDefault: false }));
 
       component.save();
 
-      expect(dbServiceSpy.addWithObservable).toHaveBeenCalledWith(jasmine.objectContaining({
+      expect(dbServiceSpy.addMaterial).toHaveBeenCalledWith(jasmine.objectContaining({
         ...VALID_FORM_VALUE,
         isDefault: false,
       }));
     });
 
-    it('closes the dialog with the inserted material once the database call completes', () => {
+    it('closes the dialog with the inserted material once the database call completes', fakeAsync(() => {
       fillValidForm(component.form);
       const inserted: SolidLoadChargeMaterial = { id: 3, ...VALID_FORM_VALUE, isDefault: false };
-      dbServiceSpy.addWithObservable.and.returnValue(of(inserted));
 
       component.save();
 
+      flushMicrotasks();
+
       expect(dialogRefSpy.close).toHaveBeenCalledWith(inserted);
-    });
+    }));
   });
 
   describe('close', () => {

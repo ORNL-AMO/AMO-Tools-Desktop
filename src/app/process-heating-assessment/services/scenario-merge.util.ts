@@ -42,7 +42,7 @@ export function getEffectivePhast(baseline: PHAST, modification: ProcessHeatingM
 // Materializes every loss key as an explicit own-property (even `undefined`) rather than only the
 // keys `losses` happens to have. A key that's absent from `losses` (never saved yet) would otherwise
 // stay absent from the snapshot too, and getEffectivePhast()'s spread only overrides keys diff.losses
-// actually owns — so an absent key silently falls through to baseline's live value the first time
+// actually owns - so an absent key silently falls through to baseline's live value the first time
 // that loss type is saved there, unfreezing a snapshot that was supposed to be frozen for good.
 function fullLossSnapshot(losses: Losses | undefined): Losses {
   const snapshot = {} as Losses;
@@ -114,7 +114,7 @@ function ensureLossIds<T extends WithId>(items: T[] | undefined): T[] | undefine
 }
 
 // A modification's override for one of these loss types, when present, is a full-array replacement
-// representing the same physical losses in the same order as baseline (see getEffectivePhast()) —
+// representing the same physical losses in the same order as baseline (see getEffectivePhast()) -
 // true in particular for legacy migrations, which clone the array in place rather than reordering
 // it. Backfilling ids here independently of baseline would break the by-id lookups every consumer
 // (Explore Opportunities comparisons, per-item updates) relies on, so align by position instead.

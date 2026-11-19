@@ -38,7 +38,7 @@ export type LiquidCoolingForm = FormGroup<{
 
 export type CoolingForm = GasCoolingForm | LiquidCoolingForm;
 
-// Legacy defaults for Air and Water: specific heat Btu/(lb-°F) or kJ/(kg-°C); density lb/scf or kg/Nm³
+// Legacy defaults for Air and Water: specific heat Btu/(lb-deg F) or kJ/(kg-deg C); density lb/scf or kg/Nm3
 // for air, lb/gal or kg/L for water. "Other" media start blank.
 const AIR_DEFAULTS = { Imperial: { specificHeat: 0.2371, density: 0.074887 }, Metric: { specificHeat: 0.993, density: 1.2 } };
 const WATER_DEFAULTS = { Imperial: { specificHeat: 1, density: 8.338 }, Metric: { specificHeat: 4.187, density: 0.999 } };
@@ -56,7 +56,7 @@ export function isGasCoolingForm(form: CoolingForm): form is GasCoolingForm {
 }
 
 /** Gas stores its outlet under both `finalTemperature` (what the calculation reads) and
- * `outletTemperature` (what the warnings check reads) — every writer keeps them mirrored via this. */
+ * `outletTemperature` (what the warnings check reads) - every writer keeps them mirrored via this. */
 export function gasOutletTemperatureFields(value: number | undefined): Pick<GasCoolingLoss, 'finalTemperature' | 'outletTemperature'> {
   return { finalTemperature: value, outletTemperature: value };
 }

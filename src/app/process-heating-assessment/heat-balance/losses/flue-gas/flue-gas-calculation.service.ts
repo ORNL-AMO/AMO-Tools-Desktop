@@ -5,6 +5,12 @@ import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
 import { OxygenCalculationMethod } from './flue-gas-form.service';
 
+/**
+ * Legacy cut-off for O2 in flue gas (percent): excess air grows without bound as O2 nears air's ~21%,
+ * so above this excess air is reported as 0. Separate from the form's stricter entry limit.
+ */
+const MAX_O2_FOR_EXCESS_AIR_PERCENT = 20.99999;
+
 /** All values in percent. */
 export interface FlueGasAvailableHeatResult {
   calculatedFlueGasO2: number;
@@ -65,7 +71,7 @@ export class FlueGasCalculationService {
       o2: input.o2, moisture: input.moisture, nitrogen: input.nitrogen,
     };
     if (input.oxygenCalculationMethod === OxygenCalculationMethod.OxygenInFlueGas) {
-      const outOfRange = input.o2InFlueGas < 0 || input.o2InFlueGas > 20.99999;
+      const outOfRange = input.o2InFlueGas < 0 || input.o2InFlueGas > MAX_O2_FOR_EXCESS_AIR_PERCENT;
       const excessAir = outOfRange ? 0 : this.processHeatingApiService.flueGasByMassCalculateExcessAir(
         { ...fuel, o2InFlueGas: input.o2InFlueGas, moistureInAirCombustion: input.moistureInAirCombustion });
       return { o2InFlueGas: input.o2InFlueGas, excessAirPercentage: this.nanToZero(excessAir) };

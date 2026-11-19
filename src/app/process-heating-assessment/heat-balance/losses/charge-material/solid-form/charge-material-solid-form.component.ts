@@ -14,6 +14,7 @@ import { CHARGE_MATERIAL_UNITS } from '../charge-material-units';
 import { ChargeMaterial, SolidChargeMaterial } from '../../../../../shared/models/phast/losses/chargeMaterial';
 import { LossFieldDifferences, nestedDifferences } from '../../loss-compare.util';
 import { ProcessHeatingUiService } from '../../../../services/process-heating-ui.service';
+import { adaptSolidLoadMaterialDb } from '../material-db.adapters';
 
 @Component({
   selector: 'app-charge-material-solid-form',
@@ -37,7 +38,7 @@ export class ChargeMaterialSolidFormComponent implements OnInit {
   readonly materialSelector = new MaterialSelector<SolidLoadChargeMaterial, SolidMaterialForm>({
     form: this.form,
     settings: this.settings,
-    dbService: inject(SolidLoadMaterialDbService),
+    dbService: adaptSolidLoadMaterialDb(inject(SolidLoadMaterialDbService)),
     destroyRef: this.destroyRef,
     modalDialogService: inject(ModalDialogService),
     injector: inject(Injector),
@@ -48,6 +49,7 @@ export class ChargeMaterialSolidFormComponent implements OnInit {
       materialHeatOfLiquid: convertDbValue(material.specificHeatLiquid, CHARGE_MATERIAL_UNITS.specificHeat, settings),
       materialMeltingPoint: convertDbValue(material.meltingPoint, CHARGE_MATERIAL_UNITS.temperature, settings),
     }),
+    needsMaterialProperties: form => form.controls.materialSpecificHeatOfSolidMaterial.value == null,
     buildRecoveryProperties: (v, settings) => ({
       specificHeatSolid: convertForSave(v.materialSpecificHeatOfSolidMaterial, CHARGE_MATERIAL_UNITS.specificHeat, settings),
       latentHeat: convertForSave(v.materialLatentHeatOfFusion, CHARGE_MATERIAL_UNITS.latentHeat, settings),
@@ -57,13 +59,7 @@ export class ChargeMaterialSolidFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.materialSelector.loadMaterials(materials => {
-      const materialId = this.form().controls.materialId.value;
-      const material = materials.find(m => m.id === materialId);
-      if (material && this.form().controls.materialSpecificHeatOfSolidMaterial.value == null) {
-        this.materialSelector.applyMaterial(material);
-      }
-    });
+    this.materialSelector.loadMaterials();
 
     this.form().controls.chargeMaterialDischargeTemperature.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef),

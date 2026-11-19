@@ -1,6 +1,5 @@
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastResults } from '../../../models/phast';
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
@@ -37,7 +36,6 @@ describe('EnergyInputService', () => {
       providers: [
         EnergyInputService,
         EnergyInputFormService,
-        ConvertUnitsService,
         { provide: EnergyInputCalculationService, useValue: calculationServiceSpy },
         { provide: ProcessHeatingAssessmentService, useValue: assessmentServiceSpy },
         { provide: ProcessHeatingResultsService, useValue: resultsServiceSpy },

@@ -4,6 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { EnergyComparisonRow, EnergySummaryResultsService } from '../../report/energy-summary/energy-summary-results.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { EnergyValidationResultsComponent } from './energy-validation-results.component';
+import { EM_DASH } from '../../constants/display-text';
 
 describe('EnergyValidationResultsComponent', () => {
   let fixture: ComponentFixture<EnergyValidationResultsComponent>;
@@ -31,7 +32,7 @@ describe('EnergyValidationResultsComponent', () => {
     comparison.set([{ label: 'Energy Used', unit: 'MMBtu/hr', calculated: undefined, metered: 9, designed: 11 }]);
     fixture.detectChanges();
 
-    expect(cells()).toEqual([['Energy Used (MMBtu/hr)', '— —', '9.00', '11.00']]);
+    expect(cells()).toEqual([['Energy Used (MMBtu/hr)', `${EM_DASH} ${EM_DASH}`, '9.00', '11.00']]);
   });
 
   it('rounds to whole numbers for small energy units, like the heat balance results', () => {

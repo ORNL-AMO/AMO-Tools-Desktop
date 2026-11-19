@@ -41,10 +41,10 @@ export class InputSummaryResultsService {
   private readonly modificationService = inject(ModificationService);
   private readonly lookups: Signal<InputSummaryLookups> = toSignal(
     combineLatest([
-      inject(SolidLoadMaterialDbService).getAllWithObservable(),
-      inject(LiquidLoadMaterialDbService).getAllWithObservable(),
-      inject(GasLoadMaterialDbService).getAllWithObservable(),
-      inject(WallLossesSurfaceDbService).getAllWithObservable(),
+      inject(SolidLoadMaterialDbService).dbSolidLoadChargeMaterials,
+      inject(LiquidLoadMaterialDbService).dbLiquidLoadChargeMaterials,
+      inject(GasLoadMaterialDbService).dbGasLoadChargeMaterials,
+      inject(WallLossesSurfaceDbService).dbWallLossesSurfaceMaterials,
     ]).pipe(map(([solidMaterials, liquidMaterials, gasMaterials, wallSurfaces]) => ({ solidMaterials, liquidMaterials, gasMaterials, wallSurfaces }))),
     { initialValue: EMPTY_LOOKUPS }
   );

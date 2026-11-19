@@ -18,11 +18,11 @@
     <div class="loss-results result-strip card-body p-2">
       <div class="result-item">
         <span class="result-label">Gross Heat</span>
-        <span class="result-value">@if (results(); as r) { {{r.grossHeat | sigFigs: 6}} {{resultsUnit}} } @else { —— }</span>
+        <span class="result-value">@if (results(); as r) { {{r.grossHeat | sigFigs: 6}} {{resultsUnit}} } @else { &mdash;&mdash; }</span>
       </div>
       <div class="result-item">
         <span class="result-label">System Losses</span>
-        <span class="result-value">@if (results(); as r) { {{r.systemLosses | sigFigs: 6}} {{resultsUnit}} } @else { —— }</span>
+        <span class="result-value">@if (results(); as r) { {{r.systemLosses | sigFigs: 6}} {{resultsUnit}} } @else { &mdash;&mdash; }</span>
       </div>
     </div>
   </div>

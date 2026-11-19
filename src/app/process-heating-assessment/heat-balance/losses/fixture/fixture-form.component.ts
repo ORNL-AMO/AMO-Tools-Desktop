@@ -12,6 +12,7 @@ import { FixtureForm } from './fixture-form.service';
 import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss';
 import { LossFieldDifferences } from '../loss-compare.util';
 import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
+import { adaptSolidLoadMaterialDb } from '../charge-material/material-db.adapters';
 
 @Component({
   selector: 'app-fixture-form',
@@ -32,7 +33,7 @@ export class FixtureFormComponent implements OnInit {
   readonly materialSelector = new MaterialSelector<SolidLoadChargeMaterial, FixtureForm>({
     form: this.form,
     settings: this.settings,
-    dbService: inject(SolidLoadMaterialDbService),
+    dbService: adaptSolidLoadMaterialDb(inject(SolidLoadMaterialDbService)),
     destroyRef: inject(DestroyRef),
     modalDialogService: inject(ModalDialogService),
     injector: inject(Injector),
@@ -43,6 +44,7 @@ export class FixtureFormComponent implements OnInit {
       meltingPoint: convertDbValue(material.meltingPoint, CHARGE_MATERIAL_UNITS.temperature, settings),
       specificHeatLiquid: convertDbValue(material.specificHeatLiquid, CHARGE_MATERIAL_UNITS.specificHeat, settings),
     }),
+    needsMaterialProperties: form => form.controls.specificHeat.value == null,
     buildRecoveryProperties: (v, settings) => ({
       specificHeatSolid: convertForSave(v.specificHeat, CHARGE_MATERIAL_UNITS.specificHeat, settings),
       latentHeat: convertForSave(v.latentHeat, CHARGE_MATERIAL_UNITS.latentHeat, settings),
@@ -52,13 +54,7 @@ export class FixtureFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.materialSelector.loadMaterials(materials => {
-      const materialId = this.form().controls.materialId.value;
-      const material = materials.find(m => m.id === materialId);
-      if (material && this.form().controls.specificHeat.value == null) {
-        this.materialSelector.applyMaterial(material);
-      }
-    });
+    this.materialSelector.loadMaterials();
   }
 
   differs(formValue: number, dbValue: number | undefined): boolean {

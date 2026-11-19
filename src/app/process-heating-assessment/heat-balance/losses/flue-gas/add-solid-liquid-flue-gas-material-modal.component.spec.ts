@@ -3,7 +3,6 @@ import { fakeAsync, flushMicrotasks, ComponentFixture, TestBed } from '@angular/
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { SigFigsPipe } from '../../../../shared/shared-pipes/sig-figs.pipe';
 import { SolidLiquidMaterialDbService } from '../../../../indexedDb/solid-liquid-material-db.service';
 import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
@@ -38,7 +37,6 @@ describe('AddSolidLiquidFlueGasMaterialModalComponent', () => {
       imports: [ReactiveFormsModule],
       declarations: [AddSolidLiquidFlueGasMaterialModalComponent, SigFigsPipe],
       providers: [
-        ConvertUnitsService,
         { provide: DIALOG_DATA, useValue: MOCK_DATA },
         { provide: DialogRef, useValue: dialogRefSpy },
         { provide: SolidLiquidMaterialDbService, useValue: dbServiceSpy },

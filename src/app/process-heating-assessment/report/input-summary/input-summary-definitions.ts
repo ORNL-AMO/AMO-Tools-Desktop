@@ -5,6 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { Losses, PHAST } from '../../models/phast';
 import { AuxiliaryEquipmentItem } from '../../../shared/models/phast/auxEquipment';
 import { AUXILIARY_EQUIPMENT_MEASUREMENT_METHOD_LABELS, AuxiliaryEquipmentMeasurementMethod } from '../../models/auxiliary-equipment';
+import { CHEMICAL_FORMULA, UNIT_SYMBOL } from '../../constants/display-text';
 
 export type SummaryValue = string | number | undefined | null;
 type UnitPair = readonly [imperial: string, metric: string];
@@ -44,9 +45,9 @@ interface ScenarioSectionDefinition {
 
 export type SectionDefinition = LossSectionDefinition<any> | ScenarioSectionDefinition;
 
-const TEMPERATURE: UnitPair = ['℉', '℃'];
-const AREA: UnitPair = ['ft²', 'm²'];
-const SPECIFIC_HEAT: UnitPair = ['Btu/(lb-℉)', 'kJ/(kg-℃)'];
+const TEMPERATURE: UnitPair = [UNIT_SYMBOL.fahrenheit, UNIT_SYMBOL.celsius];
+const AREA: UnitPair = [UNIT_SYMBOL.squareFeet, UNIT_SYMBOL.squareMeters];
+const SPECIFIC_HEAT: UnitPair = [`Btu/(lb-${UNIT_SYMBOL.fahrenheit})`, `kJ/(kg-${UNIT_SYMBOL.celsius})`];
 const MASS_FLOW: UnitPair = ['lb/hr', 'kg/hr'];
 const LENGTH_SMALL: UnitPair = ['in', 'mm'];
 const PERCENT = '%';
@@ -212,7 +213,7 @@ export const SECTION_DEFINITIONS: SectionDefinition[] = [
       prop('Specific Heat of Gas', 'specificHeat', SPECIFIC_HEAT),
       prop('Inlet Temperature', 'inletTemperature', TEMPERATURE),
       prop('Outlet Temperature', 'outletTemperature', TEMPERATURE),
-      prop('Flow Rate', 'flowRate', ['ft³/hr', 'm³/hr']),
+      prop('Flow Rate', 'flowRate', [`${UNIT_SYMBOL.cubicFeet}/hr`, `${UNIT_SYMBOL.cubicMeters}/hr`]),
       prop('Correction Factor', 'correctionFactor'),
     ],
   },
@@ -252,9 +253,9 @@ export const SECTION_DEFINITIONS: SectionDefinition[] = [
     fields: [
       prop('Cooling Medium', 'coolingLossType'),
       field('Specific Heat', SPECIFIC_HEAT, item => (item.gasCoolingLoss ?? item.liquidCoolingLoss)?.specificHeat),
-      field('Gas Density', ['lb/scf', 'kg/Nm³'], item => item.gasCoolingLoss?.gasDensity),
+      field('Gas Density', ['lb/scf', `kg/${UNIT_SYMBOL.normalCubicMeters}`], item => item.gasCoolingLoss?.gasDensity),
       field('Liquid Density', ['lb/gal', 'kg/L'], item => item.liquidCoolingLoss?.density),
-      field('Gas Flow', ['scfm', 'Nm³/min'], item => item.gasCoolingLoss?.flowRate),
+      field('Gas Flow', ['scfm', `${UNIT_SYMBOL.normalCubicMeters}/min`], item => item.gasCoolingLoss?.flowRate),
       field('Liquid Flow', ['gal/min', 'L/min'], item => item.liquidCoolingLoss?.flowRate),
       field('Inlet Temperature', TEMPERATURE, item => (item.gasCoolingLoss ?? item.liquidCoolingLoss)?.initialTemperature),
       field('Outlet Temperature', TEMPERATURE, item => item.coolingLossType === 'Gas' ? item.gasCoolingLoss?.outletTemperature : item.liquidCoolingLoss?.outletTemperature),
@@ -268,7 +269,7 @@ export const SECTION_DEFINITIONS: SectionDefinition[] = [
     // Gas Leakage is a fuel-fired step, the same scenarios Flue Gas is shown for
     isVisible: categories => categories.showFlueGas,
     fields: [
-      prop('Furnace Draft Pressure', 'draftPressure', ['in. H₂O', 'Pa']),
+      prop('Furnace Draft Pressure', 'draftPressure', [`in. ${CHEMICAL_FORMULA.H2O}`, 'Pa']),
       prop('Opening Area', 'openingArea', AREA),
       prop('Temperature of Leaking Gases', 'leakageGasTemperature', TEMPERATURE),
       prop('Specific Gravity of Flue Gas', 'specificGravity'),
@@ -285,7 +286,7 @@ export const SECTION_DEFINITIONS: SectionDefinition[] = [
       field('Flue Gas Temperature', TEMPERATURE, item => (item.flueGasByVolume ?? item.flueGasByMass)?.flueGasTemperature),
       field('Oxygen Calculation Method', undefined, item => (item.flueGasByVolume ?? item.flueGasByMass)?.oxygenCalculationMethod),
       field('Excess Air', PERCENT, item => (item.flueGasByVolume ?? item.flueGasByMass)?.excessAirPercentage),
-      field('O₂ in Flue Gas', PERCENT, item => (item.flueGasByVolume ?? item.flueGasByMass)?.o2InFlueGas),
+      field(`${CHEMICAL_FORMULA.O2} in Flue Gas`, PERCENT, item => (item.flueGasByVolume ?? item.flueGasByMass)?.o2InFlueGas),
       field('Combustion Air Temperature', TEMPERATURE, item => (item.flueGasByVolume ?? item.flueGasByMass)?.combustionAirTemperature),
       field('Fuel Temperature', TEMPERATURE, item => (item.flueGasByVolume ?? item.flueGasByMass)?.fuelTemperature),
       field('Ambient Air Temperature', TEMPERATURE, item => (item.flueGasByVolume ?? item.flueGasByMass)?.ambientAirTemp),
@@ -324,8 +325,8 @@ export const SECTION_DEFINITIONS: SectionDefinition[] = [
     fields: [
       prop('Off (Exhaust) Gas Temperature', 'offGasTemp', TEMPERATURE),
       prop('CO', 'CO', PERCENT),
-      prop('H₂', 'H2', PERCENT),
-      prop('Combustible Gas as CH₄', 'combustibleGases', PERCENT),
+      prop(CHEMICAL_FORMULA.H2, 'H2', PERCENT),
+      prop(`Combustible Gas as ${CHEMICAL_FORMULA.CH4}`, 'combustibleGases', PERCENT),
       prop('Total Volumetric Flow Rate', 'vfr'),
       prop('Dust Loading', 'dustLoading'),
       prop('Other Losses', 'otherLosses'),

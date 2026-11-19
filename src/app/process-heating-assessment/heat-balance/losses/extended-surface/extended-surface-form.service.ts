@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ExtendedSurface } from '../../../models/extended-surface';
+import { ExtendedSurface } from '../../../../shared/models/phast/losses/extendedSurface';
+import { DEFAULT_SURFACE_EMISSIVITY } from '../../../constants/surface-emissivity';
 
 export type ExtendedSurfaceForm = FormGroup<{
   surfaceArea: FormControl<number | null>;
@@ -10,7 +11,7 @@ export type ExtendedSurfaceForm = FormGroup<{
 }>;
 
 /** Starting values for a new entry; a saved entry rebuilds from exactly what was saved so a cleared field stays invalid. */
-export const NEW_EXTENDED_SURFACE: ExtendedSurface = { surfaceEmissivity: 0.9 };
+export const NEW_EXTENDED_SURFACE: ExtendedSurface = { surfaceEmissivity: DEFAULT_SURFACE_EMISSIVITY };
 
 @Injectable()
 export class ExtendedSurfaceFormService {

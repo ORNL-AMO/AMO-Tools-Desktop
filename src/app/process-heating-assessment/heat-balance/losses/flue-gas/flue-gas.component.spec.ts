@@ -11,6 +11,7 @@ import { FlueGasComponent } from './flue-gas.component';
 import { FlueGasForm, FlueGasType } from './flue-gas-form.service';
 import { FlueGasService } from './flue-gas.service';
 import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
+import { EM_DASH } from '../../../constants/display-text';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 @Component({ selector: 'app-flue-gas-volume-form', template: '<ng-content></ng-content>', standalone: false })
@@ -138,7 +139,7 @@ describe('FlueGasComponent', () => {
       formList.set([{} as FlueGasForm]);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('.loss-results').textContent).toContain('——');
+      expect(fixture.nativeElement.querySelector('.loss-results').textContent).toContain(EM_DASH + EM_DASH);
     });
 
     it('shows the calculated values from the service result', () => {

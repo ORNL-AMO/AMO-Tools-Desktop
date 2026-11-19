@@ -1,6 +1,6 @@
 import { OperatingCosts, OperatingHours } from '../../../shared/models/operations';
 import { signal, WritableSignal } from '@angular/core';
-import { of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { GasLoadMaterialDbService } from '../../../indexedDb/gas-load-material-db.service';
 import { LiquidLoadMaterialDbService } from '../../../indexedDb/liquid-load-material-db.service';
 import { SolidLoadMaterialDbService } from '../../../indexedDb/solid-load-material-db.service';
@@ -15,6 +15,7 @@ import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
 import { InputSummaryResultsService, InputSummaryUI } from './input-summary-results.service';
+import { UNIT_SYMBOL } from '../../constants/display-text';
 
 const NO_CATEGORIES: ShowResultsCategories = {
   showSlag: false,
@@ -76,10 +77,10 @@ describe('InputSummaryResultsService', () => {
           },
         },
         { provide: ModificationService, useValue: { modifications } },
-        { provide: SolidLoadMaterialDbService, useValue: { getAllWithObservable: () => of([{ id: 7, substance: 'Carbon Steel' }]) } },
-        { provide: LiquidLoadMaterialDbService, useValue: { getAllWithObservable: () => of([{ id: 7, substance: 'Water' }]) } },
-        { provide: GasLoadMaterialDbService, useValue: { getAllWithObservable: () => of([{ id: 7, substance: 'Nitrogen' }]) } },
-        { provide: WallLossesSurfaceDbService, useValue: { getAllWithObservable: () => of([{ id: 3, surface: 'Vertical Cylinders', conditionFactor: 1.394 }]) } },
+        { provide: SolidLoadMaterialDbService, useValue: { dbSolidLoadChargeMaterials: new BehaviorSubject([{ id: 7, substance: 'Carbon Steel' }]) } },
+        { provide: LiquidLoadMaterialDbService, useValue: { dbLiquidLoadChargeMaterials: new BehaviorSubject([{ id: 7, substance: 'Water' }]) } },
+        { provide: GasLoadMaterialDbService, useValue: { dbGasLoadChargeMaterials: new BehaviorSubject([{ id: 7, substance: 'Nitrogen' }]) } },
+        { provide: WallLossesSurfaceDbService, useValue: { dbWallLossesSurfaceMaterials: new BehaviorSubject([{ id: 3, surface: 'Vertical Cylinders', conditionFactor: 1.394 }]) } },
         {
           provide: ProcessHeatingResultsService,
           useValue: {
@@ -108,9 +109,9 @@ describe('InputSummaryResultsService', () => {
   });
 
   it('uses imperial or metric unit labels', () => {
-    expect(row('Wall Loss 1: North wall', 'Ambient Temperature').units).toBe('℉');
+    expect(row('Wall Loss 1: North wall', 'Ambient Temperature').units).toBe(UNIT_SYMBOL.fahrenheit);
     settings.update(current => ({ ...current, unitsOfMeasure: 'Metric' }));
-    expect(row('Wall Loss 1: North wall', 'Ambient Temperature').units).toBe('℃');
+    expect(row('Wall Loss 1: North wall', 'Ambient Temperature').units).toBe(UNIT_SYMBOL.celsius);
   });
 
   it('omits rows with no value in any scenario', () => {
