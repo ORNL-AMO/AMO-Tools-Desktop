@@ -7,8 +7,7 @@
                     formControlName="electricityCost" (focus)="focusField('electricityCost')">
                 <app-input-unit [defaultUnit]="'$/kWh'"></app-input-unit>
             </div>
-            <app-form-control-errors [control]="electricityCost" [settings]="settings()"
-                [defaultUnit]="'$/kWh'"></app-form-control-errors>
+            <app-form-control-errors [control]="electricityCost"></app-form-control-errors>
         </div>
 
         <div class="form-group">
@@ -19,8 +18,7 @@
                 <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.fuelCost.labelHTML.imperial"
                     [metricUnit]="PROCESS_COOLING_UNITS.fuelCost.labelHTML.metric"></app-input-unit>
             </div>
-            <app-form-control-errors [control]="fuelCost" [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.fuelCost.labelHTML.imperial"
-                [metricUnit]="PROCESS_COOLING_UNITS.fuelCost.labelHTML.metric"></app-form-control-errors>
+            <app-form-control-errors [control]="fuelCost"></app-form-control-errors>
         </div>
     </form>
 
@@ -39,8 +37,7 @@
                 <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial" 
                 [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-input-unit>
             </div>
-            <app-form-control-errors [control]="chilledWaterSupplyTemp" [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
-                [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-form-control-errors>
+            <app-form-control-errors [control]="chilledWaterSupplyTemp"></app-form-control-errors>
         </div>
 
         <div class="form-group">

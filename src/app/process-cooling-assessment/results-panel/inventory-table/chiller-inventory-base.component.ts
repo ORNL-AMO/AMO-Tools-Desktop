@@ -23,7 +23,7 @@ export abstract class ChillerInventoryBaseComponent implements OnInit {
       selectedChiller: this.inventoryService.selectedChiller$,
     }).pipe(
       map(({ processCooling, selectedChiller }) => {
-        this.inventoryService.setInventoryValidState(processCooling.inventory);
+        this.inventoryService.setInventoryValidState(processCooling.inventory, this.processCoolingService.settingsSignal());
         return {
           inventory: processCooling.inventory ?? [],
           selectedChillerId: selectedChiller?.itemId ?? null,

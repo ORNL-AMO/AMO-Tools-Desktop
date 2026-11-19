@@ -9,6 +9,7 @@ import { ProcessCoolingUiService } from "../../../services/process-cooling-ui.se
 import { FormControlIds, generateFormControlIds } from "../../../../shared/helperFunctions";
 import { TEMPERATURE_HTML } from "../../../../shared/app-constants";
 import { PROCESS_COOLING_UNITS } from "../../../constants/process-cooling-units";
+import { PROCESS_COOLING_VALIDATION } from "../../../constants/process-cooling-validation-rules";
 
 @Component({
   selector: 'app-water-cooled',
@@ -84,5 +85,21 @@ export class WaterCooledComponent {
   }
   get followingTempDifferential() {
     return this.form.get('followingTempDifferential');
+  }
+
+  get condenserWaterTempWarning(): string | null {
+    if (this.condenserWaterTemp.invalid) {
+      return null;
+    }
+    return this.systemInformationFormService.getFieldWarning(this.condenserWaterTemp.value,
+      PROCESS_COOLING_VALIDATION.condenserWaterTemp, PROCESS_COOLING_UNITS.temperature, this.settings());
+  }
+
+  get followingTempDifferentialWarning(): string | null {
+    if (this.followingTempDifferential.invalid) {
+      return null;
+    }
+    return this.systemInformationFormService.getFieldWarning(this.followingTempDifferential.value,
+      PROCESS_COOLING_VALIDATION.waterCooledFollowingTempDiffential, PROCESS_COOLING_UNITS.temperatureDifference, this.settings());
   }
 }

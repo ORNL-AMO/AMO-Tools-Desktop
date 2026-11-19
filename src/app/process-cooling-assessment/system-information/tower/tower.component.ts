@@ -10,6 +10,7 @@ import { FormControlIds, generateFormControlIds } from "../../../shared/helperFu
 import { getFanType, getTowerSizeMetrics, getTowerTypes } from "../../constants/process-cooling-constants";
 import { TEMPERATURE_HTML } from "../../../shared/app-constants";
 import { PROCESS_COOLING_UNITS } from "../../constants/process-cooling-units";
+import { PROCESS_COOLING_VALIDATION } from "../../constants/process-cooling-validation-rules";
 
 @Component({
   selector: 'app-tower',
@@ -126,5 +127,13 @@ export class TowerComponent {
   get isFanTypeKnown() { return this.form.get('isFanTypeKnown'); }
   get fanType() { return this.form.get('fanType'); }
   get towerSize() { return this.form.get('towerSize'); }
+
+  get HEXApproachTempWarning(): string | null {
+    if (this.HEXApproachTemp.invalid) {
+      return null;
+    }
+    return this.systemInformationFormService.getFieldWarning(this.HEXApproachTemp.value,
+      PROCESS_COOLING_VALIDATION.HEXApproachTemp, PROCESS_COOLING_UNITS.temperatureDifference, this.settings());
+  }
 
 }

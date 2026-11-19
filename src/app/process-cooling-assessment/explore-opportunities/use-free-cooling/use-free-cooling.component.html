@@ -23,7 +23,7 @@
         </div>
         @if (baselineUsesFreeCooling) {
         <div class="form-group">
-            <label for="baselineIsHEXRequired">Current Is HEX Required</label>
+            <label for="baselineIsHEXRequired">Current Is HX Required</label>
             <select id="baselineIsHEXRequired" class="form-control" [ngModel]="baselineIsHEXRequired"
                 disabled>
                 <option [ngValue]="true">Yes</option>
@@ -32,7 +32,7 @@
         </div>
         @if (baselineIsHEXRequired) {
         <div class="form-group">
-            <label for="baselineHEXApproachTemp">Current HEX Approach Temp</label>
+            <label for="baselineHEXApproachTemp">Current HX Approach Temp</label>
             <div class="input-group">
                 <input type="number" id="baselineHEXApproachTemp" class="form-control" [ngModel]="baselineHEXApproachTemp"
                     readonly disabled>
@@ -57,7 +57,7 @@
             </div>
             @if (usesFreeCooling.value === true) {
             <div class="form-group">
-                <label for="modificationIsHEXRequired">Modified Is HEX Required</label>
+                <label for="modificationIsHEXRequired">Modified Is HX Required</label>
                 <select class="form-control" id="modificationIsHEXRequired" formControlName="isHEXRequired"
                     (focus)="focusField('isHEXRequired')">
                     <option [ngValue]="true">Yes</option>
@@ -66,7 +66,7 @@
             </div>
             @if (isHEXRequired.value === true) {
             <div class="form-group">
-                <label for="modificationHEXApproachTemp">Modified HEX Approach Temp</label>
+                <label for="modificationHEXApproachTemp">Modified HX Approach Temp</label>
                 <div class="input-group">
                     <input type="number" class="form-control" id="modificationHEXApproachTemp"
                         formControlName="HEXApproachTemp" (focus)="focusField('HEXApproachTemp')">

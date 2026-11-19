@@ -13,6 +13,7 @@
         <br>
         <small class="text-muted">
             Enter the average outdoor air temperature used for cooling. This affects condenser performance.
+            The U.S. standard is @if (isMetric()) {35 degrees Celsius} @else {95 degrees Fahrenheit}; other standards could be as high as @if (isMetric()) {40.6 degrees Celsius} @else {105 degrees Fahrenheit}.
         </small>
     </h6>
 </div>
@@ -50,7 +51,11 @@
         <small class="text-muted">
             This value is the difference between the condenser cooling water temperature achieved and the wet-bulb temperature of the air entering the cooling tower (the analysis assumes the condenser temperature achieved is equal to the cooling water temperature supplied to the chiller).  
             The closer the condenser water temperature approaches the air wet-bulb temperature through evaporation in the cooling tower, the more efficiently the chiller will operate.  
-            Select the condenser following temperature differential from the pull-down menu.  Typical values are @if (isMetric()) {3.9 to 5.6 degrees Celsius} @else {7 to 10 degrees Fahrenheit}, and the allowable range is @if (isMetric()) {2.8 to 11.1} @else {5 to 20}.
+            Select the condenser following temperature differential from the pull-down menu.
+            <br><br>Typical values:
+            <ul>
+                <li>@if (isMetric()) {2.8 to 6.7 degrees Celsius} @else {5 to 12 degrees Fahrenheit}</li>
+            </ul>
         </small>
     </h6>
 </div>
@@ -80,8 +85,7 @@
             The condenser water temperature, or CWT, is the constant cooling water
             temperature maintained by the cooling tower and supplied to the chiller. 
             
-            <br><br>A typical value is @if (isMetric()) {29.4 degrees Celsius} @else {85 degrees Fahrenheit}. The
-            allowable range is @if (isMetric()) {18.3 to 32.2 degrees Celsius} @else {65 to 90 degrees Fahrenheit}.
+            <br><br>A typical value is @if (isMetric()) {29.4 degrees Celsius} @else {85 degrees Fahrenheit}.
         </small>
     </h6>
 </div>

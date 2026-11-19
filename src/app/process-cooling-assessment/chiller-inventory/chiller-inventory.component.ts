@@ -37,7 +37,7 @@ export class ChillerInventoryComponent implements OnInit {
   readonly efficiencyLabel: Signal<string> = computed(() => getProcessCoolingUnitLabel('efficiency', this.settings()?.unitsOfMeasure));
   ngOnInit(): void {
     const defaultChillerValues = this.inventoryService.selectedChillerValue ? this.inventoryService.selectedChillerValue : getDefaultInventoryItem();
-    this.form = this.inventoryService.getChillerForm(defaultChillerValues);
+    this.form = this.inventoryService.getChillerForm(defaultChillerValues, this.settings());
     // * Disable until we can populate FLE from a generic compressor db
     this.form.get('isFullLoadEfficiencyKnown').disable();
 
@@ -92,6 +92,9 @@ export class ChillerInventoryComponent implements OnInit {
   }
 
   get fullLoadEfficiencyWarning(): string | null {
+    if (this.form.controls.fullLoadEfficiency.invalid) {
+      return null;
+    }
     return this.inventoryService.getFullLoadEfficiencyWarning(this.form.controls.fullLoadEfficiency.value, this.settings().unitsOfMeasure);
   }
 }
