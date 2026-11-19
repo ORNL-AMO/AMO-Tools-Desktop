@@ -300,7 +300,7 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
 
   private rowToStrings(row: ReportTableRow): string[] {
     const toText = (cell: ReportColumnCell): string =>
-      row.display === 'list' && cell.value ? toPdfText(decodeHtmlEntities(String(cell.value))).split('\n').join(', ') : formatCell(cell);
+      row.display === 'list' && cell.value ? toPdfText(decodeHtmlEntities(String(cell.value))).split('\n').join(', ') : toPdfText(decodeHtmlEntities(formatCell(cell)));
     return [
       toPdfText(labelWithUnits(row.label, row.units ? `(${row.units})` : undefined)),
       toText(row.baseline),

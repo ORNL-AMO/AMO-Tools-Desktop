@@ -289,6 +289,19 @@ describe('ProcessHeatingReportAdapter', () => {
     expect(table.rows[1]).toEqual(['Ambient Temperature (\u00B0F)', '80', '90']);
   });
 
+  it('normalizes scalar text cells in the input summary for the PDF font', async () => {
+    inputSummary = {
+      ...INPUT_SUMMARY,
+      categories: [{
+        label: 'Charge Material',
+        count: 1,
+        sections: [{ label: 'Charge Material 1', rows: [{ label: 'Material', baseline: { value: 'H&#8322;' }, modifications: [{ value: 'H\u2082' }] }] }],
+      }],
+    };
+    const table = section<SummaryTableSection>(await build(), 'Input Summary');
+    expect(table.rows[1]).toEqual(['Material', 'H2', 'H2']);
+  });
+
   describe('invalid modifications', () => {
     const TWO_MODIFICATION_NAMES = [{ id: 'mod1', name: 'Scenario 1' }, { id: 'mod2', name: 'Scenario 2' }];
     const withTwoModifications = (row: ReportTableRow): ReportTableRow => ({ ...row, modifications: [{ value: 'mod1 value' }, { value: 'mod2 value' }] });
