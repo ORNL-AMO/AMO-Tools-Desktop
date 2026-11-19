@@ -5,7 +5,7 @@
 * [Code of Conduct](#code-of-conduct)
 * [Getting Started](#getting-started)
     * [Issues](#issues)
-    * [Branching Conventions](#issues)
+    * [Branching Conventions](#branching-conventions)
     * [Pull Requests](#pull-requests)
 * [Coding Style](#coding-style)
 * [Release Process](#release-process)
@@ -46,13 +46,13 @@ If you encounter a bug or have reproduction information related to an existing i
 
 ### Branching Conventions
 
-This repository uses the following branch conventions:
+Branch names should follow these conventions. They are not enforced by CI. A tool prefix such as `codex/` or `claude/` in front of a conventional name is fine, e.g. `claude/issue-8645-total-outflow`.
 
 - master: Stable release version
 - develop: Development branch which contains the newest features and issues will be tracked in the latest release milestone. Code may be unstable as issues work through the QA phase.
 - issue-xxx[-description]: Feature or bug fix branch from develop, should reference a github issue number. You may provide an optional short description in the branch name.
 - fix-xxx[-description]: Bug fix branch from develop, should reference a github issue number. You may provide an optional short description in the branch name.
-- epic-xxx[-description]: In some cases, a large feature will be broken down into a subset of issues. Will the large feature is developed, the small issues can't be added to develop without the totality of the epic being finished. Use an epic branch to create incremental pull requests of smaller issues into the larger epic feature.
+- epic-xxx[-description]: In some cases, a large feature will be broken down into a subset of issues. While the large feature is developed, the small issues can't be added to develop without the totality of the epic being finished. Use an epic branch to create incremental pull requests of smaller issues into the larger epic feature.
 
 ### Pull Requests
 
@@ -62,20 +62,16 @@ PRs should:
 
 - Only fix or add the functionality in question.
 - Address a single concern with a focus on readability and the minimum amount of implementation as possible
-- Use a hashtag to connect the issue number it satisfies 
-- Avoid merge commits in your PR branch; instead, use rebase or cherry-pick to keep the commit history clean.
+- Target `develop`, or the `epic-*` branch the work belongs to. `master` is only for release promotion and hotfix PRs (see the [release process](docs/release-process.md)).
+- Be titled `Issue <number>: <short description>`, e.g. `Issue 8645: Populate Total Outflow field`. The older `Issue 8645 - …` form is still accepted.
+- Begin or end the description with the bare issue number on its own line, e.g. `#8645`. Do not use `Closes #8645`; issues stay open through QA.
+- If there is no linked issue, title the PR `No issue: <short description>` and use `No issue: <one-line reason>` in place of the issue number line.
+- Avoid merge commits in your PR branch; instead, use rebase or cherry-pick to keep the commit history clean. Promotion and hotfix PRs into `master` are merged with a merge commit per the release process.
 - Follow best practices for code style:
     - [CODING_STYLE_GUIDE](CODING_STYLE_GUIDE.MD)
 
 #### Pre-PR Checklist
-Before creating a pull request, please review your code using this checklist:
-
-- [ ] Variable, function, and class names are descriptive
-- [ ] Code leverages existing architecture, helper methods, and shared modules when applicable
-- [ ] Development artifacts such as console logs, test values, and comments have been removed
-- [ ] All Copilot, Claude Code, or other LLM implementations have been reviewed as if contributed by another developer
-- [ ] UI changes have been manually tested for usability and appearance
-- [ ] The PR references the related issue number (if applicable), ex. issue -> `#0000`
+Complete the PR template when you open the PR. Its checklist is the pre-PR checklist.
 
 
 #### Please follow the "fork-and-pull" Git workflow
@@ -108,7 +104,7 @@ Releases are managed by the core development team using a release epic, mileston
 
 ## Versioning
 
-MEASUR uses [semantic verisoning 2.0.0](https://semver.org/spec/v2.0.0.html). An example version specification for MEASUR looks like `0.0.1-alpha`. Core developers will be responsible for version numbers and releases.
+MEASUR uses [semantic versioning 2.0.0](https://semver.org/spec/v2.0.0.html). An example version specification for MEASUR looks like `0.0.1-alpha`. Core developers will be responsible for version numbers and releases.
 
 The following is reproduced from semver.org:
 ```

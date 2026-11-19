@@ -164,7 +164,7 @@ required audit trail.
    command without `--snapshot`; all must pass.
 10. Commit the calculation change, new snapshot directory, activation change,
     and any reviewed allowance update together. Explain the observed result
-    differences in the PR description.
+    differences in the PR's Changes section.
 
 Do not modify an old snapshot to make tests pass. Record and review a new
 snapshot first. Once it is accepted and active, decide whether an older

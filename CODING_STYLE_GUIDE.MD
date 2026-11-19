@@ -1,77 +1,35 @@
-# MEASUR Coding & Style Guide
+# MEASUR Conventions for New Code
 
-This guide describes ideal practices for contributing to MEASUR. It is intended to help all contributors—team and open source—improve the codebase with clear, maintainable code. These guidelines are not absolute rules; use your best judgment and prioritize consistency with the existing codebase. Use [Angular’s official style guide](https://angular.io/guide/styleguide) as a baseline.
+This guide describes the direction for new code in MEASUR. Much of the existing codebase predates it, so consistency with the surrounding code wins when the two conflict. Use [Angular's style guide](https://angular.dev/style-guide) as the general baseline; this file only covers what is specific to MEASUR.
 
-## Usage Examples
-For details on existing patterns and usage examples, contributors may reference code first in the `process-cooling-assessment` module and additionally in the `compressed-air-assessment` module.
+Developers using AI agents should have them use the `angular-developer` skill to follow current Angular best practices. Most of those practices overlap with this guide. The skill is published by the Angular team: see [angular.dev/ai/agent-skills](https://angular.dev/ai/agent-skills) or the [angular/skills](https://github.com/angular/skills) repository.
 
-## General Principles
-- **Consistency:** Follow existing patterns for file structure, naming, and code organization.
-- **Type Safety:** Always use TypeScript types and interfaces. Avoid `any`; use `unknown` if uncertain.
-- **Readability:** Use descriptive variable and function names. Prefer clarity over brevity.
+## Reference Modules
+For patterns and usage examples, look first at `process-cooling-assessment`, then `compressed-air-assessment`.
 
 ## Types
+- Never use `any`; use a concrete type, or `unknown` if the type is genuinely unknown.
+- Annotate where it adds information a reader can't get from the code: non-trivial return types on public methods, and class properties declared without an initializer.
+- Skip annotations TypeScript already infers: initialized locals and properties, `inject()` calls, `void` returns, and lambda parameters in array methods.
 
-Let TypeScript inference work for you. Annotate where it adds information a reader couldn't get from the code itself; skip it when the type is already expressed in the initializer or signature.
-
-**Must have:**
-- Return types on public methods when the return is non-trivial (e.g., `getMonthControl(index: number): FormControl`, `deleteChiller(id: string): ChillerInventoryItem[]`)
-- Class properties declared without an initializer (e.g., `form: FormGroup<OperationsForm>`)
-- Concrete type in place of `any` — use `unknown` if the type is genuinely unknown
-
-**Optional / skip:**
-- Local variables with a clear initializer — `const label = 'Baseline'` already tells you the type
-- `inject()` calls — the generic is self-documenting (`inject(MyService)` returns `MyService`)
-- Properties initialized from a literal — `isCollapsed = false` is unambiguously `boolean`
-- `void` return types — TypeScript infers these; the annotation adds no signal
-- Lambda parameters in array methods (`map`, `filter`, `forEach`, `reduce`, etc.) — TypeScript infers the parameter type from the array's element type through contextual typing, so `inventory.forEach((chiller: ChillerInventoryItem) => ...)` is redundant when `inventory` is already typed
-
-## Commenting
-- Comment to explain *why* something is done, not *what* (if the code can't be made self-explanatory through descriptive naming).
-- Comment static numbers/constants with their meaning and units.
-- Document domain-specific logic, calculations, or scientific data.
-- Use JSDoc for methods/classes when context is not obvious.
-
-## Templates
-- Keep templates simple; avoid complex logic.
-- Use Angular’s native control flow (`@if`, `@for`, `@switch`) instead of structural directives (`*ngIf`, `*ngFor`, `*ngSwitch`).
-- Use the async pipe for observables when no side-effects are needed.
-
-## Components
+## Components and Templates
 - Check `/shared` and `helperFunctions.ts` for reusable components and methods before creating new ones.
-- Keep components focused on a single responsibility.
-- Use `input()` and `output()` functions (not decorators) for data flow.
-- Use setters/getters for input logic instead of lifecycle hooks.
-- Use `computed()` for derived state.
-- Use `class` bindings (not `ngClass`) and `style` bindings (not `ngStyle`).
-
-## Forms
+- Use `input()`/`output()` instead of decorators, `computed()` for derived state, and native control flow (`@if`, `@for`, `@switch`) instead of structural directives.
+- Use `class` and `style` bindings instead of `ngClass` and `ngStyle`.
 - Use Reactive Forms for anything beyond trivial forms.
-- Follow patterns from existing modules (e.g., `process-cooling-assessment`).
-    - MEASUR assessment modules consistently use and are designed around the reactive forms APIs
 
-## State Management
-- Use signals for simple state management cases. For example: dynamic template variables, strings, and primitive data types
-- Use `computed()` for derived state.
-- Use BehaviorSubjects or Observables for complex or shared state.
-- Prefer immutable state updates.
+## State
+- Use signals for simple state (template variables, primitives); use BehaviorSubjects or Observables for complex or shared state.
+- Prefer immutable updates, and don't mix Input/Output with service Observables for the same state.
 
-## Routing
+## Architecture
+- Large features use NgModules (`standalone: false`); small shared features are standalone components in `/shared`.
+- Services have a single responsibility (e.g., one form or one calculation set). Use `inject()` unless a constructor is already present.
 - Prefer lazy-loaded routes for new feature modules.
+- Use `ConvertValue` instead of `ConvertUnitsService` where possible.
 
-## Architecture & Services
-- For large features, use NgModules (standalone: false).
-- For small/shared features, use standalone components (in `/shared`).
-- Design services for a single responsibility (e.g., a form or calculation set).
-- Use `inject()` for dependency injection unless a constructor is already present.
+## Comments
+Comment *why*, not *what*. Document domain-specific logic and calculations, and give constants their meaning and units.
 
-## Legacy Code Improvement
-The MEASUR team encourages contributors to use the above guide as a means to leave any legacy code better than they found it. However, contributors should determine whether style and pattern changes fall within the scope of the immediate work. 
-
-- Leave legacy code better than you found it, but only if it fits the scope of your work.
-- Replace `any` with defined types or `unknown`.
-- Modernize components to use signals instead of Input/Output decorators.
-- Refactor state handling to avoid mixing Input/Output with service Observables.
-- Use type literals for string types with discrete values.
-- Define object types as interfaces.
-- Use the `ConvertValue` class instead of `ConvertUnitsService` where possible.
+## Legacy Code
+Leave legacy code better than you found it, but only when the change fits the scope of your work: replace `any`, use string-literal types for discrete values, and define object types as interfaces.
