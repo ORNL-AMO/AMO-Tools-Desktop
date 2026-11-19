@@ -1,5 +1,16 @@
-/** Every fixture paired with its legacy snapshots, shared by the new-module snapshot specs. */
 /* eslint-disable @typescript-eslint/no-require-imports */
+/**
+ * Synthetic: no real non-fuel assessment with Gas Leakage was available, so each is an existing fixture
+ * with a Gas Leakage entry added. Replace with real assessments later.
+ */
+export const GAS_LEAKAGE_FIXTURES: { name: string; fixture: any; snapshots: any }[] = [
+  { name: 'Steam Gas Leakage Synthetic', fixture: require('./fixtures/Steam Gas Leakage Synthetic.json'), snapshots: require('./snapshots/steam-gas-leakage-synthetic.snap.json') },
+  { name: 'Electrotechnology Gas Leakage Synthetic', fixture: require('./fixtures/Electrotechnology Gas Leakage Synthetic.json'), snapshots: require('./snapshots/electrotechnology-gas-leakage-synthetic.snap.json') },
+  { name: 'EAF Gas Leakage Synthetic', fixture: require('./fixtures/EAF Gas Leakage Synthetic.json'), snapshots: require('./snapshots/eaf-gas-leakage-synthetic.snap.json') },
+  { name: 'Custom Electrotechnology Gas Leakage Synthetic', fixture: require('./fixtures/Custom Electrotechnology Gas Leakage Synthetic.json'), snapshots: require('./snapshots/custom-electrotechnology-gas-leakage-synthetic.snap.json') },
+];
+
+/** Every fixture paired with its legacy snapshots, shared by the new-module snapshot specs. */
 export const FIXTURES: { name: string; fixture: any; snapshots: any }[] = [
   { name: '07-1353', fixture: require('./fixtures/07-1353.json'), snapshots: require('./snapshots/07-1353.snap.json') },
   { name: '123-1363', fixture: require('./fixtures/123-1363.json'), snapshots: require('./snapshots/123-1363.snap.json') },
@@ -18,5 +29,6 @@ export const FIXTURES: { name: string; fixture: any; snapshots: any }[] = [
   { name: 'EAF Dummy Values', fixture: require('./fixtures/EAF Dummy Values.json'), snapshots: require('./snapshots/eaf-dummy-values.snap.json') },
   { name: 'Steam Synthetic', fixture: require('./fixtures/Steam Synthetic.json'), snapshots: require('./snapshots/steam-synthetic.snap.json') },
   { name: 'Custom Electrotechnology Synthetic', fixture: require('./fixtures/Custom Electrotechnology Synthetic.json'), snapshots: require('./snapshots/custom-electrotechnology-synthetic.snap.json') },
+  ...GAS_LEAKAGE_FIXTURES,
 ];
 /* eslint-enable @typescript-eslint/no-require-imports */

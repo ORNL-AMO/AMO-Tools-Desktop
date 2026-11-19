@@ -4,7 +4,7 @@ const HC = HeatingEquipmentConfiguration;
 
 /** Heat Balance tabs each configuration shows that at least one other configuration hides. */
 const CONFIGURATION_ONLY_TABS: Record<HeatingEquipmentConfiguration, string[]> = {
-  [HC.FUEL_FIRED]: ['Flue Gas', 'Gas Leakage'],
+  [HC.FUEL_FIRED]: ['Flue Gas'],
   [HC.ELECTROTECHNOLOGY_STANDARD]: ['Energy Input Exhaust Gas'],
   [HC.ELECTROTECHNOLOGY_EAF]: ['Energy Input', 'Exhaust Gas', 'Slag'],
   [HC.CUSTOM_ELECTROTECHNOLOGY]: ['Heat System Efficiency'],

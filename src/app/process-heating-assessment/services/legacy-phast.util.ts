@@ -16,7 +16,7 @@ export function toLegacyPhast(phast: PHAST): SharedPHAST {
 
 /**
  * A scenario keeps the losses of tabs its energy source hides, but the legacy heat balance adds some of them
- * (Gas Leakage, Slag) to heat input regardless of energy source.
+ * (e.g. Slag) to heat input regardless of energy source.
  * @param phast scenario in this module's shape
  * @param configuration the scenario's heating equipment configuration
  * @returns a copy without the losses of tabs the configuration hides

@@ -111,3 +111,20 @@ Induction melters - Energy Exhaust   gross heat input 1813.37 → 1812.34 / 6471
 **Why:** The PDF uses a built-in font that cannot draw ℉, ℃ or subscript digits. A subscript digit also makes the PDF library encode the whole line differently, so every character in it prints wrong, not just the symbol. °F, °C and plain digits print correctly.
 
 **Where it applies:** The rebuilt module's PDF report only. Other modules' reports are tracked on #9114, which should replace this module-level fix with one shared fix.
+
+## Gas Leakage applies to every energy source
+
+**Issue:** [#8940](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8940)
+
+**Decision:** The Gas Leakage tab, its Explore Opportunities measure and its Input Summary section show for every heating equipment configuration, and leakage losses count in the results for every configuration.
+
+**Why:** The rebuild had grouped Gas Leakage with Flue Gas as fuel-fired only, so steam and electrotechnology scenarios hid the tab and dropped any saved leakage entries from their results. Legacy shows the tab for every energy source and always adds leakage to the total heat input, which then raises gross heat input. For example, a steam furnace at 80% system efficiency:
+
+```
+losses and charge heat, without leakage = 4.00 MMBtu/hr
+gas leakage                             = 0.50 MMBtu/hr
+total heat input = 4.00 + 0.50          = 4.50 MMBtu/hr
+gross heat input = 4.50 / 0.80          = 5.63 MMBtu/hr  (5.00 when leakage was dropped)
+```
+
+**Where it applies:** Heat Balance and Expert View tabs, validation, results, Sankey, JUSTIFI export, Explore Opportunities and the Input Summary. Results for legacy steam and electrotechnology assessments with leakage entries now match the legacy module. No real non-fuel assessment with leakage was available, so the snapshot tests use synthetic fixtures (existing fixtures with a leakage entry added).

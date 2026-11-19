@@ -8,7 +8,7 @@ function makeData(overrides: Partial<EnergySourceChangeDialogData> = {}): Energy
     scenarioName: 'Baseline',
     fromEnergySource: 'Fuel-fired',
     toEnergySource: 'Electrotechnology (Electrical Infrared)',
-    hiddenTabs: [{ view: LossView.FLUE_GAS, label: 'Flue Gas' }, { view: LossView.GAS_LEAKAGE, label: 'Gas Leakage' }],
+    hiddenTabs: [{ view: LossView.FLUE_GAS, label: 'Flue Gas' }],
     addedTabs: [{ view: LossView.ENERGY_INPUT_EXHAUST_GAS, label: 'Energy Input Exhaust Gas' }],
     hasInheritingModifications: true,
     keptEnergySources: [],
@@ -55,7 +55,7 @@ describe('EnergySourceChangeDialogComponent', () => {
     it('lists the hidden and added tabs', () => {
       createComponent(makeData());
 
-      expect(tabLabels('.hidden-tabs')).toEqual(['Flue Gas', 'Gas Leakage']);
+      expect(tabLabels('.hidden-tabs')).toEqual(['Flue Gas']);
       expect(tabLabels('.added-tabs')).toEqual(['Energy Input Exhaust Gas']);
     });
 

@@ -75,13 +75,13 @@ describe('toLegacyJustifiAssessment', () => {
 
   it('leaves out the losses of tabs each scenario\'s energy source hides', () => {
     const assessment = buildAssessment([{ id: 'm1' }]);
-    (assessment.phast as unknown as PHAST).losses = { leakageLosses: [{ id: 'l1' } as never], wallLosses: [] };
+    (assessment.phast as unknown as PHAST).losses = { flueGasLosses: [{ id: 'f1' } as never], wallLosses: [] };
 
     const result = toLegacyJustifiAssessment(assessment, true, scenario => scenario === 'baseline' ? EAF : FUEL_FIRED);
 
-    expect(result.phast?.losses?.leakageLosses).toBeUndefined();
+    expect(result.phast?.losses?.flueGasLosses).toBeUndefined();
     expect(result.phast?.losses?.wallLosses).toEqual([]);
-    expect(result.phast?.modifications?.[0].phast?.losses?.leakageLosses?.length).toBe(1);
+    expect(result.phast?.modifications?.[0].phast?.losses?.flueGasLosses?.length).toBe(1);
   });
 
   it('exports a modification on a different heating equipment configuration without results', () => {

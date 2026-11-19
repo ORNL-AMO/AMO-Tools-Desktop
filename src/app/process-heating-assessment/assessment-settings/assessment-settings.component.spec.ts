@@ -230,7 +230,7 @@ describe('AssessmentSettingsComponent', () => {
           scenarioName: 'Baseline',
           fromEnergySource: 'Fuel-fired',
           toEnergySource: 'Electrotechnology (Electrical Infrared)',
-          hiddenTabs: [{ view: LossView.FLUE_GAS, label: 'Flue Gas' }, { view: LossView.GAS_LEAKAGE, label: 'Gas Leakage' }],
+          hiddenTabs: [{ view: LossView.FLUE_GAS, label: 'Flue Gas' }],
           addedTabs: [{ view: LossView.ENERGY_INPUT_EXHAUST_GAS, label: 'Energy Input Exhaust Gas' }],
           hasInheritingModifications: false,
           keptEnergySources: [],
