@@ -8,6 +8,7 @@ import { SlagFormService } from './slag-form.service';
 import { SlagItem } from './slag.service';
 import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 import { UNIT_SYMBOL } from '../../../constants/display-text';
+import { InputUnitComponent } from '../../../../shared/input-unit.component';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -30,7 +31,7 @@ describe('SlagFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, InputUnitComponent],
       declarations: [SlagFormComponent],
       providers: [{ provide: ProcessHeatingUiService, useValue: { focusedFieldSignal: signal('default') } }, SlagFormService],
       schemas: [NO_ERRORS_SCHEMA],
