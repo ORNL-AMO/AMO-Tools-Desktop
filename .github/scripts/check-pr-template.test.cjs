@@ -38,7 +38,7 @@ test('a complete PR has no warnings', () => {
 test('agent PR with a free-form title, empty Changes and no issue number warns T1, S3, I1', () => {
   const warnings = checkPullRequest({
     title: 'Remove unused pneumatic valve calculator code',
-    body: `## Summary\nDeletes PneumaticValveComponent.\n\n## Changes\n<!-- A short bullet list -->\n\n## Checklist\n${checklist}\n\n#\n`,
+    body: `## Summary\nDeletes PneumaticValveComponent.\n\n## Changes\n<!-- A bulleted list or concise write-up -->\n\n## Checklist\n${checklist}\n\n#\n`,
   });
   assert.deepEqual(rules(warnings), ['T1', 'S3', 'I1']);
 });
@@ -72,6 +72,16 @@ test('missing headings and deleted checklist items warn H1 and C1', () => {
   assert.deepEqual(rules(checkPullRequest({ ...good, body: '#3493\n' })), ['H1', 'H1', 'H1']);
   const fewer = good.body.replace(`- [x] ${items[0]}\n`, '');
   assert.deepEqual(rules(checkPullRequest({ ...good, body: fewer })), ['C1']);
+});
+
+test('Changes may be a concise write-up instead of bullets', () => {
+  const body = build({ summary: 'Reused heat.', changes: 'Flash-tank water now feeds the deaerator.' });
+  assert.deepEqual(checkPullRequest({ ...good, body }), []);
+});
+
+test('an optional Details section after Changes does not warn', () => {
+  const body = build({ summary: 'Reused heat.', changes: 'Flash-tank water now feeds the deaerator.\n\n## Details\nFull breakdown here.' });
+  assert.deepEqual(checkPullRequest({ ...good, body }), []);
 });
 
 test('issue number may be the first line instead of the last', () => {

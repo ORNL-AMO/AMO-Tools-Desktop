@@ -8,7 +8,8 @@ AI agents: follow the "Pull Requests" rules in AGENTS.md. -->
 Write it for someone who hasn't seen the issue or the code. Plain language, under 100 words. Keep it simple and concise. -->
 
 ## Changes
-<!-- A short bullet list of what behaves differently. Not a list of files. -->
+<!-- A bulleted list or concise write-up of what behaves differently. Not exhaustive, and not a list of files.
+Need the full breakdown? Add an optional "## Details" section after this one. -->
 
 ## Checklist
 <!-- Tick each box. If an item doesn't apply, tick it and add "(N/A)". Leave a box unticked only if it isn't done, and say why in Changes. -->

@@ -33,6 +33,7 @@ Read only the documents relevant to the current task; this map is not a required
 - Use the installed suite declarations in `node_modules/measur-tools-suite/ts_def/` when updating suite-facing code.
 - Preserve existing units, percentage conventions, and saved data shapes unless the requested change intentionally updates them.
 - Treat default database data carefully. Reseeding or changing default records can affect existing IndexedDB state and user-defined materials.
+- Follow `CODING_STYLE_GUIDE.MD` for new Angular/TypeScript code; consistency with the surrounding code wins over it in legacy areas.
 - Keep changes scoped to the affected feature, adapter, or package. If a suite change alters calculation meaning, trace it from input form to wrapper, result display, reports/exports, and saved assessment data.
 
 ## Pull Requests
@@ -43,7 +44,7 @@ Human contributors follow `CONTRIBUTING.md`; these are the rules for agents open
 - Title: `Issue <number>: <short description paraphrasing the issue title>`, e.g. `Issue 8645: Populate Total Outflow field`. The older `Issue 8645 - …` form is still accepted; prefer the colon.
 - Body: fill in `.github/pull_request_template.md`. Keep every `<!-- -->` comment; write below each one.
 - Summary: written in simple, concise language, under 100 words, and says why the change is made. No file names or code references.
-- Changes: a short bullet list of what behaves differently, not a list of files.
+- Changes: a bulleted list or concise write-up of what behaves differently, not an exhaustive breakdown or a list of files. If a full breakdown is needed, add an optional `## Details` section after Changes.
 - Checklist: tick an item only if it is true. If an item does not apply, tick it and append `(N/A)`.
 - First or last line of the body: the bare issue number on its own line, e.g. `#8645`. Do not use `Closes #8645`; issues stay open through QA.
 - No linked issue: title the PR `No issue: <short description>` and use `No issue: <one-line reason>` in place of the issue number line.

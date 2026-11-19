@@ -54,8 +54,8 @@ function checkPullRequest({ title, body, draft, base }) {
     }
   }
 
-  if ('Changes' in sections && !/^\s*- \S/m.test(sections.Changes)) {
-    warnings.push('S3 Changes: needs at least one "- " bullet.');
+  if ('Changes' in sections && !sections.Changes.trim()) {
+    warnings.push('S3 Changes: is empty.');
   }
 
   if ('Checklist' in sections) {
