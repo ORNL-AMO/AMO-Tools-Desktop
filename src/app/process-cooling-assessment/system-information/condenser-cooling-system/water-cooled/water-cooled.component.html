@@ -23,8 +23,10 @@
       <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
         [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-input-unit>
     </div>
-    <app-form-control-errors [control]="condenserWaterTemp" [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
-                [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-form-control-errors>
+    <app-form-control-errors [control]="condenserWaterTemp"></app-form-control-errors>
+    @if (condenserWaterTempWarning) {
+    <div class="alert-warning my-1 p-2 small" [innerHTML]="condenserWaterTempWarning"></div>
+    }
   </div>
   } @else {
   <div class="form-group">
@@ -36,8 +38,10 @@
       <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
         [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-input-unit>
     </div>
-    <app-form-control-errors [control]="followingTempDifferential" [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
-                [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-form-control-errors>
+    <app-form-control-errors [control]="followingTempDifferential"></app-form-control-errors>
+    @if (followingTempDifferentialWarning) {
+    <div class="alert-warning my-1 p-2 small" [innerHTML]="followingTempDifferentialWarning"></div>
+    }
   </div>
   }
 

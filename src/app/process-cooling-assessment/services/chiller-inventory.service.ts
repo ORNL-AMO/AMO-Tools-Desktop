@@ -1,9 +1,11 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
-import { FormArray, FormControl, FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, UntypedFormBuilder, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { convertChillerEfficiency, getProcessCoolingUnitLabel } from '../constants/process-cooling-units';
+import { convertChillerEfficiency } from '../constants/process-cooling-units';
 import { roundVal } from '../../shared/helperFunctions';
+import { Settings } from '../../shared/models/settings';
+import { getRangeWarning, PROCESS_COOLING_VALIDATION } from '../constants/process-cooling-validation-rules';
 
 @Injectable({
   providedIn: 'root'
@@ -44,7 +46,7 @@ export class ChillerInventoryService {
     });
   }
 
-  getChillerForm(chiller: ChillerInventoryItem): FormGroup<ChillerInventoryForm> {
+  getChillerForm(chiller: ChillerInventoryItem, settings: Settings): FormGroup<ChillerInventoryForm> {
     const curvePoints: ChillerCurvePoint[] = chiller.loadAtPercent.map((lp, i) => ({ loadPercent: lp, kWPerTon: chiller.kWPerTonAtLoad?.[i] }))
     let form: FormGroup<ChillerInventoryForm> = this.formBuilder.group({
       name: [chiller.name, Validators.required],
@@ -52,7 +54,7 @@ export class ChillerInventoryService {
       isFullLoadEfficiencyKnown: [chiller.isFullLoadEfficiencyKnown],
       chillerType: [chiller.chillerType],
       capacity: [chiller.capacity, Validators.required],
-      fullLoadEfficiency: [chiller.fullLoadEfficiency, chiller.isFullLoadEfficiencyKnown ? Validators.required : null],
+      fullLoadEfficiency: [chiller.fullLoadEfficiency, chiller.isFullLoadEfficiencyKnown ? this.getFullLoadEfficiencyValidators(settings) : null],
       age: [chiller.age, Validators.required],
       refrigerantType: [chiller.refrigerantType],
       isCustomChiller: [chiller.isCustomChiller ?? false],
@@ -87,24 +89,26 @@ export class ChillerInventoryService {
     this.updateKwPerTonValidators(form, chiller.isCustomChiller);
   }
 
-  getFullLoadEfficiencyWarning(value: number, unitsOfMeasure: string): string | null {
-    if (value === null || value === undefined) {
-      return null;
-    }
-    const isMetric: boolean = unitsOfMeasure === 'Metric';
-    const unit: string = getProcessCoolingUnitLabel('fullLoadEfficiency', unitsOfMeasure);
-    // * thresholds defined in kW/ton
-    const max: number = isMetric ? roundVal(convertChillerEfficiency(1.5, true), 3) : 1.5;
-    const min: number = isMetric ? roundVal(convertChillerEfficiency(0.4, true), 3) : 0.4;
-    if (value > max) {
-      return `Full Load Efficiency is usually less than ${max} ${unit}`;
-    }
-    if (value < min) {
-      return `Full Load Efficiency must be greater than or equal to ${min} ${unit}`;
-    }
-    return null;
+  getFullLoadEfficiencyValidators(settings: Settings): ValidatorFn[] {
+    const rule = PROCESS_COOLING_VALIDATION.fullLoadEfficiency;
+    return [
+      Validators.required,
+      Validators.min(this.convertEfficiencyLimit(rule.min, settings?.unitsOfMeasure)),
+      Validators.max(this.convertEfficiencyLimit(rule.max, settings?.unitsOfMeasure))
+    ];
   }
 
+  getFullLoadEfficiencyWarning(value: number, unitsOfMeasure: string): string | null {
+    return getRangeWarning(value, PROCESS_COOLING_VALIDATION.fullLoadEfficiency,
+      (limit: number) => this.convertEfficiencyLimit(limit, unitsOfMeasure));
+  }
+
+  /**
+   * Validation limits are defined in kW/ton
+   */
+  private convertEfficiencyLimit(imperialLimit: number, unitsOfMeasure: string): number {
+    return unitsOfMeasure === 'Metric' ? roundVal(convertChillerEfficiency(imperialLimit, true), 3) : imperialLimit;
+  }
 
   getChillerFields(formValue: Partial<ChillerInventoryItem> & { chillerCurvePoints?: ChillerCurvePoint[] }): Partial<ChillerInventoryItem> {
     const curvePoints = formValue.chillerCurvePoints ?? [];
@@ -143,15 +147,15 @@ export class ChillerInventoryService {
     }) as FormGroup<ChillerCurvePointForm>;
   }
   
-  hasValidChillers(processCoolingAssessment: ProcessCoolingAssessment): boolean {
+  hasValidChillers(processCoolingAssessment: ProcessCoolingAssessment, settings: Settings): boolean {
     let hasValidChillers: boolean = false;
     if (processCoolingAssessment.inventory && processCoolingAssessment.inventory.length > 0) {
-      hasValidChillers = processCoolingAssessment.inventory.every(chillerInventoryItem => this.isValidChiller(chillerInventoryItem));
+      hasValidChillers = processCoolingAssessment.inventory.every(chillerInventoryItem => this.isValidChiller(chillerInventoryItem, settings));
     }
     return hasValidChillers;
   }
 
-  setInventoryValidState(inventory: ChillerInventoryItem[]) {
+  setInventoryValidState(inventory: ChillerInventoryItem[], settings: Settings) {
     let inventoryState: InventoryValidState = {
       isValid: true,
       items: {}
@@ -159,7 +163,7 @@ export class ChillerInventoryService {
 
     if (inventory && inventory.length > 0) {
       for (const chiller of inventory) {
-        const valid = this.isValidChiller(chiller);
+        const valid = this.isValidChiller(chiller, settings);
         inventoryState.items[chiller.itemId] = valid;
 
         if (!valid) {
@@ -175,8 +179,8 @@ export class ChillerInventoryService {
   }
 
 
-  isValidChiller(chiller: ChillerInventoryItem): boolean {
-    let chillerForm: FormGroup<ChillerInventoryForm> = this.getChillerForm(chiller);
+  isValidChiller(chiller: ChillerInventoryItem, settings: Settings): boolean {
+    let chillerForm: FormGroup<ChillerInventoryForm> = this.getChillerForm(chiller, settings);
     return chillerForm.valid;
   }
 

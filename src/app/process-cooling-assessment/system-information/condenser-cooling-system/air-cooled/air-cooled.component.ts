@@ -10,6 +10,7 @@ import { ProcessCoolingUiService } from "../../../services/process-cooling-ui.se
 import { FormControlIds, generateFormControlIds } from "../../../../shared/helperFunctions";
 import { TEMPERATURE_HTML } from "../../../../shared/app-constants";
 import { PROCESS_COOLING_UNITS } from "../../../constants/process-cooling-units";
+import { PROCESS_COOLING_VALIDATION } from "../../../constants/process-cooling-validation-rules";
 
 @Component({
   selector: 'app-air-cooled',
@@ -80,5 +81,13 @@ export class AirCooledComponent {
   }
   get indoorTemp() {
     return this.form.get('indoorTemp');
+  }
+
+  get indoorTempWarning(): string | null {
+    if (this.indoorTemp.invalid) {
+      return null;
+    }
+    return this.systemInformationFormService.getFieldWarning(this.indoorTemp.value,
+      PROCESS_COOLING_VALIDATION.indoorTemp, PROCESS_COOLING_UNITS.temperature, this.settings());
   }
 }

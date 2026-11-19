@@ -21,10 +21,10 @@
 @if (focusedField() == 'isHEXRequired') {
 <div class="my-2">
     <h6>
-        Is HEX Required
+        Is HX Required
         <br>
         <small class="text-muted">
-            Specifies if a heat exchanger (HEX) is required for free cooling operation. Select <em>Yes</em> if a HEX is
+            Specifies if a heat exchanger (HX) is required for free cooling operation. Select <em>Yes</em> if an HX is
             present or required for your system's free cooling mode.
         </small>
     </h6>
@@ -34,11 +34,11 @@
 @if (focusedField() == 'HEXApproachTemp') {
 <div class="my-2">
     <h6>
-        HEX Approach Temp
+        HX Approach Temp
         <br>
         <small class="text-muted">
             The temperature difference (in @if (isMetric()) {°C} @else {°F}) between the process fluid and the cooling medium in the heat exchanger
-            during free cooling. Typical range: @if (isMetric()) {2.8–11.1°C} @else {5–20°F}.
+            during free cooling.
         </small>
     </h6>
 </div>

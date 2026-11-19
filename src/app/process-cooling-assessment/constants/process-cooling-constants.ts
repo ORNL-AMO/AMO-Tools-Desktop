@@ -137,6 +137,11 @@ export const EEM_LABELS = {
   installVSDOnCentrifugalCompressors: 'Install VSD on Centrifugal Compressors'
 }
 
+/**
+ * AHRI chiller loading schedule, % of operating hours at 0% to 100% load (10% steps)
+ */
+export const AHRI_LOAD_SCHEDULE: number[] = [0, 0, 1, 5, 13, 23, 26, 19, 9, 3, 1];
+
 export const getDefaultInventoryItem = (): ChillerInventoryItem => {
     return {
         itemId: getNewIdString(),
@@ -144,16 +149,16 @@ export const getDefaultInventoryItem = (): ChillerInventoryItem => {
         description: undefined,
         modifiedDate: new Date(),
         chillerType: CompressorChillerTypeEnum.CENTRIFUGAL,
-        capacity: 1000,
+        capacity: null,
         isFullLoadEfficiencyKnown: true,
         fullLoadEfficiency: 0.65,
-        age: 10,
+        age: null,
         installVSD: false,
         useARIloadScheduleByMonthchedule: false,
         refrigerantType: RefrigerantType.R11,
         useSameMonthlyLoading: true,
-        loadScheduleAllMonths: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0],
-        loadScheduleByMonth: Array(12).fill(Array(11).fill(0)),
+        loadScheduleAllMonths: [...AHRI_LOAD_SCHEDULE],
+        loadScheduleByMonth: Array.from({ length: 12 }, () => [...AHRI_LOAD_SCHEDULE]),
         isCustomChiller: false,
         loadAtPercent: [25, 50, 75, 100],
         kWPerTonAtLoad: [],
@@ -194,9 +199,9 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings): ProcessC
               doChillerLoadSchedulesVary: undefined
             },
             airCooledSystemInput: {
-              outdoorAirTemp: 54,
+              outdoorAirTemp: 95,
               airCoolingSource: 0,
-              indoorTemp: 75,
+              indoorTemp: 68,
               followingTempDifferential: 0
             },
             waterCooledSystemInput: {
@@ -207,14 +212,14 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings): ProcessC
              towerInput: {
               usesFreeCooling: true,
               isHEXRequired: false,
-              HEXApproachTemp: 0,
+              HEXApproachTemp: null,
               numberOfTowers: 1,
               numberOfFans: 1,
               fanSpeedType: 0,
               towerSizeMetric: 0,
               isFanTypeKnown: true,
               fanType: 0,
-              towerSize: 78,
+              towerSize: null,
               towerType: TowerType.OneCellOneSpeed
             },
             chilledWaterPumpInput: {
@@ -222,16 +227,16 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings): ProcessC
               flowRate: 2.4,
               efficiency: 75,
               isMotorSizeKnown: true,
-              motorSize: 0,
-              motorEfficiency: 85,
+              motorSize: null,
+              motorEfficiency: 90,
             },
             condenserWaterPumpInput: {
               variableFlow: true,
               flowRate: 3,
               efficiency: 75,
               isMotorSizeKnown: true,
-              motorSize: 0,
-              motorEfficiency: 85,
+              motorSize: null,
+              motorEfficiency: 90,
             },
           },
           inventory: [

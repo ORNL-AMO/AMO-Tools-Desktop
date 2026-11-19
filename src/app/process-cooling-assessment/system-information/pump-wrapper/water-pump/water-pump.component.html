@@ -21,7 +21,10 @@
                 formControlName="flowRate" (focus)="focusField('flowRate')">
             <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.volumeFlowRate.labelHTML.imperial" [metricUnit]="PROCESS_COOLING_UNITS.volumeFlowRate.labelHTML.metric"></app-input-unit>
         </div>
-        <app-form-control-errors [control]="flowRate" [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.volumeFlowRate.labelHTML.imperial" [metricUnit]="PROCESS_COOLING_UNITS.volumeFlowRate.labelHTML.metric"></app-form-control-errors>
+        <app-form-control-errors [control]="flowRate"></app-form-control-errors>
+        @if (flowRateWarning) {
+        <div class="alert-warning my-1 p-2 small" [innerHTML]="flowRateWarning"></div>
+        }
     </div>
 
     <div class="form-group">
@@ -50,7 +53,7 @@
                 formControlName="motorSize" (focus)="focusField('motorSize')">
             <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.motorPower.labelHTML.imperial" [metricUnit]="PROCESS_COOLING_UNITS.motorPower.labelHTML.metric"></app-input-unit>
         </div>
-        <app-form-control-errors [control]="motorSize" [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.motorPower.labelHTML.imperial" [metricUnit]="PROCESS_COOLING_UNITS.motorPower.labelHTML.metric"></app-form-control-errors>
+        <app-form-control-errors [control]="motorSize"></app-form-control-errors>
     </div>
     }
 

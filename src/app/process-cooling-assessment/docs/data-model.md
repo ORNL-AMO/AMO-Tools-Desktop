@@ -214,7 +214,7 @@ MEASUR uses "Imperial" and "Metric" (not "SI"). Data is persisted in the units o
 | Quantity | Imperial | Metric | Conversion |
 |---|---|---|---|
 | Temperature | °F | °C | `F` ↔ `C` |
-| Temperature difference (following differential, HEX approach) | °F | °C | `R` ↔ `K` (scale only, no 32° offset) |
+| Temperature difference (following differential, HX approach) | °F | °C | `R` ↔ `K` (scale only, no 32° offset) |
 | Chiller capacity, tower size (Tons sizing) | tons | kW | `tons` ↔ `kW` |
 | Pump motor size, tower size (HP sizing) | hp | kW | `hp` ↔ `kW` |
 | Chiller efficiency (full load, custom curve, results) | kW/ton | kW/kW | `convertChillerEfficiency` |
