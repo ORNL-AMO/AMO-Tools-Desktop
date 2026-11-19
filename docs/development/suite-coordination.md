@@ -13,7 +13,7 @@ This local workflow is authoritative for Desktop work and can be followed withou
 - Record the exact Suite beta and final package versions tested.
 - Keep detailed issue history in the Desktop issue rather than duplicating it in repository handoffs.
 
-Use `.github/ISSUE_TEMPLATE/suite-integration.md` to open coordinated work and complete the MEASUR-Tools-Suite section of `.github/pull_request_template.md` for the Desktop pull request.
+Use `.github/ISSUE_TEMPLATE/suite-integration.md` to open coordinated work, and record the coordination details in that Desktop issue.
 
 ## Runtime Contract
 
@@ -55,7 +55,7 @@ Keep Suite calls behind `src/app/tools-suite-api/`. Do not expose Suite-owned ob
 
 4. Run the narrowest typecheck, unit, integration, and assessment-regression coverage that exercises the changed contract or calculation behavior.
 5. Verify web and Electron loading when WASM filenames, paths, packaging, or `locateFile` behavior changes.
-6. Replace the beta with the approved final version, repeat the two npm installs, and record that version in the Desktop issue and pull request.
+6. Replace the beta with the approved final version, repeat the two npm installs, and record that version in the Desktop issue.
 7. As the final dependency-synchronization step, commit both manifests and both npm-generated lockfiles together:
    - `package.json`
    - `package-lock.json`

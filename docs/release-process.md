@@ -36,6 +36,8 @@ The caller is [`main.yml`](../.github/workflows/main.yml).
 
 The reusable [`pr_checks.yml`](../.github/workflows/pr_checks.yml) runs Angular tests, workflow gate tests, compressed-air fixture/privacy checks, the complete calculation-regression corpus, and process-flow tests. Production builds require both `release-policy` and `pr-checks` to succeed. Release helper tests also run in the policy job without installing application dependencies.
 
+The separate [`pr_template.yml`](../.github/workflows/pr_template.yml) checks non-draft PR titles and descriptions against the [PR template](../.github/pull_request_template.md) rules in `CONTRIBUTING.md`. It only emits warnings, skips PRs into `master`, and is not a required check.
+
 Protect `develop` and `master` with required PR reviews, resolved conversations, no force pushes/deletion, and required checks. After the new checks first appear in GitHub, configure **`release-policy`** and **`pr-checks / unit-tests`** as required checks (confirm the exact displayed contexts). Keep existing review requirements. The pipeline itself also requires these jobs before building release artifacts.
 
 ## Version and branch policy

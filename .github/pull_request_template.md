@@ -1,40 +1,26 @@
-# Pull Request Template
+<!-- Title: "Issue <number>: <short description>", e.g. "Issue 8645: Populate Total Outflow field" ("Issue 8645 - ..." is also accepted).
+No linked issue: title it "No issue: <short description>".
+Fill in each section below. Comments like this one are hidden when the PR is viewed, so you can leave them.
+AI agents: follow the "Pull Requests" rules in AGENTS.md. -->
+
+## Summary
+<!-- What changes for users, and why we're making the change.
+Write it for someone who hasn't seen the issue or the code. Plain language, under 100 words. Keep it simple and concise. -->
+
+## Changes
+<!-- A short bullet list of what behaves differently. Not a list of files. -->
 
 ## Checklist
-- Variable, function, and class names are descriptive
-- Code leverages existing architecture, helper methods, and shared modules when applicable
-- Development artifacts such as console logs, test values, and comments have been removed
-- All Copilot, Claude Code, or other LLM implementations have been reviewed as if contributed by another developer
-- UI changes have been manually tested for usability and appearance
-- This PR references the related issue number (if applicable), ex. issue -> `#0000`
-- Suite-facing changes link the Suite issue/PR and record the exact package version tested
+<!-- Tick each box. If an item doesn't apply, tick it and add "(N/A)". Leave a box unticked only if it isn't done, and say why in Changes. -->
+- [ ] Changes are limited to the linked issue; unrelated problems and out-of-scope concerns are noted, not fixed, and an issue is submitted if applicable
+- [ ] I reviewed the full diff myself, including any AI-generated code, as if another developer wrote it
+- [ ] Tests were added or updated for changed behavior, or Changes explains why not
+- [ ] Calculations still go through `src/app/tools-suite-api/` (no new direct Suite calls in components or services)
+- [ ] Units, percentage conventions, and saved assessment data are unchanged, or the change is explained in Summary
+- [ ] Visible UI changes were checked in the web app (and Electron if desktop code changed)
+- [ ] No console logs, commented-out code, test values, customer data, or sensitive assessment inputs are included
+- [ ] The first or last line is the bare issue number, e.g. `#8645`, or `No issue: <reason>` when there is no issue
 
-## Description
-- **For development team**: Optional. Update the issue with a comment, if necessary.
-- **For open source contributors**: The PR description clearly explains the purpose and scope of the changes
-
-## MEASUR-Tools-Suite Coordination
-
-Complete this section for Suite-facing changes, or write `Not applicable`.
-
-- Desktop issue:
-- Suite issue:
-- Suite pull request:
-- Change classification: additive API / breaking API / behavioral / default data / declaration-only / packaging
-- Compatibility decision and approval:
-- Suite beta version tested:
-- Approved final Suite version:
-- Root and process-flow dependency pins aligned: Yes / No / Not applicable
-- Affected wrappers, enum/unit/percentage conversions, models, reports, saved data, or default data:
-- Web/Electron WASM loading affected: Yes / No
-
-### Suite Verification
-
-- [ ] Installed Suite declarations inspected
-- [ ] Wrapper typecheck and affected tests passed
-- [ ] Regression coverage run when calculation behavior changed
-- [ ] Web runtime checked when applicable
-- [ ] Electron runtime checked when applicable
-- [ ] No customer data, sensitive assessment inputs, credentials, or private operational details are included
-
----
+<!-- First or last line: the issue number on its own line, e.g. #8645. Use the bare number, not "Closes #8645", so the issue stays open for QA.
+No linked issue: replace the "#" line with "No issue: <one-line reason>", e.g. "No issue: Suite RC dependency update". -->
+#

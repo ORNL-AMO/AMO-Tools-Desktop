@@ -35,9 +35,32 @@ Read only the documents relevant to the current task; this map is not a required
 - Treat default database data carefully. Reseeding or changing default records can affect existing IndexedDB state and user-defined materials.
 - Keep changes scoped to the affected feature, adapter, or package. If a suite change alters calculation meaning, trace it from input form to wrapper, result display, reports/exports, and saved assessment data.
 
+## Pull Requests
+
+Human contributors follow `CONTRIBUTING.md`; these are the rules for agents opening PRs. Suite-facing work is coordinated in the Desktop issue, see `docs/development/suite-coordination.md`.
+
+- Base branch: `develop`, or the `epic-*` branch the work belongs to. Only release and hotfix PRs target `master` (see `docs/release-process.md`).
+- Title: `Issue <number>: <short description paraphrasing the issue title>`, e.g. `Issue 8645: Populate Total Outflow field`. The older `Issue 8645 - …` form is still accepted; prefer the colon.
+- Body: fill in `.github/pull_request_template.md`. Keep every `<!-- -->` comment; write below each one.
+- Summary: written in simple, concise language, under 100 words, and says why the change is made. No file names or code references.
+- Changes: a short bullet list of what behaves differently, not a list of files.
+- Checklist: tick an item only if it is true. If an item does not apply, tick it and append `(N/A)`.
+- First or last line of the body: the bare issue number on its own line, e.g. `#8645`. Do not use `Closes #8645`; issues stay open through QA.
+- No linked issue: title the PR `No issue: <short description>` and use `No issue: <one-line reason>` in place of the issue number line.
+- History: no merge commits in the PR branch; rebase or cherry-pick instead.
+
 ## Task-Specific Workflows
 
 Suite coordination guidance is task-specific. Use the `suite-coordination` skill when a task changes a Suite API, calculation behavior, Suite-backed default data, declarations, dependency version, or WASM packaging, or when it coordinates linked Suite/Desktop issues, pull requests, or releases. Do not load that workflow for ordinary Desktop work.
+
+## Resetting Dependencies and Build Output
+
+Never delete `node_modules`, `dist`, or lockfiles with `rm -rf` or another direct shell delete. Managed endpoint security on developer machines can treat bulk deletes as malicious and terminate the agent. Use the repo scripts instead:
+
+- `npm run reset`: removes `node_modules`, `dist`, and `package-lock.json` in the root and `process-flow-diagram-component/`.
+- `npm run install-packages`: reinstalls dependencies in both.
+
+`npm run reset` also deletes the lockfiles. Unless a lockfile change is intended, restore them before reinstalling: `git checkout -- package-lock.json process-flow-diagram-component/package-lock.json`.
 
 ## Useful Search Patterns
 

@@ -1,0 +1,22 @@
+name: PR Template
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  check-pr-template:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v6
+      - name: Get Node version
+        id: node
+        run: node -p '"version=" + require("./package.json").engines.node' >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ steps.node.outputs.version }}
+      - name: Check PR title and body (warnings only)
+        run: node .github/scripts/check-pr-template.cjs
