@@ -40,6 +40,7 @@
 /libpeerconnection.log
 npm-debug.log
 testem.log
+.eslintcache
 /typings
 /db/*.db
 scripts/download-stats

@@ -75,7 +75,17 @@ Before creating a pull request, please review your code using this checklist:
 - [ ] Development artifacts such as console logs, test values, and comments have been removed
 - [ ] All Copilot, Claude Code, or other LLM implementations have been reviewed as if contributed by another developer
 - [ ] UI changes have been manually tested for usability and appearance
+- [ ] `npm run lint` passes (root and `process-flow-diagram-component/`)
 - [ ] The PR references the related issue number (if applicable), ex. issue -> `#0000`
+
+#### Linting
+Both the Angular app and `process-flow-diagram-component/` use ESLint. Run these from the root or the package folder:
+
+- `npm run lint`: check the package.
+- `npm run lint:fix -- <paths>`: auto-fix the named files only. Avoid running it on whole folders, which would rewrite legacy code.
+- `npm run lint:prune`: after you fix a baselined (suppressed) violation, shrink `eslint-suppressions.json` and commit it.
+
+Existing violations are baselined in `eslint-suppressions.json`, so lint only fails on new code. Don't edit that file by hand, and don't run `npm run lint:suppress` to hide new violations: fix them instead. If a file gains one more violation of a rule it already has suppressed, ESLint reports every violation of that rule in the file.
 
 
 #### Please follow the "fork-and-pull" Git workflow
