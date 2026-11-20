@@ -299,13 +299,13 @@ export class ImportService {
         await firstValueFrom(this.assessmentDbService.updateWithObservable(newAssessment));
       }
 
-      let allAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
-      this.assessmentDbService.setAll(allAssessments);
-
       assessment.settings.assessmentId = newAssessment.id;
       delete assessment.settings.id;
 
       await firstValueFrom(this.settingsDbService.addWithObservable(assessment.settings));
+
+      let allAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+      this.assessmentDbService.setAll(allAssessments);
       let allSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
       this.settingsDbService.setAll(allSettings);
     }

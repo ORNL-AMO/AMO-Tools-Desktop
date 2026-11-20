@@ -26,6 +26,8 @@ export class ImportOpportunitiesComponent implements OnInit {
   importJson: any = null;
   treasureHuntSub: Subscription;
   treasureHunt: TreasureHunt;
+  settingsSub: Subscription;
+  settings: Settings;
   constructor(private treasureHuntService: TreasureHuntService,
     private importOpportunitiesService: ImportOpportunitiesService, private opportunityCardsService: OpportunityCardsService,
     private importService: ImportService,
@@ -35,10 +37,14 @@ export class ImportOpportunitiesComponent implements OnInit {
    this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
      this.treasureHunt = val;
    });
+   this.settingsSub = this.treasureHuntService.settings$.subscribe(val => {
+     this.settings = val;
+   });
   }
 
   ngOnDestroy(){
     this.treasureHuntSub.unsubscribe();
+    this.settingsSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -126,7 +132,7 @@ export class ImportOpportunitiesComponent implements OnInit {
 
   importFile() {
     let importData = this.importJson;
-    this.treasureHunt = this.importOpportunitiesService.importData(importData, this.treasureHunt);
+    this.treasureHunt = this.importOpportunitiesService.importData(importData, this.treasureHunt, this.settings);
     this.treasureHuntService.treasureHunt.next(this.treasureHunt);
     this.opportunityCardsService.updateOpportunityCards.next(true);
     this.hideImportModal();
