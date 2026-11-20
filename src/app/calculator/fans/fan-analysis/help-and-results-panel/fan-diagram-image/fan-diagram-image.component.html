@@ -1,163 +1,312 @@
 <!--no evase-->
-<div *ngIf="fanRatedInfo.includesEvase == 'No'">
-  <!--1 traverse plane-->
-  <div *ngIf="fanRatedInfo.traversePlanes == 1">
-    <img *ngIf="stepTab != 'plane-data' || planeStep == 'plane-info'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/one-traverse-plane/base-plane.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '1'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/one-traverse-plane/plane-1.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '2'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/one-traverse-plane/plane-2.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '3a'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/one-traverse-plane/plane-3a.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '4'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/one-traverse-plane/plane-4.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '5'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/one-traverse-plane/plane-5.png">
+@if (fanRatedInfo.includesEvase == 'No') {
+  <div>
+    <!--1 traverse plane-->
+    @if (fanRatedInfo.traversePlanes == 1) {
+      <div>
+        @if (stepTab != 'plane-data' || planeStep == 'plane-info') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/one-traverse-plane/base-plane.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '1') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/one-traverse-plane/plane-1.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '2') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/one-traverse-plane/plane-2.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '3a') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/one-traverse-plane/plane-3a.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '4') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/one-traverse-plane/plane-4.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '5') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/one-traverse-plane/plane-5.png">
+        }
+      </div>
+    }
+    <!--2 traverse planes-->
+    @if (fanRatedInfo.traversePlanes == 2) {
+      <div>
+        @if (stepTab != 'plane-data' || planeStep == 'plane-info') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/two-traverse-plane/base-plane.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '1') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/two-traverse-plane/plane-1.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '2') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/two-traverse-plane/plane-2.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '3a') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/two-traverse-plane/plane-3a.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '3b') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/two-traverse-plane/plane-3b.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '4') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/two-traverse-plane/plane-4.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '5') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/two-traverse-plane/plane-5.png">
+        }
+      </div>
+    }
+    <!--3 traverse planes-->
+    @if (fanRatedInfo.traversePlanes == 3) {
+      <div>
+        @if (stepTab != 'plane-data' || planeStep == 'plane-info') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/three-traverse-plane/base-plane.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '1') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/three-traverse-plane/plane-1.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '2') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/three-traverse-plane/plane-2.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '3a') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/three-traverse-plane/plane-3a.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '3b') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/three-traverse-plane/plane-3b.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '3c') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/three-traverse-plane/plane-3c.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '4') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/three-traverse-plane/plane-4.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '5') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/`ee-traverse-plane/plane-5.png">
+        }
+      </div>
+    }
   </div>
-  <!--2 traverse planes-->
-  <div *ngIf="fanRatedInfo.traversePlanes == 2">
-    <img *ngIf="stepTab != 'plane-data' || planeStep == 'plane-info'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/two-traverse-plane/base-plane.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '1'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/two-traverse-plane/plane-1.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '2'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/two-traverse-plane/plane-2.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '3a'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/two-traverse-plane/plane-3a.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '3b'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/two-traverse-plane/plane-3b.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '4'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/two-traverse-plane/plane-4.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '5'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/two-traverse-plane/plane-5.png">
-  </div>
-  <!--3 traverse planes-->
-  <div *ngIf="fanRatedInfo.traversePlanes == 3">
-    <img *ngIf="stepTab != 'plane-data' || planeStep == 'plane-info'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/three-traverse-plane/base-plane.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '1'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/three-traverse-plane/plane-1.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '2'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/three-traverse-plane/plane-2.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '3a'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/three-traverse-plane/plane-3a.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '3b'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/three-traverse-plane/plane-3b.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '3c'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/three-traverse-plane/plane-3c.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '4'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/three-traverse-plane/plane-4.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '5'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-1/`ee-traverse-plane/plane-5.png">
-  </div>
-</div>
+}
 <!--includes evase upstream-->
-<div *ngIf="fanRatedInfo.includesEvase == 'Yes' && fanRatedInfo.upDownStream == 'Upstream'">
-  <!--1 traverse plane-->
-  <div *ngIf="fanRatedInfo.traversePlanes == 1">
-    <img *ngIf="stepTab != 'plane-data' || planeStep == 'plane-info'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/one-traverse-plane/base-plane.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '1'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/one-traverse-plane/plane-1.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '2'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/one-traverse-plane/plane-2.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '3a'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/one-traverse-plane/plane-3a.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '4'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/one-traverse-plane/plane-4.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '5'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/one-traverse-plane/plane-5.png">
+@if (fanRatedInfo.includesEvase == 'Yes' && fanRatedInfo.upDownStream == 'Upstream') {
+  <div>
+    <!--1 traverse plane-->
+    @if (fanRatedInfo.traversePlanes == 1) {
+      <div>
+        @if (stepTab != 'plane-data' || planeStep == 'plane-info') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/one-traverse-plane/base-plane.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '1') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/one-traverse-plane/plane-1.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '2') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/one-traverse-plane/plane-2.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '3a') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/one-traverse-plane/plane-3a.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '4') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/one-traverse-plane/plane-4.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '5') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/one-traverse-plane/plane-5.png">
+        }
+      </div>
+    }
+    <!--2 traverse planes-->
+    @if (fanRatedInfo.traversePlanes == 2) {
+      <div>
+        @if (stepTab != 'plane-data' || planeStep == 'plane-info') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/two-traverse-plane/base-plane.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '1') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/two-traverse-plane/plane-1.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '2') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/two-traverse-plane/plane-2.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '3a') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/two-traverse-plane/plane-3a.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '3b') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/two-traverse-plane/plane-3b.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '4') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/two-traverse-plane/plane-4.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '5') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/two-traverse-plane/plane-5.png">
+        }
+      </div>
+    }
+    <!--3 traverse planes-->
+    @if (fanRatedInfo.traversePlanes == 3) {
+      <div>
+        @if (stepTab != 'plane-data' || planeStep == 'plane-info') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/three-traverse-plane/base-plane.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '1') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/three-traverse-plane/plane-1.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '2') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/three-traverse-plane/plane-2.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '3a') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/three-traverse-plane/plane-3a.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '3b') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/three-traverse-plane/plane-3b.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '3c') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/three-traverse-plane/plane-3c.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '4') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/three-traverse-plane/plane-4.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '5') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/three-traverse-plane/plane-5.png">
+        }
+      </div>
+    }
   </div>
-  <!--2 traverse planes-->
-  <div *ngIf="fanRatedInfo.traversePlanes == 2">
-    <img *ngIf="stepTab != 'plane-data' || planeStep == 'plane-info'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/two-traverse-plane/base-plane.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '1'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/two-traverse-plane/plane-1.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '2'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/two-traverse-plane/plane-2.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '3a'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/two-traverse-plane/plane-3a.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '3b'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/two-traverse-plane/plane-3b.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '4'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/two-traverse-plane/plane-4.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '5'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/two-traverse-plane/plane-5.png">
-  </div>
-  <!--3 traverse planes-->
-  <div *ngIf="fanRatedInfo.traversePlanes == 3">
-    <img *ngIf="stepTab != 'plane-data' || planeStep == 'plane-info'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/three-traverse-plane/base-plane.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '1'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/three-traverse-plane/plane-1.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '2'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/three-traverse-plane/plane-2.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '3a'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/three-traverse-plane/plane-3a.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '3b'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/three-traverse-plane/plane-3b.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '3c'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/three-traverse-plane/plane-3c.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '4'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/three-traverse-plane/plane-4.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '5'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-2/three-traverse-plane/plane-5.png">
-  </div>
-</div>
+}
 <!--includes evase downstream-->
-<div *ngIf="fanRatedInfo.includesEvase == 'Yes' && fanRatedInfo.upDownStream == 'Downstream'">
-  <!--one traverse plane-->
-  <div *ngIf="fanRatedInfo.traversePlanes == 1">
-    <img *ngIf="stepTab != 'plane-data' || planeStep == 'plane-info'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/one-traverse-plane/base-plane.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '1'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/one-traverse-plane/plane-1.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '2'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/one-traverse-plane/plane-2.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '3a'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/one-traverse-plane/plane-3a.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '4'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/one-traverse-plane/plane-4.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '5'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/one-traverse-plane/plane-5.png">
+@if (fanRatedInfo.includesEvase == 'Yes' && fanRatedInfo.upDownStream == 'Downstream') {
+  <div>
+    <!--one traverse plane-->
+    @if (fanRatedInfo.traversePlanes == 1) {
+      <div>
+        @if (stepTab != 'plane-data' || planeStep == 'plane-info') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/one-traverse-plane/base-plane.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '1') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/one-traverse-plane/plane-1.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '2') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/one-traverse-plane/plane-2.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '3a') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/one-traverse-plane/plane-3a.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '4') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/one-traverse-plane/plane-4.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '5') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/one-traverse-plane/plane-5.png">
+        }
+      </div>
+    }
+    <!--two traverse planes-->
+    @if (fanRatedInfo.traversePlanes == 2) {
+      <div>
+        @if (stepTab != 'plane-data' || planeStep == 'plane-info') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/two-traverse-plane/base-plane.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '1') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/two-traverse-plane/plane-1.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '2') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/two-traverse-plane/plane-2.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '3a') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/two-traverse-plane/plane-3a.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '3b') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/two-traverse-plane/plane-3b.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '4') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/two-traverse-plane/plane-4.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '5') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/two-traverse-plane/plane-5.png">
+        }
+      </div>
+    }
+    <!--three traverse planes-->
+    @if (fanRatedInfo.traversePlanes == 3) {
+      <div>
+        @if (stepTab != 'plane-data' || planeStep == 'plane-info') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/three-traverse-plane/base-plane.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '1') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/three-traverse-plane/plane-1.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '2') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/three-traverse-plane/plane-2.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '3a') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/three-traverse-plane/plane-3a.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '3b') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/three-traverse-plane/plane-3b.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '3c') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/three-traverse-plane/plane-3c.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '4') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/three-traverse-plane/plane-4.png">
+        }
+        @if (stepTab == 'plane-data' && planeStep == '5') {
+          <img class="img-fluid mx-auto d-block"
+            aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/three-traverse-plane/plane-5.png">
+        }
+      </div>
+    }
   </div>
-  <!--two traverse planes-->
-  <div *ngIf="fanRatedInfo.traversePlanes == 2">
-    <img *ngIf="stepTab != 'plane-data' || planeStep == 'plane-info'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/two-traverse-plane/base-plane.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '1'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/two-traverse-plane/plane-1.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '2'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/two-traverse-plane/plane-2.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '3a'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/two-traverse-plane/plane-3a.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '3b'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/two-traverse-plane/plane-3b.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '4'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/two-traverse-plane/plane-4.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '5'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/two-traverse-plane/plane-5.png">
-  </div>
-
-  <!--three traverse planes-->
-  <div *ngIf="fanRatedInfo.traversePlanes == 3">
-    <img *ngIf="stepTab != 'plane-data' || planeStep == 'plane-info'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/three-traverse-plane/base-plane.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '1'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/three-traverse-plane/plane-1.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '2'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/three-traverse-plane/plane-2.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '3a'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/three-traverse-plane/plane-3a.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '3b'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/three-traverse-plane/plane-3b.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '3c'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/three-traverse-plane/plane-3c.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '4'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/three-traverse-plane/plane-4.png">
-    <img *ngIf="stepTab == 'plane-data' && planeStep == '5'" class="img-fluid mx-auto d-block"
-      aria-describedby="fanDiagram" src="assets/images/fan-diagram/case-3/three-traverse-plane/plane-5.png">
-  </div>
-</div>
+}

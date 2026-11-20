@@ -3,40 +3,56 @@
     <app-fan-analysis-banner [settings]="settings" [inAssessment]="assessment != undefined" (emitChangeTabs)="changeTabNextOrBack($event)"></app-fan-analysis-banner>
   </div>
 
-  <div *ngIf="stepIndex != 4" class="small-tab-select nav-pills nav-fill" #smallTabSelect>
-    <div class="nav-item" (click)="setSmallScreenTab('form')"
-      [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
-      <a *ngIf="stepIndex == 0" class="nav-link">Fan Basics</a>
-      <a *ngIf="stepIndex == 1" class="nav-link">Gas Density</a>
-      <a *ngIf="stepIndex == 2" class="nav-link">Traverse Data</a>
-      <a *ngIf="stepIndex == 3" class="nav-link">Power</a>
-    </div>
-    <div class="nav-item" (click)="setSmallScreenTab('details')"
-      [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
-      <a *ngIf="stepIndex != 4" class="nav-link">Details</a>
-    </div>
-  </div>
-
-  <div class="panel-group" *ngIf="stepIndex != 4">
-    <div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
-      [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'form'}">
-      <div class="d-flex flex-column mb-4 pb-2">
-        <app-fan-analysis-form [settings]="settings"></app-fan-analysis-form>
+  @if (stepIndex != 4) {
+    <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+      <div class="nav-item" (click)="setSmallScreenTab('form')"
+        [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+        @if (stepIndex == 0) {
+          <a class="nav-link">Fan Basics</a>
+        }
+        @if (stepIndex == 1) {
+          <a class="nav-link">Gas Density</a>
+        }
+        @if (stepIndex == 2) {
+          <a class="nav-link">Traverse Data</a>
+        }
+        @if (stepIndex == 3) {
+          <a class="nav-link">Power</a>
+        }
+      </div>
+      <div class="nav-item" (click)="setSmallScreenTab('details')"
+        [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+        @if (stepIndex != 4) {
+          <a class="nav-link">Details</a>
+        }
       </div>
     </div>
-    <div class="calculator-panel-container help-panel" [ngStyle]="{'height.px': containerHeight}"
-      [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
-      <div class="d-flex flex-column mb-4 pb-2">
-        <app-help-and-results-panel [settings]="settings"></app-help-and-results-panel>
+  }
+
+  @if (stepIndex != 4) {
+    <div class="panel-group">
+      <div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
+        [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'form'}">
+        <div class="d-flex flex-column mb-4 pb-2">
+          <app-fan-analysis-form [settings]="settings"></app-fan-analysis-form>
+        </div>
+      </div>
+      <div class="calculator-panel-container help-panel" [ngStyle]="{'height.px': containerHeight}"
+        [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+        <div class="d-flex flex-column mb-4 pb-2">
+          <app-help-and-results-panel [settings]="settings"></app-help-and-results-panel>
+        </div>
       </div>
     </div>
-  </div>
+  }
 
-  <div class="tab-content scroll-item" *ngIf="stepIndex == 4">
-    <div class="d-flex flex-column mb-4 pb-2">
-      <app-fan-analysis-results [settings]="settings"></app-fan-analysis-results>
+  @if (stepIndex == 4) {
+    <div class="tab-content scroll-item">
+      <div class="d-flex flex-column mb-4 pb-2">
+        <app-fan-analysis-results [settings]="settings"></app-fan-analysis-results>
+      </div>
     </div>
-  </div>
+  }
 
   <div #footer class="calc-footer d-none d-lg-flex justify-content-between flex-fill" [ngStyle]="{'width.px': footerWidth}">
     <button class="btn btn-secondary" [disabled]="stepIndex == 0" (click)="back()">Back</button>
@@ -49,6 +65,6 @@
   </div>
   <div #footer class="calc-footer d-flex d-lg-none justify-content-between flex-fill" [ngStyle]="{'width.px': footerWidth}">
     <button class="btn btn-warning btn-sm mr-1" (click)="setExample()"><span class="small">Use Example</span></button>
-    <button class="btn btn-info btn-sm ml-1" (click)="resetDefaults()"><span class="small">Reset Data</span></button>   
+    <button class="btn btn-info btn-sm ml-1" (click)="resetDefaults()"><span class="small">Reset Data</span></button>
   </div>
 </div>

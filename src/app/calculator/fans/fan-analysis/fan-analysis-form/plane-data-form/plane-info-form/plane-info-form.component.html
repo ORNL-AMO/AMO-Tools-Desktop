@@ -8,12 +8,18 @@
         (focus)="focusField('totalPressureLossBtwnPlanes1and4')" onfocus="this.select();">
       <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
     </div>
-    <span class="alert-danger pull-right"
-      *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.invalid && !planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.pristine">
-      <span *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.errors.required">Value Required</span>
-      <span *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.errors.min">Value can't be less than
-        {{planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.errors.min.min}}.</span>
-    </span>
+    @if (planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.invalid && !planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.pristine) {
+      <span class="alert-danger pull-right"
+        >
+        @if (planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.errors.min) {
+          <span>Value can't be less than
+            {{planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.errors.min.min}}.</span>
+        }
+      </span>
+    }
   </div>
 
   <div class="form-group">
@@ -24,12 +30,18 @@
         (focus)="focusField('totalPressureLossBtwnPlanes2and5')" onfocus="this.select();">
       <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
     </div>
-    <span class="alert-danger pull-right"
-      *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.invalid && !planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.pristine">
-      <span *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.errors.required">Value Required</span>
-      <span *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.errors.min">Value can't be less than
-        {{planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.errors.min.min}}.</span>
-    </span>
+    @if (planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.invalid && !planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.pristine) {
+      <span class="alert-danger pull-right"
+        >
+        @if (planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.errors.min) {
+          <span>Value can't be less than
+            {{planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.errors.min.min}}.</span>
+        }
+      </span>
+    }
   </div>
   <div class="form-group">
     <label for="variationInBarometricPressure">Variation in Planar Barometric Pressure</label>
@@ -50,10 +62,14 @@
         (input)="save()" (focus)="focusField('inletSEF')" onfocus="this.select();">
       <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
     </div>
-    <span class="alert-danger pull-right"
-      *ngIf="planeInfoForm.controls.inletSEF.invalid && !planeInfoForm.controls.inletSEF.pristine">
-      <span *ngIf="planeInfoForm.controls.inletSEF.errors.required">Value Required</span>
-    </span>
+    @if (planeInfoForm.controls.inletSEF.invalid && !planeInfoForm.controls.inletSEF.pristine) {
+      <span class="alert-danger pull-right"
+        >
+        @if (planeInfoForm.controls.inletSEF.errors.required) {
+          <span>Value Required</span>
+        }
+      </span>
+    }
   </div>
   <div class="form-group">
     <label for="outletSEF">Outlet System Effect Factor</label>
@@ -62,10 +78,14 @@
         (input)="save()" (focus)="focusField('outletSEF')" onfocus="this.select();">
       <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
     </div>
-    <span class="alert-danger pull-right"
-      *ngIf="planeInfoForm.controls.outletSEF.invalid && !planeInfoForm.controls.outletSEF.pristine">
-      <span *ngIf="planeInfoForm.controls.outletSEF.errors.required">Value Required</span>
-    </span>
+    @if (planeInfoForm.controls.outletSEF.invalid && !planeInfoForm.controls.outletSEF.pristine) {
+      <span class="alert-danger pull-right"
+        >
+        @if (planeInfoForm.controls.outletSEF.errors.required) {
+          <span>Value Required</span>
+        }
+      </span>
+    }
   </div>
   <div class="form-group">
     <label for="sumSEF">&Sigma; System Effect Factor</label>

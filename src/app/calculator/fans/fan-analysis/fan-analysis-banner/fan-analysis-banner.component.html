@@ -1,15 +1,17 @@
-<nav class="fsat navbar banner d-flex mr-auto p-0 flex-nowrap" *ngIf="!inAssessment">
-  <div class="d-flex align-items-center p-1">
-    <div class="img-col col-sm-auto col-md-auto col-lg-auto">
-      <img class="img-icon" src="assets/images/calculator-icons/fan-icons/operating-point-icon.png">
-    </div>
-    <div class="d-flex flex-column pl-2">
-      <div class="h2-name">
-        Fan Traverse Analysis
+@if (!inAssessment) {
+  <nav class="fsat navbar banner d-flex mr-auto p-0 flex-nowrap">
+    <div class="d-flex align-items-center p-1">
+      <div class="img-col col-sm-auto col-md-auto col-lg-auto">
+        <img class="img-icon" src="assets/images/calculator-icons/fan-icons/operating-point-icon.png">
+      </div>
+      <div class="d-flex flex-column pl-2">
+        <div class="h2-name">
+          Fan Traverse Analysis
+        </div>
       </div>
     </div>
-  </div>
-</nav>
+  </nav>
+}
 
 
 <nav class="d-none d-lg-block hide-print w-100 justify-content-between">

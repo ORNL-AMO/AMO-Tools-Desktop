@@ -28,16 +28,20 @@
             <span class="step-number">3a</span>
           </a>
         </li>
-        <li *ngIf="numTraversePlanes > 1" [ngClass]="stepThreeBClassStatus">
-          <a (click)="changePlaneStepTab('3b')">
-            <span class="step-number">3b</span>
-          </a>
-        </li>
-        <li *ngIf="numTraversePlanes > 2" [ngClass]="stepThreeCClassStatus">
-          <a (click)="changePlaneStepTab('3c')">
-            <span class="step-number">3c</span>
-          </a>
-        </li>
+        @if (numTraversePlanes > 1) {
+          <li [ngClass]="stepThreeBClassStatus">
+            <a (click)="changePlaneStepTab('3b')">
+              <span class="step-number">3b</span>
+            </a>
+          </li>
+        }
+        @if (numTraversePlanes > 2) {
+          <li [ngClass]="stepThreeCClassStatus">
+            <a (click)="changePlaneStepTab('3c')">
+              <span class="step-number">3c</span>
+            </a>
+          </li>
+        }
         <li [ngClass]="stepFourClassStatus">
           <a (click)="changePlaneStepTab('4')">
             <span class="step-number">4</span>
@@ -52,27 +56,39 @@
     </nav>
     <div class="pt-1 pb-3">
       <!-- plane info -->
-      <app-plane-info-form *ngIf="planeStep == 'plane-info'" [settings]="settings">
-      </app-plane-info-form>
+      @if (planeStep == 'plane-info') {
+        <app-plane-info-form [settings]="settings">
+        </app-plane-info-form>
+      }
       <!--1-->
-      <app-fan-data-form *ngIf="planeStep == '1'" [planeNum]="'1'" [planeDescription]="'Fan Inlet Flange'"
-        [settings]="settings">
-      </app-fan-data-form>
+      @if (planeStep == '1') {
+        <app-fan-data-form [planeNum]="'1'" [planeDescription]="'Fan Inlet Flange'"
+          [settings]="settings">
+        </app-fan-data-form>
+      }
       <!--2-->
-      <app-fan-data-form *ngIf="planeStep == '2'" [planeNum]="'2'" [planeDescription]="'Fan or Evase Outlet Flange'"
-        [settings]="settings">
-      </app-fan-data-form>
+      @if (planeStep == '2') {
+        <app-fan-data-form [planeNum]="'2'" [planeDescription]="'Fan or Evase Outlet Flange'"
+          [settings]="settings">
+        </app-fan-data-form>
+      }
       <!--3a 3b 3c-->
-      <app-traverse-planes *ngIf="planeStep == '3a' || planeStep == '3b' || planeStep == '3c'"
-        [planeStep]="planeStep" [settings]="settings"></app-traverse-planes>
+      @if (planeStep == '3a' || planeStep == '3b' || planeStep == '3c') {
+        <app-traverse-planes
+          [planeStep]="planeStep" [settings]="settings"></app-traverse-planes>
+      }
       <!--4-->
-      <app-fan-data-form *ngIf="planeStep == '4'" [planeNum]="'4'" [planeDescription]="'Inlet Measurement Plane'"
-        [settings]="settings">
-      </app-fan-data-form>
+      @if (planeStep == '4') {
+        <app-fan-data-form [planeNum]="'4'" [planeDescription]="'Inlet Measurement Plane'"
+          [settings]="settings">
+        </app-fan-data-form>
+      }
       <!--5-->
-      <app-fan-data-form *ngIf="planeStep == '5'" [planeNum]="'5'" [planeDescription]="'Outlet Measurement Plane'"
-        [settings]="settings">
-      </app-fan-data-form>
+      @if (planeStep == '5') {
+        <app-fan-data-form [planeNum]="'5'" [planeDescription]="'Outlet Measurement Plane'"
+          [settings]="settings">
+        </app-fan-data-form>
+      }
     </div>
   </div>
 </div>
