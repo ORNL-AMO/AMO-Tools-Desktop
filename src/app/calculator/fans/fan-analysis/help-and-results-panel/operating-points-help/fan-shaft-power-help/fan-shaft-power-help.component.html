@@ -6,161 +6,191 @@
     </small>
   </h5>
   <hr class="my-1 hr-spacer">
-  <div class="my-2" *ngIf="currentField == 'fanSpeed'">
-    <h6>
-      Fan Speed
-      <br>
-      <small class="text-muted">
-        The operating or nameplate speed of the fan.
-        <hr>
-      </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'isMethodOne'">
-    <h6>
-      Method for Establishing Motor Input Power
-      <br>
-      <small class="text-muted">
-        Select one of two options: ‘Know Motor Input Power’ or ‘Calculate Motor Input Power’ depending on if the Motor Shaft Power
-        is known.
-      </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'driveType'">
-    <h6>
-      Drive Type
-      <br>
-      <small class="text-muted">
-        Choose among four options: ‘Direct Drive, V-Belt Drive, Notched V-Belt Drive and Synchronous Belt Drive’ depending on the
-        drive type.
-        <hr>
-      </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'ratedHP'">
-    <h6>
-      Rated Motor Power
-      <br>
-      <small class="text-muted">
-        The rated motor power.
-        <hr>
-      </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'synchronousSpeed'">
-    <h6>
-      Synchronous Speed
-      <br>
-      <small class="text-muted">
-        Synchronous speed of the motor.
-        <hr>
-      </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'lineFrequency'">
-    <h6>
-      Line Frequency
-      <br>
-      <small class="text-muted">
-        The main supply frequency. In North America, the standard frequency is 60 HZ. Elsewhere, 50 HZ is often the standard.
-        <hr>
-      </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'efficiencyClass'">
-    <h6>
-      Efficiency Class
-      <br>
-      <small class="text-muted">
-        Choose the efficiency class of your motor from three options: ‘Standard Efficiency’, ‘Energy Efficient’, and ‘Premium’.
-        <br><br>
-        The Premium (IE3) and Energy Efficient (IE2) classes are based on motors that match those NEMA classes. 
-        Standard motors should be used if the efficiency is below Energy Efficient (IE2). 
-        Efficiency values can also be directly input using User Specified.
-        <hr>
-      </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'npv'">
-    <h6>
-      Nameplate Voltage
-      <br>
-      <small class="text-muted">
-        The motor nameplate voltage.
-        <hr>
-      </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'fla'">
-    <h6>
-      Full Load Amps
-      <br>
-      <small class="text-muted">
-        The motor nameplate full load amps. If this is unknown, use the link “Estimate full-load amps” to estimate.
-        <hr>
-      </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'powerFactorAtLoad'">
-    <h6>
-      Power Factor at Load
-      <br>
-      <small class="text-muted">
-        Motor power factor at the actual loading point of the motor.
-        <hr>
-      </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'efficiencyMotor'">
-    <h6>
-      Motor Efficiency at Load
-      <br>
-      <small class="text-muted">
-        The estimated motor efficiency at normal load conditions.
-        <hr>
-      </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'isVFD'">
-    <h6>
-      Fan Equipped with a VFD
-      <br>
-      <small class="text-muted">
-        Select ‘YES’ or ‘NO’ depending on if the fan is equipped with a VFD.
-        <hr>
-      </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'efficiencyBelt'">
-    <h6>
-      Belt Efficiency
-      <br>
-      <small class="text-muted">
-        The efficiency of the drive belt. This is set by the choice of drive type, but can be changed if known.
-        <hr>
-      </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'motorShaftPower'">
-    <h6>
-      Motor Input Power
-      <br>
-      <small class="text-muted">
-        Motor Input Power, if known.
-        <hr>
-      </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'efficiencyVFD'">
-    <h6>
-      VFD Efficiency
-      <br>
-      <small class="text-muted">
-        If fan is equipped with a VFD, input the VFD efficiency (%).
-        <hr>
-      </small>
-    </h6>
-  </div>
+  @if (currentField == 'fanSpeed') {
+    <div class="my-2">
+      <h6>
+        Fan Speed
+        <br>
+        <small class="text-muted">
+          The operating or nameplate speed of the fan.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+  @if (currentField == 'isMethodOne') {
+    <div class="my-2">
+      <h6>
+        Method for Establishing Motor Input Power
+        <br>
+        <small class="text-muted">
+          Select one of two options: ‘Know Motor Input Power’ or ‘Calculate Motor Input Power’ depending on if the Motor Shaft Power
+          is known.
+        </small>
+      </h6>
+    </div>
+  }
+  @if (currentField == 'driveType') {
+    <div class="my-2">
+      <h6>
+        Drive Type
+        <br>
+        <small class="text-muted">
+          Choose among four options: ‘Direct Drive, V-Belt Drive, Notched V-Belt Drive and Synchronous Belt Drive’ depending on the
+          drive type.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+  @if (currentField == 'ratedHP') {
+    <div class="my-2">
+      <h6>
+        Rated Motor Power
+        <br>
+        <small class="text-muted">
+          The rated motor power.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+  @if (currentField == 'synchronousSpeed') {
+    <div class="my-2">
+      <h6>
+        Synchronous Speed
+        <br>
+        <small class="text-muted">
+          Synchronous speed of the motor.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+  @if (currentField == 'lineFrequency') {
+    <div class="my-2">
+      <h6>
+        Line Frequency
+        <br>
+        <small class="text-muted">
+          The main supply frequency. In North America, the standard frequency is 60 HZ. Elsewhere, 50 HZ is often the standard.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+  @if (currentField == 'efficiencyClass') {
+    <div class="my-2">
+      <h6>
+        Efficiency Class
+        <br>
+        <small class="text-muted">
+          Choose the efficiency class of your motor from three options: ‘Standard Efficiency’, ‘Energy Efficient’, and ‘Premium’.
+          <br><br>
+          The Premium (IE3) and Energy Efficient (IE2) classes are based on motors that match those NEMA classes.
+          Standard motors should be used if the efficiency is below Energy Efficient (IE2).
+          Efficiency values can also be directly input using User Specified.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+  @if (currentField == 'npv') {
+    <div class="my-2">
+      <h6>
+        Nameplate Voltage
+        <br>
+        <small class="text-muted">
+          The motor nameplate voltage.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+  @if (currentField == 'fla') {
+    <div class="my-2">
+      <h6>
+        Full Load Amps
+        <br>
+        <small class="text-muted">
+          The motor nameplate full load amps. If this is unknown, use the link “Estimate full-load amps” to estimate.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+  @if (currentField == 'powerFactorAtLoad') {
+    <div class="my-2">
+      <h6>
+        Power Factor at Load
+        <br>
+        <small class="text-muted">
+          Motor power factor at the actual loading point of the motor.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+  @if (currentField == 'efficiencyMotor') {
+    <div class="my-2">
+      <h6>
+        Motor Efficiency at Load
+        <br>
+        <small class="text-muted">
+          The estimated motor efficiency at normal load conditions.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+  @if (currentField == 'isVFD') {
+    <div class="my-2">
+      <h6>
+        Fan Equipped with a VFD
+        <br>
+        <small class="text-muted">
+          Select ‘YES’ or ‘NO’ depending on if the fan is equipped with a VFD.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+  @if (currentField == 'efficiencyBelt') {
+    <div class="my-2">
+      <h6>
+        Belt Efficiency
+        <br>
+        <small class="text-muted">
+          The efficiency of the drive belt. This is set by the choice of drive type, but can be changed if known.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+  @if (currentField == 'motorShaftPower') {
+    <div class="my-2">
+      <h6>
+        Motor Input Power
+        <br>
+        <small class="text-muted">
+          Motor Input Power, if known.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+  @if (currentField == 'efficiencyVFD') {
+    <div class="my-2">
+      <h6>
+        VFD Efficiency
+        <br>
+        <small class="text-muted">
+          If fan is equipped with a VFD, input the VFD efficiency (%).
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
 
 
 

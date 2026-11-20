@@ -1,6 +1,7 @@
-<div *ngIf="result">
+@if (result) {
+  <div>
     <div class="hidden-copy-table">
-        <table #copyTable>
+      <table #copyTable>
         <tbody>
           <tr>
             <td>{{result.name}}</td>
@@ -13,164 +14,163 @@
           <tr>
             <td>Motor Power</td>
             <td >
-                {{result.motorPowerScore | number:'1.0-0'}} 
+              {{result.motorPowerScore | number:'1.0-0'}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>Operating Hours</td>
             <td>
-                {{result.operatingHoursScore | number:'1.0-0'}} 
+              {{result.operatingHoursScore | number:'1.0-0'}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>Control</td>
             <td >
-                {{result.controlsScore | number:'1.0-0'}} 
+              {{result.controlsScore | number:'1.0-0'}}
             </td>
-
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>Production</td>
             <td>
-                {{result.productionScore | number:'1.0-0'}} 
+              {{result.productionScore | number:'1.0-0'}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>System</td>
             <td>
-                {{result.systemScore | number:'1.0-0'}} 
+              {{result.systemScore | number:'1.0-0'}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>Notes</td>
             <td>
-                {{result.notes}} 
+              {{result.notes}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.motorOverloads}} </td>
             <td >
-                {{result.checklistAnswers.motorOverloads}} 
+              {{result.checklistAnswers.motorOverloads}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.spillOrBypass}} </td>
             <td >
-                {{result.checklistAnswers.spillOrBypass}} 
+              {{result.checklistAnswers.spillOrBypass}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.dischargeDamper}} </td>
             <td >
-                {{result.checklistAnswers.dischargeDamper}} 
+              {{result.checklistAnswers.dischargeDamper}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.inletDamper}} </td>
             <td >
-                {{result.checklistAnswers.inletDamper}} 
+              {{result.checklistAnswers.inletDamper}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.variableInletVane}} </td>
             <td >
-                {{result.checklistAnswers.variableInletVane}} 
+              {{result.checklistAnswers.variableInletVane}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.systemDamper}} </td>
             <td >
-                {{result.checklistAnswers.systemDamper}} 
+              {{result.checklistAnswers.systemDamper}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.damperClosed}} </td>
             <td >
-                {{result.checklistAnswers.damperClosed}} 
+              {{result.checklistAnswers.damperClosed}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.turnRight}} </td>
             <td >
-                {{result.checklistAnswers.turnRight}} 
+              {{result.checklistAnswers.turnRight}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.turnNear}} </td>
             <td >
-                {{result.checklistAnswers.turnNear}} 
+              {{result.checklistAnswers.turnNear}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.dirtLeg}} </td>
             <td >
-                {{result.checklistAnswers.dirtLeg}} 
+              {{result.checklistAnswers.dirtLeg}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.noOutletDuct}} </td>
             <td >
-                {{result.checklistAnswers.noOutletDuct}} 
+              {{result.checklistAnswers.noOutletDuct}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.restrictedInlet}} </td>
             <td >
-                {{result.checklistAnswers.restrictedInlet}} 
+              {{result.checklistAnswers.restrictedInlet}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.excessFlowOrPressure}} </td>
             <td >
-                {{result.checklistAnswers.excessFlowOrPressure}} 
+              {{result.checklistAnswers.excessFlowOrPressure}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.unstableSystem}} </td>
             <td >
-                {{result.checklistAnswers.unstableSystem}} 
+              {{result.checklistAnswers.unstableSystem}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.unreliableSystem}} </td>
             <td >
-                {{result.checklistAnswers.unreliableSystem}} 
+              {{result.checklistAnswers.unreliableSystem}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.lowFlowOrPressure}} </td>
             <td >
-                {{result.checklistAnswers.lowFlowOrPressure}} 
+              {{result.checklistAnswers.lowFlowOrPressure}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.systemNoisy}} </td>
             <td >
-                {{result.checklistAnswers.systemNoisy}} 
+              {{result.checklistAnswers.systemNoisy}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.fanBladeBuildup}} </td>
             <td >
-                {{result.checklistAnswers.fanBladeBuildup}} 
+              {{result.checklistAnswers.fanBladeBuildup}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.weldingDuctwork}} </td>
             <td >
-                {{result.checklistAnswers.weldingDuctwork}} 
+              {{result.checklistAnswers.weldingDuctwork}}
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>{{checklistQuestions.radialFanCleanAir}} </td>
             <td >
-                {{result.checklistAnswers.radialFanCleanAir}} 
+              {{result.checklistAnswers.radialFanCleanAir}}
             </td>
-        </tr>
+          </tr>
         </tbody>
       </table>
     </div>
   </div>
-   <app-exportable-results-table [tableString]="copyTableString"
-    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
-  
+}
+<app-exportable-results-table [tableString]="copyTableString"
+  (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
