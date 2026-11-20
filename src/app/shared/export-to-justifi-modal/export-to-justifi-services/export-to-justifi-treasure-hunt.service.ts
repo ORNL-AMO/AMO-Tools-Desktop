@@ -64,8 +64,10 @@ export class ExportToJustifiTreasureHuntService {
       results.opportunitySummaries.forEach(opportunity => {
         if (opportunity.selected) {
           if (opportunity.utilityType == 'Mixed') {
-            opportunity.mixedIndividualResults.forEach(mixedOpportunity => {
-              this.addOpportunityToWorksheet(eemWorksheet, mixedOpportunity, eemRowIndex, assessment.name, true, settings);
+            opportunity.mixedIndividualResults.forEach((mixedOpportunity, index) => {
+              // implementation cost is shared by the utilities; count it once, on the first row
+              let includeSharedFinancials: boolean = index === 0;
+              this.addOpportunityToWorksheet(eemWorksheet, mixedOpportunity, eemRowIndex, assessment.name, true, settings, includeSharedFinancials);
               eemRowIndex++;
             })
           } else {
@@ -78,7 +80,7 @@ export class ExportToJustifiTreasureHuntService {
     return eemRowIndex;
   }
 
-  addOpportunityToWorksheet(eemWorksheet: ExcelJS.Worksheet, opportunity: OpportunitySummary, eemRowIndex: number, assessmentName: string, isMixed: boolean, settings: Settings) {
+  addOpportunityToWorksheet(eemWorksheet: ExcelJS.Worksheet, opportunity: OpportunitySummary, eemRowIndex: number, assessmentName: string, isMixed: boolean, settings: Settings, includeSharedFinancials: boolean = true) {
     eemWorksheet.getCell('A' + eemRowIndex).value = assessmentName;
     if (!isMixed) {
       eemWorksheet.getCell('D' + eemRowIndex).value = opportunity.opportunityName;
@@ -86,7 +88,7 @@ export class ExportToJustifiTreasureHuntService {
       eemWorksheet.getCell('D' + eemRowIndex).value = opportunity.opportunityName + ' (' + opportunity.utilityType + ')';
     }
     eemWorksheet.getCell('E' + eemRowIndex).value = opportunity.utilityType;
-    eemWorksheet.getCell('F' + eemRowIndex).value = opportunity.totalCost;
+    eemWorksheet.getCell('F' + eemRowIndex).value = includeSharedFinancials ? opportunity.totalCost : 0;
     eemWorksheet.getCell('G' + eemRowIndex).value = opportunity.totalEnergySavings;
     eemWorksheet.getCell('I' + eemRowIndex).value = opportunity.costSavings;
     eemWorksheet.getCell('H' + eemRowIndex).value = this.getUnit(settings, opportunity.utilityType);

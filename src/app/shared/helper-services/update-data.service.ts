@@ -3,10 +3,10 @@ import { Assessment } from '../models/assessment';
 import { Diagram } from '../models/diagram';
 import { FlowDiagramData, migrateFlowDiagramFieldNames, migrateInapplicableNodeTotals } from 'process-flow-lib';
 import { SSMT } from '../models/steam/ssmt';
-import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, PowerFactorCorrectionTreasureHunt, Treasure } from '../models/treasure-hunt';
+import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, PowerFactorCorrectionTreasureHunt, Treasure, WaterReductionTreasureHunt } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
-import { AirLeakSurveyData, CompressedAirPressureReductionData, CompressedAirReductionData, ElectricityReductionData, FacilityCompressorData } from '../models/standalone';
+import { AirLeakSurveyData, CompressedAirPressureReductionData, CompressedAirReductionData, ElectricityReductionData, FacilityCompressorData, LegacyWaterReductionData, WaterReductionData } from '../models/standalone';
 import { PSAT } from '../models/psat';
 import { PHAST } from '../models/phast/phast';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
@@ -14,6 +14,7 @@ import { FlueGasByMass, FlueGasByVolume } from '../models/phast/losses/flueGas';
 import { environment } from '../../../environments/environment';
 import { getNewIdString } from '../helperFunctions';
 import { Calculator } from '../models/calculators';
+import { Settings } from '../models/settings';
 import { SteamPressureOrTemp, SteamQuality } from '../models/steam/steam-inputs';
 import { AdjustedOrActual, BilledForDemand, MonthyInputs } from '../../calculator/utilities/power-factor-correction/power-factor-correction.service';
 import { ProcessCoolingAssessment } from '../models/process-cooling-assessment';
@@ -24,7 +25,7 @@ export class UpdateDataService {
 
     constructor(private convertUnitsService: ConvertUnitsService) { }
 
-    updateAssessmentVersion(assessment: Assessment): Assessment {
+    updateAssessmentVersion(assessment: Assessment, settings?: Settings): Assessment {
         console.log('current Assessment version: ' + assessment.appVersion);
         if (assessment.type === 'PSAT') {
             return this.updatePsat(assessment);
@@ -35,7 +36,7 @@ export class UpdateDataService {
         } else if (assessment.type == 'SSMT') {
             return this.updateSSMT(assessment);
         } else if (assessment.type === 'TreasureHunt') {
-            return this.updateTreasureHunt(assessment);
+            return this.updateTreasureHunt(assessment, settings);
         } else if (assessment.type === 'WasteWater') {
             return this.updateWasteWater(assessment);
         } else if (assessment.type === 'CompressedAir') {
@@ -579,7 +580,7 @@ export class UpdateDataService {
         return ssmt;
     }
 
-    updateTreasureHunt(assessment: Assessment): Assessment {
+    updateTreasureHunt(assessment: Assessment, settings?: Settings): Assessment {
         assessment.appVersion = environment.version;
         if (assessment.treasureHunt) {
             if (assessment.treasureHunt.lightingReplacements) {
@@ -634,6 +635,8 @@ export class UpdateDataService {
             }
             if (assessment.treasureHunt.waterReductions) {
                 assessment.treasureHunt.waterReductions.forEach(opportunity => {
+                    let unitsOfMeasure: string = settings ? settings.unitsOfMeasure : assessment.treasureHunt.existingDataUnits;
+                    this.updateWaterReductionTreasureHunt(opportunity, unitsOfMeasure, settings);
                     opportunity.opportunityType = Treasure.waterReduction;
                 });
             }
@@ -849,6 +852,54 @@ export class UpdateDataService {
             }
         }
         return heatCascadingTH;
+    }
+
+    updateWaterReductionTreasureHunt(waterReductionTH: WaterReductionTreasureHunt, unitsOfMeasure?: string, settings?: Settings): WaterReductionTreasureHunt {
+        waterReductionTH.baseline?.forEach(reduction => this.updateWaterReduction(reduction, unitsOfMeasure, settings));
+        waterReductionTH.modification?.forEach(reduction => this.updateWaterReduction(reduction, unitsOfMeasure, settings));
+        return waterReductionTH;
+    }
+
+    updateWaterReduction(reduction: LegacyWaterReductionData, unitsOfMeasure?: string, settings?: Settings): WaterReductionData {
+        let hasLegacyMetricDefaults: boolean = reduction.calculatorType === undefined && unitsOfMeasure == 'Metric';
+        let updatedReduction: WaterReductionData = this.updateWaterReductionCalculatorType(reduction);
+        if (hasLegacyMetricDefaults) {
+            this.updateWaterReductionMetricDefault(updatedReduction, settings);
+        }
+        return updatedReduction;
+    }
+
+    updateWaterReductionCalculatorType(reduction: LegacyWaterReductionData): WaterReductionData {
+        if (reduction.calculatorType === undefined) {
+            reduction.calculatorType = reduction.isWastewater ? 'wastewater' : 'water';
+        }
+        delete reduction.isWastewater;
+        return reduction as WaterReductionData;
+    }
+
+    updateWaterReductionMetricDefault(reduction: WaterReductionData, settings?: Settings): WaterReductionData {
+        let galToLiters = (gallons: number) => Number(this.convertUnitsService.value(gallons).from('gal').to('L').toFixed(3));
+        let galToCubicMeters = (gallons: number) => Number(this.convertUnitsService.value(gallons).from('gal').to('m3').toFixed(3));
+        if (reduction.meteredFlowMethodData?.meterReading === galToCubicMeters(100)) {
+            reduction.meteredFlowMethodData.meterReading = galToLiters(100);
+        }
+        if (reduction.volumeMeterMethodData?.finalMeterReading === galToCubicMeters(5842)) {
+            reduction.volumeMeterMethodData.finalMeterReading = galToLiters(5842);
+        }
+        if (reduction.volumeMeterMethodData?.initialMeterReading === galToCubicMeters(4235)) {
+            reduction.volumeMeterMethodData.initialMeterReading = galToLiters(4235);
+        }
+        if (reduction.bucketMethodData?.bucketVolume === galToCubicMeters(10)) {
+            reduction.bucketMethodData.bucketVolume = galToLiters(10);
+        }
+        if (settings) {
+            let settingsCost: number = reduction.calculatorType == 'wastewater' ? settings.waterWasteCost : settings.waterCost;
+            let legacyDefaultCost: number = Number(((settingsCost || 0.005) / this.convertUnitsService.value(1).from('gal').to('m3')).toFixed(3));
+            if (reduction.waterCost === legacyDefaultCost) {
+                reduction.waterCost = settingsCost || Number((0.005 / this.convertUnitsService.value(1).from('gal').to('L')).toFixed(6));
+            }
+        }
+        return reduction;
     }
 
     updateElectricityReductionTreasureHunt(electricityReductionTreasureHunt: ElectricityReductionTreasureHunt, settingTH: string): ElectricityReductionTreasureHunt {
