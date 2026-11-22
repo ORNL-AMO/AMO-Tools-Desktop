@@ -202,8 +202,7 @@ export interface ProcessSteamUsageData {
 
 export interface ProcessSteamUsageRow {
     name: string;
-    type: 'steam-leaks' | 'steam-trap-leaks' | 'process';
-    quantity?: number;
+    type: 'process' | 'other';
     steamUsage: number;
     condensateRecoverable: boolean;
     condensateRecoveryRate: number;

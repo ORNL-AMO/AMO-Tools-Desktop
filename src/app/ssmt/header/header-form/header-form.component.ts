@@ -156,13 +156,12 @@ export class HeaderFormComponent implements OnInit {
     if (!this.selected || !this.showProcessSteamUsage) {
       return;
     }
-    const data = this.processSteamUsageData
+    this.processSteamUsageDataCopy = this.processSteamUsageData
       ? JSON.parse(JSON.stringify(this.processSteamUsageData))
       : this.processSteamUsageService.getDefaultData(
         this.headerForm.controls.processSteamUsage.value,
         this.headerForm.controls.condensationRecoveryRate.value
       );
-    this.processSteamUsageDataCopy = this.processSteamUsageService.updateCalculatedLosses(data, this.pressureLevel, this.settings);
     this.ssmtService.modalOpen.next(true);
     this.processSteamUsageModal.show();
   }
@@ -174,15 +173,11 @@ export class HeaderFormComponent implements OnInit {
   }
 
   applyProcessSteamUsageData() {
-    if (!this.processSteamUsageCalculator || this.processSteamUsageCalculator.form.invalid) {
+    if (!this.processSteamUsageCalculator?.canApply) {
       this.processSteamUsageCalculator?.form.markAllAsTouched();
       return;
     }
-    this.processSteamUsageData = this.processSteamUsageService.updateCalculatedLosses(
-      this.processSteamUsageCalculator.getData(),
-      this.pressureLevel,
-      this.settings
-    );
+    this.processSteamUsageData = this.processSteamUsageCalculator.getData();
     const totals = this.processSteamUsageService.calculateTotals(this.processSteamUsageData);
     this.headerForm.patchValue({
       processSteamUsage: totals.processSteamUsage,

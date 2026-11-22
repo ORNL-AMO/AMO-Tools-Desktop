@@ -262,20 +262,20 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body p-0">
-        @if (processSteamUsageDataCopy) {
-          <app-process-steam-usage-modal [data]="processSteamUsageDataCopy" [settings]="settings"
-            [pressureLevel]="pressureLevel" [idPrefix]="idString + pressureLevel">
+      @if (processSteamUsageDataCopy) {
+        <div class="modal-body p-0">
+          <app-process-steam-usage-modal #calculator [data]="processSteamUsageDataCopy" [settings]="settings"
+            [idPrefix]="idString + pressureLevel">
           </app-process-steam-usage-modal>
-        }
-      </div>
-      <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-default" (click)="hideProcessSteamUsageModal()">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="applyProcessSteamUsageData()"
-          [disabled]="!!processSteamUsageCalculator?.form?.invalid">
-          Apply Data
-        </button>
-      </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" (click)="hideProcessSteamUsageModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="applyProcessSteamUsageData()"
+            [disabled]="!calculator.canApply">
+            Apply Data
+          </button>
+        </div>
+      }
     </div>
   </div>
 </div>

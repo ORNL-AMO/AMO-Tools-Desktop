@@ -166,7 +166,7 @@ export class ConvertSsmtService {
   /**
    * Converts calculator rows and returns the header total as their sum, so the locked header value keeps matching the calculator.
    * Rows are rounded with roundVal(…, 4) rather than convertValue(), whose rounding keeps only 2 decimals and would
-   * zero out small leak/trap losses (e.g. 0.001 klb/hr).
+   * zero out small flows (e.g. 0.001 klb/hr).
    */
   private convertProcessSteamUsageData(data: ProcessSteamUsageData, oldSettings: Settings, newSettings: Settings): number {
     let total = 0;

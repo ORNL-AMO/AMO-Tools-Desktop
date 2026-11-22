@@ -8,7 +8,6 @@
       <div formArrayName="rows" class="usage-rows">
         <div class="usage-row usage-row-header">
           <span>Steam Use</span>
-          <span>Quantity</span>
           <span>Steam Usage</span>
           <span class="text-center">Condensate Recoverable?</span>
           <span>Condensate Recovery Rate</span>
@@ -32,26 +31,11 @@
             </div>
 
             <div class="form-group">
-              <label class="d-lg-none" [for]="idPrefix() + '_quantity_' + index">Quantity</label>
-              @if (row.controls.type.value !== 'process') {
-                <input class="form-control" type="number" min="0" step="1" formControlName="quantity"
-                  [attr.aria-label]="row.controls.name.value + ' quantity'"
-                  [id]="idPrefix() + '_quantity_' + index" (input)="calculate()">
-                @if (row.controls.quantity.invalid && row.controls.quantity.dirty) {
-                  <span class="text-danger small">Enter a whole number of 0 or more.</span>
-                }
-              } @else {
-                <span class="not-applicable">&mdash;</span>
-              }
-            </div>
-
-            <div class="form-group">
               <label class="d-lg-none" [for]="idPrefix() + '_steamUsage_' + index">Steam Usage</label>
               <div class="input-group">
                 <input class="form-control" type="number" min="0" step="any" formControlName="steamUsage"
                   [attr.aria-label]="row.controls.name.value + ' steam usage'"
-                  [id]="idPrefix() + '_steamUsage_' + index" (input)="calculate()"
-                  [readonly]="row.controls.type.value !== 'process'">
+                  [id]="idPrefix() + '_steamUsage_' + index" (input)="calculate()">
                 <span class="input-group-addon units"
                   [innerHTML]="settings().steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
               </div>
@@ -98,22 +82,35 @@
       </button>
     </form>
 
+    <!-- Totals aren't shown while an input has an error, since they would be calculated from invalid values. -->
     <div class="totals mt-3">
       <div>
         <span>Total Process Steam Usage</span>
-        <strong>{{ totals.processSteamUsage | number:'1.0-4' }}
-          <span [innerHTML]="settings().steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
-        </strong>
+        @if (form.invalid) {
+          <strong>&mdash;</strong>
+        } @else {
+          <strong>{{ totals.processSteamUsage | number:'1.0-4' }}
+            <span [innerHTML]="settings().steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+          </strong>
+        }
       </div>
       <div>
         <span>Recovered Condensate</span>
-        <strong>{{ totals.recoveredCondensate | number:'1.0-4' }}
-          <span [innerHTML]="settings().steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
-        </strong>
+        @if (form.invalid) {
+          <strong>&mdash;</strong>
+        } @else {
+          <strong>{{ totals.recoveredCondensate | number:'1.0-4' }}
+            <span [innerHTML]="settings().steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+          </strong>
+        }
       </div>
       <div>
         <span>Overall Condensate Recovery Rate</span>
-        <strong>{{ totals.condensateRecoveryRate | number:'1.0-3' }}%</strong>
+        @if (form.invalid) {
+          <strong>&mdash;</strong>
+        } @else {
+          <strong>{{ totals.condensateRecoveryRate | number:'1.0-3' }}%</strong>
+        }
       </div>
     </div>
   </div>
@@ -124,8 +121,10 @@
     </div>
     <h5>Process Steam Usage</h5>
     <p>
-      Enter the number of steam leaks and failed steam traps on this header. Their estimated steam losses are
-      calculated using the header pressure level. Add a row for each process or other steam use.
+      Add a row for each process that uses steam on this header and enter its steam usage.
+    </p>
+    <p>
+      Use Other (Miscellaneous) for estimated steam use that is not a process, such as steam leaks or failed traps.
     </p>
     <h5>Condensate Recovery</h5>
     <p>
@@ -133,8 +132,8 @@
       system, then enter the percentage recovered for that row.
     </p>
     <p>
-      The overall recovery rate is the total recovered condensate divided by total process steam usage. Steam leaks
-      and trap losses are excluded from recovered condensate unless explicitly marked recoverable.
+      The overall recovery rate is the total recovered condensate divided by total process steam usage, so rows that
+      are not marked recoverable still count toward total usage.
     </p>
   </div>
 </div>

@@ -1,13 +1,12 @@
-import { Component, effect, inject, input } from '@angular/core';
+import { Component, Input, inject, input } from '@angular/core';
 import { FormArray, FormControl, FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { ProcessSteamUsageData, ProcessSteamUsageRow } from '../../../shared/models/steam/ssmt';
-import { ProcessSteamUsageService, ProcessSteamUsageTotals, SteamHeaderPressureLevel } from './process-steam-usage.service';
+import { ProcessSteamUsageService, ProcessSteamUsageTotals } from './process-steam-usage.service';
 
 type ProcessSteamUsageRowForm = FormGroup<{
   name: FormControl<string>;
   type: FormControl<ProcessSteamUsageRow['type']>;
-  quantity: FormControl<number>;
   steamUsage: FormControl<number>;
   condensateRecoverable: FormControl<boolean>;
   condensateRecoveryRate: FormControl<number>;
@@ -20,9 +19,14 @@ type ProcessSteamUsageRowForm = FormGroup<{
   standalone: false
 })
 export class ProcessSteamUsageModalComponent {
-  data = input.required<ProcessSteamUsageData>();
+  // Rows load as soon as the data is set, so the parent's Apply Data button reads the loaded totals in the same check.
+  @Input({ required: true })
+  set data(data: ProcessSteamUsageData) {
+    this.rows.clear();
+    this.processSteamUsageService.getCalculatorData(data).rows.forEach(row => this.rows.push(this.createRowForm(row)));
+    this.calculate();
+  }
   settings = input.required<Settings>();
-  pressureLevel = input.required<SteamHeaderPressureLevel>();
   idPrefix = input.required<string>();
 
   private formBuilder = inject(NonNullableFormBuilder);
@@ -37,16 +41,13 @@ export class ProcessSteamUsageModalComponent {
     condensateRecoveryRate: 0
   };
 
-  constructor() {
-    effect(() => {
-      this.rows.clear();
-      this.data().rows.forEach(row => this.rows.push(this.createRowForm(row)));
-      this.calculate();
-    });
-  }
-
   get rows(): FormArray<ProcessSteamUsageRowForm> {
     return this.form.controls.rows;
+  }
+
+  // Applying a total of 0 would set the header's process steam usage to 0.
+  get canApply(): boolean {
+    return this.form.valid && this.totals.processSteamUsage > 0;
   }
 
   addRow() {
@@ -55,7 +56,9 @@ export class ProcessSteamUsageModalComponent {
     while (names.has(`Process ${processNumber}`)) {
       processNumber++;
     }
-    this.rows.push(this.createRowForm({
+    // New process rows go above the fixed Other (Miscellaneous) row.
+    const otherRowIndex = this.rows.controls.findIndex(row => row.controls.type.value === 'other');
+    this.rows.insert(otherRowIndex === -1 ? this.rows.length : otherRowIndex, this.createRowForm({
       name: `Process ${processNumber}`,
       type: 'process',
       steamUsage: 0,
@@ -81,17 +84,7 @@ export class ProcessSteamUsageModalComponent {
   }
 
   calculate() {
-    const updatedData = this.processSteamUsageService.updateCalculatedLosses(
-      this.getData(),
-      this.pressureLevel(),
-      this.settings()
-    );
-    updatedData.rows.forEach((row, index) => {
-      if (row.type !== 'process') {
-        this.rows.at(index).controls.steamUsage.patchValue(row.steamUsage, { emitEvent: false });
-      }
-    });
-    this.totals = this.processSteamUsageService.calculateTotals(updatedData);
+    this.totals = this.processSteamUsageService.calculateTotals(this.getData());
   }
 
   getData(): ProcessSteamUsageData {
@@ -101,7 +94,6 @@ export class ProcessSteamUsageModalComponent {
         return {
           name: (value.name ?? '').trim(),
           type: value.type,
-          quantity: value.type === 'process' ? undefined : value.quantity,
           steamUsage: value.steamUsage,
           condensateRecoverable: value.condensateRecoverable,
           condensateRecoveryRate: value.condensateRecoverable ? value.condensateRecoveryRate : 0
@@ -114,7 +106,6 @@ export class ProcessSteamUsageModalComponent {
     return this.formBuilder.group({
       name: this.formBuilder.control(row.name, [Validators.required, Validators.pattern(/\S/)]),
       type: this.formBuilder.control(row.type),
-      quantity: this.formBuilder.control(row.quantity ?? 0, [Validators.required, Validators.min(0), Validators.pattern(/^\d+$/)]),
       steamUsage: this.formBuilder.control(row.steamUsage ?? 0, [Validators.required, Validators.min(0)]),
       condensateRecoverable: this.formBuilder.control(row.condensateRecoverable),
       condensateRecoveryRate: this.formBuilder.control(row.condensateRecoveryRate ?? 0, [Validators.required, Validators.min(0), Validators.max(100)])

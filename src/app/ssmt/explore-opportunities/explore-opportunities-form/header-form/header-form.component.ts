@@ -289,7 +289,7 @@ export class HeaderFormComponent implements OnInit {
     const modificationForm = this.getModificationHeaderForm(header);
     const baselineForm = this.getBaselineHeaderForm(header);
     const useBaselineValues = header !== 'highPressureHeader' && modificationForm.controls.useBaselineProcessSteamUsage.value;
-    const data = this.hasProcessSteamUsageData(header)
+    this.processSteamUsageDataCopy = this.hasProcessSteamUsageData(header)
       ? this.processSteamUsageService.copyData(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput[header].processSteamUsageData)
       : this.processSteamUsageService.getDefaultData(
         useBaselineValues ? baselineForm.controls.processSteamUsage.value : modificationForm.controls.processSteamUsage.value,
@@ -297,7 +297,6 @@ export class HeaderFormComponent implements OnInit {
       );
     this.processSteamUsageHeader = header;
     this.processSteamUsagePressureLevel = this.processSteamUsageService.getPressureLevel(header);
-    this.processSteamUsageDataCopy = this.processSteamUsageService.updateCalculatedLosses(data, this.processSteamUsagePressureLevel, this.settings);
     this.ssmtService.modalOpen.next(true);
     this.processSteamUsageModal.show();
   }
@@ -309,16 +308,12 @@ export class HeaderFormComponent implements OnInit {
   }
 
   applyProcessSteamUsageData() {
-    if (!this.processSteamUsageCalculator || this.processSteamUsageCalculator.form.invalid) {
+    if (!this.processSteamUsageCalculator?.canApply) {
       this.processSteamUsageCalculator?.form.markAllAsTouched();
       return;
     }
     const header = this.processSteamUsageHeader;
-    const data = this.processSteamUsageService.updateCalculatedLosses(
-      this.processSteamUsageCalculator.getData(),
-      this.processSteamUsagePressureLevel,
-      this.settings
-    );
+    const data = this.processSteamUsageCalculator.getData();
     const totals = this.processSteamUsageService.calculateTotals(data);
     const modificationForm = this.getModificationHeaderForm(header);
     modificationForm.patchValue({
