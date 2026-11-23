@@ -131,6 +131,7 @@ export class ModificationListComponent implements OnInit {
       }
     }
 
+    let isCopy: boolean = ssmt != undefined;
     if (!ssmt) {
       ssmt = this.ssmt;
     }
@@ -138,10 +139,11 @@ export class ModificationListComponent implements OnInit {
     delete ssmtCopy.modifications;
     ssmtCopy.name = this.newModificationName;
 
-    if (ssmtCopy.headerInput.lowPressureHeader) {
+    // A copied scenario keeps its custom process steam usage. Only new scenarios from the baseline use the baseline values.
+    if (!isCopy && ssmtCopy.headerInput.lowPressureHeader) {
       ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage = true;
     }
-    if (ssmtCopy.headerInput.mediumPressureHeader) {
+    if (!isCopy && ssmtCopy.headerInput.mediumPressureHeader) {
       ssmtCopy.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage = true;
     }
     let tmpModification: Modification = {
