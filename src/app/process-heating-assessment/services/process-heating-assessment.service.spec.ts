@@ -1,4 +1,5 @@
-import { TestBed } from '@angular/core/testing';
+import { signal } from '@angular/core';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { of, Subject, throwError } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
@@ -6,14 +7,19 @@ import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PHAST } from '../models/phast';
 import { ProcessHeatingModification } from '../models/modification';
-import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
+import { ProcessHeatingAssessmentService, scenarioSettingsFor } from './process-heating-assessment.service';
+import { ProcessHeatingValidityService } from './process-heating-validity.service';
 
 describe('ProcessHeatingAssessmentService', () => {
   let service: ProcessHeatingAssessmentService;
   let settingsDb: jasmine.SpyObj<SettingsDbService>;
   let assessmentDb: jasmine.SpyObj<AssessmentDbService>;
+  const settingsValid = signal(true);
+  const baselineValid = signal(true);
 
   beforeEach(() => {
+    settingsValid.set(true);
+    baselineValid.set(true);
     settingsDb = jasmine.createSpyObj<SettingsDbService>('SettingsDbService', [
       'updateWithObservable', 'getAllSettings', 'setAll', 'getByAssessmentId', 'addWithObservable',
     ]);
@@ -27,9 +33,65 @@ describe('ProcessHeatingAssessmentService', () => {
         ProcessHeatingAssessmentService,
         { provide: AssessmentDbService, useValue: assessmentDb },
         { provide: SettingsDbService, useValue: settingsDb },
+        {
+          provide: ProcessHeatingValidityService,
+          useValue: { isAssessmentSettingsValid: settingsValid, scenarioValidity: () => ({ isValid: baselineValid() }) },
+        },
       ],
     });
     service = TestBed.inject(ProcessHeatingAssessmentService);
+  });
+
+  describe('setupDone on save', () => {
+    function savedSetupDone(): boolean {
+      return (assessmentDb.updateWithObservable.calls.mostRecent().args[0].phast as unknown as PHAST).setupDone;
+    }
+
+    // Built inside each fakeAsync test, so the auto-save debounce runs on the fake clock.
+    function loadAssessment(): void {
+      service = TestBed.runInInjectionContext(() => new ProcessHeatingAssessmentService());
+      service.setAssessment({ id: 7, phast: {} } as Assessment);
+      service.setSettings({ unitsOfMeasure: 'Imperial' } as Settings);
+    }
+
+    it('marks the assessment set up when the settings and baseline are valid', fakeAsync(() => {
+      loadAssessment();
+      service.setProcessHeating({ name: 'Baseline' });
+      tick(300);
+
+      expect(savedSetupDone()).toBeTrue();
+    }));
+
+    it('marks the assessment not set up when the baseline is invalid', fakeAsync(() => {
+      loadAssessment();
+      baselineValid.set(false);
+      service.setProcessHeating({ name: 'Baseline' });
+      tick(300);
+
+      expect(savedSetupDone()).toBeFalse();
+    }));
+
+    it('marks the assessment not set up when the settings are invalid', fakeAsync(() => {
+      loadAssessment();
+      settingsValid.set(false);
+      service.setProcessHeating({ name: 'Baseline' });
+      tick(300);
+
+      expect(savedSetupDone()).toBeFalse();
+    }));
+
+    it('re-saves the mark when only the settings change', fakeAsync(() => {
+      loadAssessment();
+      tick(300);
+      assessmentDb.updateWithObservable.calls.reset();
+
+      settingsValid.set(false);
+      service.setSettings({ unitsOfMeasure: 'Imperial', currency: '\u20AC' } as Settings);
+      tick(300);
+
+      expect(assessmentDb.updateWithObservable).toHaveBeenCalledTimes(1);
+      expect(savedSetupDone()).toBeFalse();
+    }));
   });
 
   describe('lossSignal / updateLossesProperty', () => {
@@ -221,6 +283,7 @@ describe('ProcessHeatingAssessmentService', () => {
 
       const savedPhast = assessmentDb.updateWithObservable.calls.mostRecent().args[0].phast as unknown as PHAST;
       expect(savedPhast.losses.wallLosses[0].ambientTemperature).toBe(100);
+      expect(savedPhast.setupDone).toBeTrue();
       expect(assessmentDb.updateWithObservable).toHaveBeenCalledBefore(settingsDb.updateWithObservable);
     });
 
@@ -313,5 +376,23 @@ describe('ProcessHeatingAssessmentService', () => {
       expect(service.processHeatingSignal().losses.wallLosses[0].ambientTemperature).toBe(212);
       expect(assessmentDb.updateWithObservable).not.toHaveBeenCalled();
     });
+  });
+});
+
+describe('scenarioSettingsFor', () => {
+  const settings = { energySourceType: 'Fuel', unitsOfMeasure: 'Imperial' } as Settings;
+  const phast = {
+    modifications: [{ id: 'electric', energySource: { energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' } }, { id: 'same' }],
+  } as unknown as PHAST;
+
+  it('returns the assessment settings for the baseline and for a modification without its own energy source', () => {
+    expect(scenarioSettingsFor(settings, phast, 'baseline')).toBe(settings);
+    expect(scenarioSettingsFor(settings, phast, 'same')).toBe(settings);
+  });
+
+  it("applies a modification's own energy source", () => {
+    expect(scenarioSettingsFor(settings, phast, 'electric')).toEqual(jasmine.objectContaining({
+      energySourceType: 'Electricity', furnaceType: 'Electrical Infrared', unitsOfMeasure: 'Imperial',
+    }));
   });
 });

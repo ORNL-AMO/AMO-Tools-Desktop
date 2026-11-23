@@ -1,6 +1,6 @@
-import { computed, inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
+import { computed, inject, Injectable, Injector, Signal, signal, WritableSignal } from '@angular/core';
 import { isEqual } from 'lodash';
-import { BehaviorSubject, debounceTime, firstValueFrom, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, firstValueFrom, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Assessment } from '../../shared/models/assessment';
 import { PHAST as SharedPHAST } from '../../shared/models/phast/phast';
@@ -12,6 +12,7 @@ import { HeatingEquipmentConfiguration, HeatingSystemEnergyType } from '../model
 import { ScenarioOverrides, ProcessHeatingModification } from '../models/modification';
 import { getEffectivePhast } from './scenario-merge.util';
 import { convertProcessHeatingEnergyUnit, convertProcessHeatingUnits } from './convert-process-heating.util';
+import { ProcessHeatingValidityService } from './process-heating-validity.service';
 
 export type ProcessHeatingDataProperty = keyof PHAST;
 
@@ -38,10 +39,29 @@ export function deriveHeatingEquipmentConfiguration(settings: Settings): Heating
   return HeatingEquipmentConfiguration.FUEL_FIRED;
 }
 
+/**
+ * @param settings the assessment's settings
+ * @param phast the assessment's baseline, holding its modifications
+ * @param scenario 'baseline' or a modification id
+ * @returns the settings with the modification's own energy source applied, when it has one
+ */
+export function scenarioSettingsFor(settings: Settings, phast: PHAST | undefined, scenario: AssessmentScenario): Settings {
+  const energySource = scenario === 'baseline'
+    ? undefined
+    : ((phast?.modifications ?? []) as ProcessHeatingModification[]).find(mod => mod.id === scenario)?.energySource;
+  if (!settings || !energySource) {
+    return settings;
+  }
+  const { energySourceType, furnaceType, customFurnaceName } = energySource;
+  return { ...settings, energySourceType, furnaceType, customFurnaceName };
+}
+
 @Injectable()
 export class ProcessHeatingAssessmentService {
   private readonly assessmentDbService = inject(AssessmentDbService);
   private readonly settingsDbService = inject(SettingsDbService);
+  /** Resolves ProcessHeatingValidityService at save time; it injects this service, so injecting it here directly would be a circular dependency. */
+  private readonly injector = inject(Injector);
 
   private readonly assessment = new BehaviorSubject<Assessment>(undefined);
   readonly assessment$ = this.assessment.asObservable();
@@ -63,11 +83,12 @@ export class ProcessHeatingAssessmentService {
   );
 
   constructor() {
-    this.assessment$.pipe(
+    // Settings changes also re-save, since they can change whether the setup is done.
+    combineLatest([this.assessment$, this.settings$]).pipe(
       debounceTime(300),
-      switchMap(assessment => {
+      switchMap(([assessment]) => {
         if (assessment) {
-          return this.assessmentDbService.updateWithObservable(assessment).pipe(
+          return this.assessmentDbService.updateWithObservable(this.withSetupDone(assessment)).pipe(
              // * getAllAssessments -> setAll workflow is only to satisfy legacy MEASUR patterns that are used for keeping items in memory. 
             // * Satisfying this pattern fixes stale assessment data in the directories
             switchMap(() => this.assessmentDbService.getAllAssessments()),
@@ -90,6 +111,17 @@ export class ProcessHeatingAssessmentService {
 
   get settingsValue(): Settings {
     return this.settings.getValue();
+  }
+
+  /**
+   * The dashboard, rollup and JUSTIFI export only include assessments marked set up, the same rule as Report access.
+   * @param assessment the assessment about to be written
+   * @returns a copy whose `setupDone` reflects the current settings and baseline validity
+   */
+  private withSetupDone(assessment: Assessment): Assessment {
+    const validityService = this.injector.get(ProcessHeatingValidityService);
+    const setupDone = validityService.isAssessmentSettingsValid() && validityService.scenarioValidity('baseline').isValid;
+    return { ...assessment, phast: { ...assessment.phast, setupDone } };
   }
 
   setProcessHeating(phast: PHAST): void {
@@ -181,17 +213,7 @@ export class ProcessHeatingAssessmentService {
   scenarioSettings(scenario: AssessmentScenario): Settings {
     let cached = this.scenarioSettingsCache.get(scenario);
     if (!cached) {
-      cached = computed(() => {
-        const settings = this.settingsSignal();
-        const energySource = scenario === 'baseline'
-          ? undefined
-          : this.getModifications(this.processHeatingSignal()).find(mod => mod.id === scenario)?.energySource;
-        if (!settings || !energySource) {
-          return settings;
-        }
-        const { energySourceType, furnaceType, customFurnaceName } = energySource;
-        return { ...settings, energySourceType, furnaceType, customFurnaceName };
-      }, { equal: isEqual });
+      cached = computed(() => scenarioSettingsFor(this.settingsSignal(), this.processHeatingSignal(), scenario), { equal: isEqual });
       this.scenarioSettingsCache.set(scenario, cached);
     }
     return cached();
@@ -272,7 +294,7 @@ export class ProcessHeatingAssessmentService {
    */
   private async persistSettings(newSettings: Settings, dataChanged: boolean): Promise<void> {
     if (dataChanged) {
-      await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessmentValue));
+      await firstValueFrom(this.assessmentDbService.updateWithObservable(this.withSetupDone(this.assessmentValue)));
     }
     await firstValueFrom(this.settingsDbService.updateWithObservable(newSettings));
     this.settingsDbService.setAll(await firstValueFrom(this.settingsDbService.getAllSettings()));
