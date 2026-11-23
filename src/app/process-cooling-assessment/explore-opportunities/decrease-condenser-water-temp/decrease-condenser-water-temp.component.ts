@@ -48,7 +48,10 @@ export class DecreaseCondenserWaterTempComponent implements OnInit {
       if (modification) {
         this.useOpportunity = modification.decreaseCondenserWaterTemp.useOpportunity;
         this.isOpportunityDisabled = modification.useSlidingCondenserWaterTemp.useOpportunity === true;
-        this.form.patchValue({ condenserWaterTemperature: modification.decreaseCondenserWaterTemp.condenserWaterTemp }, { emitEvent: false });
+        const condenserWaterTemperature = modification.decreaseCondenserWaterTemp.condenserWaterTemp;
+        if (this.condenserWaterTemperature.value !== condenserWaterTemperature) {
+          this.form.patchValue({ condenserWaterTemperature }, { emitEvent: false });
+        }
         this.condenserWaterTemperature.updateValueAndValidity({ emitEvent: false });
       }
     });
@@ -86,4 +89,3 @@ export class DecreaseCondenserWaterTempComponent implements OnInit {
 
 
 }
-
