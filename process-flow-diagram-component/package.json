@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "webpack build --config ./standalone-build.config.js --mode=development --watch",
     "build": "webpack build --config ./webpack.config.js",
-    "lint": "eslint . --cache --report-unused-disable-directives --max-warnings 0",
-    "lint:fix": "eslint --cache --fix",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint --fix",
     "lint:suppress": "eslint . --suppress-all",
     "lint:prune": "eslint . --prune-suppressions",
     "preview": "vite preview",

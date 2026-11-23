@@ -57,6 +57,6 @@ Use the narrowest verification that covers the change:
 - Process-flow component typecheck: run from `process-flow-diagram-component/` with `npm run test:typecheck`
 - Lint: `npm run lint` in the root and in `process-flow-diagram-component/`. Fix only named files with `npm run lint:fix -- <paths>`.
 
-Legacy lint violations are baselined in each package's `eslint-suppressions.json`. Never hand-edit it, and never run `npm run lint:suppress` to hide new violations. After fixing suppressed violations, run `npm run lint:prune` and commit the smaller file. Exceeding a file's suppressed count for a rule reports every violation of that rule in the file, not just the new one. Some rules use TypeScript type information, so a cached run (`.eslintcache`) can miss violations caused by changes in other files; delete `.eslintcache` if results look stale.
+Legacy lint violations are baselined in each package's `eslint-suppressions.json`. Never hand-edit it, and never run `npm run lint:suppress` to hide new violations. After fixing suppressed violations, run `npm run lint:prune` and commit the smaller file. Exceeding a file's suppressed count for a rule reports every violation of that rule in the file, not just the new one.
 
 For runtime checks, `npm run start` builds the process-flow component and serves the Angular app. Use Electron-specific testing when a change touches `ElectronService`, desktop packaging, file paths, preload/main process behavior, backups, or WASM `locateFile` behavior.
