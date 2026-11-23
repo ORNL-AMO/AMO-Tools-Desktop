@@ -22,7 +22,7 @@
     </tr>
     <tr>
       <td class="bold">Pressure (<span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>)</td>
-      <td class="text-center">{{results.inletPressure | number:'1.0-1'}}        
+      <td class="text-center">{{results.inletPressure | number:'1.0-1'}}
       </td>
       <td class="text-center">{{results.outletPressure | number:'1.0-1'}}
       </td>
@@ -37,14 +37,26 @@
     <tr>
       <td class="bold">Phase</td>
       <td class="text-center">
-        <span *ngIf="results.inletQuality == 0">Liquid</span>
-        <span *ngIf="results.inletQuality == 1">Gas</span>
-        <span *ngIf="results.inletQuality != 1 && results.inletQuality != 0">{{results.inletQuality | number:'1.0-1'}}</span>
+        @if (results.inletQuality == 0) {
+          <span>Liquid</span>
+        }
+        @if (results.inletQuality == 1) {
+          <span>Gas</span>
+        }
+        @if (results.inletQuality != 1 && results.inletQuality != 0) {
+          <span>{{results.inletQuality | number:'1.0-1'}}</span>
+        }
       </td>
       <td class="text-center">
-        <span *ngIf="results.outletQuality == 0">Liquid</span>
-        <span *ngIf="results.outletQuality == 1">Gas</span>
-        <span *ngIf="results.outletQuality != 1 && results.outletQuality != 0">{{results.outletQuality | number:'1.0-1'}}</span>
+        @if (results.outletQuality == 0) {
+          <span>Liquid</span>
+        }
+        @if (results.outletQuality == 1) {
+          <span>Gas</span>
+        }
+        @if (results.outletQuality != 1 && results.outletQuality != 0) {
+          <span>{{results.outletQuality | number:'1.0-1'}}</span>
+        }
       </td>
     </tr>
     <tr>
@@ -72,7 +84,7 @@
       <td class="bold">Energy Flow (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>)</td>
       <td class="text-center">{{results.inletEnergyFlow | number:'1.0-1'}}
       </td>
-      <td class="text-center">{{results.outletEnergyFlow | number:'1.0-1'}}       
+      <td class="text-center">{{results.outletEnergyFlow | number:'1.0-1'}}
       </td>
     </tr>
   </tbody>

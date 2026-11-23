@@ -3,21 +3,29 @@
     <label class="small" for="deaeratorPressure">Deaerator Pressure</label>
     <div class="input-group">
       <input class="form-control" name="deaeratorPressure" id="deaeratorPressure" formControlName="deaeratorPressure"
-        type="number" (input)="calculate()" (focus)="focusField('deaeratorPressure')" 
+        type="number" (input)="calculate()" (focus)="focusField('deaeratorPressure')"
         onfocus="this.select();">
       <span class="input-group-addon units"><span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
+        [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="deaeratorForm.controls.deaeratorPressure.invalid && !deaeratorForm.controls.deaeratorPressure.pristine">
-      <span *ngIf="deaeratorForm.controls.deaeratorPressure.errors.required">Value Required</span>
-      <span *ngIf="deaeratorForm.controls.deaeratorPressure.errors.max">Value can't be greater than
-        {{deaeratorForm.controls.deaeratorPressure.errors.max.max}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span *ngIf="deaeratorForm.controls.deaeratorPressure.errors.min">Value can't be less than
-        {{deaeratorForm.controls.deaeratorPressure.errors.min.min}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-    </span>
+    @if (deaeratorForm.controls.deaeratorPressure.invalid && !deaeratorForm.controls.deaeratorPressure.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (deaeratorForm.controls.deaeratorPressure.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (deaeratorForm.controls.deaeratorPressure.errors.max) {
+          <span>Value can't be greater than
+            {{deaeratorForm.controls.deaeratorPressure.errors.max.max}} <span
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+        @if (deaeratorForm.controls.deaeratorPressure.errors.min) {
+          <span>Value can't be less than
+            {{deaeratorForm.controls.deaeratorPressure.errors.min.min}} <span
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+      </span>
+    }
   </div>
 
   <div class="form-group">
@@ -27,35 +35,51 @@
         (input)="calculate()" (focus)="focusField('ventRate')"  onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="deaeratorForm.controls.ventRate.invalid && !deaeratorForm.controls.ventRate.pristine">
-      <span *ngIf="deaeratorForm.controls.ventRate.errors.required">Value Required</span>
-      <span *ngIf="deaeratorForm.controls.ventRate.errors.max">Value can't be greater than
-        {{deaeratorForm.controls.ventRate.errors.max.max}} %.</span>
-      <span *ngIf="deaeratorForm.controls.ventRate.errors.min">Value can't be less than
-        {{deaeratorForm.controls.ventRate.errors.min.min}} %.</span>
-    </span>
+    @if (deaeratorForm.controls.ventRate.invalid && !deaeratorForm.controls.ventRate.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (deaeratorForm.controls.ventRate.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (deaeratorForm.controls.ventRate.errors.max) {
+          <span>Value can't be greater than
+            {{deaeratorForm.controls.ventRate.errors.max.max}} %.</span>
+        }
+        @if (deaeratorForm.controls.ventRate.errors.min) {
+          <span>Value can't be less than
+            {{deaeratorForm.controls.ventRate.errors.min.min}} %.</span>
+        }
+      </span>
+    }
   </div>
 
   <div class="form-group">
     <label class="small" for="feedwaterMassFlow">Feedwater Mass Flow</label>
     <div class="input-group">
       <input class="form-control" name="feedwaterMassFlow" id="feedwaterMassFlow" formControlName="feedwaterMassFlow"
-        type="number" (input)="calculate()" (focus)="focusField('feedwaterMassFlow')" 
+        type="number" (input)="calculate()" (focus)="focusField('feedwaterMassFlow')"
         onfocus="this.select();">
       <span class="input-group-addon units"><span
-          [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+        [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="deaeratorForm.controls.feedwaterMassFlow.invalid && !deaeratorForm.controls.feedwaterMassFlow.pristine">
-      <span *ngIf="deaeratorForm.controls.feedwaterMassFlow.errors.required">Value Required</span>
-      <span *ngIf="deaeratorForm.controls.feedwaterMassFlow.errors.max">Value can't be greater than
-        {{deaeratorForm.controls.feedwaterMassFlow.errors.max.max}} <span
-          [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
-      <span *ngIf="deaeratorForm.controls.feedwaterMassFlow.errors.min">Value can't be less than
-        {{deaeratorForm.controls.feedwaterMassFlow.errors.min.min}} <span
-          [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
-    </span>
+    @if (deaeratorForm.controls.feedwaterMassFlow.invalid && !deaeratorForm.controls.feedwaterMassFlow.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (deaeratorForm.controls.feedwaterMassFlow.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (deaeratorForm.controls.feedwaterMassFlow.errors.max) {
+          <span>Value can't be greater than
+            {{deaeratorForm.controls.feedwaterMassFlow.errors.max.max}} <span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
+        }
+        @if (deaeratorForm.controls.feedwaterMassFlow.errors.min) {
+          <span>Value can't be less than
+            {{deaeratorForm.controls.feedwaterMassFlow.errors.min.min}} <span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
+        }
+      </span>
+    }
   </div>
 
   <label class="group-label w-100">Water</label>
@@ -65,43 +89,67 @@
       <input class="form-control" name="waterPressure" id="waterPressure" formControlName="waterPressure" type="number"
         (input)="calculate()" (focus)="focusField('waterPressure')"  onfocus="this.select();">
       <span class="input-group-addon units"><span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
+        [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="deaeratorForm.controls.waterPressure.invalid && !deaeratorForm.controls.waterPressure.pristine">
-      <span *ngIf="deaeratorForm.controls.waterPressure.errors.required">Value Required</span>
-      <span *ngIf="deaeratorForm.controls.waterPressure.errors.max">Value can't be greater than
-        {{deaeratorForm.controls.waterPressure.errors.max.max}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span *ngIf="deaeratorForm.controls.waterPressure.errors.min">Value can't be less than
-        {{deaeratorForm.controls.waterPressure.errors.min.min}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-    </span>
+    @if (deaeratorForm.controls.waterPressure.invalid && !deaeratorForm.controls.waterPressure.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (deaeratorForm.controls.waterPressure.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (deaeratorForm.controls.waterPressure.errors.max) {
+          <span>Value can't be greater than
+            {{deaeratorForm.controls.waterPressure.errors.max.max}} <span
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+        @if (deaeratorForm.controls.waterPressure.errors.min) {
+          <span>Value can't be less than
+            {{deaeratorForm.controls.waterPressure.errors.min.min}} <span
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+      </span>
+    }
   </div>
   <div class="form-group label-select">
     <select name="waterThermodynamicQuantity" class="form-control" formControlName="waterThermodynamicQuantity"
       id="waterThermodynamicQuantity" (change)="setWaterQuantityRanges()"
       (focus)="focusField('waterThermodynamicQuantity')">
-      <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
+      @for (option of thermoOptions; track option) {
+        <option [ngValue]="option.value">{{option.display}}</option>
+      }
     </select>
     <div class="spacer"></div>
     <div class="input-group">
       <input type="number" class="form-control" name="waterQuantityValue" id="waterQuantityValue" formControlName="waterQuantityValue"
         onfocus="this.select();" (input)="calculate()" (focus)="focusField('waterQuantityValue')">
-      <span class="input-group-addon units" *ngIf="deaeratorForm.controls.waterThermodynamicQuantity.value != 3"
-        [innerHTML]="getOptionDisplayUnit(deaeratorForm.controls.waterThermodynamicQuantity.value) | settingsLabel"></span>
-      <span class="alert-danger pull-right small"
-        *ngIf="deaeratorForm.controls.waterQuantityValue.invalid && !deaeratorForm.controls.waterQuantityValue.pristine">
-        <span *ngIf="deaeratorForm.controls.waterQuantityValue.errors.required">Value Required</span>
-        <span *ngIf="deaeratorForm.controls.waterQuantityValue.errors.max">Value can't be greater than {{deaeratorForm.controls.waterQuantityValue.errors.max.max}}
-          <span *ngIf="deaeratorForm.controls.waterThermodynamicQuantity.value != 3"
-            [innerHTML]="getOptionDisplayUnit(deaeratorForm.controls.waterThermodynamicQuantity.value) | settingsLabel"></span>.
+      @if (deaeratorForm.controls.waterThermodynamicQuantity.value != 3) {
+        <span class="input-group-addon units"
+          [innerHTML]="getOptionDisplayUnit(deaeratorForm.controls.waterThermodynamicQuantity.value) | settingsLabel"></span>
+      }
+      @if (deaeratorForm.controls.waterQuantityValue.invalid && !deaeratorForm.controls.waterQuantityValue.pristine) {
+        <span class="alert-danger pull-right small"
+          >
+          @if (deaeratorForm.controls.waterQuantityValue.errors.required) {
+            <span>Value Required</span>
+          }
+          @if (deaeratorForm.controls.waterQuantityValue.errors.max) {
+            <span>Value can't be greater than {{deaeratorForm.controls.waterQuantityValue.errors.max.max}}
+              @if (deaeratorForm.controls.waterThermodynamicQuantity.value != 3) {
+                <span
+                  [innerHTML]="getOptionDisplayUnit(deaeratorForm.controls.waterThermodynamicQuantity.value) | settingsLabel"></span>
+              }.
+            </span>
+          }
+          @if (deaeratorForm.controls.waterQuantityValue.errors.min) {
+            <span>Value can't be less than {{deaeratorForm.controls.waterQuantityValue.errors.min.min}}
+              @if (deaeratorForm.controls.waterThermodynamicQuantity.value != 3) {
+                <span
+                  [innerHTML]="getOptionDisplayUnit(deaeratorForm.controls.waterThermodynamicQuantity.value) | settingsLabel"></span>
+              }.
+            </span>
+          }
         </span>
-        <span *ngIf="deaeratorForm.controls.waterQuantityValue.errors.min">Value can't be less than {{deaeratorForm.controls.waterQuantityValue.errors.min.min}}
-          <span *ngIf="deaeratorForm.controls.waterThermodynamicQuantity.value != 3"
-            [innerHTML]="getOptionDisplayUnit(deaeratorForm.controls.waterThermodynamicQuantity.value) | settingsLabel"></span>.
-        </span>
-      </span>
+      }
     </div>
   </div>
 
@@ -113,40 +161,64 @@
         (input)="calculate()" (focus)="focusField('steamPressure')"  onfocus="this.select();">
       <span class="input-group-addon units"><span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="deaeratorForm.controls.steamPressure.invalid && !deaeratorForm.controls.steamPressure.pristine">
-      <span *ngIf="deaeratorForm.controls.steamPressure.errors.required">Value Required</span>
-      <span *ngIf="deaeratorForm.controls.steamPressure.errors.max">Value can't be greater than
-        {{deaeratorForm.controls.steamPressure.errors.max.max}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span *ngIf="deaeratorForm.controls.steamPressure.errors.min">Value can't be less than
-        {{deaeratorForm.controls.steamPressure.errors.min.min}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-    </span>
+    @if (deaeratorForm.controls.steamPressure.invalid && !deaeratorForm.controls.steamPressure.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (deaeratorForm.controls.steamPressure.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (deaeratorForm.controls.steamPressure.errors.max) {
+          <span>Value can't be greater than
+            {{deaeratorForm.controls.steamPressure.errors.max.max}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+        @if (deaeratorForm.controls.steamPressure.errors.min) {
+          <span>Value can't be less than
+            {{deaeratorForm.controls.steamPressure.errors.min.min}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+      </span>
+    }
   </div>
 
   <div class="form-group label-select">
     <select name="steamThermodynamicQuantity" class="form-control" formControlName="steamThermodynamicQuantity"
       id="steamThermodynamicQuantity" (change)="setSteamQuantityRanges()"
       (focus)="focusField('steamThermodynamicQuantity')">
-      <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
+      @for (option of thermoOptions; track option) {
+        <option [ngValue]="option.value">{{option.display}}</option>
+      }
     </select>
     <div class="spacer"></div>
     <div class="input-group">
       <input type="number" class="form-control" name="steamQuantityValue" id="steamQuantityValue" formControlName="steamQuantityValue"
         onfocus="this.select();" (input)="calculate()" (focus)="focusField('steamQuantityValue')">
-      <span class="input-group-addon units" *ngIf="deaeratorForm.controls.steamThermodynamicQuantity.value != 3"
-        [innerHTML]="getOptionDisplayUnit(deaeratorForm.controls.steamThermodynamicQuantity.value) | settingsLabel"></span>
-      <span class="alert-danger pull-right small"
-        *ngIf="deaeratorForm.controls.steamQuantityValue.invalid && !deaeratorForm.controls.steamQuantityValue.pristine">
-        <span *ngIf="deaeratorForm.controls.steamQuantityValue.errors.required">Value Required</span>
-        <span *ngIf="deaeratorForm.controls.steamQuantityValue.errors.max">Value can't be greater than {{deaeratorForm.controls.steamQuantityValue.errors.max.max}}
-          <span *ngIf="deaeratorForm.controls.steamThermodynamicQuantity.value != 3"
-            [innerHTML]="getOptionDisplayUnit(deaeratorForm.controls.steamThermodynamicQuantity.value) | settingsLabel"></span>.
+      @if (deaeratorForm.controls.steamThermodynamicQuantity.value != 3) {
+        <span class="input-group-addon units"
+          [innerHTML]="getOptionDisplayUnit(deaeratorForm.controls.steamThermodynamicQuantity.value) | settingsLabel"></span>
+      }
+      @if (deaeratorForm.controls.steamQuantityValue.invalid && !deaeratorForm.controls.steamQuantityValue.pristine) {
+        <span class="alert-danger pull-right small"
+          >
+          @if (deaeratorForm.controls.steamQuantityValue.errors.required) {
+            <span>Value Required</span>
+          }
+          @if (deaeratorForm.controls.steamQuantityValue.errors.max) {
+            <span>Value can't be greater than {{deaeratorForm.controls.steamQuantityValue.errors.max.max}}
+              @if (deaeratorForm.controls.steamThermodynamicQuantity.value != 3) {
+                <span
+                  [innerHTML]="getOptionDisplayUnit(deaeratorForm.controls.steamThermodynamicQuantity.value) | settingsLabel"></span>
+              }.
+            </span>
+          }
+          @if (deaeratorForm.controls.steamQuantityValue.errors.min) {
+            <span>Value can't be less than {{deaeratorForm.controls.steamQuantityValue.errors.min.min}}
+              @if (deaeratorForm.controls.steamThermodynamicQuantity.value != 3) {
+                <span
+                  [innerHTML]="getOptionDisplayUnit(deaeratorForm.controls.steamThermodynamicQuantity.value) | settingsLabel"></span>
+              }.
+            </span>
+          }
         </span>
-        <span *ngIf="deaeratorForm.controls.steamQuantityValue.errors.min">Value can't be less than {{deaeratorForm.controls.steamQuantityValue.errors.min.min}}
-          <span *ngIf="deaeratorForm.controls.steamThermodynamicQuantity.value != 3"
-            [innerHTML]="getOptionDisplayUnit(deaeratorForm.controls.steamThermodynamicQuantity.value) | settingsLabel"></span>.
-        </span>
-      </span>
+      }
     </div>
   </div>
 </form>

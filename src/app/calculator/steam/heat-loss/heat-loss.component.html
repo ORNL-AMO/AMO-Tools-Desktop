@@ -19,8 +19,10 @@
     <div class="calculator-panel-container modification mh-100"
       [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}" [ngStyle]="{'height.px': containerHeight}">
       <div class="d-flex flex-column m-4">
-        <app-heat-loss-form *ngIf="heatLossForm" [heatLossForm]="heatLossForm" [settings]="settings"
-          (emitChangeField)="changeField($event)" (emitCalculate)="calculate($event)"></app-heat-loss-form>
+        @if (heatLossForm) {
+          <app-heat-loss-form [heatLossForm]="heatLossForm" [settings]="settings"
+            (emitChangeField)="changeField($event)" (emitCalculate)="calculate($event)"></app-heat-loss-form>
+        }
         <div class="w-100 justify-content-center btn-group btn-group-sm">
           <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
             Reset Data
@@ -47,12 +49,16 @@
         </div>
       </div>
       <div class="d-flex">
-        <app-heat-loss-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField"
-          [settings]="settings" [thermodynamicQuantity]="input.thermodynamicQuantity"></app-heat-loss-help>
-        <div class="d-flex flex-column w-100 align-items-center p-4" *ngIf="tabSelect == 'results'">
-          <app-heat-loss-results class="w-100" [results]="results" [settings]="settings"
-            [percentHeatLoss]="input.percentHeatLoss"></app-heat-loss-results>
-        </div>
+        @if (tabSelect == 'help') {
+          <app-heat-loss-help class="w-100" [currentField]="currentField"
+            [settings]="settings" [thermodynamicQuantity]="input.thermodynamicQuantity"></app-heat-loss-help>
+        }
+        @if (tabSelect == 'results') {
+          <div class="d-flex flex-column w-100 align-items-center p-4">
+            <app-heat-loss-results class="w-100" [results]="results" [settings]="settings"
+              [percentHeatLoss]="input.percentHeatLoss"></app-heat-loss-results>
+          </div>
+        }
       </div>
     </div>
 

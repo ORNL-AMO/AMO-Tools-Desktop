@@ -8,61 +8,65 @@
   </h5>
   <hr class="my-1 hr-spacer">
 
-  <div class="my-2" *ngIf="currentField == 'saturatedPressure'">
-    <h6>
-      Saturated Pressure
-      <br>
-      <small class="text-muted">
-        Pressure of the steam. Pressure cannot be above the critical point, as there is no longer a phase
-        change.
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">{{ranges.minPressure}}
-              <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
-            </td>
-            <td class="w-50 text-center">{{ranges.maxPressure}}
-              <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  @if (currentField == 'saturatedPressure') {
+    <div class="my-2">
+      <h6>
+        Saturated Pressure
+        <br>
+        <small class="text-muted">
+          Pressure of the steam. Pressure cannot be above the critical point, as there is no longer a phase
+          change.
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">{{ranges.minPressure}}
+                <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+              </td>
+              <td class="w-50 text-center">{{ranges.maxPressure}}
+                <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'saturatedTemperature'">
-    <h6>
-      Saturated Temperature
-      <br>
-      <small class="text-muted">
-        Temperature of the steam. Temperature cannot be above the critical point, as there is no longer a phase change.
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">{{ranges.minTemp}}
-              <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
-            </td>
-            <td class="w-50 text-center">{{ranges.maxTemp}}
-              <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  }
+  @if (currentField == 'saturatedTemperature') {
+    <div class="my-2">
+      <h6>
+        Saturated Temperature
+        <br>
+        <small class="text-muted">
+          Temperature of the steam. Temperature cannot be above the critical point, as there is no longer a phase change.
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">{{ranges.minTemp}}
+                <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+              </td>
+              <td class="w-50 text-center">{{ranges.maxTemp}}
+                <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  }
 </div>

@@ -40,7 +40,7 @@
       <td class="text-center">{{results.outletPressure |number:'1.0-2'}} </td>
       <!-- <td class="text-center">
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
-      </td> -->
+        </td> -->
     </tr>
     <tr>
       <td class="bold">Temperature (<span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)</td>
@@ -49,27 +49,45 @@
       <td class="text-center">{{results.outletTemperature |number:'1.0-1'}} </td>
       <!-- <td class="text-center">
         <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
-      </td> -->
+        </td> -->
     </tr>
     <tr>
       <td class="bold">Phase</td>
       <td class="text-center">
-        <span *ngIf="results.inletQuality == 0">Liquid</span>
-        <span *ngIf="results.inletQuality == 1">Gas</span>
-        <span *ngIf="results.inletQuality != 1 && results.inletQuality != 0">{{results.inletQuality
-                |number:'1.0-2'}}</span>
+        @if (results.inletQuality == 0) {
+          <span>Liquid</span>
+        }
+        @if (results.inletQuality == 1) {
+          <span>Gas</span>
+        }
+        @if (results.inletQuality != 1 && results.inletQuality != 0) {
+          <span>{{results.inletQuality
+            |number:'1.0-2'}}</span>
+        }
       </td>
       <td class="text-center">
-        <span *ngIf="results.outletIdealQuality == 0">Liquid</span>
-        <span *ngIf="results.outletIdealQuality == 1">Gas</span>
-        <span *ngIf="results.outletIdealQuality != 1 && results.outletIdealQuality != 0">{{results.outletIdealQuality
-                |number:'1.0-2'}}</span>
+        @if (results.outletIdealQuality == 0) {
+          <span>Liquid</span>
+        }
+        @if (results.outletIdealQuality == 1) {
+          <span>Gas</span>
+        }
+        @if (results.outletIdealQuality != 1 && results.outletIdealQuality != 0) {
+          <span>{{results.outletIdealQuality
+            |number:'1.0-2'}}</span>
+        }
       </td>
       <td class="text-center">
-        <span *ngIf="results.outletQuality == 0">Liquid</span>
-        <span *ngIf="results.outletQuality == 1">Gas</span>
-        <span *ngIf="results.outletQuality != 1 && results.outletQuality != 0">{{results.outletQuality
-                |number:'1.0-2'}}</span>
+        @if (results.outletQuality == 0) {
+          <span>Liquid</span>
+        }
+        @if (results.outletQuality == 1) {
+          <span>Gas</span>
+        }
+        @if (results.outletQuality != 1 && results.outletQuality != 0) {
+          <span>{{results.outletQuality
+            |number:'1.0-2'}}</span>
+        }
       </td>
       <!-- <td></td> -->
     </tr>
@@ -81,7 +99,7 @@
       <td class="text-center">{{results.outletSpecificEnthalpy |number:'1.0-1'}} </td>
       <!-- <td class="text-center">
         <span [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>
-      </td> -->
+        </td> -->
     </tr>
     <tr>
       <td class="bold">Sp. Entropy (<span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>)</td>
@@ -90,7 +108,7 @@
       <td class="text-center">{{results.outletSpecificEntropy |number:'1.0-3'}} </td>
       <!-- <td class="text-center">
         <span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>
-      </td> -->
+        </td> -->
     </tr>
     <tr>
       <td class="bold">Mass Flow (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>)</td>
@@ -99,7 +117,7 @@
       <td class="text-center">{{results.massFlow |number:'1.0-2'}} </td>
       <!-- <td class="text-center">
         <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
-      </td> -->
+        </td> -->
     </tr>
     <tr>
       <td class="bold">Energy Flow (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>)</td>
@@ -108,7 +126,7 @@
       <td class="text-center">{{results.outletEnergyFlow |number:'1.0-1'}}</td>
       <!-- <td class="text-center">
         <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>
-      </td> -->
+        </td> -->
     </tr>
   </tbody>
 </table>

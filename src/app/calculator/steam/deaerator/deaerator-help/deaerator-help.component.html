@@ -20,296 +20,338 @@
 
 
 
-  <div class="my-2" *ngIf="currentField == 'deaeratorPressure'">
-    <h6>
-      Deaerator Pressure
-      <br>
-      <small class="text-muted">
-        The pressure of the deaerator. Commonly 0 to 30 psig.
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">{{rangeValues.deaeratorPressureMin}} <span
+  @if (currentField == 'deaeratorPressure') {
+    <div class="my-2">
+      <h6>
+        Deaerator Pressure
+        <br>
+        <small class="text-muted">
+          The pressure of the deaerator. Commonly 0 to 30 psig.
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">{{rangeValues.deaeratorPressureMin}} <span
                 [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
-            <td class="w-50 text-center">{{rangeValues.deaeratorPressureMax}} <span
+              <td class="w-50 text-center">{{rangeValues.deaeratorPressureMax}} <span
                 [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
-          </tr>
-        </tbody>
-      </table>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  }
 
-  <div class="my-2" *ngIf="currentField == 'ventRate'">
-    <h6>
-      Vent Rate
-      <br>
-      <small class="text-muted">
-        Deaerator vent rate as a % of feedwater flow. Commonly 0.1% to 0.2%.
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">{{rangeValues.ventRateMin}} %</td>
-            <td class="w-50 text-center">{{rangeValues.ventRateMax}} %</td>
-          </tr>
-        </tbody>
-      </table>
+  @if (currentField == 'ventRate') {
+    <div class="my-2">
+      <h6>
+        Vent Rate
+        <br>
+        <small class="text-muted">
+          Deaerator vent rate as a % of feedwater flow. Commonly 0.1% to 0.2%.
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">{{rangeValues.ventRateMin}} %</td>
+              <td class="w-50 text-center">{{rangeValues.ventRateMax}} %</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  }
 
-  <div class="my-2" *ngIf="currentField == 'feedwaterMassFlow'">
-    <h6>
-      Feedwater Mass Flow
-      <br>
-      <small class="text-muted">
-        Require mass flow of feedwater.
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">{{rangeValues.feedwaterMassFlowMin}} <span
+  @if (currentField == 'feedwaterMassFlow') {
+    <div class="my-2">
+      <h6>
+        Feedwater Mass Flow
+        <br>
+        <small class="text-muted">
+          Require mass flow of feedwater.
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">{{rangeValues.feedwaterMassFlowMin}} <span
                 [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
-            </td>
-            <td class="w-50 text-center">{{rangeValues.feedwaterMassFlowMax}} <span
+              </td>
+              <td class="w-50 text-center">{{rangeValues.feedwaterMassFlowMax}} <span
                 [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'waterPressure'">
-    <h6>
-      Water Pressure
-      <br>
-      <small class="text-muted">
-        The pressure of the inlet water. (Absolute)
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">{{rangeValues.waterPressureMin}} <span
+  }
+  @if (currentField == 'waterPressure') {
+    <div class="my-2">
+      <h6>
+        Water Pressure
+        <br>
+        <small class="text-muted">
+          The pressure of the inlet water. (Absolute)
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">{{rangeValues.waterPressureMin}} <span
                 [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
-            <td class="w-50 text-center">{{rangeValues.waterPressureMax}} <span
+              <td class="w-50 text-center">{{rangeValues.waterPressureMax}} <span
                 [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
-          </tr>
-        </tbody>
-      </table>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  }
 
 
-  <div class="my-2" *ngIf="currentField == 'waterThermodynamicQuantity'">
-    <h6>
-      Known Variable
-      <br>
-      <small class="text-muted">
-        Choose a known steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further
-        characterize
-        the inlet water.
-        <hr>
-      </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'steamThermodynamicQuantity'">
-    <h6>
-      Known Variable
-      <br>
-      <small class="text-muted">
-        Choose a known steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further
-        characterize
-        the inlet steam.
-        <hr>
-      </small>
-    </h6>
-  </div>
+  @if (currentField == 'waterThermodynamicQuantity') {
+    <div class="my-2">
+      <h6>
+        Known Variable
+        <br>
+        <small class="text-muted">
+          Choose a known steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further
+          characterize
+          the inlet water.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+  @if (currentField == 'steamThermodynamicQuantity') {
+    <div class="my-2">
+      <h6>
+        Known Variable
+        <br>
+        <small class="text-muted">
+          Choose a known steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further
+          characterize
+          the inlet steam.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
 
-  <div class="my-2" *ngIf="currentField == 'waterQuantityValue'">
-    <h6>
-      <div *ngIf="waterThermodynamicQuantity == 0">
-        <span>Temperature</span>
-        Value
-        <br>
-        <small class="text-muted">
-          The temperature of the inlet water.
-          <hr>
-        </small>
+  @if (currentField == 'waterQuantityValue') {
+    <div class="my-2">
+      <h6>
+        @if (waterThermodynamicQuantity == 0) {
+          <div>
+            <span>Temperature</span>
+            Value
+            <br>
+            <small class="text-muted">
+              The temperature of the inlet water.
+              <hr>
+            </small>
+          </div>
+        }
+        @if (waterThermodynamicQuantity == 1) {
+          <div>
+            <span>Specific Enthalpy</span>
+            Value
+            <br>
+            <small class="text-muted">
+              Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for
+              the material,
+              compared to the standard state, in terms of mass.
+              <hr>
+            </small>
+          </div>
+        }
+        @if (waterThermodynamicQuantity == 2) {
+          <div>
+            <span>Specific Entropy</span>
+            Value
+            <br>
+            <small class="text-muted">
+              Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the
+              standard state,
+              in terms of mass.
+              <hr>
+            </small>
+          </div>
+        }
+        @if (waterThermodynamicQuantity == 3) {
+          <div>
+            <span>Saturated Quality</span>
+            Value
+            <br>
+            <small class="text-muted">
+              Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for
+              steam; a value
+              between 0 and 1 indicates mixed flow (both liquid and vapor).
+              <hr>
+            </small>
+          </div>
+        }
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">{{rangeValues.waterQuantityValueMin}}
+                @if (waterThermodynamicQuantity != 3) {
+                  <span
+                    [innerHTML]="getOptionDisplayUnit(waterThermodynamicQuantity) | settingsLabel"></span>
+                }
+              </td>
+              <td class="w-50 text-center">{{rangeValues.waterQuantityValueMax}}
+                @if (waterThermodynamicQuantity != 3) {
+                  <span
+                    [innerHTML]="getOptionDisplayUnit(waterThermodynamicQuantity) | settingsLabel"></span>
+                }
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div *ngIf="waterThermodynamicQuantity == 1">
-        <span>Specific Enthalpy</span>
-        Value
-        <br>
-        <small class="text-muted">
-          Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for
-          the material,
-          compared to the standard state, in terms of mass.
-          <hr>
-        </small>
-      </div>
-      <div *ngIf="waterThermodynamicQuantity == 2">
-        <span>Specific Entropy</span>
-        Value
-        <br>
-        <small class="text-muted">
-          Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the
-          standard state,
-          in terms of mass.
-          <hr>
-        </small>
-      </div>
-      <div *ngIf="waterThermodynamicQuantity == 3">
-        <span>Saturated Quality</span>
-        Value
-        <br>
-        <small class="text-muted">
-          Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for
-          steam; a value
-          between 0 and 1 indicates mixed flow (both liquid and vapor).
-          <hr>
-        </small>
-      </div>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">{{rangeValues.waterQuantityValueMin}}
-              <span *ngIf="waterThermodynamicQuantity != 3"
-                [innerHTML]="getOptionDisplayUnit(waterThermodynamicQuantity) | settingsLabel"></span>
-            </td>
-            <td class="w-50 text-center">{{rangeValues.waterQuantityValueMax}}
-              <span *ngIf="waterThermodynamicQuantity != 3"
-                [innerHTML]="getOptionDisplayUnit(waterThermodynamicQuantity) | settingsLabel"></span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'steamPressure'">
-    <h6>
-      Steam Pressure
-      <br>
-      <small class="text-muted">
-        The pressure of the inlet steam. (Absolute)
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">{{rangeValues.steamPressureMin}} <span
+  }
+  @if (currentField == 'steamPressure') {
+    <div class="my-2">
+      <h6>
+        Steam Pressure
+        <br>
+        <small class="text-muted">
+          The pressure of the inlet steam. (Absolute)
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">{{rangeValues.steamPressureMin}} <span
                 [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
-            <td class="w-50 text-center">{{rangeValues.steamPressureMax}} <span
+              <td class="w-50 text-center">{{rangeValues.steamPressureMax}} <span
                 [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
-          </tr>
-        </tbody>
-      </table>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  }
 
-  <div class="my-2" *ngIf="currentField == 'steamQuantityValue'">
-    <h6>
-      <div *ngIf="steamThermodynamicQuantity == 0">
-        <span>Temperature</span>
-        Value
-        <br>
-        <small class="text-muted">
-          The temperature of the inlet steam.
-          <hr>
-        </small>
+  @if (currentField == 'steamQuantityValue') {
+    <div class="my-2">
+      <h6>
+        @if (steamThermodynamicQuantity == 0) {
+          <div>
+            <span>Temperature</span>
+            Value
+            <br>
+            <small class="text-muted">
+              The temperature of the inlet steam.
+              <hr>
+            </small>
+          </div>
+        }
+        @if (steamThermodynamicQuantity == 1) {
+          <div>
+            <span>Specific Enthalpy</span>
+            Value
+            <br>
+            <small class="text-muted">
+              Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for
+              the material,
+              compared to the standard state, in terms of mass.
+              <hr>
+            </small>
+          </div>
+        }
+        @if (steamThermodynamicQuantity == 2) {
+          <div>
+            <span>Specific Entropy</span>
+            Value
+            <br>
+            <small class="text-muted">
+              Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the
+              standard state,
+              in terms of mass.
+              <hr>
+            </small>
+          </div>
+        }
+        @if (steamThermodynamicQuantity == 3) {
+          <div>
+            <span>Saturated Quality</span>
+            Value
+            <br>
+            <small class="text-muted">
+              Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for
+              steam; a value
+              between 0 and 1 indicates mixed flow (both liquid and vapor).
+              <hr>
+            </small>
+          </div>
+        }
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">{{rangeValues.steamQuantityValueMin}}
+                @if (steamThermodynamicQuantity != 3) {
+                  <span
+                    [innerHTML]="getOptionDisplayUnit(steamThermodynamicQuantity) | settingsLabel"></span>
+                }
+              </td>
+              <td class="w-50 text-center">{{rangeValues.steamQuantityValueMax}}
+                @if (steamThermodynamicQuantity != 3) {
+                  <span
+                    [innerHTML]="getOptionDisplayUnit(steamThermodynamicQuantity) | settingsLabel"></span>
+                }
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div *ngIf="steamThermodynamicQuantity == 1">
-        <span>Specific Enthalpy</span>
-        Value
-        <br>
-        <small class="text-muted">
-          Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for
-          the material,
-          compared to the standard state, in terms of mass.
-          <hr>
-        </small>
-      </div>
-      <div *ngIf="steamThermodynamicQuantity == 2">
-        <span>Specific Entropy</span>
-        Value
-        <br>
-        <small class="text-muted">
-          Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the
-          standard state,
-          in terms of mass.
-          <hr>
-        </small>
-      </div>
-      <div *ngIf="steamThermodynamicQuantity == 3">
-        <span>Saturated Quality</span>
-        Value
-        <br>
-        <small class="text-muted">
-          Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for
-          steam; a value
-          between 0 and 1 indicates mixed flow (both liquid and vapor).
-          <hr>
-        </small>
-      </div>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">{{rangeValues.steamQuantityValueMin}}
-              <span *ngIf="steamThermodynamicQuantity != 3"
-                [innerHTML]="getOptionDisplayUnit(steamThermodynamicQuantity) | settingsLabel"></span>
-            </td>
-            <td class="w-50 text-center">{{rangeValues.steamQuantityValueMax}}
-              <span *ngIf="steamThermodynamicQuantity != 3"
-                [innerHTML]="getOptionDisplayUnit(steamThermodynamicQuantity) | settingsLabel"></span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
-  </div>
+  }
 </div>

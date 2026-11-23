@@ -14,276 +14,348 @@
     </h6>
   </div>
   <hr class="my-1 hr-spacer">
-  
-  <div class="my-2" *ngIf="currentField == 'solveFor'">
-    <h6>
-      "Solve For" Option
-      <br>
-      <small class="text-muted">
-        User can generate a basic steam turbine model, solving for either Outlet Steam Conditions or Isentropic
-        Efficiency.
-        <hr>
-      </small>
-    </h6>
-  </div>
 
-  <div class="my-2" *ngIf="currentField == 'inletPressure'">
-    <h6>
-      Pressure (Inlet)
-      <br>
-      <small class="text-muted">
-        The pressure at the inlet. Commonly between 0 and 300 and occasionally much greater. (Absolute)
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">{{rangeValues.inletPressureMin}} <span
+  @if (currentField == 'solveFor') {
+    <div class="my-2">
+      <h6>
+        "Solve For" Option
+        <br>
+        <small class="text-muted">
+          User can generate a basic steam turbine model, solving for either Outlet Steam Conditions or Isentropic
+          Efficiency.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField == 'inletPressure') {
+    <div class="my-2">
+      <h6>
+        Pressure (Inlet)
+        <br>
+        <small class="text-muted">
+          The pressure at the inlet. Commonly between 0 and 300 and occasionally much greater. (Absolute)
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">{{rangeValues.inletPressureMin}} <span
                 [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
-            <td class="w-50 text-center">{{rangeValues.inletPressureMax}} <span
+              <td class="w-50 text-center">{{rangeValues.inletPressureMax}} <span
                 [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
-          </tr>
-        </tbody>
-      </table>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  }
 
-  <div class="my-2" *ngIf="currentField == 'inletQuantity' || currentField == 'outletQuantity'">
-    <h6>
-      Known Variable
-      <br>
-      <small class="text-muted">
-        Choose a known steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further
-        characterize the generated steam.
-        <hr>
-      </small>
-    </h6>
-  </div>
-
-  <div class="my-2" *ngIf="currentField == 'inletQuantityValue'">
-    <h6>
-      <span *ngIf="inletQuantity == 0">Temperature (Inlet)</span>
-      <span *ngIf="inletQuantity == 1">Specific Enthalpy</span>
-      <span *ngIf="inletQuantity == 2">Specific Entropy</span>
-      <span *ngIf="inletQuantity == 3">Saturated Quality</span>
-      <br>
-      <small class="text-muted">
-        <span *ngIf="inletQuantity == 0">The temperature at the inlet. If below boiling point, inlet will be a
-          liquid.</span>
-        <span *ngIf="inletQuantity == 1">Specific Enthalpy (h) is the combination of the steam's internal energy and the
-          work needed to make room for the
-          material, compared to the standard state, in terms of mass.</span>
-        <span *ngIf="inletQuantity == 2">Specific Entropy (s) is a measure of the amount of energy which is unavailable
-          to do work, compared to the standard
-          state, in terms of mass.</span>
-        <span *ngIf="inletQuantity == 3">Quality is the vapor mass percentage of the steam/water mixture. Quality is
-          zero for liquid water and 1 for steam;
-          a value between 0 and 1 indicates mixed flow (both liquid and vapor).</span>
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">{{rangeValues.inletQuantityValueMin}}
-              <span *ngIf="thermodynamicQuantity != 3"
-                [innerHTML]="getOptionDisplayUnit(inletQuantity) | settingsLabel"></span>
-            </td>
-            <td class="w-50 text-center">{{rangeValues.inletQuantityValueMax}}
-              <span *ngIf="thermodynamicQuantity != 3"
-                [innerHTML]="getOptionDisplayUnit(inletQuantity) | settingsLabel"></span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  @if (currentField == 'inletQuantity' || currentField == 'outletQuantity') {
+    <div class="my-2">
+      <h6>
+        Known Variable
+        <br>
+        <small class="text-muted">
+          Choose a known steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further
+          characterize the generated steam.
+          <hr>
+        </small>
+      </h6>
     </div>
-  </div>
+  }
 
-  <div class="my-2" *ngIf="currentField == 'turbineProperty'">
-    <h6>
-      Turbine Property
-      <br>
-      <small class="text-muted">
-        Choose which is known for the Turbine: ‘Mass Flow’ or ‘Power Out’.
-        <hr>
-      </small>
-    </h6>
-  </div>
-
-  <div class="my-2" *ngIf="currentField == 'isentropicEfficiency'">
-    <h6>
-      Isentropic Efficiency
-      <br>
-      <small class="text-muted">
-        The energy removed as a percent (%) of the energy removed if turbine were an isentropic process (entropy in =
-        entropy out).
-        Commonly 55% to 80%.
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">{{rangeValues.isentropicEfficiencyMin}} %</td>
-            <td class="w-50 text-center">{{rangeValues.isentropicEfficiencyMax}} %</td>
-          </tr>
-        </tbody>
-      </table>
+  @if (currentField == 'inletQuantityValue') {
+    <div class="my-2">
+      <h6>
+        @if (inletQuantity == 0) {
+          <span>Temperature (Inlet)</span>
+        }
+        @if (inletQuantity == 1) {
+          <span>Specific Enthalpy</span>
+        }
+        @if (inletQuantity == 2) {
+          <span>Specific Entropy</span>
+        }
+        @if (inletQuantity == 3) {
+          <span>Saturated Quality</span>
+        }
+        <br>
+        <small class="text-muted">
+          @if (inletQuantity == 0) {
+            <span>The temperature at the inlet. If below boiling point, inlet will be a
+              liquid.</span>
+          }
+          @if (inletQuantity == 1) {
+            <span>Specific Enthalpy (h) is the combination of the steam's internal energy and the
+              work needed to make room for the
+              material, compared to the standard state, in terms of mass.</span>
+          }
+          @if (inletQuantity == 2) {
+            <span>Specific Entropy (s) is a measure of the amount of energy which is unavailable
+              to do work, compared to the standard
+              state, in terms of mass.</span>
+          }
+          @if (inletQuantity == 3) {
+            <span>Quality is the vapor mass percentage of the steam/water mixture. Quality is
+              zero for liquid water and 1 for steam;
+              a value between 0 and 1 indicates mixed flow (both liquid and vapor).</span>
+          }
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">{{rangeValues.inletQuantityValueMin}}
+                @if (thermodynamicQuantity != 3) {
+                  <span
+                    [innerHTML]="getOptionDisplayUnit(inletQuantity) | settingsLabel"></span>
+                }
+              </td>
+              <td class="w-50 text-center">{{rangeValues.inletQuantityValueMax}}
+                @if (thermodynamicQuantity != 3) {
+                  <span
+                    [innerHTML]="getOptionDisplayUnit(inletQuantity) | settingsLabel"></span>
+                }
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  }
 
-  <div class="my-2" *ngIf="currentField == 'generatorEfficiency'">
-    <h6>
-      Generator Efficiency
-      <br>
-      <small class="text-muted">
-        The conversion efficiency to electricity. Commonly 95%.
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">{{rangeValues.generatorEfficiencyMin}} %</td>
-            <td class="w-50 text-center">{{rangeValues.generatorEfficiencyMax}} %</td>
-          </tr>
-        </tbody>
-      </table>
+  @if (currentField == 'turbineProperty') {
+    <div class="my-2">
+      <h6>
+        Turbine Property
+        <br>
+        <small class="text-muted">
+          Choose which is known for the Turbine: ‘Mass Flow’ or ‘Power Out’.
+          <hr>
+        </small>
+      </h6>
     </div>
-  </div>
+  }
 
-  <div class="my-2" *ngIf="currentField == 'outletSteamPressure'">
-    <h6>
-      Outlet Steam Pressure
-      <br>
-      <small class="text-muted">
-        The pressure at the outlet. Must be less than the inlet pressure.
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">{{rangeValues.outletSteamPressureMin}} <span
+  @if (currentField == 'isentropicEfficiency') {
+    <div class="my-2">
+      <h6>
+        Isentropic Efficiency
+        <br>
+        <small class="text-muted">
+          The energy removed as a percent (%) of the energy removed if turbine were an isentropic process (entropy in =
+          entropy out).
+          Commonly 55% to 80%.
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">{{rangeValues.isentropicEfficiencyMin}} %</td>
+              <td class="w-50 text-center">{{rangeValues.isentropicEfficiencyMax}} %</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  @if (currentField == 'generatorEfficiency') {
+    <div class="my-2">
+      <h6>
+        Generator Efficiency
+        <br>
+        <small class="text-muted">
+          The conversion efficiency to electricity. Commonly 95%.
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">{{rangeValues.generatorEfficiencyMin}} %</td>
+              <td class="w-50 text-center">{{rangeValues.generatorEfficiencyMax}} %</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  @if (currentField == 'outletSteamPressure') {
+    <div class="my-2">
+      <h6>
+        Outlet Steam Pressure
+        <br>
+        <small class="text-muted">
+          The pressure at the outlet. Must be less than the inlet pressure.
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">{{rangeValues.outletSteamPressureMin}} <span
                 [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
-            <td class="w-50 text-center">{{rangeValues.outletSteamPressureMax}} <span
+              <td class="w-50 text-center">{{rangeValues.outletSteamPressureMax}} <span
                 [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
-          </tr>
-        </tbody>
-      </table>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  }
 
-  <div class="my-2" *ngIf="currentField == 'outletQuantityValue'">
-    <h6>
-      <span *ngIf="outletQuantityValue == 0">Temperature (Outlet)</span>
-      <span *ngIf="outletQuantityValue == 1">Specific Enthalpy</span>
-      <span *ngIf="outletQuantityValue == 2">Specific Entropy</span>
-      <span *ngIf="outletQuantityValue == 3">Saturated Quality</span>
-      <br>
-      <small class="text-muted">
-        <span *ngIf="outletQuantityValue == 0">The temperature at the inlet. If below boiling point, inlet will be a
-          liquid.</span>
-        <span *ngIf="outletQuantityValue == 1">Specific Enthalpy (h) is the combination of the steam's internal energy
-          and the work needed to make room for the
-          material, compared to the standard state, in terms of mass.</span>
-        <span *ngIf="outletQuantityValue == 2">Specific Entropy (s) is a measure of the amount of energy which is
-          unavailable to do work, compared to the standard
-          state, in terms of mass.</span>
-        <span *ngIf="outletQuantityValue == 3">Quality is the vapor mass percentage of the steam/water mixture. Quality
-          is zero for liquid water and 1 for steam;
-          a value between 0 and 1 indicates mixed flow (both liquid and vapor).</span>
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">{{rangeValues.outletQuantityValueMin}}
-              <span *ngIf="thermodynamicQuantity != 3"
-                [innerHTML]="getOptionDisplayUnit(outletQuantity) | settingsLabel"></span>
-            </td>
-            <td class="w-50 text-center">{{rangeValues.outletQuantityValueMax}}
-              <span *ngIf="thermodynamicQuantity != 3"
-                [innerHTML]="getOptionDisplayUnit(outletQuantity) | settingsLabel"></span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  @if (currentField == 'outletQuantityValue') {
+    <div class="my-2">
+      <h6>
+        @if (outletQuantityValue == 0) {
+          <span>Temperature (Outlet)</span>
+        }
+        @if (outletQuantityValue == 1) {
+          <span>Specific Enthalpy</span>
+        }
+        @if (outletQuantityValue == 2) {
+          <span>Specific Entropy</span>
+        }
+        @if (outletQuantityValue == 3) {
+          <span>Saturated Quality</span>
+        }
+        <br>
+        <small class="text-muted">
+          @if (outletQuantityValue == 0) {
+            <span>The temperature at the inlet. If below boiling point, inlet will be a
+              liquid.</span>
+          }
+          @if (outletQuantityValue == 1) {
+            <span>Specific Enthalpy (h) is the combination of the steam's internal energy
+              and the work needed to make room for the
+              material, compared to the standard state, in terms of mass.</span>
+          }
+          @if (outletQuantityValue == 2) {
+            <span>Specific Entropy (s) is a measure of the amount of energy which is
+              unavailable to do work, compared to the standard
+              state, in terms of mass.</span>
+          }
+          @if (outletQuantityValue == 3) {
+            <span>Quality is the vapor mass percentage of the steam/water mixture. Quality
+              is zero for liquid water and 1 for steam;
+              a value between 0 and 1 indicates mixed flow (both liquid and vapor).</span>
+          }
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">{{rangeValues.outletQuantityValueMin}}
+                @if (thermodynamicQuantity != 3) {
+                  <span
+                    [innerHTML]="getOptionDisplayUnit(outletQuantity) | settingsLabel"></span>
+                }
+              </td>
+              <td class="w-50 text-center">{{rangeValues.outletQuantityValueMax}}
+                @if (thermodynamicQuantity != 3) {
+                  <span
+                    [innerHTML]="getOptionDisplayUnit(outletQuantity) | settingsLabel"></span>
+                }
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  }
 
-  <div class="my-2" *ngIf="currentField == 'massFlowOrPowerOut'">
-    <h6>
-      <span *ngIf="turbineProperty == 0">
-        Mass Flow
-      </span>
-      <span *ngIf="turbineProperty == 1">
-        Power Out
-      </span>
-      <br>
-      <small class="text-muted">
-        <span *ngIf="turbineProperty == 0">
-          Mass flow of the inlet steam.
-        </span>
-        <span *ngIf="turbineProperty == 1">
-          The electricity generated by the turbine.
-        </span>
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr *ngIf="turbineProperty == 0">
-            <td class="w-50 text-center">{{rangeValues.massFlowOrPowerOutMin}} <span
-                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></td>
-            <td class="w-50 text-center">{{rangeValues.massFlowOrPowerOutMax}} <span
-                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></td>
-          </tr>
-          <tr *ngIf="turbineProperty == 1">
-            <td class="w-50 text-center">0 kW</td>
-            <td class="w-50 text-center">&mdash; &mdash;</td>
-          </tr>
-        </tbody>
-      </table>
+  @if (currentField == 'massFlowOrPowerOut') {
+    <div class="my-2">
+      <h6>
+        @if (turbineProperty == 0) {
+          <span>
+            Mass Flow
+          </span>
+        }
+        @if (turbineProperty == 1) {
+          <span>
+            Power Out
+          </span>
+        }
+        <br>
+        <small class="text-muted">
+          @if (turbineProperty == 0) {
+            <span>
+              Mass flow of the inlet steam.
+            </span>
+          }
+          @if (turbineProperty == 1) {
+            <span>
+              The electricity generated by the turbine.
+            </span>
+          }
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            @if (turbineProperty == 0) {
+              <tr>
+                <td class="w-50 text-center">{{rangeValues.massFlowOrPowerOutMin}} <span
+                  [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></td>
+                <td class="w-50 text-center">{{rangeValues.massFlowOrPowerOutMax}} <span
+                  [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></td>
+              </tr>
+            }
+            @if (turbineProperty == 1) {
+              <tr>
+                <td class="w-50 text-center">0 kW</td>
+                <td class="w-50 text-center">&mdash; &mdash;</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  }
 
 
 

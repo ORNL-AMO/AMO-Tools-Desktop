@@ -2,26 +2,34 @@
   <form [formGroup]="steamPropertiesForm">
 
     <div class="form-group">
-      <div class="known-row-parent"> 
-      <label for="pressure">Pressure</label>
-      <div class="input-group calc-addon-group">
-        <input type="number" step="1" class="form-control" formControlName="pressure" id="pressure"
-          onfocus="this.select();" (focus)="focusField('pressure')" (input)="calculate()">
-        <span class="input-group-addon units" [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="steamPropertiesForm.controls.pressure.invalid && !steamPropertiesForm.controls.pressure.pristine">
-        <span *ngIf="steamPropertiesForm.controls.pressure.errors.required">Value Required</span>
-        <span *ngIf="steamPropertiesForm.controls.pressure.errors.max">Value can't be greater than
-          {{steamPropertiesForm.controls.pressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
-        <span *ngIf="steamPropertiesForm.controls.pressure.errors.greaterThan">Value must be greater than
-          {{steamPropertiesForm.controls.pressure.errors.greaterThan}} {{settings.steamPressureMeasurement}}.</span>
-      </span>
+      <div class="known-row-parent">
+        <label for="pressure">Pressure</label>
+        <div class="input-group calc-addon-group">
+          <input type="number" step="1" class="form-control" formControlName="pressure" id="pressure"
+            onfocus="this.select();" (focus)="focusField('pressure')" (input)="calculate()">
+          <span class="input-group-addon units" [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+        </div>
+        @if (steamPropertiesForm.controls.pressure.invalid && !steamPropertiesForm.controls.pressure.pristine) {
+          <span class="alert-danger pull-right small"
+            >
+            @if (steamPropertiesForm.controls.pressure.errors.required) {
+              <span>Value Required</span>
+            }
+            @if (steamPropertiesForm.controls.pressure.errors.max) {
+              <span>Value can't be greater than
+                {{steamPropertiesForm.controls.pressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+            }
+            @if (steamPropertiesForm.controls.pressure.errors.greaterThan) {
+              <span>Value must be greater than
+                {{steamPropertiesForm.controls.pressure.errors.greaterThan}} {{settings.steamPressureMeasurement}}.</span>
+            }
+          </span>
+        }
       </div>
     </div>
 
     <div class="form-group">
-      <div class="known-row-parent"> 
+      <div class="known-row-parent">
         <div class="input-group calc-addon-group">
           <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity"
             id="thermodynamicQuantity" (change)="setQuantityValue()" autofocus
@@ -37,28 +45,42 @@
             <div class="input-group calc-addon-group known-conditional-input-group">
               <input type="number" step="1" class="form-control" formControlName="quantityValue" id="quantityValue"
                 onfocus="this.select();" (input)="calculate()" (focus)="focusField('quantityValue')" autofocus>
-              <span class="input-group-addon units" *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value != ThermodynamicQuantity.QUALITY"
-                [innerHTML]="getOptionDisplayUnit(steamPropertiesForm.controls.thermodynamicQuantity.value) | settingsLabel"></span>
+              @if (steamPropertiesForm.controls.thermodynamicQuantity.value != ThermodynamicQuantity.QUALITY) {
+                <span class="input-group-addon units"
+                  [innerHTML]="getOptionDisplayUnit(steamPropertiesForm.controls.thermodynamicQuantity.value) | settingsLabel"></span>
+              }
             </div>
           </div>
 
-          <span class="alert-danger pull-right small"
-            *ngIf="steamPropertiesForm.controls.quantityValue.invalid && !steamPropertiesForm.controls.quantityValue.pristine">
-            <span *ngIf="steamPropertiesForm.controls.quantityValue.errors.required">Value Required</span>
-            <span *ngIf="steamPropertiesForm.controls.quantityValue.errors.max">Value can't be greater than {{steamPropertiesForm.controls.quantityValue.errors.max.max}}
-              <span *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value != ThermodynamicQuantity.QUALITY" [innerHTML]="getOptionDisplayUnit(steamPropertiesForm.controls.thermodynamicQuantity.value) | settingsLabel"></span>.
+          @if (steamPropertiesForm.controls.quantityValue.invalid && !steamPropertiesForm.controls.quantityValue.pristine) {
+            <span class="alert-danger pull-right small"
+              >
+              @if (steamPropertiesForm.controls.quantityValue.errors.required) {
+                <span>Value Required</span>
+              }
+              @if (steamPropertiesForm.controls.quantityValue.errors.max) {
+                <span>Value can't be greater than {{steamPropertiesForm.controls.quantityValue.errors.max.max}}
+                  @if (steamPropertiesForm.controls.thermodynamicQuantity.value != ThermodynamicQuantity.QUALITY) {
+                    <span [innerHTML]="getOptionDisplayUnit(steamPropertiesForm.controls.thermodynamicQuantity.value) | settingsLabel"></span>
+                  }.
+                </span>
+              }
+              @if (steamPropertiesForm.controls.quantityValue.errors.min) {
+                <span>Value can't be less than
+                  {{steamPropertiesForm.controls.quantityValue.errors.min.min}}
+                  @if (steamPropertiesForm.controls.thermodynamicQuantity.value != ThermodynamicQuantity.QUALITY) {
+                    <span
+                      [innerHTML]="getOptionDisplayUnit(steamPropertiesForm.controls.thermodynamicQuantity.value) | settingsLabel"></span>
+                  }.
+                </span>
+              }
             </span>
-              <span *ngIf="steamPropertiesForm.controls.quantityValue.errors.min">Value can't be less than
-                {{steamPropertiesForm.controls.quantityValue.errors.min.min}}
-                <span *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value != ThermodynamicQuantity.QUALITY"
-                  [innerHTML]="getOptionDisplayUnit(steamPropertiesForm.controls.thermodynamicQuantity.value) | settingsLabel"></span>.
-              </span>
-          </span>
+          }
         </div>
       </div>
     </div>
 
-    
+
 
     <div class="form-group">
       <label class="small bold">Pressure</label>
@@ -87,9 +109,15 @@
     <div class="form-group">
       <label class="small bold">Quality</label>
       <div class="small text-center bold">
-        <span *ngIf="steamPropertiesOutput.quality == 0">Liquid</span>
-        <span *ngIf="steamPropertiesOutput.quality == 1">Gas</span>
-        <span *ngIf="steamPropertiesOutput.quality != 1 && steamPropertiesOutput.quality != 0">{{steamPropertiesOutput.quality | number:'1.0-2'}}</span>
+        @if (steamPropertiesOutput.quality == 0) {
+          <span>Liquid</span>
+        }
+        @if (steamPropertiesOutput.quality == 1) {
+          <span>Gas</span>
+        }
+        @if (steamPropertiesOutput.quality != 1 && steamPropertiesOutput.quality != 0) {
+          <span>{{steamPropertiesOutput.quality | number:'1.0-2'}}</span>
+        }
       </div>
     </div>
     <div class="form-group">

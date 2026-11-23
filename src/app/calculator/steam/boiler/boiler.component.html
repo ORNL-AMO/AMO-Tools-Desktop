@@ -21,8 +21,10 @@
       [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'form'}"
       [ngStyle]="{'height.px': containerHeight}">
       <div class="d-flex flex-column m-4">
-        <app-boiler-form *ngIf="boilerForm" [boilerForm]="boilerForm" [settings]="settings"
-          (emitChangeField)="changeField($event)" (emitCalculate)="calculate($event)"></app-boiler-form>
+        @if (boilerForm) {
+          <app-boiler-form [boilerForm]="boilerForm" [settings]="settings"
+            (emitChangeField)="changeField($event)" (emitCalculate)="calculate($event)"></app-boiler-form>
+        }
         <div class="w-100 justify-content-center btn-group btn-group-sm">
           <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
             Reset Data
@@ -50,12 +52,16 @@
         </div>
       </div>
       <div class="d-flex">
-        <app-boiler-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings"
-          [thermodynamicQuantity]="input.thermodynamicQuantity"></app-boiler-help>
-        <div class="d-flex flex-column w-100 align-items-center p-4" *ngIf="tabSelect == 'results'">
-          <app-boiler-results class="w-100" [results]="results" [settings]="settings" [inputData]="input">
-          </app-boiler-results>
-        </div>
+        @if (tabSelect == 'help') {
+          <app-boiler-help class="w-100" [currentField]="currentField" [settings]="settings"
+            [thermodynamicQuantity]="input.thermodynamicQuantity"></app-boiler-help>
+        }
+        @if (tabSelect == 'results') {
+          <div class="d-flex flex-column w-100 align-items-center p-4">
+            <app-boiler-results class="w-100" [results]="results" [settings]="settings" [inputData]="input">
+            </app-boiler-results>
+          </div>
+        }
       </div>
     </div>
   </div>

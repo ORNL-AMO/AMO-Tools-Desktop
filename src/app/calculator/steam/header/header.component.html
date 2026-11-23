@@ -29,24 +29,34 @@
                 type="number" (input)="calculate()" (focus)="changeField('headerPressure')" onfocus="this.select();">
               <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
             </div>
-            <span class="alert-danger pull-right small"
-              *ngIf="headerPressureForm.controls.headerPressure.invalid && !headerPressureForm.controls.headerPressure.pristine">
-              <span *ngIf="headerPressureForm.controls.headerPressure.errors.required">Value Required</span>
-              <span *ngIf="headerPressureForm.controls.headerPressure.errors.max">Value can't be greater than
-                {{headerPressureForm.controls.headerPressure.errors.max.max}}
-                {{settings.steamPressureMeasurement}}.</span>
-              <span *ngIf="headerPressureForm.controls.headerPressure.errors.min">Value can't be less than
-                {{headerPressureForm.controls.headerPressure.errors.min.min}}
-                {{settings.steamPressureMeasurement}}.</span>
-            </span>
+            @if (headerPressureForm.controls.headerPressure.invalid && !headerPressureForm.controls.headerPressure.pristine) {
+              <span class="alert-danger pull-right small"
+                >
+                @if (headerPressureForm.controls.headerPressure.errors.required) {
+                  <span>Value Required</span>
+                }
+                @if (headerPressureForm.controls.headerPressure.errors.max) {
+                  <span>Value can't be greater than
+                    {{headerPressureForm.controls.headerPressure.errors.max.max}}
+                    {{settings.steamPressureMeasurement}}.</span>
+                }
+                @if (headerPressureForm.controls.headerPressure.errors.min) {
+                  <span>Value can't be less than
+                    {{headerPressureForm.controls.headerPressure.errors.min.min}}
+                    {{settings.steamPressureMeasurement}}.</span>
+                }
+              </span>
+            }
           </div>
 
           <div class="form-group">
             <label for="numInlets" class="small">Number of Inlets</label>
             <select class="form-control" name="numInlets" id="numInlets" formControlName="numInlets" type="number"
               (change)="getInletForms()" (focus)="changeField('numInlets')">
-              <option *ngFor="let numInletOption of numInletOptions" [ngValue]="numInletOption">{{numInletOption}}
-              </option>
+              @for (numInletOption of numInletOptions; track numInletOption) {
+                <option [ngValue]="numInletOption">{{numInletOption}}
+                </option>
+              }
             </select>
           </div>
 
@@ -55,13 +65,15 @@
         <!-- <div class="form-group mt-2 mb-2">
           <label for="numInlets">Number of Inlets</label>
           <select (focus)="changeField('numInlets')" (change)="getInletForms()" class="form-control" [(ngModel)]="numInlets"
-            name="numInlets" id="numInlets">
-            <option *ngFor="let numInletOption of numInletOptions" [ngValue]="numInletOption">{{numInletOption}}</option>
+          name="numInlets" id="numInlets">
+          <option *ngFor="let numInletOption of numInletOptions" [ngValue]="numInletOption">{{numInletOption}}</option>
           </select>
-        </div> -->
-        <app-header-form *ngFor="let inletForm of inletForms; let index = index;" [inletForm]="inletForm"
-          [index]="index+1" [settings]="settings" (emitChangeField)="changeField($event, index)"
-          (emitCalculate)="saveInletForm($event, index)"></app-header-form>
+          </div> -->
+        @for (inletForm of inletForms; track inletForm; let index = $index) {
+          <app-header-form [inletForm]="inletForm"
+            [index]="index+1" [settings]="settings" (emitChangeField)="changeField($event, index)"
+            (emitCalculate)="saveInletForm($event, index)"></app-header-form>
+        }
         <div class="w-100 justify-content-center btn-group btn-group-sm">
           <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
             Reset Data
@@ -89,13 +101,19 @@
         </div>
       </div>
       <div class="d-flex">
-        <app-header-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings"
-          [thermodynamicQuantity]="inletThermoQuantity"></app-header-help>
-        <div class="d-flex flex-column w-100 align-items-center p-4" *ngIf="tabSelect == 'results'">
-          <app-header-results *ngIf="results" class="w-100" [results]="results" [settings]="settings"
-            (tableStringEmitter)="updateTable0String($event)"
-            [numberOfInlets]="headerPressureForm.controls.numInlets.value"></app-header-results>
-        </div>
+        @if (tabSelect == 'help') {
+          <app-header-help class="w-100" [currentField]="currentField" [settings]="settings"
+            [thermodynamicQuantity]="inletThermoQuantity"></app-header-help>
+        }
+        @if (tabSelect == 'results') {
+          <div class="d-flex flex-column w-100 align-items-center p-4">
+            @if (results) {
+              <app-header-results class="w-100" [results]="results" [settings]="settings"
+                (tableStringEmitter)="updateTable0String($event)"
+                [numberOfInlets]="headerPressureForm.controls.numInlets.value"></app-header-results>
+            }
+          </div>
+        }
       </div>
     </div>
   </div>

@@ -6,38 +6,62 @@
         (input)="calculate()" (focus)="focusField('inletPressure')"  onfocus="this.select();">
       <span class="input-group-addon units"><span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="heatLossForm.controls.inletPressure.invalid && !heatLossForm.controls.inletPressure.pristine">
-      <span *ngIf="heatLossForm.controls.inletPressure.errors.required">Value Required</span>
-      <span *ngIf="heatLossForm.controls.inletPressure.errors.max">Value can't be greater than
-        {{heatLossForm.controls.inletPressure.errors.max.max}}  <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span *ngIf="heatLossForm.controls.inletPressure.errors.min">Value can't be less than
-        {{heatLossForm.controls.inletPressure.errors.min.min}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-    </span>
+    @if (heatLossForm.controls.inletPressure.invalid && !heatLossForm.controls.inletPressure.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (heatLossForm.controls.inletPressure.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (heatLossForm.controls.inletPressure.errors.max) {
+          <span>Value can't be greater than
+            {{heatLossForm.controls.inletPressure.errors.max.max}}  <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+        @if (heatLossForm.controls.inletPressure.errors.min) {
+          <span>Value can't be less than
+            {{heatLossForm.controls.inletPressure.errors.min.min}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+      </span>
+    }
   </div>
 
 
   <div class="form-group label-select">
     <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity"
       id="thermodynamicQuantity" (change)="setQuantityRanges()" (focus)="focusField('thermodynamicQuantity')">
-      <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
+      @for (option of thermoOptions; track option) {
+        <option [ngValue]="option.value">{{option.display}}</option>
+      }
     </select>
     <div class="spacer"></div>
     <div class="input-group">
       <input type="number" class="form-control" name="quantityValue" id="quantityValue" formControlName="quantityValue"
         onfocus="this.select();" (input)="calculate()" (focus)="focusField('quantityValue')">
-      <span class="input-group-addon units" *ngIf="heatLossForm.controls.thermodynamicQuantity.value != 3"
-        [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
-      <span class="alert-danger pull-right small"
-        *ngIf="heatLossForm.controls.quantityValue.invalid && !heatLossForm.controls.quantityValue.pristine">
-        <span *ngIf="heatLossForm.controls.quantityValue.errors.required">Value Required</span>
-        <span *ngIf="heatLossForm.controls.quantityValue.errors.max">Value can't be greater than {{heatLossForm.controls.quantityValue.errors.max.max}}
-          <span *ngIf="heatLossForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>.
+      @if (heatLossForm.controls.thermodynamicQuantity.value != 3) {
+        <span class="input-group-addon units"
+          [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
+      }
+      @if (heatLossForm.controls.quantityValue.invalid && !heatLossForm.controls.quantityValue.pristine) {
+        <span class="alert-danger pull-right small"
+          >
+          @if (heatLossForm.controls.quantityValue.errors.required) {
+            <span>Value Required</span>
+          }
+          @if (heatLossForm.controls.quantityValue.errors.max) {
+            <span>Value can't be greater than {{heatLossForm.controls.quantityValue.errors.max.max}}
+              @if (heatLossForm.controls.thermodynamicQuantity.value != 3) {
+                <span [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
+              }.
+            </span>
+          }
+          @if (heatLossForm.controls.quantityValue.errors.min) {
+            <span>Value can't be less than {{heatLossForm.controls.quantityValue.errors.min.min}}
+              @if (heatLossForm.controls.thermodynamicQuantity.value != 3) {
+                <span [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
+              }.
+            </span>
+          }
         </span>
-        <span *ngIf="heatLossForm.controls.quantityValue.errors.min">Value can't be less than {{heatLossForm.controls.quantityValue.errors.min.min}}
-          <span *ngIf="heatLossForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>.
-        </span>
-      </span>
+      }
     </div>
   </div>
 
@@ -47,35 +71,51 @@
       <input class="form-control" name="inletMassFlow" id="inletMassFlow" formControlName="inletMassFlow" type="number"
         (input)="calculate()" (focus)="focusField('inletMassFlow')"  onfocus="this.select();">
       <span class="input-group-addon units"> <span
-          [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+        [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="heatLossForm.controls.inletMassFlow.invalid && !heatLossForm.controls.inletMassFlow.pristine">
-      <span *ngIf="heatLossForm.controls.inletMassFlow.errors.required">Value Required</span>
-      <span *ngIf="heatLossForm.controls.inletMassFlow.errors.max">Value can't be greater than
-        {{heatLossForm.controls.inletMassFlow.errors.max.max}} <span
-          [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
-      <span *ngIf="heatLossForm.controls.inletMassFlow.errors.min">Value can't be less than
-        {{heatLossForm.controls.inletMassFlow.errors.min.min}} <span
-          [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
-    </span>
+    @if (heatLossForm.controls.inletMassFlow.invalid && !heatLossForm.controls.inletMassFlow.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (heatLossForm.controls.inletMassFlow.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (heatLossForm.controls.inletMassFlow.errors.max) {
+          <span>Value can't be greater than
+            {{heatLossForm.controls.inletMassFlow.errors.max.max}} <span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
+        }
+        @if (heatLossForm.controls.inletMassFlow.errors.min) {
+          <span>Value can't be less than
+            {{heatLossForm.controls.inletMassFlow.errors.min.min}} <span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
+        }
+      </span>
+    }
   </div>
 
   <div class="form-group">
     <label class="small" for="percentHeatLoss">% Heat Loss</label>
     <div class="input-group">
       <input class="form-control" name="percentHeatLoss" id="percentHeatLoss" formControlName="percentHeatLoss"
-        type="number" (input)="calculate()" (focus)="focusField('percentHeatLoss')" 
+        type="number" (input)="calculate()" (focus)="focusField('percentHeatLoss')"
         onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="heatLossForm.controls.percentHeatLoss.invalid && !heatLossForm.controls.percentHeatLoss.pristine">
-      <span *ngIf="heatLossForm.controls.percentHeatLoss.errors.required">Value Required</span>
-      <span *ngIf="heatLossForm.controls.percentHeatLoss.errors.max">Value can't be greater than
-        {{heatLossForm.controls.percentHeatLoss.errors.max.max}} %.</span>
-      <span *ngIf="heatLossForm.controls.percentHeatLoss.errors.min">Value can't be less than
-        {{heatLossForm.controls.percentHeatLoss.errors.min.min}} %.</span>
-    </span>
+    @if (heatLossForm.controls.percentHeatLoss.invalid && !heatLossForm.controls.percentHeatLoss.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (heatLossForm.controls.percentHeatLoss.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (heatLossForm.controls.percentHeatLoss.errors.max) {
+          <span>Value can't be greater than
+            {{heatLossForm.controls.percentHeatLoss.errors.max.max}} %.</span>
+        }
+        @if (heatLossForm.controls.percentHeatLoss.errors.min) {
+          <span>Value can't be less than
+            {{heatLossForm.controls.percentHeatLoss.errors.min.min}} %.</span>
+        }
+      </span>
+    }
   </div>
 </form>
