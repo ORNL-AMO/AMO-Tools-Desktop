@@ -14,6 +14,12 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unsafe-function-type": {
       "count": 1
     },
@@ -98,6 +104,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 4
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
     },
@@ -174,6 +183,12 @@
   "src/app/calculator/compressed-air/air-leak-survey/air-leak-survey.component.ts": {
     "@angular-eslint/prefer-standalone": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
     }
   },
   "src/app/calculator/compressed-air/air-leak-survey/air-leak-survey.service.spec.ts": {
@@ -240,6 +255,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 7
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -345,6 +363,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -440,6 +461,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 10
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -655,6 +679,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 6
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -930,6 +957,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -993,6 +1023,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 7
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -1298,6 +1331,12 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
     },
@@ -1508,6 +1547,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 4
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -1531,6 +1573,9 @@
       "count": 1
     },
     "@angular-eslint/use-lifecycle-interface": {
+      "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 2
     },
     "prefer-const": {
@@ -1696,6 +1741,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 4
     },
@@ -1802,6 +1850,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 4
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
@@ -1981,6 +2032,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 3
     },
@@ -2016,6 +2070,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
@@ -2077,6 +2134,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 5
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
@@ -2296,6 +2356,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 9
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -2361,6 +2424,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 4
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -2401,6 +2467,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
@@ -2881,6 +2950,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 6
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
     },
@@ -2998,6 +3070,12 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -3147,6 +3225,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 3
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 5
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 3
@@ -3459,6 +3540,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -3583,6 +3667,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -3633,6 +3720,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -3705,6 +3795,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -4389,6 +4482,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 3
     },
@@ -4558,6 +4654,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 3
     },
@@ -4688,6 +4787,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -4743,6 +4845,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 3
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -4777,6 +4882,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -5103,6 +5211,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 4
@@ -5834,6 +5945,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 6
+    },
     "prefer-const": {
       "count": 12
     }
@@ -5890,6 +6004,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 6
     },
     "prefer-const": {
       "count": 17
@@ -5983,6 +6100,9 @@
       "count": 4
     },
     "@angular-eslint/prefer-standalone": {
+      "count": 1
+    },
+    "@typescript-eslint/await-thenable": {
       "count": 1
     },
     "@typescript-eslint/no-explicit-any": {
@@ -6140,6 +6260,12 @@
     "@angular-eslint/prefer-standalone": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     }
@@ -6161,6 +6287,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 6
     },
     "prefer-const": {
       "count": 10
@@ -6207,6 +6336,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 6
     },
     "prefer-const": {
       "count": 13
@@ -6787,6 +6919,12 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 2
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 6
     },
@@ -6890,6 +7028,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -7029,6 +7170,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -7059,6 +7203,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 12
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
     },
     "prefer-const": {
       "count": 10
@@ -7604,6 +7751,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "no-var": {
       "count": 3
     }
@@ -7716,6 +7866,9 @@
     "@typescript-eslint/no-array-constructor": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -7756,6 +7909,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 3
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 5
     },
     "@typescript-eslint/no-unused-expressions": {
       "count": 1
@@ -7883,6 +8039,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -8001,6 +8160,9 @@
     "@angular-eslint/prefer-inject": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 7
     }
@@ -8025,6 +8187,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "prefer-const": {
       "count": 3
@@ -8129,6 +8294,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 4
     },
     "prefer-const": {
       "count": 11
@@ -8348,6 +8516,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "prefer-const": {
       "count": 3
@@ -8620,6 +8791,9 @@
     },
     "@typescript-eslint/no-array-constructor": {
       "count": 3
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "prefer-const": {
       "count": 8
@@ -8950,6 +9124,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
     }
   },
   "src/app/compressed-air-assessment/baseline-tab-content/baseline-footer-nav-buttons/ca-disable-next-button-pipe.ts": {
@@ -9065,6 +9242,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 3
     },
@@ -9158,6 +9338,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 5
     }
@@ -9171,6 +9354,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -9886,6 +10072,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -9909,6 +10098,9 @@
       "count": 1
     },
     "@angular-eslint/use-lifecycle-interface": {
+      "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 2
     },
     "prefer-const": {
@@ -10200,6 +10392,9 @@
     "@typescript-eslint/no-array-constructor": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "no-var": {
       "count": 2
     },
@@ -10282,6 +10477,12 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 6
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 6
     }
@@ -10303,6 +10504,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 6
     }
   },
   "src/app/compressed-air-assessment/compressed-air-banner/compressed-air-banner.component.html": {
@@ -10319,6 +10523,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 10
     }
   },
   "src/app/compressed-air-assessment/compressed-air-banner/setup-tabs/setup-tabs.component.html": {
@@ -10336,6 +10543,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
+    },
     "prefer-const": {
       "count": 1
     }
@@ -10346,6 +10556,9 @@
     },
     "@angular-eslint/prefer-standalone": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 10
     }
   },
   "src/app/compressed-air-assessment/compressed-air-calculation.service.ts": {
@@ -10452,6 +10665,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     }
   },
   "src/app/compressed-air-assessment/compressed-air-report/input-summary/compressor-item-summary/compressor-item-summary.component.html": {
@@ -10547,6 +10763,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "no-var": {
       "count": 1
     }
@@ -10563,6 +10782,9 @@
     },
     "@typescript-eslint/no-array-constructor": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
     },
     "no-var": {
       "count": 3
@@ -10583,6 +10805,9 @@
     },
     "@typescript-eslint/no-array-constructor": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
     },
     "no-var": {
       "count": 3
@@ -10629,6 +10854,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "@typescript-eslint/no-unused-expressions": {
       "count": 1
@@ -10681,6 +10909,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "prefer-const": {
       "count": 22
@@ -10741,6 +10972,9 @@
     },
     "@typescript-eslint/no-array-constructor": {
       "count": 7
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 5
@@ -10899,6 +11133,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 4
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 7
@@ -11134,6 +11371,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -11192,6 +11432,12 @@
       "count": 1
     },
     "@angular-eslint/use-lifecycle-interface": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
+    "@typescript-eslint/no-misused-promises": {
       "count": 1
     },
     "prefer-const": {
@@ -11674,6 +11920,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -11745,6 +11994,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 4
+    },
     "prefer-const": {
       "count": 11
     }
@@ -11779,6 +12031,9 @@
       "count": 1
     },
     "@typescript-eslint/no-array-constructor": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 1
     },
     "prefer-const": {
@@ -11842,6 +12097,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 3
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 10
     }
@@ -11887,6 +12145,9 @@
     "@typescript-eslint/no-array-constructor": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -11906,6 +12167,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -12041,6 +12305,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 3
     },
@@ -12054,6 +12321,9 @@
     },
     "@typescript-eslint/no-array-constructor": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
     },
     "prefer-const": {
       "count": 21
@@ -12330,6 +12600,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 14
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
     },
@@ -12415,8 +12688,17 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/await-thenable": {
+      "count": 6
+    },
     "@typescript-eslint/no-array-constructor": {
       "count": 6
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 12
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
     },
     "prefer-const": {
       "count": 63
@@ -12431,6 +12713,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -12452,6 +12737,12 @@
       "count": 1
     },
     "@angular-eslint/use-lifecycle-interface": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 4
+    },
+    "@typescript-eslint/no-misused-promises": {
       "count": 1
     },
     "prefer-const": {
@@ -12489,6 +12780,9 @@
   "src/app/dashboard/dashboard.service.ts": {
     "@angular-eslint/prefer-inject": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     }
   },
   "src/app/dashboard/data-and-backup/data-and-backup.component.html": {
@@ -12505,6 +12799,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 6
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -12543,6 +12840,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "prefer-const": {
       "count": 4
     }
@@ -12576,6 +12876,9 @@
     "@typescript-eslint/no-array-constructor": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 3
     },
@@ -12604,6 +12907,9 @@
   },
   "src/app/dashboard/directory-dashboard/directory-dashboard.service.ts": {
     "@angular-eslint/prefer-inject": {
+      "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 2
     },
     "@typescript-eslint/no-unused-vars": {
@@ -12646,6 +12952,9 @@
     },
     "@typescript-eslint/no-array-constructor": {
       "count": 6
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 15
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -12779,6 +13088,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 9
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -12800,6 +13112,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -12830,6 +13145,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 6
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -12875,6 +13193,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 4
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -12900,6 +13221,12 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 2
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 3
     },
@@ -12916,6 +13243,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
@@ -12982,6 +13312,12 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
+    },
+    "@typescript-eslint/await-thenable": {
+      "count": 5
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 12
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -13053,6 +13389,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 3
@@ -13138,6 +13477,9 @@
       "count": 16
     },
     "@typescript-eslint/no-explicit-any": {
+      "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 2
     },
     "@typescript-eslint/no-unused-vars": {
@@ -13681,6 +14023,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 1
     }
@@ -13725,6 +14070,11 @@
   "src/app/fsat/fsat-report/fsat-report-sankey/fsat-report-sankey.component.ts": {
     "@angular-eslint/prefer-standalone": {
       "count": 1
+    }
+  },
+  "src/app/fsat/fsat-report/fsat-report.adapter.ts": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 4
     }
   },
   "src/app/fsat/fsat-report/fsat-report.component.html": {
@@ -13876,6 +14226,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 13
     }
@@ -13958,6 +14311,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 7
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -13971,6 +14327,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
     },
     "prefer-const": {
       "count": 31
@@ -14218,6 +14577,9 @@
     }
   },
   "src/app/fsat/routing/fsat-assessment.resolver.ts": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "prefer-const": {
       "count": 1
     }
@@ -14242,6 +14604,11 @@
       "count": 1
     },
     "@angular-eslint/prefer-standalone": {
+      "count": 1
+    }
+  },
+  "src/app/fsat/services/fsat-charts.service.ts": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
       "count": 1
     }
   },
@@ -14305,8 +14672,14 @@
     "@angular-eslint/prefer-inject": {
       "count": 4
     },
+    "@typescript-eslint/await-thenable": {
+      "count": 1
+    },
     "@typescript-eslint/no-explicit-any": {
       "count": 4
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
@@ -14327,6 +14700,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 3
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "prefer-const": {
       "count": 4
     }
@@ -14342,6 +14718,9 @@
   "src/app/indexedDb/delete-data.service.ts": {
     "@angular-eslint/prefer-inject": {
       "count": 8
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 10
     },
     "prefer-const": {
       "count": 15
@@ -14489,6 +14868,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 5
     },
@@ -14538,6 +14920,12 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 6
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 3
     },
@@ -14560,6 +14948,12 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 6
     }
@@ -14579,6 +14973,12 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 1
     }
@@ -14596,6 +14996,12 @@
       "count": 1
     },
     "@angular-eslint/use-lifecycle-interface": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
+    "@typescript-eslint/no-misused-promises": {
       "count": 1
     },
     "prefer-const": {
@@ -14662,6 +15068,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 4
     }
@@ -14714,6 +15123,9 @@
     },
     "@typescript-eslint/no-array-constructor": {
       "count": 3
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 6
     },
     "prefer-const": {
       "count": 11
@@ -14896,6 +15308,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
     },
@@ -14932,6 +15347,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 12
     },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
     },
@@ -14962,6 +15380,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 4
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 4
@@ -15253,6 +15674,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 16
     }
@@ -15269,6 +15693,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
@@ -15295,6 +15722,9 @@
     },
     "@typescript-eslint/no-array-constructor": {
       "count": 3
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "no-var": {
       "count": 1
@@ -16090,6 +16520,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 10
     }
@@ -16106,6 +16539,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "prefer-const": {
       "count": 10
@@ -16283,6 +16719,9 @@
     "@typescript-eslint/no-array-constructor": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -16302,6 +16741,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -16435,6 +16877,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 5
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 3
     },
@@ -16448,6 +16893,9 @@
     },
     "@typescript-eslint/no-array-constructor": {
       "count": 4
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "prefer-const": {
       "count": 12
@@ -16803,6 +17251,9 @@
     "@typescript-eslint/no-array-constructor": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 5
     }
@@ -16824,6 +17275,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
+    },
+    "@typescript-eslint/await-thenable": {
+      "count": 2
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -17042,8 +17496,14 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/await-thenable": {
+      "count": 1
+    },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 6
     },
     "prefer-const": {
       "count": 6
@@ -17206,6 +17666,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
+    },
     "prefer-const": {
       "count": 6
     }
@@ -17231,6 +17694,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
+    },
     "prefer-const": {
       "count": 11
     }
@@ -17253,8 +17719,14 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/await-thenable": {
+      "count": 1
+    },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 7
     },
     "prefer-const": {
       "count": 14
@@ -17615,8 +18087,14 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/await-thenable": {
+      "count": 2
+    },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 4
     },
     "prefer-const": {
       "count": 7
@@ -17673,6 +18151,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 8
     }
@@ -17693,6 +18174,9 @@
       "count": 1
     },
     "@angular-eslint/use-lifecycle-interface": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 1
     },
     "prefer-const": {
@@ -18737,6 +19221,9 @@
     "@angular-eslint/prefer-standalone": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 4
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -18977,6 +19464,12 @@
     "@angular-eslint/prefer-inject": {
       "count": 3
     },
+    "@typescript-eslint/await-thenable": {
+      "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -19049,6 +19542,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 4
     },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 5
     }
@@ -19092,6 +19588,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 4
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "prefer-const": {
       "count": 10
@@ -19387,6 +19886,11 @@
       "count": 3
     }
   },
+  "src/app/phast/phast-report/phast-report.adapter.ts": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 3
+    }
+  },
   "src/app/phast/phast-report/phast-report.component.html": {
     "@angular-eslint/template/eqeqeq": {
       "count": 27
@@ -19428,6 +19932,9 @@
       "count": 1
     },
     "@angular-eslint/prefer-standalone": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
       "count": 1
     },
     "prefer-const": {
@@ -19512,6 +20019,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 8
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -19548,6 +20058,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
@@ -19615,6 +20128,9 @@
   "src/app/process-cooling-assessment/chiller-load-schedule/chiller-load-schedule.component.ts": {
     "@angular-eslint/prefer-standalone": {
       "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 3
     }
   },
   "src/app/process-cooling-assessment/constants/process-cooling-constants.ts": {
@@ -19833,6 +20349,9 @@
   "src/app/process-cooling-assessment/report/performance-profile/chiller-profile-chart/chiller-profile-chart.component.ts": {
     "@angular-eslint/prefer-standalone": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
     }
   },
   "src/app/process-cooling-assessment/report/performance-profile/performance-profile.component.ts": {
@@ -19874,6 +20393,12 @@
       "count": 1
     },
     "@angular-eslint/use-lifecycle-interface": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
       "count": 1
     },
     "@typescript-eslint/no-unused-vars": {
@@ -20026,6 +20551,9 @@
     }
   },
   "src/app/process-cooling-assessment/routing/process-cooling-assessment-resolver.resolver.ts": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     }
@@ -20054,6 +20582,9 @@
     }
   },
   "src/app/process-cooling-assessment/services/process-cooling-assessment.service.ts": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -20073,6 +20604,9 @@
     }
   },
   "src/app/process-cooling-assessment/services/process-cooling-ui.service.ts": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 8
+    },
     "prefer-const": {
       "count": 1
     }
@@ -20090,6 +20624,12 @@
       "count": 1
     },
     "@angular-eslint/use-lifecycle-interface": {
+      "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
       "count": 2
     },
     "prefer-const": {
@@ -20574,6 +21114,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -20638,6 +21181,11 @@
       "count": 16
     }
   },
+  "src/app/psat/modify-conditions/modify-conditions-tabs/modify-conditions-tabs.component.spec.ts": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    }
+  },
   "src/app/psat/modify-conditions/modify-conditions-tabs/modify-conditions-tabs.component.ts": {
     "@angular-eslint/prefer-inject": {
       "count": 8
@@ -20697,6 +21245,12 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
     },
     "prefer-const": {
       "count": 3
@@ -20782,6 +21336,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 11
     }
@@ -20809,6 +21366,11 @@
   },
   "src/app/psat/psat-report/psat-report-sankey/psat-report-sankey.component.ts": {
     "@angular-eslint/prefer-standalone": {
+      "count": 1
+    }
+  },
+  "src/app/psat/psat-report/psat-report.adapter.ts": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
       "count": 1
     }
   },
@@ -20841,6 +21403,9 @@
     }
   },
   "src/app/psat/psat-tab.service.ts": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 2
     }
@@ -20890,6 +21455,9 @@
     }
   },
   "src/app/psat/psat.component.spec.ts": {
+    "@typescript-eslint/await-thenable": {
+      "count": 7
+    },
     "@typescript-eslint/no-explicit-any": {
       "count": 10
     }
@@ -20909,6 +21477,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 13
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -20939,6 +21510,11 @@
   "src/app/psat/pump-fluid/pump-fluid.component.html": {
     "@angular-eslint/template/eqeqeq": {
       "count": 8
+    }
+  },
+  "src/app/psat/pump-fluid/pump-fluid.component.spec.ts": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
     }
   },
   "src/app/psat/pump-fluid/pump-fluid.component.ts": {
@@ -20972,6 +21548,9 @@
   "src/app/psat/pump-operations/pump-operations.component.spec.ts": {
     "@typescript-eslint/no-explicit-any": {
       "count": 4
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 5
     }
   },
   "src/app/psat/pump-operations/pump-operations.component.ts": {
@@ -21002,6 +21581,11 @@
       "count": 2
     }
   },
+  "src/app/psat/services/psat-charts.service.ts": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    }
+  },
   "src/app/psat/system-basics/system-basics.component.spec.ts": {
     "@typescript-eslint/no-explicit-any": {
       "count": 2
@@ -21019,6 +21603,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
     },
     "prefer-const": {
       "count": 6
@@ -21331,6 +21918,9 @@
     "@typescript-eslint/no-array-constructor": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 8
     }
@@ -21359,6 +21949,9 @@
       "count": 1
     },
     "@angular-eslint/use-lifecycle-interface": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 1
     },
     "prefer-const": {
@@ -21464,6 +22057,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -21519,6 +22115,12 @@
       "count": 1
     },
     "@angular-eslint/use-lifecycle-interface": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
+    },
+    "@typescript-eslint/no-misused-promises": {
       "count": 1
     },
     "prefer-const": {
@@ -21723,6 +22325,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 3
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 10
     }
@@ -21785,6 +22390,9 @@
     "@typescript-eslint/no-array-constructor": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -21804,6 +22412,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -21943,6 +22554,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 3
     },
@@ -21956,6 +22570,9 @@
     },
     "@typescript-eslint/no-array-constructor": {
       "count": 4
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
     },
     "prefer-const": {
       "count": 14
@@ -22073,8 +22690,14 @@
     "@angular-eslint/prefer-standalone": {
       "count": 1
     },
+    "@typescript-eslint/await-thenable": {
+      "count": 1
+    },
     "@typescript-eslint/no-array-constructor": {
       "count": 2
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -22232,6 +22855,9 @@
     "@angular-eslint/prefer-standalone": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 1
     }
@@ -22319,6 +22945,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "prefer-const": {
       "count": 4
     }
@@ -22370,6 +22999,9 @@
       "count": 1
     },
     "@angular-eslint/use-lifecycle-interface": {
+      "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 2
     },
     "prefer-const": {
@@ -22512,6 +23144,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "no-var": {
       "count": 4
     }
@@ -22532,6 +23167,9 @@
       "count": 1
     },
     "@angular-eslint/use-lifecycle-interface": {
+      "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 2
     },
     "no-var": {
@@ -22739,6 +23377,9 @@
     "@angular-eslint/prefer-standalone": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "prefer-const": {
       "count": 3
     }
@@ -22761,6 +23402,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 11
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 3
@@ -22942,6 +23586,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     }
   },
   "src/app/shared/analytics/analytics.service.ts": {
@@ -22950,6 +23597,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
     },
     "@typescript-eslint/no-unsafe-function-type": {
       "count": 1
@@ -23029,6 +23679,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 3
     },
@@ -23042,6 +23695,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 5
     },
     "@typescript-eslint/no-unused-expressions": {
       "count": 1
@@ -23119,6 +23775,9 @@
     "@angular-eslint/prefer-inject": {
       "count": 11
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 7
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 16
     },
@@ -23129,6 +23788,9 @@
   "src/app/shared/connected-inventory/compressed-air-motor-integration.service.ts": {
     "@angular-eslint/prefer-inject": {
       "count": 5
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 7
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -23166,6 +23828,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -23225,6 +23890,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 3
     },
@@ -23236,6 +23904,9 @@
     "@angular-eslint/prefer-inject": {
       "count": 10
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 7
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
     },
@@ -23246,6 +23917,9 @@
   "src/app/shared/connected-inventory/pump-motor-integration.service.ts": {
     "@angular-eslint/prefer-inject": {
       "count": 5
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 7
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -23331,6 +24005,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 16
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 3
     },
@@ -23358,6 +24035,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 4
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -23513,6 +24193,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/await-thenable": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -23563,6 +24246,9 @@
   "src/app/shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-template.service.ts": {
     "@angular-eslint/prefer-inject": {
       "count": 7
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
     },
     "no-var": {
       "count": 1
@@ -23710,6 +24396,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
     },
@@ -23847,6 +24536,12 @@
     "@angular-eslint/prefer-inject": {
       "count": 16
     },
+    "@typescript-eslint/await-thenable": {
+      "count": 15
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 7
+    },
     "prefer-const": {
       "count": 42
     }
@@ -23958,11 +24653,17 @@
     "@angular-eslint/prefer-inject": {
       "count": 6
     },
+    "@typescript-eslint/await-thenable": {
+      "count": 9
+    },
     "@typescript-eslint/no-array-constructor": {
       "count": 8
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 21
     },
     "prefer-const": {
       "count": 54
@@ -23985,6 +24686,9 @@
     "@angular-eslint/prefer-inject": {
       "count": 5
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 3
     }
@@ -23998,6 +24702,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
     },
     "prefer-const": {
       "count": 4
@@ -24023,6 +24730,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 3
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "prefer-const": {
       "count": 1
@@ -24113,6 +24823,9 @@
     "@typescript-eslint/no-array-constructor": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -24125,6 +24838,9 @@
       "count": 1
     },
     "@angular-eslint/use-lifecycle-interface": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 1
     },
     "prefer-const": {
@@ -24157,6 +24873,9 @@
   "src/app/shared/modules/weather-data/weather-file-import/weather-file-import.component.ts": {
     "@angular-eslint/prefer-standalone": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
     }
   },
   "src/app/shared/modules/weather-data/weather-file-import/weather-file-parser.service.ts": {
@@ -24173,6 +24892,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 3
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -24201,6 +24923,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     }
   },
   "src/app/shared/modules/weather-data/weather-stations/weather-stations.component.html": {
@@ -24216,6 +24941,9 @@
       "count": 1
     },
     "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 1
     }
   },
@@ -24284,6 +25012,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -24321,6 +25052,9 @@
     "@typescript-eslint/no-array-constructor": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "no-var": {
       "count": 2
     },
@@ -24339,6 +25073,9 @@
       "count": 1
     },
     "@angular-eslint/use-lifecycle-interface": {
+      "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 2
     },
     "prefer-const": {
@@ -24409,6 +25146,19 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 5
+    }
+  },
+  "src/app/shared/report-builder/adapters/report-adapter.utils.ts": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    }
+  },
+  "src/app/shared/report-builder/components/export-button/export-button.component.ts": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     }
   },
   "src/app/shared/report-builder/services/pdf-report.service.ts": {
@@ -24581,6 +25331,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 1
     }
@@ -24600,6 +25353,9 @@
     "@angular-eslint/prefer-standalone": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -24615,6 +25371,9 @@
       "count": 3
     },
     "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 1
     }
   },
@@ -24640,6 +25399,9 @@
       "count": 3
     },
     "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 1
     },
     "@typescript-eslint/no-unused-vars": {
@@ -26022,6 +26784,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     }
   },
   "src/app/ssmt/ssmt-report/executive-summary/executive-summary.component.html": {
@@ -26040,6 +26805,9 @@
       "count": 1
     },
     "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 1
     },
     "prefer-const": {
@@ -26168,6 +26936,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     }
@@ -26212,6 +26983,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "no-var": {
       "count": 3
     }
@@ -26229,11 +27003,19 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "no-var": {
       "count": 3
     },
     "prefer-const": {
       "count": 5
+    }
+  },
+  "src/app/ssmt/ssmt-report/ssmt-charts.service.ts": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
     }
   },
   "src/app/ssmt/ssmt-report/ssmt-report-sankey/ssmt-report-sankey.component.ts": {
@@ -26247,6 +27029,11 @@
   "src/app/ssmt/ssmt-report/ssmt-report.adapter.spec.ts": {
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    }
+  },
+  "src/app/ssmt/ssmt-report/ssmt-report.adapter.ts": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 2
     }
   },
   "src/app/ssmt/ssmt-report/ssmt-report.component.html": {
@@ -26336,6 +27123,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 3
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 14
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -26346,6 +27136,9 @@
   "src/app/ssmt/ssmt.service.ts": {
     "@angular-eslint/prefer-inject": {
       "count": 9
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -26488,6 +27281,9 @@
     "@angular-eslint/prefer-standalone": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "prefer-const": {
       "count": 5
     }
@@ -26512,6 +27308,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -26563,6 +27362,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -26582,6 +27384,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -26607,6 +27412,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -26643,6 +27451,9 @@
   "src/app/suiteDb/custom-materials/custom-materials.service.ts": {
     "@angular-eslint/prefer-inject": {
       "count": 8
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 17
     },
     "prefer-const": {
       "count": 30
@@ -26686,6 +27497,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -26705,6 +27519,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 6
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -26773,6 +27590,9 @@
     "@angular-eslint/prefer-standalone": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "prefer-const": {
       "count": 5
     }
@@ -26802,6 +27622,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 3
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
     },
     "prefer-const": {
       "count": 5
@@ -26833,6 +27656,9 @@
       "count": 3
     },
     "@angular-eslint/prefer-standalone": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 1
     },
     "prefer-const": {
@@ -26902,6 +27728,9 @@
     "@angular-eslint/prefer-standalone": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "prefer-const": {
       "count": 5
     }
@@ -26928,6 +27757,9 @@
     },
     "@angular-eslint/prefer-standalone": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
     },
     "prefer-const": {
       "count": 2
@@ -27018,6 +27850,9 @@
     "@angular-eslint/prefer-inject": {
       "count": 2
     },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 3
     },
@@ -27057,6 +27892,11 @@
       "count": 1
     }
   },
+  "src/app/tools-suite-api/steam-suite-api.service.spec.ts": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    }
+  },
   "src/app/tools-suite-api/steam-suite-api.service.ts": {
     "@angular-eslint/prefer-inject": {
       "count": 2
@@ -27093,6 +27933,12 @@
   "src/app/tools-suite-api/tools-suite-api.service.ts": {
     "@angular-eslint/prefer-inject": {
       "count": 9
+    },
+    "@typescript-eslint/await-thenable": {
+      "count": 4
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "prefer-const": {
       "count": 23
@@ -27356,6 +28202,9 @@
       "count": 1
     },
     "@angular-eslint/use-lifecycle-interface": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 1
     },
     "@typescript-eslint/no-unused-vars": {
@@ -27960,6 +28809,9 @@
   "src/app/treasure-hunt/treasure-hunt-calculator-services/steam-leak-treasure-hunt.service.spec.ts": {
     "@typescript-eslint/no-explicit-any": {
       "count": 19
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 2
     }
   },
   "src/app/treasure-hunt/treasure-hunt-calculator-services/steam-leak-treasure-hunt.service.ts": {
@@ -28098,6 +28950,9 @@
     "@typescript-eslint/no-array-constructor": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "no-var": {
       "count": 6
     },
@@ -28172,6 +29027,9 @@
     "@typescript-eslint/no-array-constructor": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "no-var": {
       "count": 6
     },
@@ -28202,6 +29060,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
     },
     "no-var": {
       "count": 10
@@ -28234,6 +29095,9 @@
     "@typescript-eslint/no-array-constructor": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "no-var": {
       "count": 2
     },
@@ -28252,6 +29116,9 @@
       "count": 1
     },
     "@angular-eslint/use-lifecycle-interface": {
+      "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 2
     },
     "no-var": {
@@ -28309,6 +29176,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 5
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 13
     }
@@ -28356,6 +29226,9 @@
     "@typescript-eslint/no-array-constructor": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -28381,6 +29254,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -28420,6 +29296,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 3
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
     },
     "no-var": {
       "count": 6
@@ -28481,6 +29360,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 3
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -28514,6 +29396,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 7
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -28524,6 +29409,12 @@
   "src/app/treasure-hunt/treasure-hunt.service.ts": {
     "@angular-eslint/prefer-inject": {
       "count": 3
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
     },
     "prefer-const": {
       "count": 5
@@ -28561,6 +29452,9 @@
     "@angular-eslint/prefer-standalone": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
     "prefer-const": {
       "count": 1
     }
@@ -28579,6 +29473,9 @@
     },
     "@angular-eslint/prefer-standalone": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -28928,6 +29825,9 @@
     "@angular-eslint/prefer-standalone": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 14
     }
@@ -28954,6 +29854,9 @@
       "count": 1
     },
     "@angular-eslint/use-lifecycle-interface": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 1
     },
     "prefer-const": {
@@ -29031,6 +29934,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -29231,6 +30137,9 @@
     },
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     }
   },
   "src/app/waste-water/waste-water-report/srt-graphs/srt-graphs.component.html": {
@@ -29247,6 +30156,11 @@
     },
     "prefer-const": {
       "count": 1
+    }
+  },
+  "src/app/waste-water/waste-water-report/waste-water-report.adapter.ts": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 2
     }
   },
   "src/app/waste-water/waste-water-report/waste-water-report.component.html": {
@@ -29286,6 +30200,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 8
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
     },
@@ -29299,6 +30216,9 @@
     },
     "@typescript-eslint/no-array-constructor": {
       "count": 3
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "prefer-const": {
       "count": 32
@@ -29368,6 +30288,11 @@
       "count": 1
     }
   },
+  "src/app/water-process-diagram/water-diagram-sync.service.spec.ts": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    }
+  },
   "src/app/water-process-diagram/water-diagram/water-diagram.component.ts": {
     "@angular-eslint/prefer-standalone": {
       "count": 1
@@ -29387,6 +30312,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 3
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 5
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
@@ -29492,6 +30420,9 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
     },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-expressions": {
       "count": 1
     },
@@ -29513,6 +30444,9 @@
       "count": 2
     },
     "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 1
     },
     "@typescript-eslint/no-unused-vars": {
@@ -29595,6 +30529,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 13
     }
@@ -29610,6 +30547,9 @@
   "src/app/water/update-assessment-from-diagram.service.ts": {
     "@angular-eslint/prefer-inject": {
       "count": 7
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
     },
     "prefer-const": {
       "count": 10
@@ -29660,6 +30600,12 @@
     "@angular-eslint/use-lifecycle-interface": {
       "count": 3
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 7
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
     },
@@ -29670,6 +30616,9 @@
   "src/app/water/water-assessment.service.ts": {
     "@angular-eslint/prefer-inject": {
       "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
     },
     "@typescript-eslint/no-unused-expressions": {
       "count": 10
@@ -29751,6 +30700,9 @@
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 2
     },
@@ -29766,6 +30718,9 @@
       "count": 3
     },
     "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
       "count": 1
     }
   },
@@ -29797,6 +30752,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 3
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
@@ -30006,6 +30964,9 @@
     },
     "@angular-eslint/use-lifecycle-interface": {
       "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
     },
     "@typescript-eslint/no-unused-expressions": {
       "count": 1
@@ -30230,12 +31191,20 @@
       "count": 9
     }
   },
+  "src/main.ts": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    }
+  },
   "src/polyfills.ts": {
     "@typescript-eslint/no-explicit-any": {
       "count": 1
     }
   },
   "src/process-flow-lib/water/logic/results.ts": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 3
+    },
     "@typescript-eslint/no-unused-vars": {
       "count": 7
     },
@@ -30259,6 +31228,9 @@
   "src/process-flow-lib/water/logic/water-components.ts": {
     "@typescript-eslint/no-explicit-any": {
       "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 2
     },
     "prefer-const": {
       "count": 11

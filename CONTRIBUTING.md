@@ -87,6 +87,8 @@ Both the Angular app and `process-flow-diagram-component/` use ESLint. Run these
 
 Existing violations are baselined in `eslint-suppressions.json`, so lint only fails on new code. Don't edit that file by hand, and don't run `npm run lint:suppress` to hide new violations: fix them instead. If a file gains one more violation of a rule it already has suppressed, ESLint reports every violation of that rule in the file.
 
+Some rules (such as unhandled promises) use TypeScript type information. Lint caches results per file, so a change in one file can hide a new violation in another until that file changes too. If results look stale, delete `.eslintcache` and rerun. Pull request checks always run without the cache.
+
 
 #### Please follow the "fork-and-pull" Git workflow
 
