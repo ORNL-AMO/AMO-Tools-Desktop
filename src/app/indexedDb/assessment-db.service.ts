@@ -56,14 +56,14 @@ export class AssessmentDbService {
   getAllAssessments(): Observable<Assessment[]> {
     return this.dbService.getAll(this.storeName).pipe(
       mergeMap(async (assessments: Array<Assessment>) => {
-        let allSettings: Array<Settings>;
-        for await (let assessment of assessments) {
+        const needsUpdate: boolean = assessments.some((assessment: Assessment) => assessment.appVersion !== environment.version);
+        const allSettings: Settings[] = needsUpdate
+          ? await firstValueFrom(this.dbService.getAll<Settings>(SettingsStoreMeta.store))
+          : [];
+        for (const assessment of assessments) {
           if (assessment.appVersion !== environment.version) {
-            if (assessment.type === 'TreasureHunt' && !allSettings) {
-              allSettings = await firstValueFrom(this.dbService.getAll<Settings>(SettingsStoreMeta.store));
-            }
-            let assessmentSettings: Settings = allSettings?.find(settings => settings.assessmentId === assessment.id);
-            this.updateDataService.updateAssessmentVersion(assessment, assessmentSettings);
+            const settingsForAssessment: Settings = allSettings.find((settings: Settings) => settings.assessmentId === assessment.id);
+            this.updateDataService.updateAssessmentVersion(assessment, settingsForAssessment);
             let assessmentCalculators: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
             let updatedAssessmentCalculators = this.updateDataService.updateAssessmentCalculatorVersion(assessmentCalculators);
             if (updatedAssessmentCalculators) {
