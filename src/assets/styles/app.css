@@ -15,6 +15,35 @@
     background-color: rgba(0, 0, 0, 0.6);
 }
 
+/* Reset System Settings modal. The pane is a flex column so only the modal body scrolls and the buttons stay in view. */
+.reset-data-modal-dialog {
+    display: flex;
+    flex-direction: column;
+}
+
+.reset-data-modal-dialog .cdk-dialog-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+/*
+ * Full screen on phones and small windows. !important overrides the inline pane size from the dialog config.
+ * Width is 100% (of the overlay), not 100vw: an open dialog keeps the page scrollbar visible, and 100vw would include it.
+ */
+@media screen and (max-width: 767.98px) {
+    .reset-data-modal-dialog {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 100dvh;
+        max-height: 100dvh !important;
+        margin: 0;
+        padding: 1rem;
+        border-radius: 0;
+    }
+}
+
 /*  This is used on tabs throughout could be simplified and not needed in some cases */
 /* for ow, override aggressive z-index from bootstrap style */
 .sticky-top {

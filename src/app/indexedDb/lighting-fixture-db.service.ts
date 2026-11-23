@@ -69,5 +69,14 @@ export class LightingFixtureServiceDbService {
     this.dbLightingFixtureMaterials.next(allMaterials);
   }
 
+  async deleteAllCustomMaterials(): Promise<boolean> {
+    const customMaterials: Array<LightingFixtureMaterial> = await firstValueFrom(this.getAllCustomMaterials());
+    for (const material of customMaterials) {
+      await firstValueFrom(this.deleteByIdWithObservable(material.id));
+    }
+    await this.setAllMaterialsFromDb();
+    return true;
+  }
+
   // Optionally, add async wrappers if needed for compatibility
 }

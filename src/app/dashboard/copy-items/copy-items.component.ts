@@ -214,6 +214,8 @@ export class CopyItemsComponent implements OnInit {
         originalDirectory.parentDirectoryId = this.copyForm.controls.destinationDirectoryId.value
       }
       originalDirectory.name = originalDirectory.name + ' (copy)';
+      // A copy belongs to the user, like copied assessments, diagrams and inventories; only the original Examples folder is example data.
+      originalDirectory.isExample = false;
       let newDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(originalDirectory));
       this.selectedDirData.newDirectoryIdMap[oldDirectoryId] = newDirectory.id;
 
