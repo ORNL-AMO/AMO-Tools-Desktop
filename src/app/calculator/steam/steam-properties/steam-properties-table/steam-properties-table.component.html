@@ -7,7 +7,7 @@
         (<span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)
       </th>
       <th class="table-col-2">Specific Enthalpy(<span
-          [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>)</th>
+        [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>)</th>
       <th class="table-col-3">Specific Entropy
         (<span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>)
       </th>
@@ -20,23 +20,39 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let row of rowData; let i = index">
-      <td>{{row.pressure | number:'1.0-4'}}</td>
-      <td>{{row.temperature | number:'1.0-2'}}</td>
-      <td>{{row.enthalpy | number:'1.0-2'}}</td>
-      <td>{{row.entropy | number:'1.0-4'}}</td>
-      <td>
-        <span *ngIf="row.quality == 0">Liquid</span>
-        <span *ngIf="row.quality == 1">Gas</span>
-        <span *ngIf="row.quality != 1 && row.quality != 0">{{row.quality | number:'1.0-2'}}</span>
-      </td>
-      <td *ngIf="row.thermodynamicQuantity == ThermodynamicQuantity.TEMPERATURE">Temperature</td>
-      <td *ngIf="row.thermodynamicQuantity == ThermodynamicQuantity.ENTHALPY">Specific Enthalpy</td>
-      <td *ngIf="row.thermodynamicQuantity == ThermodynamicQuantity.ENTROPY">Specific Entropy</td>
-      <td *ngIf="row.thermodynamicQuantity == ThermodynamicQuantity.QUALITY">Saturated Quality</td>
-      <td>{{row.volume | number:'1.0-4'}}</td>
-      <td class="delete-row" (click)="deleteRow(i)">Delete</td>
-    </tr>
+    @for (row of rowData; track row; let i = $index) {
+      <tr>
+        <td>{{row.pressure | number:'1.0-4'}}</td>
+        <td>{{row.temperature | number:'1.0-2'}}</td>
+        <td>{{row.enthalpy | number:'1.0-2'}}</td>
+        <td>{{row.entropy | number:'1.0-4'}}</td>
+        <td>
+          @if (row.quality == 0) {
+            <span>Liquid</span>
+          }
+          @if (row.quality == 1) {
+            <span>Gas</span>
+          }
+          @if (row.quality != 1 && row.quality != 0) {
+            <span>{{row.quality | number:'1.0-2'}}</span>
+          }
+        </td>
+        @if (row.thermodynamicQuantity == ThermodynamicQuantity.TEMPERATURE) {
+          <td>Temperature</td>
+        }
+        @if (row.thermodynamicQuantity == ThermodynamicQuantity.ENTHALPY) {
+          <td>Specific Enthalpy</td>
+        }
+        @if (row.thermodynamicQuantity == ThermodynamicQuantity.ENTROPY) {
+          <td>Specific Entropy</td>
+        }
+        @if (row.thermodynamicQuantity == ThermodynamicQuantity.QUALITY) {
+          <td>Saturated Quality</td>
+        }
+        <td>{{row.volume | number:'1.0-4'}}</td>
+        <td class="delete-row" (click)="deleteRow(i)">Delete</td>
+      </tr>
+    }
   </tbody>
 </table>
 

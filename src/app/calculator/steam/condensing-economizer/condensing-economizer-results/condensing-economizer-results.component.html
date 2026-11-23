@@ -1,148 +1,226 @@
 <label class="group-label mb-1">Results</label>
-<table *ngIf="output" #copyTable0 class="table table-hover table-striped">
-  <tbody>
-    <tr>
-      <td class="bold w-50">Excess Air</td>
-      <td *ngIf="output.excessAir" class="text-center w-50">
-        {{output.excessAir | number:'1.0-1'}} %
-      </td>
-      <td *ngIf="!output.excessAir" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>  
-    <tr>
-      <td class="bold w-50">Current Available Heat</td>
-      <td *ngIf="output.effThermal" class="text-center w-50">
-        {{output.effThermal | number:'1.0-1'}} % 
-      </td>
-      <td *ngIf="!output.effThermal" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>  
-    <tr>
-      <td class="bold w-50">Specific Heat of Flue Gas</td>
-      <td *ngIf="output.specHeat" class="text-center w-50">
-        {{output.specHeat | number:'1.0-2'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(lb-&#8457;)</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/(kg-&#8451;)</span>
-      </td>
-      <td *ngIf="!output.specHeat" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr> 
-
-    <tr>
-      <td class="bold w-50">Flue Gas Flow Rate</td>
-      <td *ngIf="output.flowFlueGas" class="text-center w-50">
-        {{output.flowFlueGas | number:'1.0-0'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/hr</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg/hr</span>
-      </td>
-      <td *ngIf="!output.flowFlueGas" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr> 
-
-    <tr>
-      <td class="bold w-50">Fraction Condensed</td>
-      <td *ngIf="output.fracCondensed" class="text-center w-50">
-        {{output.fracCondensed | number:'1.0-2'}} %
-      </td>
-      <td *ngIf="!output.fracCondensed" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr> 
-
-    <tr>
-      <td class="bold w-50">Sensible Heat Recovery</td>
-      <td *ngIf="output.sensibleHeatRecovery" class="text-center w-50">
-        {{output.sensibleHeatRecovery | number:'1.0-2'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/hr</span>
-      </td>
-      <td *ngIf="!output.sensibleHeatRecovery" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr> 
-    
-    <tr>
-      <td class="bold w-50">Latent Heat Recovery</td>
-      <td *ngIf="output.heatRecovery" class="text-center w-50">
-        {{output.heatRecovery | number:'1.0-2'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/hr</span>
-      </td>
-      <td *ngIf="!output.heatRecovery" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr> 
-
-    <tr>
-      <td class="bold w-50">Total Heat Recovery</td>
-      <td *ngIf="output.totalHeatRecovery" class="text-center w-50">
-        {{output.totalHeatRecovery | number:'1.0-2'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/hr</span>
-      </td>
-      <td *ngIf="!output.totalHeatRecovery" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr> 
-
-  </tbody>
-</table>
+@if (output) {
+  <table #copyTable0 class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold w-50">Excess Air</td>
+        @if (output.excessAir) {
+          <td class="text-center w-50">
+            {{output.excessAir | number:'1.0-1'}} %
+          </td>
+        }
+        @if (!output.excessAir) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Current Available Heat</td>
+        @if (output.effThermal) {
+          <td class="text-center w-50">
+            {{output.effThermal | number:'1.0-1'}} %
+          </td>
+        }
+        @if (!output.effThermal) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Specific Heat of Flue Gas</td>
+        @if (output.specHeat) {
+          <td class="text-center w-50">
+            {{output.specHeat | number:'1.0-2'}}
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>Btu/(lb-&#8457;)</span>
+            }
+            @if (settings.unitsOfMeasure == 'Metric') {
+              <span>kJ/(kg-&#8451;)</span>
+            }
+          </td>
+        }
+        @if (!output.specHeat) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Flue Gas Flow Rate</td>
+        @if (output.flowFlueGas) {
+          <td class="text-center w-50">
+            {{output.flowFlueGas | number:'1.0-0'}}
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>lb/hr</span>
+            }
+            @if (settings.unitsOfMeasure == 'Metric') {
+              <span>kg/hr</span>
+            }
+          </td>
+        }
+        @if (!output.flowFlueGas) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Fraction Condensed</td>
+        @if (output.fracCondensed) {
+          <td class="text-center w-50">
+            {{output.fracCondensed | number:'1.0-2'}} %
+          </td>
+        }
+        @if (!output.fracCondensed) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Sensible Heat Recovery</td>
+        @if (output.sensibleHeatRecovery) {
+          <td class="text-center w-50">
+            {{output.sensibleHeatRecovery | number:'1.0-2'}}
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>MMBtu/hr</span>
+            }
+            @if (settings.unitsOfMeasure == 'Metric') {
+              <span>MJ/hr</span>
+            }
+          </td>
+        }
+        @if (!output.sensibleHeatRecovery) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Latent Heat Recovery</td>
+        @if (output.heatRecovery) {
+          <td class="text-center w-50">
+            {{output.heatRecovery | number:'1.0-2'}}
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>MMBtu/hr</span>
+            }
+            @if (settings.unitsOfMeasure == 'Metric') {
+              <span>MJ/hr</span>
+            }
+          </td>
+        }
+        @if (!output.heatRecovery) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Total Heat Recovery</td>
+        @if (output.totalHeatRecovery) {
+          <td class="text-center w-50">
+            {{output.totalHeatRecovery | number:'1.0-2'}}
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>MMBtu/hr</span>
+            }
+            @if (settings.unitsOfMeasure == 'Metric') {
+              <span>MJ/hr</span>
+            }
+          </td>
+        }
+        @if (!output.totalHeatRecovery) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+    </tbody>
+  </table>
+}
 
 
 <label class="group-label mb-1">Annual Results</label>
-<table *ngIf="output" #copyTable0 class="table table-hover table-striped">
-  <tbody>
-    <tr>
-      <td class="bold w-50">Sensible Heat Recovery</td>
-      <td *ngIf="output.sensibleHeatRecoveryAnnual" class="text-center w-50">
-        {{output.sensibleHeatRecoveryAnnual | number:'1.0-0'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
-      </td>
-      <td *ngIf="!output.sensibleHeatRecoveryAnnual" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr> 
-    
-    <tr>
-      <td class="bold w-50">Latent Heat Recovery</td>
-      <td *ngIf="output.heatRecoveryAnnual" class="text-center w-50">
-        {{output.heatRecoveryAnnual | number:'1.0-0'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
-      </td>
-      <td *ngIf="!output.heatRecoveryAnnual" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr> 
-    <tr>
-      <td class="bold w-50">Annual Heat Recovery</td>
-      <td *ngIf="output.annualHeatRecovery" class="text-center w-50">
-        {{output.annualHeatRecovery | number:'1.0-0'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
-      </td>
-      <td *ngIf="!output.annualHeatRecovery" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr> 
-    <tr>
-      <td class="bold w-50">Cost Savings</td>
-      <td *ngIf="output.costSavings" class="text-center w-50">
-        {{output.costSavings | currency:'USD':'symbol':'1.0-0'}}
-      </td>
-      <td *ngIf="!output.costSavings" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+@if (output) {
+  <table #copyTable0 class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold w-50">Sensible Heat Recovery</td>
+        @if (output.sensibleHeatRecoveryAnnual) {
+          <td class="text-center w-50">
+            {{output.sensibleHeatRecoveryAnnual | number:'1.0-0'}}
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>MMBtu</span>
+            }
+            @if (settings.unitsOfMeasure == 'Metric') {
+              <span>MJ</span>
+            }
+          </td>
+        }
+        @if (!output.sensibleHeatRecoveryAnnual) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Latent Heat Recovery</td>
+        @if (output.heatRecoveryAnnual) {
+          <td class="text-center w-50">
+            {{output.heatRecoveryAnnual | number:'1.0-0'}}
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>MMBtu</span>
+            }
+            @if (settings.unitsOfMeasure == 'Metric') {
+              <span>MJ</span>
+            }
+          </td>
+        }
+        @if (!output.heatRecoveryAnnual) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Annual Heat Recovery</td>
+        @if (output.annualHeatRecovery) {
+          <td class="text-center w-50">
+            {{output.annualHeatRecovery | number:'1.0-0'}}
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>MMBtu</span>
+            }
+            @if (settings.unitsOfMeasure == 'Metric') {
+              <span>GJ</span>
+            }
+          </td>
+        }
+        @if (!output.annualHeatRecovery) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Cost Savings</td>
+        @if (output.costSavings) {
+          <td class="text-center w-50">
+            {{output.costSavings | currency:'USD':'symbol':'1.0-0'}}
+          </td>
+        }
+        @if (!output.costSavings) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+    </tbody>
+  </table>
+}
 
 <!-- export table component -->
-<app-exportable-results-table *ngIf="output" [tableString]="table0String" (updateTableString)="updateTable0String()">
-</app-exportable-results-table>
+@if (output) {
+  <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+  </app-exportable-results-table>
+}

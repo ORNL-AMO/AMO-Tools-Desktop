@@ -1,26 +1,36 @@
-<app-boiler-efficiency-modal *ngIf="showBoilerEfficiencyModal" [settings]="settings"
-  (emitClose)="closeBoilerEfficiencyModal()" (emitSave)="setBoilerEfficiencyAndClose($event)">
-</app-boiler-efficiency-modal>
+@if (showBoilerEfficiencyModal) {
+  <app-boiler-efficiency-modal [settings]="settings"
+    (emitClose)="closeBoilerEfficiencyModal()" (emitSave)="setBoilerEfficiencyAndClose($event)">
+  </app-boiler-efficiency-modal>
+}
 <form [formGroup]="boilerForm">
   <div class="form-group">
     <label class="small" for="deaeratorPressure">Deaerator Pressure</label>
     <div class="input-group">
       <input class="form-control" name="deaeratorPressure" id="deaeratorPressure" formControlName="deaeratorPressure"
-        type="number" (input)="calculate()" (focus)="focusField('deaeratorPressure')" 
+        type="number" (input)="calculate()" (focus)="focusField('deaeratorPressure')"
         onfocus="this.select();">
       <span class="input-group-addon units"><span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
+        [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="boilerForm.controls.deaeratorPressure.invalid && !boilerForm.controls.deaeratorPressure.pristine">
-      <span *ngIf="boilerForm.controls.deaeratorPressure.errors.required">Value Required</span>
-      <span *ngIf="boilerForm.controls.deaeratorPressure.errors.max">Value can't be greater than
-        {{boilerForm.controls.deaeratorPressure.errors.max.max}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span *ngIf="boilerForm.controls.deaeratorPressure.errors.min">Value can't be less than
-        {{boilerForm.controls.deaeratorPressure.errors.min.min}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-    </span>
+    @if (boilerForm.controls.deaeratorPressure.invalid && !boilerForm.controls.deaeratorPressure.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (boilerForm.controls.deaeratorPressure.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (boilerForm.controls.deaeratorPressure.errors.max) {
+          <span>Value can't be greater than
+            {{boilerForm.controls.deaeratorPressure.errors.max.max}} <span
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+        @if (boilerForm.controls.deaeratorPressure.errors.min) {
+          <span>Value can't be less than
+            {{boilerForm.controls.deaeratorPressure.errors.min.min}} <span
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+      </span>
+    }
   </div>
 
   <div class="form-group">
@@ -33,14 +43,22 @@
         (focus)="focusField('combustionEfficiency')"  onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="boilerForm.controls.combustionEfficiency.invalid && !boilerForm.controls.combustionEfficiency.pristine">
-      <span *ngIf="boilerForm.controls.combustionEfficiency.errors.required">Value Required</span>
-      <span *ngIf="boilerForm.controls.combustionEfficiency.errors.max">Value can't be greater than
-        {{boilerForm.controls.combustionEfficiency.errors.max.max}} %.</span>
-      <span *ngIf="boilerForm.controls.combustionEfficiency.errors.min">Value can't be less than
-        {{boilerForm.controls.combustionEfficiency.errors.min.min}} %.</span>
-    </span>
+    @if (boilerForm.controls.combustionEfficiency.invalid && !boilerForm.controls.combustionEfficiency.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (boilerForm.controls.combustionEfficiency.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (boilerForm.controls.combustionEfficiency.errors.max) {
+          <span>Value can't be greater than
+            {{boilerForm.controls.combustionEfficiency.errors.max.max}} %.</span>
+        }
+        @if (boilerForm.controls.combustionEfficiency.errors.min) {
+          <span>Value can't be less than
+            {{boilerForm.controls.combustionEfficiency.errors.min.min}} %.</span>
+        }
+      </span>
+    }
   </div>
   <div class="form-group">
     <label class="small" for="blowdownRate">Blowdown Rate</label>
@@ -49,14 +67,22 @@
         (input)="calculate()" (focus)="focusField('blowdownRate')"  onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="boilerForm.controls.blowdownRate.invalid && !boilerForm.controls.blowdownRate.pristine">
-      <span *ngIf="boilerForm.controls.blowdownRate.errors.required">Value Required</span>
-      <span *ngIf="boilerForm.controls.blowdownRate.errors.max">Value can't be greater than
-        {{boilerForm.controls.blowdownRate.errors.max.max}} %.</span>
-      <span *ngIf="boilerForm.controls.blowdownRate.errors.min">Value can't be less than
-        {{boilerForm.controls.blowdownRate.errors.min.min}} %.</span>
-    </span>
+    @if (boilerForm.controls.blowdownRate.invalid && !boilerForm.controls.blowdownRate.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (boilerForm.controls.blowdownRate.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (boilerForm.controls.blowdownRate.errors.max) {
+          <span>Value can't be greater than
+            {{boilerForm.controls.blowdownRate.errors.max.max}} %.</span>
+        }
+        @if (boilerForm.controls.blowdownRate.errors.min) {
+          <span>Value can't be less than
+            {{boilerForm.controls.blowdownRate.errors.min.min}} %.</span>
+        }
+      </span>
+    }
   </div>
   <label class="group-label w-100">Steam</label>
   <div class="form-group">
@@ -65,41 +91,65 @@
       <input class="form-control" name="steamPressure" id="steamPressure" formControlName="steamPressure" type="number"
         (input)="calculate()" (focus)="focusField('steamPressure')"  onfocus="this.select();">
       <span class="input-group-addon units"><span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="boilerForm.controls.steamPressure.invalid && !boilerForm.controls.steamPressure.pristine">
-      <span *ngIf="boilerForm.controls.steamPressure.errors.required">Value Required</span>
-      <span *ngIf="boilerForm.controls.steamPressure.errors.max">Value can't be greater than
-        {{boilerForm.controls.steamPressure.errors.max.max}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span *ngIf="boilerForm.controls.steamPressure.errors.min">Value can't be less than
-        {{boilerForm.controls.steamPressure.errors.min.min}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-    </span>
+    @if (boilerForm.controls.steamPressure.invalid && !boilerForm.controls.steamPressure.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (boilerForm.controls.steamPressure.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (boilerForm.controls.steamPressure.errors.max) {
+          <span>Value can't be greater than
+            {{boilerForm.controls.steamPressure.errors.max.max}} <span
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+        @if (boilerForm.controls.steamPressure.errors.min) {
+          <span>Value can't be less than
+            {{boilerForm.controls.steamPressure.errors.min.min}} <span
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+      </span>
+    }
   </div>
 
   <div class="form-group label-select">
     <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity"
       id="thermodynamicQuantity" (change)="setQuantityRanges()" (focus)="focusField('thermodynamicQuantity')">
-      <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
+      @for (option of thermoOptions; track option) {
+        <option [ngValue]="option.value">{{option.display}}</option>
+      }
     </select>
     <div class="spacer"></div>
     <div class="input-group">
       <input type="number" step="1" class="form-control" formControlName="quantityValue" id="quantityValue"
         onfocus="this.select();" (input)="calculate()" (focus)="focusField('quantityValue')" autofocus>
-      <span class="input-group-addon units" *ngIf="boilerForm.controls.thermodynamicQuantity.value != 3"
-        [innerHTML]="getOptionDisplayUnit(boilerForm.controls.thermodynamicQuantity.value) | settingsLabel"></span>
-      <span class="alert-danger pull-right small"
-        *ngIf="boilerForm.controls.quantityValue.invalid && !boilerForm.controls.quantityValue.pristine">
-        <span *ngIf="boilerForm.controls.quantityValue.errors.required">Value Required</span>
-        <span *ngIf="boilerForm.controls.quantityValue.errors.max">Value can't be greater than {{boilerForm.controls.quantityValue.errors.max.max}}
-          <span *ngIf="boilerForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit(boilerForm.controls.thermodynamicQuantity.value) | settingsLabel"></span>.
+      @if (boilerForm.controls.thermodynamicQuantity.value != 3) {
+        <span class="input-group-addon units"
+          [innerHTML]="getOptionDisplayUnit(boilerForm.controls.thermodynamicQuantity.value) | settingsLabel"></span>
+      }
+      @if (boilerForm.controls.quantityValue.invalid && !boilerForm.controls.quantityValue.pristine) {
+        <span class="alert-danger pull-right small"
+          >
+          @if (boilerForm.controls.quantityValue.errors.required) {
+            <span>Value Required</span>
+          }
+          @if (boilerForm.controls.quantityValue.errors.max) {
+            <span>Value can't be greater than {{boilerForm.controls.quantityValue.errors.max.max}}
+              @if (boilerForm.controls.thermodynamicQuantity.value != 3) {
+                <span [innerHTML]="getOptionDisplayUnit(boilerForm.controls.thermodynamicQuantity.value) | settingsLabel"></span>
+              }.
+            </span>
+          }
+          @if (boilerForm.controls.quantityValue.errors.min) {
+            <span>Value can't be less than {{boilerForm.controls.quantityValue.errors.min.min}}
+              @if (boilerForm.controls.thermodynamicQuantity.value != 3) {
+                <span [innerHTML]="getOptionDisplayUnit(boilerForm.controls.thermodynamicQuantity.value) | settingsLabel"></span>
+              }.
+            </span>
+          }
         </span>
-        <span *ngIf="boilerForm.controls.quantityValue.errors.min">Value can't be less than {{boilerForm.controls.quantityValue.errors.min.min}}
-          <span *ngIf="boilerForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit(boilerForm.controls.thermodynamicQuantity.value) | settingsLabel"></span>.
-        </span>
-      </span>
+      }
     </div>
   </div>
 
@@ -109,17 +159,25 @@
       <input class="form-control" name="steamMassFlow" id="steamMassFlow" formControlName="steamMassFlow" type="number"
         (input)="calculate()" (focus)="focusField('steamMassFlow')"  onfocus="this.select();">
       <span class="input-group-addon units"><span
-          [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+        [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="boilerForm.controls.steamMassFlow.invalid && !boilerForm.controls.steamMassFlow.pristine">
-      <span *ngIf="boilerForm.controls.steamMassFlow.errors.required">Value Required</span>
-      <span *ngIf="boilerForm.controls.steamMassFlow.errors.max">Value can't be greater than
-        {{boilerForm.controls.steamMassFlow.errors.max.max}} <span
-          [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
-      <span *ngIf="boilerForm.controls.steamMassFlow.errors.min">Value can't be less than
-        {{boilerForm.controls.steamMassFlow.errors.min.min}} <span
-          [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
-    </span>
+    @if (boilerForm.controls.steamMassFlow.invalid && !boilerForm.controls.steamMassFlow.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (boilerForm.controls.steamMassFlow.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (boilerForm.controls.steamMassFlow.errors.max) {
+          <span>Value can't be greater than
+            {{boilerForm.controls.steamMassFlow.errors.max.max}} <span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
+        }
+        @if (boilerForm.controls.steamMassFlow.errors.min) {
+          <span>Value can't be less than
+            {{boilerForm.controls.steamMassFlow.errors.min.min}} <span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
+        }
+      </span>
+    }
   </div>
 </form>

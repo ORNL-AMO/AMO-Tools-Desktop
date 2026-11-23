@@ -6,43 +6,67 @@
       <input class="form-control" name="pressure" id="pressure" formControlName="pressure" type="number"
         (input)="calculate()" (focus)="focusField('pressure')"  onfocus="this.select();">
       <span class="input-group-addon units"><span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
+        [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="inletForm.controls.pressure.invalid && !inletForm.controls.pressure.pristine">
-      <span *ngIf="inletForm.controls.pressure.errors.required">Value Required</span>
-      <span *ngIf="inletForm.controls.pressure.errors.max">Value can't be greater than
-        {{inletForm.controls.pressure.errors.max.max}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span *ngIf="inletForm.controls.pressure.errors.min">Value can't be less than
-        {{inletForm.controls.pressure.errors.min.min}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-    </span>
+    @if (inletForm.controls.pressure.invalid && !inletForm.controls.pressure.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (inletForm.controls.pressure.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (inletForm.controls.pressure.errors.max) {
+          <span>Value can't be greater than
+            {{inletForm.controls.pressure.errors.max.max}} <span
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+        @if (inletForm.controls.pressure.errors.min) {
+          <span>Value can't be less than
+            {{inletForm.controls.pressure.errors.min.min}} <span
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+      </span>
+    }
   </div>
 
   <div class="form-group label-select">
     <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity"
       id="thermodynamicQuantity" (change)="setQuantityRanges()" (focus)="focusField('thermodynamicQuantity')">
-      <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
+      @for (option of thermoOptions; track option) {
+        <option [ngValue]="option.value">{{option.display}}</option>
+      }
     </select>
     <div class="spacer"></div>
     <div class="input-group">
       <input type="number" class="form-control" name="quantityValue" id="quantityValue" formControlName="quantityValue"
         onfocus="this.select();" (input)="calculate()" (focus)="focusField('quantityValue')">
-      <span class="input-group-addon units" *ngIf="inletForm.controls.thermodynamicQuantity.value != 3"
-        [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
-      <span class="alert-danger pull-right small"
-        *ngIf="inletForm.controls.quantityValue.invalid && !inletForm.controls.quantityValue.pristine">
-        <span *ngIf="inletForm.controls.quantityValue.errors.required">Value Required</span>
-        <span *ngIf="inletForm.controls.quantityValue.errors.max">Value can't be greater than {{inletForm.controls.quantityValue.errors.max.max}}
-          <span *ngIf="inletForm.controls.thermodynamicQuantity.value != 3"
-            [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>.
+      @if (inletForm.controls.thermodynamicQuantity.value != 3) {
+        <span class="input-group-addon units"
+          [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
+      }
+      @if (inletForm.controls.quantityValue.invalid && !inletForm.controls.quantityValue.pristine) {
+        <span class="alert-danger pull-right small"
+          >
+          @if (inletForm.controls.quantityValue.errors.required) {
+            <span>Value Required</span>
+          }
+          @if (inletForm.controls.quantityValue.errors.max) {
+            <span>Value can't be greater than {{inletForm.controls.quantityValue.errors.max.max}}
+              @if (inletForm.controls.thermodynamicQuantity.value != 3) {
+                <span
+                  [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
+              }.
+            </span>
+          }
+          @if (inletForm.controls.quantityValue.errors.min) {
+            <span>Value can't be less than {{inletForm.controls.quantityValue.errors.min.min}}
+              @if (inletForm.controls.thermodynamicQuantity.value != 3) {
+                <span
+                  [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
+              }.
+            </span>
+          }
         </span>
-        <span *ngIf="inletForm.controls.quantityValue.errors.min">Value can't be less than {{inletForm.controls.quantityValue.errors.min.min}}
-          <span *ngIf="inletForm.controls.thermodynamicQuantity.value != 3"
-            [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>.
-        </span>
-      </span>
+      }
     </div>
   </div>
 
@@ -52,17 +76,25 @@
       <input class="form-control" name="massFlow" id="massFlow" formControlName="massFlow" type="number"
         (input)="calculate()" (focus)="focusField('massFlow')"  onfocus="this.select();">
       <span class="input-group-addon units"><span
-          [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+        [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="inletForm.controls.massFlow.invalid && !inletForm.controls.massFlow.pristine">
-      <span *ngIf="inletForm.controls.massFlow.errors.required">Value Required</span>
-      <span *ngIf="inletForm.controls.massFlow.errors.max">Value can't be greater than
-        {{inletForm.controls.massFlow.errors.max.max}} <span
-          [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
-      <span *ngIf="inletForm.controls.massFlow.errors.min">Value can't be less than
-        {{inletForm.controls.massFlow.errors.min.min}} <span
-          [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
-    </span>
+    @if (inletForm.controls.massFlow.invalid && !inletForm.controls.massFlow.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (inletForm.controls.massFlow.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (inletForm.controls.massFlow.errors.max) {
+          <span>Value can't be greater than
+            {{inletForm.controls.massFlow.errors.max.max}} <span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
+        }
+        @if (inletForm.controls.massFlow.errors.min) {
+          <span>Value can't be less than
+            {{inletForm.controls.massFlow.errors.min.min}} <span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
+        }
+      </span>
+    }
   </div>
 </form>

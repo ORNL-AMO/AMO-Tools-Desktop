@@ -3,7 +3,9 @@
   <div class="form-group">
     <select name="solveFor" class="form-control w-100" formControlName="solveFor" id="solveFor"
       (change)="setValidators()" (focus)="focusField('solveFor')" >
-      <option *ngFor="let option of methodOptions" [ngValue]="option.value">{{option.display}}</option>
+      @for (option of methodOptions; track option) {
+        <option [ngValue]="option.value">{{option.display}}</option>
+      }
     </select>
   </div>
 
@@ -16,41 +18,65 @@
       <span class="input-group-addon units">
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="turbineForm.controls.inletPressure.invalid && !turbineForm.controls.inletPressure.pristine">
-      <span *ngIf="turbineForm.controls.inletPressure.errors.required">Value Required</span>
-      <span *ngIf="turbineForm.controls.inletPressure.errors.max">Value can't be greater than
-        {{turbineForm.controls.inletPressure.errors.max.max}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span *ngIf="turbineForm.controls.inletPressure.errors.min">Value can't be less than
-        {{turbineForm.controls.inletPressure.errors.min.min}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-    </span>
+    @if (turbineForm.controls.inletPressure.invalid && !turbineForm.controls.inletPressure.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (turbineForm.controls.inletPressure.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (turbineForm.controls.inletPressure.errors.max) {
+          <span>Value can't be greater than
+            {{turbineForm.controls.inletPressure.errors.max.max}} <span
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+        @if (turbineForm.controls.inletPressure.errors.min) {
+          <span>Value can't be less than
+            {{turbineForm.controls.inletPressure.errors.min.min}} <span
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+      </span>
+    }
   </div>
 
   <div class="form-group label-select">
     <select name="inletQuantity" class="form-control" formControlName="inletQuantity" id="inletQuantity"
       (change)="setValidators()" (focus)="focusField('inletQuantity')">
-      <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
+      @for (option of thermoOptions; track option) {
+        <option [ngValue]="option.value">{{option.display}}</option>
+      }
     </select>
     <div class="spacer"></div>
     <div class="input-group">
       <input type="number" class="form-control" name="inletQuantityValue" id="inletQuantityValue" formControlName="inletQuantityValue"
         onfocus="this.select();" (input)="calculate()" (focus)="focusField('inletQuantityValue')">
-      <span class="input-group-addon units" *ngIf="turbineForm.controls.inletQuantity.value != 3"
-        [innerHTML]="getOptionDisplayUnit(turbineForm.controls.inletQuantity.value) | settingsLabel"></span>
-      <span class="alert-danger pull-right small"
-        *ngIf="turbineForm.controls.inletQuantityValue.invalid && !turbineForm.controls.inletQuantityValue.pristine">
-        <span *ngIf="turbineForm.controls.inletQuantityValue.errors.required">Value Required</span>
-        <span *ngIf="turbineForm.controls.inletQuantityValue.errors.max">Value can't be greater than {{turbineForm.controls.inletQuantityValue.errors.max.max}}
-          <span *ngIf="turbineForm.controls.inletQuantity.value != 3"
-            [innerHTML]="getOptionDisplayUnit(turbineForm.controls.inletQuantity.value) | settingsLabel"></span>.
+      @if (turbineForm.controls.inletQuantity.value != 3) {
+        <span class="input-group-addon units"
+          [innerHTML]="getOptionDisplayUnit(turbineForm.controls.inletQuantity.value) | settingsLabel"></span>
+      }
+      @if (turbineForm.controls.inletQuantityValue.invalid && !turbineForm.controls.inletQuantityValue.pristine) {
+        <span class="alert-danger pull-right small"
+          >
+          @if (turbineForm.controls.inletQuantityValue.errors.required) {
+            <span>Value Required</span>
+          }
+          @if (turbineForm.controls.inletQuantityValue.errors.max) {
+            <span>Value can't be greater than {{turbineForm.controls.inletQuantityValue.errors.max.max}}
+              @if (turbineForm.controls.inletQuantity.value != 3) {
+                <span
+                  [innerHTML]="getOptionDisplayUnit(turbineForm.controls.inletQuantity.value) | settingsLabel"></span>
+              }.
+            </span>
+          }
+          @if (turbineForm.controls.inletQuantityValue.errors.min) {
+            <span>Value can't be less than {{turbineForm.controls.inletQuantityValue.errors.min.min}}
+              @if (turbineForm.controls.inletQuantity.value != 3) {
+                <span
+                  [innerHTML]="getOptionDisplayUnit(turbineForm.controls.inletQuantity.value) | settingsLabel"></span>
+              }.
+            </span>
+          }
         </span>
-        <span *ngIf="turbineForm.controls.inletQuantityValue.errors.min">Value can't be less than {{turbineForm.controls.inletQuantityValue.errors.min.min}}
-          <span *ngIf="turbineForm.controls.inletQuantity.value != 3"
-            [innerHTML]="getOptionDisplayUnit(turbineForm.controls.inletQuantity.value) | settingsLabel"></span>.
-        </span>
-      </span>
+      }
     </div>
   </div>
 
@@ -59,56 +85,92 @@
     <label class="small" for="turbineProperty">Selected Turbine Property</label>
     <select name="turbineProperty" class="form-control" formControlName="turbineProperty" id="turbineProperty"
       (change)="calculate()" (focus)="focusField('turbineProperty')" >
-      <option *ngFor="let option of turbineOptions" [ngValue]="option.value">{{option.display}}</option>
+      @for (option of turbineOptions; track option) {
+        <option [ngValue]="option.value">{{option.display}}</option>
+      }
     </select>
   </div>
 
   <div class="form-group">
-    <label class="small" for="massFlowOrPowerOut" *ngIf="turbineForm.controls.turbineProperty.value == 0">Mass
-      Flow</label>
-    <label class="small" for="massFlowOrPowerOut" *ngIf="turbineForm.controls.turbineProperty.value == 1">Power
-      Out</label>
+    @if (turbineForm.controls.turbineProperty.value == 0) {
+      <label class="small" for="massFlowOrPowerOut">Mass
+        Flow</label>
+    }
+    @if (turbineForm.controls.turbineProperty.value == 1) {
+      <label class="small" for="massFlowOrPowerOut">Power
+        Out</label>
+    }
     <div class="input-group">
       <input class="form-control" name="massFlowOrPowerOut" id="massFlowOrPowerOut" formControlName="massFlowOrPowerOut"
-        type="number" (input)="calculate()" (focus)="focusField('massFlowOrPowerOut')" 
+        type="number" (input)="calculate()" (focus)="focusField('massFlowOrPowerOut')"
         onfocus="this.select();">
-      <span class="input-group-addon units"
-        *ngIf="turbineForm.controls.turbineProperty.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
-      <span class="input-group-addon units" *ngIf="turbineForm.controls.turbineProperty.value == 1" [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+      @if (turbineForm.controls.turbineProperty.value == 0) {
+        <span class="input-group-addon units"
+          ><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+      }
+      @if (turbineForm.controls.turbineProperty.value == 1) {
+        <span class="input-group-addon units" [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+      }
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="turbineForm.controls.massFlowOrPowerOut.invalid && !turbineForm.controls.massFlowOrPowerOut.pristine">
-      <span *ngIf="turbineForm.controls.massFlowOrPowerOut.errors.required">Value Required</span>
-      <span *ngIf="turbineForm.controls.massFlowOrPowerOut.errors.max">Value can't be greater than
-        {{turbineForm.controls.massFlowOrPowerOut.errors.max.max}}
-        <span *ngIf="turbineForm.controls.turbineProperty.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
-        <span *ngIf="turbineForm.controls.turbineProperty.value == 1" [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
-        .</span>
-      <span *ngIf="turbineForm.controls.massFlowOrPowerOut.errors.min">Value can't be less than
-        {{turbineForm.controls.massFlowOrPowerOut.errors.min.min}}
-        <span *ngIf="turbineForm.controls.turbineProperty.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
-        <span *ngIf="turbineForm.controls.turbineProperty.value == 1" [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
-        .</span>
-    </span>
+    @if (turbineForm.controls.massFlowOrPowerOut.invalid && !turbineForm.controls.massFlowOrPowerOut.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (turbineForm.controls.massFlowOrPowerOut.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (turbineForm.controls.massFlowOrPowerOut.errors.max) {
+          <span>Value can't be greater than
+            {{turbineForm.controls.massFlowOrPowerOut.errors.max.max}}
+            @if (turbineForm.controls.turbineProperty.value == 0) {
+              <span><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+            }
+            @if (turbineForm.controls.turbineProperty.value == 1) {
+              <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+            }
+            .</span>
+        }
+        @if (turbineForm.controls.massFlowOrPowerOut.errors.min) {
+          <span>Value can't be less than
+            {{turbineForm.controls.massFlowOrPowerOut.errors.min.min}}
+            @if (turbineForm.controls.turbineProperty.value == 0) {
+              <span><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+            }
+            @if (turbineForm.controls.turbineProperty.value == 1) {
+              <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+            }
+            .</span>
+        }
+      </span>
+    }
   </div>
 
-  <div class="form-group" *ngIf="turbineForm.controls.solveFor.value == 0">
-    <label class="small" for="isentropicEfficiency">Isentropic Efficiency</label>
-    <div class="input-group">
-      <input class="form-control" name="isentropicEfficiency" id="isentropicEfficiency"
-        formControlName="isentropicEfficiency" type="number" step="1" (input)="calculate()"
-        (focus)="focusField('isentropicEfficiency')"  onfocus="this.select();">
-      <span class="input-group-addon units">%</span>
+  @if (turbineForm.controls.solveFor.value == 0) {
+    <div class="form-group">
+      <label class="small" for="isentropicEfficiency">Isentropic Efficiency</label>
+      <div class="input-group">
+        <input class="form-control" name="isentropicEfficiency" id="isentropicEfficiency"
+          formControlName="isentropicEfficiency" type="number" step="1" (input)="calculate()"
+          (focus)="focusField('isentropicEfficiency')"  onfocus="this.select();">
+        <span class="input-group-addon units">%</span>
+      </div>
+      @if (turbineForm.controls.isentropicEfficiency.invalid && !turbineForm.controls.isentropicEfficiency.pristine) {
+        <span class="alert-danger pull-right small"
+          >
+          @if (turbineForm.controls.isentropicEfficiency.errors.required) {
+            <span>Value Required</span>
+          }
+          @if (turbineForm.controls.isentropicEfficiency.errors.max) {
+            <span>Value can't be greater than
+              {{turbineForm.controls.isentropicEfficiency.errors.max.max}} %.</span>
+          }
+          @if (turbineForm.controls.isentropicEfficiency.errors.min) {
+            <span>Value can't be less than
+              {{turbineForm.controls.isentropicEfficiency.errors.min.min}} %.</span>
+          }
+        </span>
+      }
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="turbineForm.controls.isentropicEfficiency.invalid && !turbineForm.controls.isentropicEfficiency.pristine">
-      <span *ngIf="turbineForm.controls.isentropicEfficiency.errors.required">Value Required</span>
-      <span *ngIf="turbineForm.controls.isentropicEfficiency.errors.max">Value can't be greater than
-        {{turbineForm.controls.isentropicEfficiency.errors.max.max}} %.</span>
-      <span *ngIf="turbineForm.controls.isentropicEfficiency.errors.min">Value can't be less than
-        {{turbineForm.controls.isentropicEfficiency.errors.min.min}} %.</span>
-    </span>
-  </div>
+  }
 
   <div class="form-group">
     <label class="small" for="generatorEfficiency">Generator Efficiency</label>
@@ -118,14 +180,22 @@
         (focus)="focusField('generatorEfficiency')"  onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="turbineForm.controls.generatorEfficiency.invalid && !turbineForm.controls.generatorEfficiency.pristine">
-      <span *ngIf="turbineForm.controls.generatorEfficiency.errors.required">Value Required</span>
-      <span *ngIf="turbineForm.controls.generatorEfficiency.errors.max">Value can't be greater than
-        {{turbineForm.controls.generatorEfficiency.errors.max.max}} %.</span>
-      <span *ngIf="turbineForm.controls.generatorEfficiency.errors.min">Value can't be less than
-        {{turbineForm.controls.generatorEfficiency.errors.min.min}} %.</span>
-    </span>
+    @if (turbineForm.controls.generatorEfficiency.invalid && !turbineForm.controls.generatorEfficiency.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (turbineForm.controls.generatorEfficiency.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (turbineForm.controls.generatorEfficiency.errors.max) {
+          <span>Value can't be greater than
+            {{turbineForm.controls.generatorEfficiency.errors.max.max}} %.</span>
+        }
+        @if (turbineForm.controls.generatorEfficiency.errors.min) {
+          <span>Value can't be less than
+            {{turbineForm.controls.generatorEfficiency.errors.min.min}} %.</span>
+        }
+      </span>
+    }
   </div>
 
   <label class="group-label">Outlet Steam</label>
@@ -137,41 +207,67 @@
         (focus)="focusField('outletSteamPressure')"  onfocus="this.select();">
       <span class="input-group-addon units"><span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="turbineForm.controls.outletSteamPressure.invalid && !turbineForm.controls.outletSteamPressure.pristine">
-      <span *ngIf="turbineForm.controls.outletSteamPressure.errors.required">Value Required</span>
-      <span *ngIf="turbineForm.controls.outletSteamPressure.errors.max">Value can't be greater than
-        {{turbineForm.controls.outletSteamPressure.errors.max.max}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span *ngIf="turbineForm.controls.outletSteamPressure.errors.min">Value can't be less than
-        {{turbineForm.controls.outletSteamPressure.errors.min.min}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-    </span>
+    @if (turbineForm.controls.outletSteamPressure.invalid && !turbineForm.controls.outletSteamPressure.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (turbineForm.controls.outletSteamPressure.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (turbineForm.controls.outletSteamPressure.errors.max) {
+          <span>Value can't be greater than
+            {{turbineForm.controls.outletSteamPressure.errors.max.max}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+        @if (turbineForm.controls.outletSteamPressure.errors.min) {
+          <span>Value can't be less than
+            {{turbineForm.controls.outletSteamPressure.errors.min.min}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+      </span>
+    }
   </div>
 
-  <div class="form-group label-select" *ngIf="turbineForm.controls.solveFor.value == 1">
-    <select name="outletQuantity" class="form-control" formControlName="outletQuantity" id="outletQuantity"
-      (change)="setValidators()" (focus)="focusField('outletQuantity')">
-      <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
-    </select>
-    <div class="spacer"></div>
-    <div class="input-group">
-      <input type="number" class="form-control" name="outletQuantityValue" id="outletQuantityValue"
-        formControlName="outletQuantityValue" onfocus="this.select();" (input)="calculate()"
-        (focus)="focusField('outletQuantityValue')">
-      <span class="input-group-addon units" *ngIf="turbineForm.controls.outletQuantity.value != 3"
-        [innerHTML]="getOptionDisplayUnit(turbineForm.controls.outletQuantity.value) | settingsLabel"></span>
-      <span class="alert-danger pull-right small"
-        *ngIf="turbineForm.controls.outletQuantityValue.invalid && !turbineForm.controls.outletQuantityValue.pristine">
-        <span *ngIf="turbineForm.controls.outletQuantityValue.errors.required">Value Required</span>
-        <span *ngIf="turbineForm.controls.outletQuantityValue.errors.max">Value can't be greater than {{turbineForm.controls.outletQuantityValue.errors.max.max}}
-          <span *ngIf="turbineForm.controls.outletQuantity.value != 3"
-            [innerHTML]="getOptionDisplayUnit(turbineForm.controls.outletQuantity.value) | settingsLabel"></span>.
-        </span>
-        <span *ngIf="turbineForm.controls.outletQuantityValue.errors.min">Value can't be less than {{turbineForm.controls.outletQuantityValue.errors.min.min}}
-          <span *ngIf="turbineForm.controls.outletQuantity.value != 3"
-            [innerHTML]="getOptionDisplayUnit(turbineForm.controls.outletQuantity.value) | settingsLabel"></span>.
-        </span>
-      </span>
+  @if (turbineForm.controls.solveFor.value == 1) {
+    <div class="form-group label-select">
+      <select name="outletQuantity" class="form-control" formControlName="outletQuantity" id="outletQuantity"
+        (change)="setValidators()" (focus)="focusField('outletQuantity')">
+        @for (option of thermoOptions; track option) {
+          <option [ngValue]="option.value">{{option.display}}</option>
+        }
+      </select>
+      <div class="spacer"></div>
+      <div class="input-group">
+        <input type="number" class="form-control" name="outletQuantityValue" id="outletQuantityValue"
+          formControlName="outletQuantityValue" onfocus="this.select();" (input)="calculate()"
+          (focus)="focusField('outletQuantityValue')">
+        @if (turbineForm.controls.outletQuantity.value != 3) {
+          <span class="input-group-addon units"
+            [innerHTML]="getOptionDisplayUnit(turbineForm.controls.outletQuantity.value) | settingsLabel"></span>
+        }
+        @if (turbineForm.controls.outletQuantityValue.invalid && !turbineForm.controls.outletQuantityValue.pristine) {
+          <span class="alert-danger pull-right small"
+            >
+            @if (turbineForm.controls.outletQuantityValue.errors.required) {
+              <span>Value Required</span>
+            }
+            @if (turbineForm.controls.outletQuantityValue.errors.max) {
+              <span>Value can't be greater than {{turbineForm.controls.outletQuantityValue.errors.max.max}}
+                @if (turbineForm.controls.outletQuantity.value != 3) {
+                  <span
+                    [innerHTML]="getOptionDisplayUnit(turbineForm.controls.outletQuantity.value) | settingsLabel"></span>
+                }.
+              </span>
+            }
+            @if (turbineForm.controls.outletQuantityValue.errors.min) {
+              <span>Value can't be less than {{turbineForm.controls.outletQuantityValue.errors.min.min}}
+                @if (turbineForm.controls.outletQuantity.value != 3) {
+                  <span
+                    [innerHTML]="getOptionDisplayUnit(turbineForm.controls.outletQuantity.value) | settingsLabel"></span>
+                }.
+              </span>
+            }
+          </span>
+        }
+      </div>
     </div>
-  </div>
+  }
 
 </form>

@@ -2,12 +2,16 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="gasTypeId">Fuel
-        <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" *ngIf="!inModal">Add New
-          Fuel</a>
+        @if (!inModal) {
+          <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()">Add New
+            Fuel</a>
+        }
       </label>
       <select name="gasTypeId" class="form-control" formControlName="gasTypeId" id="gasTypeId"
         (change)="setProperties()" (focus)="focusField('gasTypeId')" >
-        <option *ngFor="let option of options" [ngValue]="option.id">{{option.substance}}</option>
+        @for (option of options; track option) {
+          <option [ngValue]="option.id">{{option.substance}}</option>
+        }
       </select>
     </div>
 
@@ -18,21 +22,29 @@
           formControlName="flueGasTemperature" id="flueGasTemperature" onfocus="this.select();"
           (input)="setCombustionValidation()" (focus)="focusField('flueGasTemperature')" >
         <span class="input-group-addon units"><span
-            [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span></span>
+          [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span></span>
       </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="stackLossForm.controls.flueGasTemperature.invalid && !stackLossForm.controls.flueGasTemperature.pristine">
-        <span *ngIf="stackLossForm.controls.flueGasTemperature.errors.required">Value Required</span>
-        <span *ngIf="stackLossForm.controls.flueGasTemperature.errors.min">Value can't be less than Ambient Temperature
-          ({{stackLossForm.controls.flueGasTemperature.errors.min.min}}<span
-            [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>).</span>
-      </span>
-      <span class="alert-warning small" *ngIf="stackTemperatureWarning == true">
-        Stack Temperature less than {{tempMin}} <span
-          [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>, gases may be condensing in the
-        stack and
-        calculated efficiency may not be valid.
-      </span>
+      @if (stackLossForm.controls.flueGasTemperature.invalid && !stackLossForm.controls.flueGasTemperature.pristine) {
+        <span class="alert-danger pull-right small"
+          >
+          @if (stackLossForm.controls.flueGasTemperature.errors.required) {
+            <span>Value Required</span>
+          }
+          @if (stackLossForm.controls.flueGasTemperature.errors.min) {
+            <span>Value can't be less than Ambient Temperature
+              ({{stackLossForm.controls.flueGasTemperature.errors.min.min}}<span
+                [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>).</span>
+          }
+        </span>
+      }
+      @if (stackTemperatureWarning == true) {
+        <span class="alert-warning small">
+          Stack Temperature less than {{tempMin}} <span
+            [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>, gases may be condensing in the
+          stack and
+          calculated efficiency may not be valid.
+        </span>
+      }
     </div>
 
     <div class="form-group">
@@ -41,12 +53,16 @@
         <input name="ambientAirTemp" type="number" step="10" class="form-control" formControlName="ambientAirTemp" id="ambientAirTemp"
           onfocus="this.select();" (input)="calcExcessAir()" (focus)="focusField('ambientAirTemp')" >
         <span class="input-group-addon units"><span
-            [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span></span>
+          [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span></span>
       </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="stackLossForm.controls.ambientAirTemp.invalid && !stackLossForm.controls.ambientAirTemp.pristine">
-        <span *ngIf="stackLossForm.controls.ambientAirTemp.errors.required">Value Required</span>
-      </span>
+      @if (stackLossForm.controls.ambientAirTemp.invalid && !stackLossForm.controls.ambientAirTemp.pristine) {
+        <span class="alert-danger pull-right small"
+          >
+          @if (stackLossForm.controls.ambientAirTemp.errors.required) {
+            <span>Value Required</span>
+          }
+        </span>
+      }
     </div>
 
     <div class="form-group">
@@ -54,45 +70,67 @@
       <select name="oxygenCalculationMethod" class="form-control" (change)="changeMethod()"
         formControlName="oxygenCalculationMethod" id="oxygenCalculationMethod"
         (focus)="focusField('oxygenCalculationMethod')" >
-        <option *ngFor="let method of calculationMethods" [ngValue]="method">{{method}}</option>
+        @for (method of calculationMethods; track method) {
+          <option [ngValue]="method">{{method}}</option>
+        }
       </select>
     </div>
 
-    <div class="form-group" *ngIf="!calcMethodExcessAir">
-      <label class="small" for="o2InFlueGas">O<sub>2</sub> In Flue Gas</label>
-      <div class="input-group">
-        <input name="o2InFlueGas" type="number" step="0.5" min="0" max="20.5" class="form-control"
-          formControlName="o2InFlueGas" id="o2InFlueGas" onfocus="this.select();" (input)="calcExcessAir()"
-          (focus)="focusField('o2InFlueGas')" >
-        <span class="input-group-addon units">%</span>
+    @if (!calcMethodExcessAir) {
+      <div class="form-group">
+        <label class="small" for="o2InFlueGas">O<sub>2</sub> In Flue Gas</label>
+        <div class="input-group">
+          <input name="o2InFlueGas" type="number" step="0.5" min="0" max="20.5" class="form-control"
+            formControlName="o2InFlueGas" id="o2InFlueGas" onfocus="this.select();" (input)="calcExcessAir()"
+            (focus)="focusField('o2InFlueGas')" >
+          <span class="input-group-addon units">%</span>
+        </div>
+        @if (stackLossForm.controls.o2InFlueGas.invalid && !stackLossForm.controls.o2InFlueGas.pristine) {
+          <span class="alert-danger pull-right small"
+            >
+            @if (stackLossForm.controls.o2InFlueGas.errors.required) {
+              <span>Value Required</span>
+            }
+            @if (stackLossForm.controls.o2InFlueGas.errors.max) {
+              <span>Value can't be greater than
+                {{stackLossForm.controls.o2InFlueGas.errors.max.max}} %.</span>
+            }
+            @if (stackLossForm.controls.o2InFlueGas.errors.min) {
+              <span>Value can't be less than
+                {{stackLossForm.controls.o2InFlueGas.errors.min.min}} %.</span>
+            }
+          </span>
+        }
       </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="stackLossForm.controls.o2InFlueGas.invalid && !stackLossForm.controls.o2InFlueGas.pristine">
-        <span *ngIf="stackLossForm.controls.o2InFlueGas.errors.required">Value Required</span>
-        <span *ngIf="stackLossForm.controls.o2InFlueGas.errors.max">Value can't be greater than
-          {{stackLossForm.controls.o2InFlueGas.errors.max.max}} %.</span>
-        <span *ngIf="stackLossForm.controls.o2InFlueGas.errors.min">Value can't be less than
-          {{stackLossForm.controls.o2InFlueGas.errors.min.min}} %.</span>
-      </span>
-    </div>
+    }
 
-    <div class="form-group" *ngIf="calcMethodExcessAir">
-      <label class="small" for="excessAirPercentage">Excess Air</label>
-      <div class="input-group">
-        <input name="excessAirPercentage" type="number" step="any" min="0" class="form-control"
-          formControlName="excessAirPercentage" id="excessAirPercentage" onfocus="this.select();"
-          (input)="calcExcessAir()" (focus)="focusField('excessAirPercentage')" >
-        <span class="input-group-addon units">%</span>
+    @if (calcMethodExcessAir) {
+      <div class="form-group">
+        <label class="small" for="excessAirPercentage">Excess Air</label>
+        <div class="input-group">
+          <input name="excessAirPercentage" type="number" step="any" min="0" class="form-control"
+            formControlName="excessAirPercentage" id="excessAirPercentage" onfocus="this.select();"
+            (input)="calcExcessAir()" (focus)="focusField('excessAirPercentage')" >
+          <span class="input-group-addon units">%</span>
+        </div>
+        @if (stackLossForm.controls.excessAirPercentage.invalid && !stackLossForm.controls.excessAirPercentage.pristine) {
+          <span class="alert-danger pull-right small"
+            >
+            @if (stackLossForm.controls.excessAirPercentage.errors.required) {
+              <span>Value Required</span>
+            }
+            @if (stackLossForm.controls.excessAirPercentage.errors.max) {
+              <span>Value can't be greater than
+                {{stackLossForm.controls.excessAirPercentage.errors.max.max}} %.</span>
+            }
+            @if (stackLossForm.controls.excessAirPercentage.errors.min) {
+              <span>Value can't be less than
+                {{stackLossForm.controls.excessAirPercentage.errors.min.min}} %.</span>
+            }
+          </span>
+        }
       </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="stackLossForm.controls.excessAirPercentage.invalid && !stackLossForm.controls.excessAirPercentage.pristine">
-        <span *ngIf="stackLossForm.controls.excessAirPercentage.errors.required">Value Required</span>
-        <span *ngIf="stackLossForm.controls.excessAirPercentage.errors.max">Value can't be greater than
-          {{stackLossForm.controls.excessAirPercentage.errors.max.max}} %.</span>
-        <span *ngIf="stackLossForm.controls.excessAirPercentage.errors.min">Value can't be less than
-          {{stackLossForm.controls.excessAirPercentage.errors.min.min}} %.</span>
-      </span>
-    </div>
+    }
 
   </div>
 </form>
@@ -102,8 +140,10 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div>
-        <app-flue-gas-material *ngIf="materialModal.isShown" (closeModal)="hideMaterialModal($event)"
-          (hideModal)="hideMaterialModal($event)" [settings]="settings"></app-flue-gas-material>
+        @if (materialModal.isShown) {
+          <app-flue-gas-material (closeModal)="hideMaterialModal($event)"
+            (hideModal)="hideMaterialModal($event)" [settings]="settings"></app-flue-gas-material>
+        }
       </div>
     </div>
   </div>

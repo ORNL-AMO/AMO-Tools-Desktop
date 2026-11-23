@@ -3,45 +3,69 @@
     <label class="small" for="inletWaterPressure">Pressure</label>
     <div class="input-group">
       <input class="form-control" name="inletWaterPressure" id="inletWaterPressure" formControlName="inletWaterPressure"
-        type="number" (input)="calculate()" (focus)="focusField('inletWaterPressure')" 
+        type="number" (input)="calculate()" (focus)="focusField('inletWaterPressure')"
         onfocus="this.select();">
       <span class="input-group-addon units"><span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
+        [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="flashTankForm.controls.inletWaterPressure.invalid && !flashTankForm.controls.inletWaterPressure.pristine">
-      <span *ngIf="flashTankForm.controls.inletWaterPressure.errors.required">Value Required</span>
-      <span *ngIf="flashTankForm.controls.inletWaterPressure.errors.max">Value can't be greater than
-        {{flashTankForm.controls.inletWaterPressure.errors.max.max}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span *ngIf="flashTankForm.controls.inletWaterPressure.errors.min">Value can't be less than
-        {{flashTankForm.controls.inletWaterPressure.errors.min.min}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-    </span>
+    @if (flashTankForm.controls.inletWaterPressure.invalid && !flashTankForm.controls.inletWaterPressure.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (flashTankForm.controls.inletWaterPressure.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (flashTankForm.controls.inletWaterPressure.errors.max) {
+          <span>Value can't be greater than
+            {{flashTankForm.controls.inletWaterPressure.errors.max.max}} <span
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+        @if (flashTankForm.controls.inletWaterPressure.errors.min) {
+          <span>Value can't be less than
+            {{flashTankForm.controls.inletWaterPressure.errors.min.min}} <span
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+      </span>
+    }
   </div>
 
 
   <div class="form-group label-select">
     <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity"
       id="thermodynamicQuantity" (change)="setQuantityRanges()" (focus)="focusField('thermodynamicQuantity')">
-      <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
+      @for (option of thermoOptions; track option) {
+        <option [ngValue]="option.value">{{option.display}}</option>
+      }
     </select>
     <div class="spacer"></div>
     <div class="input-group">
       <input type="number" class="form-control" name="quantityValue" id="quantityValue" formControlName="quantityValue"
         onfocus="this.select();" (input)="calculate()" (focus)="focusField('quantityValue')">
-      <span class="input-group-addon units" *ngIf="flashTankForm.controls.thermodynamicQuantity.value != 3"
-        [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
-      <span class="alert-danger pull-right small"
-        *ngIf="flashTankForm.controls.quantityValue.invalid && !flashTankForm.controls.quantityValue.pristine">
-        <span *ngIf="flashTankForm.controls.quantityValue.errors.required">Value Required</span>
-        <span *ngIf="flashTankForm.controls.quantityValue.errors.max">Value can't be greater than {{flashTankForm.controls.quantityValue.errors.max.max}}
-          <span *ngIf="flashTankForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>.
+      @if (flashTankForm.controls.thermodynamicQuantity.value != 3) {
+        <span class="input-group-addon units"
+          [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
+      }
+      @if (flashTankForm.controls.quantityValue.invalid && !flashTankForm.controls.quantityValue.pristine) {
+        <span class="alert-danger pull-right small"
+          >
+          @if (flashTankForm.controls.quantityValue.errors.required) {
+            <span>Value Required</span>
+          }
+          @if (flashTankForm.controls.quantityValue.errors.max) {
+            <span>Value can't be greater than {{flashTankForm.controls.quantityValue.errors.max.max}}
+              @if (flashTankForm.controls.thermodynamicQuantity.value != 3) {
+                <span [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
+              }.
+            </span>
+          }
+          @if (flashTankForm.controls.quantityValue.errors.min) {
+            <span>Value can't be less than {{flashTankForm.controls.quantityValue.errors.min.min}}
+              @if (flashTankForm.controls.thermodynamicQuantity.value != 3) {
+                <span [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
+              }.
+            </span>
+          }
         </span>
-        <span *ngIf="flashTankForm.controls.quantityValue.errors.min">Value can't be less than {{flashTankForm.controls.quantityValue.errors.min.min}}
-          <span *ngIf="flashTankForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>.
-        </span>
-      </span>
+      }
     </div>
   </div>
 
@@ -49,21 +73,29 @@
     <label class="small" for="inletWaterMassFlow">Mass Flow</label>
     <div class="input-group">
       <input class="form-control" name="inletWaterMassFlow" id="inletWaterMassFlow" formControlName="inletWaterMassFlow"
-        type="number" (input)="calculate()" (focus)="focusField('inletWaterMassFlow')" 
+        type="number" (input)="calculate()" (focus)="focusField('inletWaterMassFlow')"
         onfocus="this.select();">
       <span class="input-group-addon units"><span
-          [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+        [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="flashTankForm.controls.inletWaterMassFlow.invalid && !flashTankForm.controls.inletWaterMassFlow.pristine">
-      <span *ngIf="flashTankForm.controls.inletWaterMassFlow.errors.required">Value Required</span>
-      <span *ngIf="flashTankForm.controls.inletWaterMassFlow.errors.max">Value can't be greater than
-        {{flashTankForm.controls.inletWaterMassFlow.errors.max.max}} <span
-          [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
-      <span *ngIf="flashTankForm.controls.inletWaterMassFlow.errors.min">Value can't be less than
-        {{flashTankForm.controls.inletWaterMassFlow.errors.min.min}} <span
-          [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
-    </span>
+    @if (flashTankForm.controls.inletWaterMassFlow.invalid && !flashTankForm.controls.inletWaterMassFlow.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (flashTankForm.controls.inletWaterMassFlow.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (flashTankForm.controls.inletWaterMassFlow.errors.max) {
+          <span>Value can't be greater than
+            {{flashTankForm.controls.inletWaterMassFlow.errors.max.max}} <span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
+        }
+        @if (flashTankForm.controls.inletWaterMassFlow.errors.min) {
+          <span>Value can't be less than
+            {{flashTankForm.controls.inletWaterMassFlow.errors.min.min}} <span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
+        }
+      </span>
+    }
   </div>
 
   <div class="form-group">
@@ -72,17 +104,25 @@
       <input class="form-control" name="tankPressure" id="tankPressure" formControlName="tankPressure" type="number"
         (input)="calculate()" (focus)="focusField('tankPressure')"  onfocus="this.select();">
       <span class="input-group-addon units"><span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
+        [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="flashTankForm.controls.tankPressure.invalid && !flashTankForm.controls.tankPressure.pristine">
-      <span *ngIf="flashTankForm.controls.tankPressure.errors.required">Value Required</span>
-      <span *ngIf="flashTankForm.controls.tankPressure.errors.max">Value can't be greater than
-        {{flashTankForm.controls.tankPressure.errors.max.max}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span *ngIf="flashTankForm.controls.tankPressure.errors.min">Value can't be less than
-        {{flashTankForm.controls.tankPressure.errors.min.min}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-    </span>
+    @if (flashTankForm.controls.tankPressure.invalid && !flashTankForm.controls.tankPressure.pristine) {
+      <span class="alert-danger pull-right small"
+        >
+        @if (flashTankForm.controls.tankPressure.errors.required) {
+          <span>Value Required</span>
+        }
+        @if (flashTankForm.controls.tankPressure.errors.max) {
+          <span>Value can't be greater than
+            {{flashTankForm.controls.tankPressure.errors.max.max}} <span
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+        @if (flashTankForm.controls.tankPressure.errors.min) {
+          <span>Value can't be less than
+            {{flashTankForm.controls.tankPressure.errors.min.min}} <span
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        }
+      </span>
+    }
   </div>
 </form>

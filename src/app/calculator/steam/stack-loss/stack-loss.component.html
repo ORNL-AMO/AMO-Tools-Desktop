@@ -16,61 +16,69 @@
   </div>
 
   <div class="panel-group" [ngStyle]="{'height.px': containerHeight}">
-  <div class="calculator-panel-container modification mh-100" [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'form'}"
-  [ngStyle]="{'height.px': containerHeight}">
-    <div class="d-flex flex-column m-4">
-      <div class="form-group">
-        <label class="small" for="method">Type of fuel</label>
-        <select class="form-control" id="method" [(ngModel)]="method" (focus)="changeField('measurementType')"
-          (blur)="changeField('default')" (change)="changeFuelType()">
-          <option [ngValue]="1">Gas</option>
-          <option [ngValue]="0">Solid/Liquid</option>
-        </select>
-      </div>
-      <app-stack-loss-form *ngIf="stackLossForm" [method]="method" [stackLossForm]="stackLossForm" [settings]="settings"
-        [inModal]="inModal" (emitChangeField)="changeField($event)" (emitCalculate)="calculate($event)">
-      </app-stack-loss-form>
-      <div class="form-group">
-        <label class="small bold">Stack Loss</label>
-        <div class="small bold text-center">{{stackLossPercent | sigFigs:'3'}} %</div>
-      </div>
-      <div class="form-group">
-        <label class="small bold">Boiler Combustion Efficiency</label>
-        <div class="small bold text-center">{{boilerEfficiency | sigFigs:'3'}} %</div>
-      </div>
-      <div class="w-100 justify-content-center btn-group btn-group-sm" *ngIf="!inModal">
-        <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
-          Reset Data
-        </button>
-        <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateData()">
-          Generate Example
-        </button>
+    <div class="calculator-panel-container modification mh-100" [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'form'}"
+      [ngStyle]="{'height.px': containerHeight}">
+      <div class="d-flex flex-column m-4">
+        <div class="form-group">
+          <label class="small" for="method">Type of fuel</label>
+          <select class="form-control" id="method" [(ngModel)]="method" (focus)="changeField('measurementType')"
+            (blur)="changeField('default')" (change)="changeFuelType()">
+            <option [ngValue]="1">Gas</option>
+            <option [ngValue]="0">Solid/Liquid</option>
+          </select>
+        </div>
+        @if (stackLossForm) {
+          <app-stack-loss-form [method]="method" [stackLossForm]="stackLossForm" [settings]="settings"
+            [inModal]="inModal" (emitChangeField)="changeField($event)" (emitCalculate)="calculate($event)">
+          </app-stack-loss-form>
+        }
+        <div class="form-group">
+          <label class="small bold">Stack Loss</label>
+          <div class="small bold text-center">{{stackLossPercent | sigFigs:'3'}} %</div>
+        </div>
+        <div class="form-group">
+          <label class="small bold">Boiler Combustion Efficiency</label>
+          <div class="small bold text-center">{{boilerEfficiency | sigFigs:'3'}} %</div>
+        </div>
+        @if (!inModal) {
+          <div class="w-100 justify-content-center btn-group btn-group-sm">
+            <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+              Reset Data
+            </button>
+            <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateData()">
+              Generate Example
+            </button>
+          </div>
+        }
       </div>
     </div>
-  </div>
 
-  <div class="calculator-panel-container help-panel" [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'details'}"
-  [ngStyle]="{'height.px': containerHeight}">
-    <div class="d-flex flex-wrap tabs primary sticky-top" [ngStyle]="{'height.px': headerHeight}">
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
-          <div>Results</div>
-        </a>
+    <div class="calculator-panel-container help-panel" [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'details'}"
+      [ngStyle]="{'height.px': containerHeight}">
+      <div class="d-flex flex-wrap tabs primary sticky-top" [ngStyle]="{'height.px': headerHeight}">
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+          <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+            <div>Results</div>
+          </a>
+        </div>
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+          <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+            <div>Help</div>
+          </a>
+        </div>
       </div>
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
-          <div>Help</div>
-        </a>
+      <div class="d-flex">
+        @if (tabSelect == 'help') {
+          <app-stack-loss-help class="w-100" [currentField]="currentField" [settings]="settings">
+          </app-stack-loss-help>
+        }
+        @if (tabSelect == 'results') {
+          <div class="d-flex flex-column w-100 align-items-center pt-4">
+            <h3 class="text-center mb-0">Stack Loss (%)</h3>
+            <app-percent-graph [value]="stackLossPercent" [width]="200"></app-percent-graph>
+          </div>
+        }
       </div>
     </div>
-    <div class="d-flex">
-      <app-stack-loss-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings">
-      </app-stack-loss-help>
-      <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
-        <h3 class="text-center mb-0">Stack Loss (%)</h3>
-        <app-percent-graph [value]="stackLossPercent" [width]="200"></app-percent-graph>
-      </div>
-    </div>
-  </div>
   </div>
 </div>

@@ -1,121 +1,188 @@
 <label class="group-label mb-1">Annual Energy Results</label>
-<table *ngIf="output" #copyTable0 class="table table-hover table-striped">
-  <tbody>
-    <tr>
-      <td class="bold w-50">Energy Savings From Water Heater</td>
-      <td *ngIf="output.energySavedDWH" class="text-center w-50">
-        {{output.energySavedDWH | number:'1.0-0'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
-      </td>
-      <td *ngIf="!output.energySavedDWH" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Energy Savings From Boiler</td>
-      <td *ngIf="output.energySavedBoiler" class="text-center w-50">
-        {{output.energySavedBoiler | number:'1.0-0'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
-      </td>
-      <td *ngIf="!output.energySavedBoiler" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Baseline Energy</td>
-      <td *ngIf="output.energySavedTotal" class="text-center w-50">
-        {{output.energySavedTotal | number:'1.0-0'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
-      </td>
-      <td *ngIf="!output.energySavedTotal" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr> 
-    <tr>
-      <td class="bold w-50">Energy Savings</td>
-      <td *ngIf="output.energySavedTotal" class="text-center w-50">
-        {{output.energySavedTotal | number:'1.0-0'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
-      </td>
-      <td *ngIf="!output.energySavedTotal" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Baseline Water Savings</td>
-      <td *ngIf="output.waterSaved" class="text-center w-50">
-        {{output.waterSaved | number:'1.0-0'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
-      </td>
-      <td *ngIf="!output.waterSaved" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Water Savings</td>
-      <td *ngIf="output.waterSaved" class="text-center w-50">
-        {{output.waterSaved | number:'1.0-0'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
-      </td>
-      <td *ngIf="!output.waterSaved" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>     
-
-  </tbody>
-</table>
+@if (output) {
+  <table #copyTable0 class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold w-50">Energy Savings From Water Heater</td>
+        @if (output.energySavedDWH) {
+          <td class="text-center w-50">
+            {{output.energySavedDWH | number:'1.0-0'}}
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>MMBtu</span>
+            }
+            @if (settings.unitsOfMeasure == 'Metric') {
+              <span>GJ</span>
+            }
+          </td>
+        }
+        @if (!output.energySavedDWH) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Energy Savings From Boiler</td>
+        @if (output.energySavedBoiler) {
+          <td class="text-center w-50">
+            {{output.energySavedBoiler | number:'1.0-0'}}
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>MMBtu</span>
+            }
+            @if (settings.unitsOfMeasure == 'Metric') {
+              <span>GJ</span>
+            }
+          </td>
+        }
+        @if (!output.energySavedBoiler) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Baseline Energy</td>
+        @if (output.energySavedTotal) {
+          <td class="text-center w-50">
+            {{output.energySavedTotal | number:'1.0-0'}}
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>MMBtu</span>
+            }
+            @if (settings.unitsOfMeasure == 'Metric') {
+              <span>GJ</span>
+            }
+          </td>
+        }
+        @if (!output.energySavedTotal) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Energy Savings</td>
+        @if (output.energySavedTotal) {
+          <td class="text-center w-50">
+            {{output.energySavedTotal | number:'1.0-0'}}
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>MMBtu</span>
+            }
+            @if (settings.unitsOfMeasure == 'Metric') {
+              <span>GJ</span>
+            }
+          </td>
+        }
+        @if (!output.energySavedTotal) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Baseline Water Savings</td>
+        @if (output.waterSaved) {
+          <td class="text-center w-50">
+            {{output.waterSaved | number:'1.0-0'}}
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>gal</span>
+            }
+            @if (settings.unitsOfMeasure == 'Metric') {
+              <span>m<sup>3</sup></span>
+            }
+          </td>
+        }
+        @if (!output.waterSaved) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Water Savings</td>
+        @if (output.waterSaved) {
+          <td class="text-center w-50">
+            {{output.waterSaved | number:'1.0-0'}}
+            @if (settings.unitsOfMeasure == 'Imperial') {
+              <span>gal</span>
+            }
+            @if (settings.unitsOfMeasure == 'Metric') {
+              <span>m<sup>3</sup></span>
+            }
+          </td>
+        }
+        @if (!output.waterSaved) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+    </tbody>
+  </table>
+}
 
 <!-- export table component -->
 <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
 </app-exportable-results-table>
 
 <label class="group-label mb-1">Annual Cost Results</label>
-<table *ngIf="output" #copyTable1 class="table table-hover table-striped">
-  <tbody>
-    <tr>
-      <td class="bold w-50">Cost Savings From Water and Treatment</td>
-      <td *ngIf="output.costSavingsWNT" class="text-center w-50">
-        {{output.costSavingsWNT | currency:'USD':'symbol':'1.0-0'}}
-      </td>
-      <td *ngIf="!output.costSavingsWNT" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Cost Savings Water Heater Fuel</td>
-      <td *ngIf="output.costSavingsDWH" class="text-center w-50">
-        {{output.costSavingsDWH | currency:'USD':'symbol':'1.0-0'}}
-      </td>
-      <td *ngIf="!output.costSavingsDWH" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Cost Savings From Boiler</td>
-      <td *ngIf="output.costSavingsBoiler" class="text-center w-50">
-        {{output.costSavingsBoiler | currency:'USD':'symbol':'1.0-0'}}
-      </td>
-      <td *ngIf="!output.costSavingsBoiler" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Cost Savings Total</td>
-      <td *ngIf="output.costSavingsTotal" class="text-center w-50">
-        {{output.costSavingsTotal | currency:'USD':'symbol':'1.0-0'}}
-      </td>
-      <td *ngIf="!output.costSavingsTotal" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-  </tbody>
-</table>
+@if (output) {
+  <table #copyTable1 class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold w-50">Cost Savings From Water and Treatment</td>
+        @if (output.costSavingsWNT) {
+          <td class="text-center w-50">
+            {{output.costSavingsWNT | currency:'USD':'symbol':'1.0-0'}}
+          </td>
+        }
+        @if (!output.costSavingsWNT) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Cost Savings Water Heater Fuel</td>
+        @if (output.costSavingsDWH) {
+          <td class="text-center w-50">
+            {{output.costSavingsDWH | currency:'USD':'symbol':'1.0-0'}}
+          </td>
+        }
+        @if (!output.costSavingsDWH) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Cost Savings From Boiler</td>
+        @if (output.costSavingsBoiler) {
+          <td class="text-center w-50">
+            {{output.costSavingsBoiler | currency:'USD':'symbol':'1.0-0'}}
+          </td>
+        }
+        @if (!output.costSavingsBoiler) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+      <tr>
+        <td class="bold w-50">Cost Savings Total</td>
+        @if (output.costSavingsTotal) {
+          <td class="text-center w-50">
+            {{output.costSavingsTotal | currency:'USD':'symbol':'1.0-0'}}
+          </td>
+        }
+        @if (!output.costSavingsTotal) {
+          <td class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        }
+      </tr>
+    </tbody>
+  </table>
+}
 
 <!-- export table component -->
 <app-exportable-results-table [tableString]="table1String" (updateTableString)="updateTable1String()">
