@@ -44,6 +44,7 @@ import { AssessmentOpportunityHelpComponent } from './assessment-opportunity/ass
 import { PowerFactorCorrectionModule } from '../../calculator/utilities/power-factor-correction/power-factor-correction.module';
 import { AirLeakSurveyModule } from '../../calculator/compressed-air/air-leak-survey/air-leak-survey.module';
 import { SteamLeakSurveyModule } from '../../calculator/steam/steam-leak/steam-leak-survey.module';
+import { CompressedAirDryerModule } from '../../calculator/compressed-air/compressed-air-dryer/compressed-air-dryer.module';
 
 @NgModule({
   declarations: [
@@ -90,7 +91,8 @@ import { SteamLeakSurveyModule } from '../../calculator/steam/steam-leak/steam-l
     AssessmentIntegrationModule,
     BoilerBlowdownRateModule,
     PowerFactorCorrectionModule,
-    SteamLeakSurveyModule
+    SteamLeakSurveyModule,
+    CompressedAirDryerModule
   ],
   providers: [
     CalculatorsService,

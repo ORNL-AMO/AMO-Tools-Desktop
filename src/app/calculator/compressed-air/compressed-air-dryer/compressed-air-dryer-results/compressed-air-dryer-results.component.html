@@ -1,0 +1,65 @@
+@if (baselineOutput) {
+  <div>
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td></td>
+          <td class="bold text-center">Baseline</td>
+          <td class="bold text-center">Modification</td>
+        </tr>
+        @for (row of rows; track row.field) {
+          @if (isRowShown(row)) {
+            <tr>
+              <td class="group-label bold">{{row.label}}</td>
+              <td class="text-center">
+                @if (appliesTo(row, baselineInput)) {
+                  <span>
+                    {{baselineOutput[row.field] | number:'1.2-2'}} {{getUnit(row)}}
+                  </span>
+                } @else {
+                  <span>&mdash;</span>
+                }
+              </td>
+              <td class="text-center">
+                @if (modificationOutput && appliesTo(row, modificationInput)) {
+                  <span>
+                    {{modificationOutput[row.field] | number:'1.2-2'}} {{getUnit(row)}}
+                  </span>
+                } @else {
+                  <span>&mdash;</span>
+                }
+              </td>
+            </tr>
+          }
+        }
+        <tr>
+          <td class="group-label bold">Total Annual Cost</td>
+          <td class="text-center">
+            {{baselineOutput.totalCostPerYear | currency:'USD':'symbol':'1.2-2'}}
+          </td>
+          <td class="text-center">
+            @if (modificationOutput) {
+              <span>
+                {{modificationOutput.totalCostPerYear | currency:'USD':'symbol':'1.2-2'}}
+              </span>
+            } @else {
+              <span>&mdash;</span>
+            }
+          </td>
+        </tr>
+        <tr>
+          <td class="group-label bold">Annual Cost Savings</td>
+          <td class="text-center" colspan="2">
+            @if (modificationOutput) {
+              <span>
+                {{annualCostSavings | currency:'USD':'symbol':'1.2-2'}}
+              </span>
+            } @else {
+              <span>&mdash;</span>
+            }
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+}

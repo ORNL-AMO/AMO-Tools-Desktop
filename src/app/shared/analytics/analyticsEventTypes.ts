@@ -32,6 +32,7 @@ export type AnalyticsEventString = 'page_view' |
     'calculator-CA-pneumatic-air' |
     'calculator-CA-receiver-tank' |
     'calculator-CA-system-capacity' |
+    'calculator-CA-dryer' |
 
     'calculator-FAN-analysis' |
     'calculator-FAN-efficiency' |
