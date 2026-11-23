@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ImportExportOpportunities, Treasure, TreasureHunt } from '../../shared/models/treasure-hunt';
 import { UpdateDataService } from '../../shared/helper-services/update-data.service';
+import { Settings } from '../../shared/models/settings';
 
 @Injectable()
 export class ImportOpportunitiesService {
 
   constructor(private updateDataService: UpdateDataService) { }
 
-  importData(data: ImportExportOpportunities, treasureHunt: TreasureHunt): TreasureHunt {
+  importData(data: ImportExportOpportunities, treasureHunt: TreasureHunt, settings?: Settings): TreasureHunt {
     if (data.lightingReplacements) {
       if (treasureHunt.lightingReplacements == undefined) {
         treasureHunt.lightingReplacements = new Array();
@@ -68,6 +69,7 @@ export class ImportOpportunitiesService {
       if (treasureHunt.waterReductions == undefined) {
         treasureHunt.waterReductions = new Array();
       }
+      data.waterReductions.forEach(opportunity => this.updateDataService.updateWaterReductionTreasureHunt(opportunity, settings?.unitsOfMeasure, settings));
       this.updateLegacyOpportunities(data.waterReductions, Treasure.waterReduction);
       treasureHunt.waterReductions = treasureHunt.waterReductions.concat(data.waterReductions);
     }

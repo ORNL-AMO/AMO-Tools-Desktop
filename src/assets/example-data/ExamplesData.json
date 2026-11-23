@@ -3157,7 +3157,7 @@
                                             "otherMethodData": {
                                                 "consumption": 15000
                                             },
-                                            "isWastewater": false
+                                            "calculatorType": "water"
                                         }
                                     ],
                                     "modification": [
@@ -3181,7 +3181,7 @@
                                             "otherMethodData": {
                                                 "consumption": 15000
                                             },
-                                            "isWastewater": false
+                                            "calculatorType": "water"
                                         }
                                     ],
                                     "opportunitySheet": {
@@ -28485,7 +28485,7 @@
                                     "otherMethodData": {
                                         "consumption": 15000
                                     },
-                                    "isWastewater": false
+                                    "calculatorType": "water"
                                 }
                             ],
                             "modification": [
@@ -28509,7 +28509,7 @@
                                     "otherMethodData": {
                                         "consumption": 15000
                                     },
-                                    "isWastewater": false
+                                    "calculatorType": "water"
                                 }
                             ],
                             "opportunitySheet": {

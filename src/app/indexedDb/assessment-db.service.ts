@@ -3,13 +3,14 @@ import { Assessment } from '../shared/models/assessment';
 import * as _ from 'lodash';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { BehaviorSubject, firstValueFrom, map, mergeMap, Observable } from 'rxjs';
-import { AssessmentStoreMeta } from './dbConfig';
+import { AssessmentStoreMeta, SettingsStoreMeta } from './dbConfig';
 import { UpdateDataService } from '../shared/helper-services/update-data.service';
 import { environment } from '../../environments/environment';
 import { CalculatorDbService } from './calculator-db.service';
 import { Calculator } from '../shared/models/calculators';
 import { DiagramIdbService } from './diagram-idb.service';
 import { Diagram } from '../shared/models/diagram';
+import { Settings } from '../shared/models/settings';
 declare const packageJson;
 
 @Injectable()
@@ -55,9 +56,14 @@ export class AssessmentDbService {
   getAllAssessments(): Observable<Assessment[]> {
     return this.dbService.getAll(this.storeName).pipe(
       mergeMap(async (assessments: Array<Assessment>) => {
-        for await (let assessment of assessments) {
+        const needsUpdate: boolean = assessments.some((assessment: Assessment) => assessment.appVersion !== environment.version);
+        const allSettings: Settings[] = needsUpdate
+          ? await firstValueFrom(this.dbService.getAll<Settings>(SettingsStoreMeta.store))
+          : [];
+        for (const assessment of assessments) {
           if (assessment.appVersion !== environment.version) {
-            this.updateDataService.updateAssessmentVersion(assessment);
+            const settingsForAssessment: Settings = allSettings.find((settings: Settings) => settings.assessmentId === assessment.id);
+            this.updateDataService.updateAssessmentVersion(assessment, settingsForAssessment);
             let assessmentCalculators: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
             let updatedAssessmentCalculators = this.updateDataService.updateAssessmentCalculatorVersion(assessmentCalculators);
             if (updatedAssessmentCalculators) {
