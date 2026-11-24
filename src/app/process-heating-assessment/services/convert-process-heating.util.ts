@@ -176,7 +176,8 @@ const FIXTURE_FIELDS: FieldMap<FixtureLoss> = {
 
 const LEAKAGE_FIELDS: FieldMap<LeakageLoss> = {
   draftPressure: PRESSURE,
-  openingArea: AREA,
+  // Openings are often under 1 sq ft; 4 decimals of m2 would shift a 0.06 sq ft opening's leakage by about 0.5%.
+  openingArea: exact(AREA),
   ambientTemperature: TEMPERATURE,
   leakageGasTemperature: TEMPERATURE,
 };
