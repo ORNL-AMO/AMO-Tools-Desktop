@@ -222,15 +222,15 @@ describe('Fan affinity Desktop integration with the published beta', () => {
     expect(estimate({nameplatePower: 15, motorControlTypeCurrent: 0, actualFlow: 30000}, metric)).toBeCloseTo(15 * 0.97 * 0.96, 10);
   });
 
-  it('keeps the metered Motor Power until the estimate is usable and requires Nameplate Power only in Estimate mode', () => {
+  it('clears Motor Power until the estimate is usable and requires Nameplate Power only in Estimate mode', () => {
     const form = service.getFormFromObj(input({powerMotor: 50, estimateMotorPower: true, nameplatePower: 0}));
     service.setEstimatedMotorPower(form, imperial);
-    expect(form.controls.powerMotor.value).toBe(50);
+    expect(form.controls.powerMotor.value).toBeNull();
     expect(form.controls.nameplatePower.errors?.greaterThan).toBe(0);
     expect(form.valid).toBeFalse();
     form.controls.nameplatePower.setValue(15); form.controls.ratedFlow.setValue(0);
     service.setEstimatedMotorPower(form, imperial);
-    expect(form.controls.powerMotor.value).toBe(50);
+    expect(form.controls.powerMotor.value).toBeNull();
     expect(service.getFormFromObj(input({nameplatePower: 0})).controls.nameplatePower.errors).toBeNull();
   });
 

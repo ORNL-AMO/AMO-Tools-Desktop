@@ -38,6 +38,8 @@ export class FanAffinityLawFormComponent implements OnInit {
     { display: 'Volume', value: 1 }
   ];
 
+  private meteredPowerMotor: number;
+
   constructor(private fanAffinityLawService: FanAffinityLawService) { }
 
   ngOnInit() {
@@ -60,13 +62,19 @@ export class FanAffinityLawFormComponent implements OnInit {
   }
 
   // Switches Motor Power between direct (metered) entry and an estimate from Nameplate Power.
-  // Switching back to metered keeps the last valid estimate as the entered value.
+  // Switching back to metered keeps the last valid estimate (rounded) as the entered value,
+  // or restores the metered value if no valid estimate was made.
   toggleEstimateMotorPower() {
-    const estimate: boolean = !this.fanAffinityLawForm.controls.estimateMotorPower.value;
-    this.fanAffinityLawForm.controls.estimateMotorPower.patchValue(estimate);
+    const controls = this.fanAffinityLawForm.controls;
+    const estimate: boolean = !controls.estimateMotorPower.value;
+    controls.estimateMotorPower.patchValue(estimate);
     if (estimate) {
+      this.meteredPowerMotor = controls.powerMotor.value;
       // show the Nameplate Power error right away instead of silently zeroing the results
-      this.fanAffinityLawForm.controls.nameplatePower.markAsDirty();
+      controls.nameplatePower.markAsDirty();
+    } else {
+      const powerMotor: number = controls.powerMotor.value ?? this.meteredPowerMotor;
+      controls.powerMotor.patchValue(powerMotor != null ? Number(powerMotor.toFixed(2)) : null);
     }
     this.emitCalculate();
   }

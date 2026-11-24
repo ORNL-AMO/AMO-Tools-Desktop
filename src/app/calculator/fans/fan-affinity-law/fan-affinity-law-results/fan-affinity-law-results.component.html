@@ -94,7 +94,7 @@
     </tr>
     <tr *ngIf="showField('newFanRatedFlow')">
       <td>New Fan Rated Flow</td>
-      <td class="text-center" colspan="2">{{fanAffinityLawResults?.newFanRatedFlow | number:'1.0-3'}}
+      <td class="text-center" colspan="2">{{fanAffinityLawResults?.newFanRatedFlow | number:flowVolumeDigits()}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> CFM</span>
         <span *ngIf="settings.unitsOfMeasure != 'Imperial'"> m<sup>3</sup>/s</span>
       </td>

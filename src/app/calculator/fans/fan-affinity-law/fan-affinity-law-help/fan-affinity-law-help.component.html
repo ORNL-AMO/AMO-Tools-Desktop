@@ -44,6 +44,7 @@
         Mechanical power delivered to the fan at the baseline operating point, after motor and drive losses.
         Enter delivered power in kW. This is not nameplate
         power or electrical input power. Review older entries that used nameplate or full-speed rated power.
+        If unknown, click Estimate Motor Power to estimate it from the motor nameplate.
         <hr>
       </small>
     </h6>
@@ -56,6 +57,8 @@
         <br>
         Motor nameplate power, in {{settings.unitsOfMeasure == 'Imperial' ? 'hp' : 'kW'}}. Delivered motor power will be estimated based on flow and
         system efficiencies.
+        <br>
+        Motor Power = Nameplate &times; 0.7457 &times; ((Actual Flow)/(Rated Flow))<sup>3</sup> &times; Drive Efficiency &times; Motor Efficiency
         <hr>
       </small>
     </h6>

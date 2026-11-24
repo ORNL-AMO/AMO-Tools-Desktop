@@ -129,12 +129,9 @@ export class FanAffinityLawService {
     }
     const powerMotor: number = nameplateKw * controlFactor
       * (form.controls.efficiencyDrive.value / 100) * (form.controls.efficiencyMotor.value / 100);
-    // Keep the existing Motor Power until the inputs give a usable estimate (e.g. Nameplate Power still 0),
-    // so switching to Estimate doesn't wipe a metered value; the Nameplate Power error blocks the calculation.
-    if (!Number.isFinite(powerMotor) || powerMotor <= 0) {
-      return;
-    }
-    form.controls.powerMotor.patchValue(powerMotor, { emitEvent: false });
+    // Clear Motor Power until the inputs give a usable estimate (e.g. Nameplate Power still 0)
+    const estimate: number = Number.isFinite(powerMotor) && powerMotor > 0 ? powerMotor : null;
+    form.controls.powerMotor.patchValue(estimate, { emitEvent: false });
     form.controls.powerMotor.updateValueAndValidity();
   }
 
