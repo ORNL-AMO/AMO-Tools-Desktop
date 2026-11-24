@@ -415,14 +415,14 @@ export class UpdateDataService {
 
         assessment.phast = this.updateMoistureInAirCombustion(assessment.phast);
         if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
-            assessment.phast.modifications.forEach(mod => {
+            assessment.phast.modifications.filter(mod => mod.phast).forEach(mod => {
                 mod.phast = this.updateMoistureInAirCombustion(mod.phast);
             });
         }
 
         assessment.phast = this.updateFlueGas(assessment.phast);
         if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
-            assessment.phast.modifications.forEach(mod => {
+            assessment.phast.modifications.filter(mod => mod.phast).forEach(mod => {
                 mod.phast = this.updateFlueGas(mod.phast);
             });
         }
@@ -430,7 +430,7 @@ export class UpdateDataService {
         assessment.appVersion = environment.version;
         assessment.phast = this.updateEnergyInputExhaustGasLoss(assessment.phast);
         if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
-            assessment.phast.modifications.forEach(mod => {
+            assessment.phast.modifications.filter(mod => mod.phast).forEach(mod => {
                 mod.phast = this.updateEnergyInputExhaustGasLoss(mod.phast);
             });
         }

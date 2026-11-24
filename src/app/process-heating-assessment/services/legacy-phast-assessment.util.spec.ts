@@ -3,7 +3,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { PHAST } from '../models/phast';
 import { LegacyModification } from '../models/modification';
-import { toLegacyPhastAssessment } from './legacy-phast-assessment.util';
+import { canOpenInLegacyPhast, phastModuleFor, toLegacyPhastAssessment } from './legacy-phast-assessment.util';
 
 /* eslint-disable @typescript-eslint/no-require-imports */
 const FUEL_EXAMPLE = require('../snapshot-tests/fixtures/Process Heating - Fuel Example.json').assessments[0];
@@ -89,5 +89,43 @@ describe('toLegacyPhastAssessment', () => {
     toLegacyPhastAssessment(assessment, FUEL_EXAMPLE.settings);
 
     expect(assessment).toEqual(saved);
+  });
+});
+
+describe('canOpenInLegacyPhast', () => {
+  it('allows an assessment whose modifications all have a legacy copy, or that has none', () => {
+    expect(canOpenInLegacyPhast(buildAssessment({}, [{ id: 'm1', phast: { name: 'Mod 1' } }]).phast)).toBeTrue();
+    expect(canOpenInLegacyPhast(buildAssessment({}, []).phast)).toBeTrue();
+  });
+
+  it('refuses an assessment with a modification created in this module', () => {
+    const assessment = buildAssessment({}, [{ id: 'm1', phast: { name: 'Mod 1' } }, { id: 'm2', scenarioOverrides: {} }]);
+
+    expect(canOpenInLegacyPhast(assessment.phast)).toBeFalse();
+  });
+});
+
+describe('phastModuleFor', () => {
+  const neverOpened = buildAssessment({}, [{ id: 'm1', phast: { name: 'Mod 1' } }]).phast;
+  const savedByProcessHeating = buildAssessment({}, [{ id: 'm1', phast: { name: 'Stale' }, scenarioOverrides: { name: 'Edited' } }]).phast;
+  const createdByProcessHeating = buildAssessment({}, [{ id: 'm1', scenarioOverrides: {} }]).phast;
+
+  it('opens Process Heating when the legacy module cannot open the assessment, whatever the user picked', () => {
+    expect(phastModuleFor(createdByProcessHeating)).toBe('process-heating');
+    expect(phastModuleFor(createdByProcessHeating, 'phast')).toBe('process-heating');
+  });
+
+  it('opens the module the user picked', () => {
+    expect(phastModuleFor(savedByProcessHeating, 'phast')).toBe('phast');
+    expect(phastModuleFor(neverOpened, 'process-heating')).toBe('process-heating');
+  });
+
+  it('opens Process Heating once it has saved the assessment', () => {
+    expect(phastModuleFor(savedByProcessHeating)).toBe('process-heating');
+  });
+
+  it('opens the legacy module for an assessment Process Heating has not saved', () => {
+    expect(phastModuleFor(neverOpened)).toBe('phast');
+    expect(phastModuleFor(buildAssessment({}, []).phast)).toBe('phast');
   });
 });

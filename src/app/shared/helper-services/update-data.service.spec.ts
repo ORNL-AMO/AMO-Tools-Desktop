@@ -3,6 +3,7 @@ import { UpdateDataService } from './update-data.service';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { Assessment } from '../models/assessment';
 import { ProcessCoolingAssessment, TowerType } from '../models/process-cooling-assessment';
+import { PHAST } from '../models/phast/phast';
 import { environment } from '../../../environments/environment';
 
 describe('UpdateDataService.updateProcessCooling', () => {
@@ -150,5 +151,43 @@ describe('UpdateDataService.updateProcessCooling', () => {
   it('does not throw when processCooling is missing', () => {
     const assessment: Assessment = { name: 'no data', type: 'ProcessCooling', appVersion: '1.7.5' };
     expect(() => service.updateAssessmentVersion(assessment)).not.toThrow();
+  });
+});
+
+describe('UpdateDataService.updatePhast', () => {
+  let service: UpdateDataService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [UpdateDataService, ConvertUnitsService]
+    });
+    service = TestBed.inject(UpdateDataService);
+  });
+
+  function legacyFlueGasPhast(): PHAST {
+    return {
+      losses: { flueGasLosses: [{ flueGasType: 'By Mass', flueGasByMass: { moistureInAirComposition: 1.5 } }] }
+    } as unknown as PHAST;
+  }
+
+  it('skips rebuilt modifications, which have no phast, and still migrates legacy ones', () => {
+    const assessment: Assessment = {
+      name: 'mixed modifications',
+      type: 'PHAST',
+      appVersion: '1.0.0',
+      phast: {
+        losses: {},
+        modifications: [
+          { id: 'rebuilt', notes: undefined },
+          { id: 'legacy', phast: legacyFlueGasPhast() }
+        ]
+      } as PHAST
+    };
+
+    const updated = service.updateAssessmentVersion(assessment);
+
+    expect(updated.phast.modifications[0].phast).toBeUndefined();
+    expect(updated.phast.modifications[1].phast.losses.flueGasLosses[0].flueGasByMass.moistureInAirCombustion).toBe(1.5);
+    expect(updated.appVersion).toBe(environment.version);
   });
 });

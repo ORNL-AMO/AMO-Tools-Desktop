@@ -4,6 +4,7 @@ import { GreaterThanValidator } from '../../shared/validators/greater-than';
 import { AuxiliaryEquipmentItem } from '../../shared/models/phast/auxEquipment';
 import { AuxiliaryEquipmentMeasurementMethod } from '../models/auxiliary-equipment';
 import { HOURS_PER_YEAR } from '../../shared/app-constants';
+import { DEFAULT_LINE_FREQUENCY_HZ, DEFAULT_MOTOR_AND_DRIVE_EFFICIENCY_PERCENT } from '../constants/auxiliary-equipment';
 
 export type MultimeterForm = FormGroup<{
   numberOfPhases: FormControl<number | null>;
@@ -34,10 +35,6 @@ export type AuxiliaryEquipmentForm = FormGroup<{
 
 /** Current phases (1 or 3) for a new item's multimeter reading. */
 const DEFAULT_NUMBER_OF_PHASES = 3;
-/** Supply frequency (Hz) for a new or migrated item. */
-export const DEFAULT_LINE_FREQUENCY_HZ = 60;
-/** Motor and drive efficiency (%) for a new or migrated item. */
-export const DEFAULT_MOTOR_AND_DRIVE_EFFICIENCY_PERCENT = 100;
 
 /**
  * Starting values for a new item, matching the Electricity Reduction calculator defaults.

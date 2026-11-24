@@ -7,7 +7,7 @@ import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PHAST } from '../models/phast';
 import { ProcessHeatingModification } from '../models/modification';
-import { ProcessHeatingAssessmentService, scenarioSettingsFor } from './process-heating-assessment.service';
+import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingValidityService } from './process-heating-validity.service';
 
 describe('ProcessHeatingAssessmentService', () => {
@@ -376,23 +376,5 @@ describe('ProcessHeatingAssessmentService', () => {
       expect(service.processHeatingSignal().losses.wallLosses[0].ambientTemperature).toBe(212);
       expect(assessmentDb.updateWithObservable).not.toHaveBeenCalled();
     });
-  });
-});
-
-describe('scenarioSettingsFor', () => {
-  const settings = { energySourceType: 'Fuel', unitsOfMeasure: 'Imperial' } as Settings;
-  const phast = {
-    modifications: [{ id: 'electric', energySource: { energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' } }, { id: 'same' }],
-  } as unknown as PHAST;
-
-  it('returns the assessment settings for the baseline and for a modification without its own energy source', () => {
-    expect(scenarioSettingsFor(settings, phast, 'baseline')).toBe(settings);
-    expect(scenarioSettingsFor(settings, phast, 'same')).toBe(settings);
-  });
-
-  it("applies a modification's own energy source", () => {
-    expect(scenarioSettingsFor(settings, phast, 'electric')).toEqual(jasmine.objectContaining({
-      energySourceType: 'Electricity', furnaceType: 'Electrical Infrared', unitsOfMeasure: 'Imperial',
-    }));
   });
 });

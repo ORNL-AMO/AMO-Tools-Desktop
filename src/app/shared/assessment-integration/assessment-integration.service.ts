@@ -13,6 +13,7 @@ import { FsatService } from '../../fsat/fsat.service';
 import { PhastIntegrationService } from '../../phast/phast-integration.service';
 import { AssessmentService } from '../../dashboard/assessment.service';
 import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment/compressed-air-assessment-results.service';
+import { phastModuleFor, toLegacyPhastAssessment } from '../../process-heating-assessment/services/legacy-phast-assessment.util';
 
 @Injectable({
   providedIn: 'root'
@@ -49,10 +50,13 @@ export class AssessmentIntegrationService {
     }
 
     if (assessment) {
-      integratedAssessment.assessment = assessment;
       let assessmentSettings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+      integratedAssessment.assessment = assessmentType === 'PHAST' ? toLegacyPhastAssessment(assessment, assessmentSettings) : assessment;
       if (assessmentType === 'PHAST') {
         await this.phastIntegrationService.setIntegratedAssessmentData(integratedAssessment, assessmentSettings, treasureHuntSettings);
+        if (phastModuleFor(assessment.phast) === 'process-heating') {
+          integratedAssessment.navigation.url = '/process-heating/' + assessment.id;
+        }
       } else if (assessmentType === 'PSAT') {
         this.psatService.setIntegratedAssessmentData(integratedAssessment, assessmentSettings);
       } else if (assessmentType === 'FSAT') {

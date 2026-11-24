@@ -18,6 +18,7 @@ import { SsmtReportRollupService } from './ssmt-report-rollup.service';
 import { TreasureHuntReportRollupService } from './treasure-hunt-report-rollup.service';
 import { WasteWaterReportRollupService } from './waste-water-report-rollup.service';
 import { CompressedAirReportRollupService } from './compressed-air-report-rollup.service';
+import { toLegacyPhastAssessment } from '../process-heating-assessment/services/legacy-phast-assessment.util';
 
 @Injectable()
 export class ReportRollupService {
@@ -65,6 +66,9 @@ export class ReportRollupService {
   pushAssessment(assessment: Assessment) {
     let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
     let tmpSettings: Settings = this.checkSettings(settings);
+    if (assessment.type === 'PHAST') {
+      assessment = toLegacyPhastAssessment(assessment, settings);
+    }
     this.assessmentsArray.push({ assessment: assessment, settings: tmpSettings });
   }
 

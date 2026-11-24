@@ -2,9 +2,39 @@ import { Assessment } from '../../shared/models/assessment';
 import { PHAST as SharedPHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { PHAST } from '../models/phast';
+import { ProcessHeatingModification } from '../models/modification';
 import { toLegacyJustifiAssessment } from './legacy-justifi-assessment.util';
 import { migrateLegacyPhast } from './legacy-phast-migration.util';
-import { scenarioSettingsFor } from './process-heating-assessment.service';
+import { scenarioSettingsFor } from './scenario-settings.util';
+
+/**
+ * The legacy module reads each modification's full `phast` copy, which a modification created in this module lacks.
+ * @param phast Process Heating assessment as saved by either module, never a converted copy
+ * @returns whether the legacy module can open the assessment
+ */
+export function canOpenInLegacyPhast(phast: SharedPHAST): boolean {
+  return (phast?.modifications ?? []).every(modification => modification.phast);
+}
+
+export type PhastModuleChoice = 'phast' | 'process-heating';
+
+/**
+ * Once this module saves an assessment, code outside it calculates from the saved `scenarioOverrides`, while the
+ * legacy module would show each modification's stale `phast` clone. A user's explicit choice still opens legacy.
+ * @param phast Process Heating assessment as saved by either module, never a converted copy
+ * @param override module the user picked, if any
+ * @returns the module to open the assessment in
+ */
+export function phastModuleFor(phast: SharedPHAST, override?: PhastModuleChoice): PhastModuleChoice {
+  if (!canOpenInLegacyPhast(phast)) {
+    return 'process-heating';
+  }
+  if (override) {
+    return override;
+  }
+  const savedByProcessHeating = (phast?.modifications ?? []).some(modification => (modification as unknown as ProcessHeatingModification).scenarioOverrides);
+  return savedByProcessHeating ? 'process-heating' : 'phast';
+}
 
 /**
  * Code outside this module (dashboard, rollup, JUSTIFI export, Treasure Hunt) calculates from each modification's

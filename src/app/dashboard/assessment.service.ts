@@ -17,6 +17,8 @@ import { getDefaultProcessCoolingAssessment } from '../process-cooling-assessmen
 import { TreasureHunt } from '../shared/models/treasure-hunt';
 import { OperatingHours } from '../shared/models/operations';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { PhastModuleChoice, phastModuleFor } from '../process-heating-assessment/services/legacy-phast-assessment.util';
+import { ROUTE_TOKENS } from '../process-heating-assessment/constants/process-heating-routes';
 
 @Injectable()
 export class AssessmentService {
@@ -32,7 +34,7 @@ export class AssessmentService {
     this.showTutorial = new BehaviorSubject<string>(null);
   }
 
-  goToAssessment(assessment: Assessment, mainTab?: string, subTab?: string, phastModuleOverride?: 'phast' | 'process-heating') {
+  goToAssessment(assessment: Assessment, mainTab?: string, subTab?: string, phastModuleOverride?: PhastModuleChoice) {
     if (mainTab) {
       this.startingTab = mainTab;
     } else {
@@ -53,7 +55,11 @@ export class AssessmentService {
       if (assessment.phast.setupDone && !mainTab && (!assessment.isExample)) {
         this.startingTab = 'assessment';
       }
-      itemSegment = phastModuleOverride === 'process-heating' ? '/process-heating/' : '/phast/';
+      if (phastModuleFor(assessment.phast, phastModuleOverride) === 'process-heating') {
+        this.dashboardService.navigateWithSidebarOptions(this.getProcessHeatingUrl(assessment.id, this.startingTab), { shouldCollapse: true });
+        return;
+      }
+      itemSegment = '/phast/';
     } else if (assessment.type === 'FSAT') {
       if (assessment.fsat.setupDone && !mainTab && !assessment.isExample) {
         this.startingTab = 'assessment';
@@ -102,6 +108,18 @@ export class AssessmentService {
 
     this.dashboardService.navigateWithSidebarOptions(itemSegment + assessment.id, { shouldCollapse: true })
 
+  }
+
+  /**
+   * Process Heating reads its view from the route rather than `startingTab`.
+   * @param assessmentId the assessment to open
+   * @param startingTab tab the legacy module would open
+   * @returns the Process Heating route for the matching view; Baseline when no view matches
+   */
+  private getProcessHeatingUrl(assessmentId: number, startingTab: string): string {
+    const routedViews: string[] = [ROUTE_TOKENS.assessment, ROUTE_TOKENS.report];
+    const viewSegment = routedViews.includes(startingTab) ? `/${startingTab}` : '';
+    return `/process-heating/${assessmentId}${viewSegment}`;
   }
 
   getNewAssessment(assessmentType: AssessmentType): Assessment {

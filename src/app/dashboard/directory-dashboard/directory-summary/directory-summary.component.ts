@@ -34,6 +34,7 @@ import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmD
 import { EditContactModalData } from '../../../shared/edit-contact-modal/editContactModalData';
 import { EditContactModalComponent } from '../../../shared/edit-contact-modal/edit-contact-modal.component';
 import { ModalDialogService } from '../../../shared/modal-dialog.service';
+import { toLegacyPhastAssessment } from '../../../process-heating-assessment/services/legacy-phast-assessment.util';
 
 @Component({
   selector: 'app-directory-summary',
@@ -223,9 +224,10 @@ export class DirectorySummaryComponent implements OnInit {
     let totalEnergyUsed: number = 0;
     let totalCost: number = 0;
     phastAssessments.forEach(assessment => {
-      if (assessment.phast.setupDone) {
-        let assessmentSettings: Settings = this.settingsDbService.getByAssessmentId(assessment);
-        let result: ExecutiveSummary = this.executiveSummaryService.getSummary(assessment.phast, false, assessmentSettings, assessment.phast);
+      let assessmentSettings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+      let legacyPhast = toLegacyPhastAssessment(assessment, assessmentSettings).phast;
+      if (legacyPhast.setupDone) {
+        let result: ExecutiveSummary = this.executiveSummaryService.getSummary(legacyPhast, false, assessmentSettings, legacyPhast);
         result.annualEnergyUsed = this.convertUnitsService.value(result.annualEnergyUsed).from(assessmentSettings.energyResultUnit).to(this.directorySettings.energyResultUnit);
         totalEnergyUsed = totalEnergyUsed + result.annualEnergyUsed;
         totalCost = totalCost + result.annualCost;

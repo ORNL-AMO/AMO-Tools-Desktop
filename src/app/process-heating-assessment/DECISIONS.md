@@ -90,7 +90,7 @@ Induction melters - Energy Exhaust   gross heat input 1813.37 → 1812.34 / 6471
 
 **Why:** It is a fallback in case users run into problems with the rebuild that need to be rolled back.
 
-**Where it applies:** The whole legacy module. Gaps between the two, such as dashboard and rollup support for rebuilt assessments, are tracked as open questions on [#8900](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8900).
+**Where it applies:** The whole legacy module. Code outside both modules reads rebuilt assessments as described in [Code outside the module reads a converted copy](#code-outside-the-module-reads-a-converted-copy).
 
 ## Material lists are shared and reloaded when an assessment opens
 
@@ -128,3 +128,17 @@ gross heat input = 4.50 / 0.80          = 5.63 MMBtu/hr  (5.00 when leakage was 
 ```
 
 **Where it applies:** Heat Balance and Expert View tabs, validation, results, Sankey, JUSTIFI export, Explore Opportunities and the Input Summary. Results for legacy steam and electrotechnology assessments with leakage entries now match the legacy module. No real non-fuel assessment with leakage was available, so the snapshot tests use synthetic fixtures (existing fixtures with a leakage entry added).
+
+## Code outside the module reads a converted copy
+
+**Issue:** [#8940](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8940)
+
+**Decision:** The dashboard summary card and its Quick Report, the folder summary, the report rollup, the JUSTIFI export (from the dashboard and from the legacy share modal) and the Treasure Hunt import each convert a Process Heating assessment into the legacy shape when they load it. The converted copy is never saved. The rebuild saves a setup done mark whenever the assessment or its settings are saved, using the same rule as Report access.
+
+**Why:** Those features calculate from each modification's full copy of the baseline. The rebuild saves only what a modification changes, so they dropped rebuilt assessments or failed on them, and legacy modifications edited in the rebuild kept a stale copy. They also counted Auxiliary Power, which the rebuild does not use, and the rebuild never saved the setup done mark they check.
+
+**Where it applies:**
+- Every Process Heating assessment, including ones never opened in the rebuild, so Auxiliary Power and losses from tabs the energy source hides no longer count on the dashboard, rollup, JUSTIFI export or Treasure Hunt.
+- A modification on a different energy source than the baseline is calculated with the baseline's settings in these features, as legacy does.
+- Rebuilt assessments saved before this change have no setup done mark and stay off the dashboard and rollup until they are opened once.
+- The dashboard, rollup and Treasure Hunt open an assessment in the rebuild once the rebuild has saved it, since their numbers come from the rebuild's edits and the legacy module would show its stale copy. The dashboard card's Assessment and Assessment Report links open the matching rebuild view. The sidebar's module choice can still open such an assessment in the legacy module, unless it has a modification created in the rebuild, which the legacy module cannot open. Assessments the rebuild has never saved still open in the legacy module.
