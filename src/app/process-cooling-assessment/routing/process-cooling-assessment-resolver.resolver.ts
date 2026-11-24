@@ -78,7 +78,6 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
         this.processCoolingAssessmentService.setAssessment(assessment);
         this.processCoolingAssessmentService.setProcessCooling(assessment.processCooling);
         this.inventoryService.setDefaultSelectedChiller(assessment.processCooling.inventory);
-        this.inventoryService.setInventoryValidState(assessment.processCooling.inventory);
 
         if (assessment.processCooling.weatherData) {
           this.processCoolingWeatherContextService.setWeatherData(assessment.processCooling.weatherData);
@@ -109,6 +108,8 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
                 if (settings) {
                   this.processCoolingWeatherContextService.settings = settings;
                 }
+                // * after settings init, inventory may have been converted and validation limits depend on units
+                this.inventoryService.setInventoryValidState(this.processCoolingAssessmentService.processCoolingSignal().inventory, settings);
               }),
               map(settings => ({
                 assessment,

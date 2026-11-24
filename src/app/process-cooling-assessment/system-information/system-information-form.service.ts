@@ -2,10 +2,11 @@
 import { inject, Injectable } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, FormControl, ValidatorFn } from '@angular/forms';
 import { CoolingWaterPumpType, Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, CondenserCoolingMethod, SystemInformation, AirCoolingSource, TowerSizeMetric, FanType, FanSpeedType } from '../../shared/models/process-cooling-assessment';
-import { PROCESS_COOLING_VALIDATION } from '../constants/process-cooling-validation-rules';
+import { FieldValidationRules, getRangeWarning, PROCESS_COOLING_VALIDATION } from '../constants/process-cooling-validation-rules';
 import { ConvertValue } from '../../shared/convert-units/ConvertValue';
 import { Settings } from '../../shared/models/settings';
 import { AppUnits, convertFlowRatePerTon, PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
+import { GreaterThanValidator } from '../../shared/validators/greater-than';
 import { roundVal } from '../../shared/helperFunctions';
 import { getTowerTypeDependentValues } from '../constants/process-cooling-constants';
 
@@ -139,8 +140,7 @@ export class SystemInformationFormService {
     }
     return [
       Validators.required,
-      Validators.min(this.convertLimit(PROCESS_COOLING_VALIDATION.motorSize.min, PROCESS_COOLING_UNITS.motorPower, settings)),
-      Validators.max(this.convertLimit(PROCESS_COOLING_VALIDATION.motorSize.max, PROCESS_COOLING_UNITS.motorPower, settings))
+      GreaterThanValidator.greaterThan(this.convertLimit(PROCESS_COOLING_VALIDATION.motorSize.greaterThan, PROCESS_COOLING_UNITS.motorPower, settings))
     ];
   }
 
@@ -354,6 +354,21 @@ getWaterCooledFollowingTempDifferentialValidators(settings: Settings): Validator
       ];
     }
     return validators;
+  }
+
+  /**
+   * Warning for a value that is valid but outside the typical (yellow) range of the rule
+   */
+  getFieldWarning(value: number, rule: FieldValidationRules, units: AppUnits, settings: Settings): string | null {
+    return getRangeWarning(value, rule, (limit: number) => this.convertLimit(limit, units, settings));
+  }
+
+  getPumpFlowRateWarning(value: number, pumpType: CoolingWaterPumpType, settings: Settings): string | null {
+    const rule = pumpType === 'condenserWaterPumpInput'
+      ? PROCESS_COOLING_VALIDATION.condenserWaterPumpFlowRate
+      : PROCESS_COOLING_VALIDATION.chilledWaterPumpFlowRate;
+    const isMetric: boolean = settings.unitsOfMeasure === 'Metric';
+    return getRangeWarning(value, rule, (limit: number) => isMetric ? roundVal(convertFlowRatePerTon(limit, true), 4) : limit);
   }
 
   /**

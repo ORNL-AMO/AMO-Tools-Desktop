@@ -97,4 +97,11 @@ export class WaterPumpComponent {
   get motorEfficiency() {
     return this.form.get('motorEfficiency');
   }
+
+  get flowRateWarning(): string | null {
+    if (this.flowRate.invalid) {
+      return null;
+    }
+    return this.systemInformationFormService.getPumpFlowRateWarning(this.flowRate.value, this.pumpFormType(), this.settings());
+  }
 }

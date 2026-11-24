@@ -403,7 +403,7 @@ export class ProcessCoolingSuiteApiService {
    * @param towerInput {TowerInput} - Tower input object
    *   @property CHWT {number} Chilled Water Supply Temperature (°F), 35-55, default 44
    *   @property useFreeCooling {boolean} Use free cooling
-   *   @property HEXApproachTemp {number} Heat exchanger approach temp (°F), 5-20, default 0
+   *   @property HEXApproachTemp {number} Heat exchanger (HX) approach temp (°F), 3-20. Blank (null) when HX is not required, sent as 0
    *   @property constantCWT {boolean} Is condenser water temperature constant
    *   @property CWT {number} Condenser water temperature (°F), 70-90, default 85
    *   @property CWVariableFlow {boolean} Is condenser water flow variable, default true
@@ -416,7 +416,8 @@ export class ProcessCoolingSuiteApiService {
       return new this.toolsSuiteApiService.ToolsSuiteModule.WaterCooledSystemInput(
         operations.chilledWaterSupplyTemp,
         towerInput.usesFreeCooling,
-        towerInput.HEXApproachTemp,
+        // * blank when HX is not required
+        towerInput.HEXApproachTemp ?? 0,
         input.isConstantCondenserWaterTemp,
         input.condenserWaterTemp,
         // todo 7655 2 pumpInputs need defaults?

@@ -39,6 +39,9 @@
                         <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
                             [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
                         <app-form-control-errors class="w-100" [control]="followingTempDifferential"></app-form-control-errors>
+                        @if (followingTempDifferentialWarning) {
+                        <div class="alert-warning my-1 p-2 small" [innerHTML]="followingTempDifferentialWarning"></div>
+                        }
                     </div>
                 </div>
             </div>

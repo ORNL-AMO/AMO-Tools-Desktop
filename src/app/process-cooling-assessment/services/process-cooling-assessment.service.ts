@@ -159,7 +159,7 @@ export class ProcessCoolingAssessmentService {
     if (updatedChiller && this.inventoryService.selectedChillerValue?.itemId === itemId) {
       this.inventoryService.setSelectedChiller(updatedChiller);
     }
-    this.inventoryService.setInventoryValidState(updatedProcessCooling.inventory);
+    this.inventoryService.setInventoryValidState(updatedProcessCooling.inventory, this.settingsSignal());
     this.setProcessCooling(updatedProcessCooling);
   }
 

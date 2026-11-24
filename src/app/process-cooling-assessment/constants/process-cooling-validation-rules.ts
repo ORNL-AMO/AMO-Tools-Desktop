@@ -1,8 +1,11 @@
-// * Validation rules for Process Cooling Assessment forms pulled from CWSAT Engineering Ref doc (Doc updated 11/26/2024) 
+// * Validation rules for Process Cooling Assessment forms pulled from CWSAT Engineering Ref doc (Doc updated 11/26/2024)
+// * min/max/greaterThan (red) and warningMin/warningMax (yellow) updated from "PC key field ranges" doc
 
 /**
  * Validation defined here for better maintenance and verification.
  * All units in Imperial, conversion handled in form services as needed.
+ * - min / max / greaterThan: form validators, value is invalid outside the range
+ * - warningMin / warningMax: value is valid but outside the typical range, show a warning
  */
 export const PROCESS_COOLING_VALIDATION: ProcessCoolingValidation = {
   // OperationsForm
@@ -31,13 +34,17 @@ export const PROCESS_COOLING_VALIDATION: ProcessCoolingValidation = {
   variableFlow: {},
   chilledWaterPumpFlowRate: {
     required: true,
-    min: 1.6,
-    max: 3.0
+    min: 0,
+    max: 4.0,
+    warningMin: 1.6,
+    warningMax: 3.0
   },
   condenserWaterPumpFlowRate: {
     required: true,
-    min: 2.0,
-    max: 4.0
+    min: 0,
+    max: 4.0,
+    warningMin: 1.6,
+    warningMax: 3.0
   },
   efficiency: {
     required: true,
@@ -46,8 +53,8 @@ export const PROCESS_COOLING_VALIDATION: ProcessCoolingValidation = {
   },
   motorSize: {
     required: true,
-    min: 1,
-    max: 100
+    // * no max, consistent with other motor size fields in MEASUR
+    greaterThan: 0
   },
   motorEfficiency: {
     required: true,
@@ -64,7 +71,8 @@ export const PROCESS_COOLING_VALIDATION: ProcessCoolingValidation = {
   indoorTemp: {
     required: true,
     min: 60,
-    max: 90
+    max: 110,
+    warningMax: 100
   },
   airCooledFollowingTempDiffential: {
     required: true,
@@ -75,14 +83,17 @@ export const PROCESS_COOLING_VALIDATION: ProcessCoolingValidation = {
     required: true,
     // * no explicity min/max is listed for !isConstantCondenserWaterTemp, so continue to use below for both cases
     min: 2,
-    max: 20
+    max: 20,
+    warningMin: 5,
+    warningMax: 12
   },
   // WaterCooledSystemInputForm
   isConstantCondenserWaterTemp: {},
   condenserWaterTemp: {
     required: true,
-    min: 65,
-    max: 90
+    min: 60,
+    max: 90,
+    warningMin: 65
   },
 
   // TowerForm
@@ -90,8 +101,9 @@ export const PROCESS_COOLING_VALIDATION: ProcessCoolingValidation = {
   isHEXRequired: {},
   HEXApproachTemp: {
     required: true,
-    min: 5,
-    max: 20
+    min: 3,
+    max: 20,
+    warningMin: 5
   },
   numberOfTowers: {
     required: true,
@@ -116,9 +128,16 @@ export const PROCESS_COOLING_VALIDATION: ProcessCoolingValidation = {
     required: true,
     min: 1,
     max: 100
+  },
+
+  // ChillerInventoryForm, kW/ton
+  fullLoadEfficiency: {
+    required: true,
+    min: 0,
+    max: 2.5,
+    warningMin: 0.2,
+    warningMax: 2.0
   }
-
-
 };
 
 
@@ -126,6 +145,9 @@ export interface FieldValidationRules {
   required?: boolean;
   min?: number;
   max?: number;
+  greaterThan?: number;
+  warningMin?: number;
+  warningMax?: number;
   custom?: {
     [ruleName: string]: (value: unknown) => boolean;
   };
@@ -133,4 +155,18 @@ export interface FieldValidationRules {
 
 export interface ProcessCoolingValidation {
   [field: string]: FieldValidationRules;
+}
+
+/**
+ * Returns a warning when a value is valid but outside the expected (typical) range of a rule.
+ * @param value value in display units
+ * @param toDisplayUnits converts an Imperial limit to display units
+ */
+export function getRangeWarning(value: number, rule: FieldValidationRules, toDisplayUnits: (imperialLimit: number) => number): string | null {
+  if (value === null || value === undefined) {
+    return null;
+  }
+  const isAboveExpected: boolean = rule.warningMax !== undefined && value > toDisplayUnits(rule.warningMax);
+  const isBelowExpected: boolean = rule.warningMin !== undefined && value < toDisplayUnits(rule.warningMin);
+  return isAboveExpected || isBelowExpected ? 'Value falls outside expected range' : null;
 }

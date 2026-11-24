@@ -62,7 +62,9 @@ describe('TowerComponent', () => {
       'getTowerSizeValidators',
       'getHexApproachTempValidators',
       'getTowerInput',
+      'getFieldWarning',
     ]);
+    formServiceSpy.getFieldWarning.and.returnValue(null);
     formServiceSpy.getTowerForm.and.returnValue(mockForm);
     formServiceSpy.getTowerTypeDependentValues.and.returnValue({ numberOfFans: 2, fanSpeedType: 1 });
     formServiceSpy.getTowerSizeValidators.and.callFake(

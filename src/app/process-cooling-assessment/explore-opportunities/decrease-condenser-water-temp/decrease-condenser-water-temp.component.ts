@@ -10,6 +10,8 @@ import { Settings } from '../../../shared/models/settings';
 import { TEMPERATURE_HTML } from '../../../shared/app-constants';
 import { SystemInformationFormService } from '../../system-information/system-information-form.service';
 import { DecreaseCondenserWaterTempForm, ExploreOpportunitiesFormService } from '../../services/explore-opportunities-form.service';
+import { PROCESS_COOLING_UNITS } from '../../constants/process-cooling-units';
+import { PROCESS_COOLING_VALIDATION } from '../../constants/process-cooling-validation-rules';
 
 @Component({
   selector: 'app-decrease-condenser-water-temp',
@@ -80,10 +82,17 @@ export class DecreaseCondenserWaterTempComponent implements OnInit {
     return this.form.get('condenserWaterTemperature');
   }
 
+  get condenserWaterTemperatureWarning(): string | null {
+    if (this.condenserWaterTemperature.invalid) {
+      return null;
+    }
+    return this.systemInformationService.getFieldWarning(this.condenserWaterTemperature.value,
+      PROCESS_COOLING_VALIDATION.condenserWaterTemp, PROCESS_COOLING_UNITS.temperature, this.settings());
+  }
+
    focusField(str: string) {
     this.processCoolingUiService.focusedFieldSignal.set(str);
   }
 
 
 }
-

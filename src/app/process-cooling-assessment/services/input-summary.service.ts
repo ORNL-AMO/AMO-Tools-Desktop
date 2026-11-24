@@ -200,14 +200,14 @@ export class InputSummaryService {
                 modifications: modifications ? modifications.map(mod => ({ value: mod.usesFreeCooling ? 'Yes' : 'No' })) : []
             },
             {
-                label: 'Is HEX Required',
+                label: 'Is HX Required',
                 units: '',
                 className: defaultclassName,
                 baseline: { value: baseline?.isHEXRequired ? 'Yes' : 'No' },
                 modifications: modifications ? modifications.map(mod => ({ value: mod.isHEXRequired ? 'Yes' : 'No' })) : []
             },
             {
-                label: 'HEX Approach Temp',
+                label: 'HX Approach Temp',
                 units: tempUnit,
                 className: defaultclassName,
                 baseline: { value: baseline?.HEXApproachTemp ?? null, decimalPipe: '1.0-1' },
@@ -364,12 +364,12 @@ export class InputSummaryService {
                     modifications: mods.map(m => ({ value: m?.usesFreeCooling != null ? (m.usesFreeCooling ? 'Yes' : 'No') : null }))
                 },
                 {
-                    label: 'HEX Required', units: '', className: 'default',
+                    label: 'HX Required', units: '', className: 'default',
                     baseline: { value: baseline?.isHEXRequired != null ? (baseline.isHEXRequired ? 'Yes' : 'No') : null },
                     modifications: mods.map(m => ({ value: m?.isHEXRequired != null ? (m.isHEXRequired ? 'Yes' : 'No') : null }))
                 },
                 {
-                    label: 'HEX Approach Temperature', units: tempUnit, className: 'default',
+                    label: 'HX Approach Temperature', units: tempUnit, className: 'default',
                     baseline: { value: baseline?.HEXApproachTemp ?? null, decimalPipe: '1.0-1' },
                     modifications: mods.map(m => ({ value: m?.HEXApproachTemp ?? null, decimalPipe: '1.0-1' }))
                 },
