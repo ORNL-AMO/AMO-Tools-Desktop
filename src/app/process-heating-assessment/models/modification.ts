@@ -18,7 +18,7 @@ export interface ScenarioEnergySource {
 }
 
 // Picked from Settings so both assessment settings and a ScenarioEnergySource fit; Settings marks these fields optional.
-type EnergySourceFields = Pick<Settings, 'energySourceType' | 'furnaceType' | 'customFurnaceName'>;
+export type EnergySourceFields = Pick<Settings, 'energySourceType' | 'furnaceType' | 'customFurnaceName'>;
 
 /**
  * An empty furnace type or custom name matches whether saved as `null` or `undefined`, since saved data mixes both.

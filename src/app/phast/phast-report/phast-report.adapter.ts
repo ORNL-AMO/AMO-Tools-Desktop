@@ -819,8 +819,8 @@ export class PhastReportAdapter implements ReportDataAdapter {
     const energyCostUnit = settings.unitsOfMeasure === 'Metric' ? '/GJ' : '/MMBtu';
 
     const rows: string[][] = [
-      ['Energy Source Type', settings.energySourceType ?? '—', ...modBundles.map(() => settings.energySourceType ?? '—')],
-      ['Furnace Type', settings.furnaceType ?? '—', ...modBundles.map(() => settings.furnaceType ?? '—')],
+      ['Energy Source Type', settings.energySourceType ?? '—', ...modBundles.map(m => (m.modification?.energySource ?? settings).energySourceType ?? '—')],
+      ['Furnace Type', settings.furnaceType ?? '—', ...modBundles.map(m => (m.modification?.energySource ?? settings).furnaceType ?? '—')],
       ['Operating Hours (hrs/yr)', fmt(baseline.phast.operatingHours?.hoursPerYear), ...modBundles.map(m => fmt(m.phast.operatingHours?.hoursPerYear))],
       [`Fuel Cost (${energyCostUnit})`, this.fmtUSD(baseline.phast.operatingCosts?.fuelCost), ...modBundles.map(m => this.fmtUSD(m.phast.operatingCosts?.fuelCost))],
     ];

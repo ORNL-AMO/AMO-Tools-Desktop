@@ -57,6 +57,7 @@ export function toLegacyJustifiAssessment(
       exploreOpportunities: Object.keys(flags).length > 0,
       ...legacyFlags,
       exportWithoutResults: configuration !== baselineConfiguration,
+      energySource: modification.energySource,
       phast: toLegacyPhast(withoutHiddenLosses(withoutAuxiliaryEquipment(getEffectivePhast(baseline, modification)), configuration)),
     } as LegacyModification;
   });

@@ -82,6 +82,15 @@ describe('toLegacyPhastAssessment', () => {
     expect(modifications.map(modification => modification.id)).toEqual(['same']);
   });
 
+  it('carries a kept modification\'s own furnace type, for the report\'s Operation Data', () => {
+    const induction = { energySourceType: 'Electricity', furnaceType: 'Induction Heating and Melting' };
+    const assessment = buildAssessment({}, [{ id: 'induction', scenarioOverrides: {}, energySource: induction }]);
+
+    const modification = toLegacyPhastAssessment(assessment, { energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' } as Settings).phast.modifications[0];
+
+    expect(modification.energySource).toEqual(induction);
+  });
+
   it('does not mutate the saved assessment', () => {
     const assessment: Assessment = cloneDeep(FUEL_EXAMPLE.assessment);
     const saved = cloneDeep(assessment);

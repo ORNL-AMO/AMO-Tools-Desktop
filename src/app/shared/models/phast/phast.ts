@@ -18,6 +18,7 @@ import { DesignedEnergy } from './designedEnergy';
 import { EnergyInputExhaustGasLoss } from './losses/energyInputExhaustGasLosses';
 import { OperatingHours, OperatingCosts } from '../operations';
 import { SavingsOpportunity } from '../explore-opps';
+import type { ScenarioEnergySource } from '../../../process-heating-assessment/models/modification';
 
 export interface PHAST {
   name?: string;
@@ -66,6 +67,8 @@ export interface Modification {
   notes?: Notes;
   /** Set on an export copy whose energy source the JUSTIFI export can't calculate; never saved. */
   exportWithoutResults?: boolean;
+  /** Set on a converted copy of a modification with its own energy source; never saved. */
+  energySource?: ScenarioEnergySource;
   exploreOpportunities?: boolean;
   exploreOppsShowFlueGas?: SavingsOpportunity;
   exploreOppsShowAirTemp?: SavingsOpportunity;
