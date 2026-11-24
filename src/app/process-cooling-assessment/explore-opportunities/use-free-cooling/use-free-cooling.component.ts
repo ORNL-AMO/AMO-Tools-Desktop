@@ -9,6 +9,7 @@ import { Modification } from '../../../shared/models/process-cooling-assessment'
 import { ExploreOpportunitiesFormService, UseFreeCoolingForm } from '../../services/explore-opportunities-form.service';
 import { SystemInformationFormService } from '../../system-information/system-information-form.service';
 import { PROCESS_COOLING_UNITS } from '../../constants/process-cooling-units';
+import { PROCESS_COOLING_VALIDATION } from '../../constants/process-cooling-validation-rules';
 
 @Component({
   selector: 'app-use-free-cooling',
@@ -100,6 +101,14 @@ export class UseFreeCoolingComponent implements OnInit {
   get usesFreeCooling() { return this.form.get('usesFreeCooling') as FormControl; }
   get isHEXRequired() { return this.form.get('isHEXRequired') as FormControl; }
   get HEXApproachTemp() { return this.form.get('HEXApproachTemp') as FormControl; }
+
+  get HEXApproachTempWarning(): string | null {
+    if (this.HEXApproachTemp.invalid) {
+      return null;
+    }
+    return this.systemInformationFormService.getFieldWarning(this.HEXApproachTemp.value,
+      PROCESS_COOLING_VALIDATION.HEXApproachTemp, PROCESS_COOLING_UNITS.temperatureDifference, this.settings());
+  }
 
   focusField(str: string) {
     this.processCoolingUiService.focusedFieldSignal.set(str);

@@ -9,6 +9,8 @@ import { ProcessCoolingAssessmentService } from '../../services/process-cooling-
 import { Modification } from '../../../shared/models/process-cooling-assessment';
 import { SystemInformationFormService } from '../../system-information/system-information-form.service';
 import { ExploreOpportunitiesFormService } from '../../services/explore-opportunities-form.service';
+import { PROCESS_COOLING_UNITS } from '../../constants/process-cooling-units';
+import { PROCESS_COOLING_VALIDATION } from '../../constants/process-cooling-validation-rules';
 
 @Component({
   selector: 'app-sliding-condenser-water-temperature',
@@ -80,6 +82,14 @@ export class SlidingCondenserWaterTemperatureComponent implements OnInit {
 
   get followingTempDifferential() {
     return this.form.get('followingTempDifferential') as FormControl;
+  }
+
+  get followingTempDifferentialWarning(): string | null {
+    if (this.followingTempDifferential.invalid) {
+      return null;
+    }
+    return this.systemInformationService.getFieldWarning(this.followingTempDifferential.value,
+      PROCESS_COOLING_VALIDATION.waterCooledFollowingTempDiffential, PROCESS_COOLING_UNITS.temperatureDifference, this.settings());
   }
 
   focusField(str: string) {

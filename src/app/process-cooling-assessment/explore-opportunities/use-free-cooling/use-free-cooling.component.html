@@ -74,6 +74,9 @@
                         [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
                         [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-input-unit>
                     <app-form-control-errors class="w-100" [control]="HEXApproachTemp"></app-form-control-errors>
+                    @if (HEXApproachTempWarning) {
+                    <div class="alert-warning my-1 p-2 small" [innerHTML]="HEXApproachTempWarning"></div>
+                    }
                 </div>
             </div>
             }
