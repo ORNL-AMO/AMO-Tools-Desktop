@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MotorInventoryData, MotorPropertyDisplayOptions, MotorItem, LoadCharacteristicOptions, NameplateDataOptions, NameplateData, LoadCharacteristicData, ManualSpecificationOptions, ManualSpecificationData, OperationDataOptions, OperationData, BatchAnalysisOptions, BatchAnalysisData, PurchaseInformationOptions, PurchaseInformationData, TorqueOptions, TorqueData, OtherOptions, OtherData } from '../../motor-inventory';
 import { Settings } from '../../../shared/models/settings';
 import { MotorInventorySummaryService } from '../motor-inventory-summary.service';
+import { getMotorSupplyType, MotorSupplyType, motorSupplyOptions } from '../../motor-inventory-setup/motor-catalog/motor-supply';
 
 @Injectable()
 export class InventorySummaryTableService {
@@ -28,6 +29,9 @@ export class InventorySummaryTableService {
     motorData = [{ value: motorItem.name, fieldStr: 'name' }, { value: departmentName, fieldStr: 'departmentName' }];
     //nameplate
     let nameplateData = this.getNameplateMotorData(motorItem.nameplateData, displayOptions.nameplateDataOptions, settings);
+    let motorSupply: MotorSupplyType = getMotorSupplyType(motorItem);
+    let ratedPowerIndex: number = nameplateData.findIndex(data => data.fieldStr == 'ratedMotorPower');
+    nameplateData.splice(ratedPowerIndex + 1, 0, { value: motorSupplyOptions.find(option => option.value == motorSupply).display, fieldStr: 'motorSupply' });
     motorData = motorData.concat(nameplateData);
     //load characteristics
     let loadCharacteristicData = this.getLoadCharactersticData(motorItem.loadCharacteristicData, displayOptions.loadCharactersticOptions);
@@ -51,7 +55,24 @@ export class InventorySummaryTableService {
     let otherData = this.getOtherData(motorItem.otherData, displayOptions.otherOptions);
     motorData = motorData.concat(otherData);
 
-    return motorData;
+    return this.clearFieldsNotUsedBySupply(motorData, motorSupply);
+  }
+
+  //fields hidden in setup for single-phase or DC motors are left blank so old values don't show
+  clearFieldsNotUsedBySupply(motorData: Array<SummaryMotorData>, motorSupply: MotorSupplyType): Array<SummaryMotorData> {
+    let notUsed: Array<string> = [];
+    if (motorSupply == 'dc') {
+      notUsed = ['efficiencyClass', 'lineFrequency', 'powerFactor100', 'powerFactor75', 'powerFactor50', 'powerFactor25',
+        'powerFactorAtLoad', 'synchronousSpeed', 'poles', 'isVFD', 'voltageConnectionType'];
+    } else if (motorSupply == 'singlePhase') {
+      notUsed = ['voltageConnectionType'];
+    }
+    return motorData.map(data => {
+      if (notUsed.includes(data.fieldStr)) {
+        return { value: undefined, fieldStr: data.fieldStr };
+      }
+      return data;
+    });
   }
 
   //nameplate data
@@ -94,9 +115,6 @@ export class InventorySummaryTableService {
       }
       motorData.push({ value: nameplateData.weight, fieldStr: 'weight', unit: weightUnit });
     }
-    if (nameplateDataOptions.numberOfPhases) {
-      motorData.push({ value: nameplateData.numberOfPhases, fieldStr: 'numberOfPhases' });
-    }
     if (nameplateDataOptions.fullLoadSpeed) {
       motorData.push({ value: nameplateData.fullLoadSpeed, fieldStr: 'fullLoadSpeed', unit: 'rpm' });
     }
@@ -136,9 +154,6 @@ export class InventorySummaryTableService {
       }
       if (manualSpecificationOptions.poles) {
         motorData.push({ value: manualSpecificationData.poles, fieldStr: 'poles' });
-      }
-      if (manualSpecificationOptions.currentType) {
-        motorData.push({ value: manualSpecificationData.currentType, fieldStr: 'currentType' });
       }
     }
     return motorData;

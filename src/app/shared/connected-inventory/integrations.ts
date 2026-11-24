@@ -20,6 +20,8 @@ export interface InventoryOption {
 export interface CatalogItemOptions {
   department: string,
   catalog: Array<any>;
+  // * items shown in the list but not selectable, with the reason after the name
+  disabledItems?: Array<{ id: string, reason: string }>;
 }
 
 export interface IntegrationState {

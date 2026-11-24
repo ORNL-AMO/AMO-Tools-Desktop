@@ -4,6 +4,15 @@
 <div class="row no-gutters section">
     <div class="col-md-6 col-sm-12">
         <div class="d-flex flex-column w-100 card-text">
+            <!--motor supply: from numberOfPhases and currentType-->
+            <div class="d-flex flex-wrap">
+                <div class="label-item">
+                    Motor Supply:
+                </div>
+                <div class="flex-fill">
+                    {{motorSupply}}
+                </div>
+            </div>
             <div class="d-flex flex-wrap">
                 <!--Efficiency type: efficiencyClass-->
                 <div class="label-item">
@@ -119,15 +128,6 @@
                     {{nameplateData.weight}}
                     <span *ngIf="settings.unitsOfMeasure != 'Metric'">lb</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg</span>
-                </div>
-            </div>
-            <!-- numberOfPhases -->
-            <div class="d-flex flex-wrap" *ngIf="displayOptions.numberOfPhases">
-                <div class="label-item">
-                    Number of Phases:
-                </div>
-                <div class="flex-fill">
-                    {{nameplateData.numberOfPhases}}
                 </div>
             </div>
             <!-- fullLoadSpeed -->

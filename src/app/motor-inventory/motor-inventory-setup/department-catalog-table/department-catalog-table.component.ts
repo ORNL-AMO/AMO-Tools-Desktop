@@ -7,6 +7,7 @@ import { Settings } from '../../../shared/models/settings';
 import { BatchAnalysisService } from '../../batch-analysis/batch-analysis.service';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
 import { FeatureFlagService } from '../../../shared/feature-flag.service';
+import { getMotorSupplyType } from '../motor-catalog/motor-supply';
 
 @Component({
     selector: 'app-department-catalog-table',
@@ -104,7 +105,8 @@ export class DepartmentCatalogTableComponent implements OnInit {
     let tableDataItem: DepartmentCatalogTableDataItem = {
       name: motorItem.name,
       operatingHours: motorItem.operationData.annualOperatingHours,
-      efficiencyClass: motorItem.nameplateData.efficiencyClass,
+      //efficiency class is hidden for DC motors, so don't show the old value
+      efficiencyClass: getMotorSupplyType(motorItem) == 'dc' ? undefined : motorItem.nameplateData.efficiencyClass,
       estimatedEfficiency: motorItem.nameplateData.nominalEfficiency,
       ratedPower: motorItem.nameplateData.ratedMotorPower,
       energyUsage: batchAnalysisDataAndResults.results.existingEnergyUse,

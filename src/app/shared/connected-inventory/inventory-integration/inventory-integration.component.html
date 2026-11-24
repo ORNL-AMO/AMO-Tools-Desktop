@@ -71,7 +71,9 @@
                     formControlName="selectedCatalogItem" (change)="setSelectedCatalogItem()">
                     <option selected [ngValue]="null">Select {{selectOptions.itemName}} Item</option>
                     <optgroup *ngFor="let option of selectOptions.catalogItemOptions" label="{{option.department}}">
-                        <option *ngFor="let item of option.catalog" [ngValue]="item">{{item.name}}</option>
+                        <option *ngFor="let item of option.catalog" [ngValue]="item"
+                            [disabled]="getDisabledReason(option, item)">{{item.name}}<ng-container
+                                *ngIf="getDisabledReason(option, item)"> ({{getDisabledReason(option, item)}})</ng-container></option>
                     </optgroup>
                 </select>
             </div>

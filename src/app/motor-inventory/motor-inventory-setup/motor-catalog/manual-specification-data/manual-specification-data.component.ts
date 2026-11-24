@@ -5,6 +5,7 @@ import { ManualSpecificationOptions, MotorItem } from '../../../motor-inventory'
 import { MotorCatalogService } from '../motor-catalog.service';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 import { ManualSpecificationDataService } from './manual-specification-data.service';
+import { getMotorSupplyType, MotorSupplyType } from '../motor-supply';
 
 @Component({
     selector: 'app-manual-specification-data',
@@ -22,6 +23,7 @@ export class ManualSpecificationDataComponent implements OnInit {
   polesOptions: Array<number> = [2, 4, 6, 8, 10, 12];
   synchronousSpeedOptions: Array<number>;
   selectedMotorItem: MotorItem;
+  motorSupply: MotorSupplyType;
   constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
     private manualSpecificationDataService: ManualSpecificationDataService) { }
 
@@ -30,6 +32,7 @@ export class ManualSpecificationDataComponent implements OnInit {
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
       if (selectedMotor) {
         this.motorForm = this.manualSpecificationDataService.getFormFromManualSpecificationData(selectedMotor.manualSpecificationData);
+        this.motorSupply = getMotorSupplyType(selectedMotor);
       }
     });
     //updates on all motor changes
@@ -37,6 +40,7 @@ export class ManualSpecificationDataComponent implements OnInit {
       if (motorInventoryData) {
         this.selectedMotorItem = this.motorCatalogService.getUpdatedSelectedMotorItem();
         if (this.selectedMotorItem) {
+          this.motorSupply = getMotorSupplyType(this.selectedMotorItem);
           if (this.selectedMotorItem.nameplateData.lineFrequency == 60) {
             this.synchronousSpeedOptions = [900, 1200, 1800, 3600];
           } else if (this.selectedMotorItem.nameplateData.lineFrequency == 50) {
