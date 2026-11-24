@@ -228,9 +228,11 @@ export class OpportunityCardsComponent implements OnInit {
       const selectedModification = integratedAssessment.modificationEnergyUseItems?.find(
         item => item.modificationId === existingData.selectedModificationId
       );
-      if (selectedModification) {
-        cardData.assessmentOpportunity.modificationEnergyUseItems = selectedModification.energies;
+      if (!selectedModification) {
+        // Picking a replacement modification happens in the opportunity form, so the card stays stale.
+        return;
       }
+      cardData.assessmentOpportunity.modificationEnergyUseItems = selectedModification.energies;
     }
     cardData.hasStaleAssessmentData = false;
     this.opportunityCardList = Array.from(this.opportunityCardList);

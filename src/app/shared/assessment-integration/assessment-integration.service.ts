@@ -73,12 +73,13 @@ export class AssessmentIntegrationService {
 
   checkHasUpdatedEnergyData(existingOptions: IntegratedEnergyOptions, updatedOptions: IntegratedEnergyOptions) {
     let hasUpdatedBaseline = this.checkisOptionDifferent(existingOptions.baseline, updatedOptions.baseline);
-    let hasUpdatedModification: boolean = false;
     let existingMod = existingOptions.modifications[0];
+    if (!existingMod) {
+      return hasUpdatedBaseline;
+    }
+    // The linked modification can be deleted, or left out for using another energy source, after it was linked.
     let updatedMod = updatedOptions.modifications.find(mod => mod.modificationId === existingMod.modificationId);
-    if (updatedMod) {
-     hasUpdatedModification = this.checkisOptionDifferent(existingMod, updatedMod);
-    } 
+    let hasUpdatedModification: boolean = !updatedMod || this.checkisOptionDifferent(existingMod, updatedMod);
     return hasUpdatedBaseline || hasUpdatedModification;
   }
 

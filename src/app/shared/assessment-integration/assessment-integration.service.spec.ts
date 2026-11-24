@@ -86,4 +86,28 @@ describe('AssessmentIntegrationService', () => {
 
     expect(integratedAssessment.navigation.url).toBe('/phast/1');
   });
+
+  describe('checkHasUpdatedEnergyData', () => {
+    const option = (modificationId: string | undefined, annualCost: number) => ({ name: 'Option', modificationId, annualEnergy: 10, co2EmissionsOutput: 1, annualCost });
+
+    it('flags a linked modification that no longer exists', () => {
+      const existing = { baseline: option(undefined, 100), modifications: [option('m1', 80)] };
+      const updated = { baseline: option(undefined, 100), modifications: [option('m2', 70)] };
+
+      expect(service.checkHasUpdatedEnergyData(existing, updated)).toBeTrue();
+    });
+
+    it('compares only the baseline when no modification is linked', () => {
+      const existing = { baseline: option(undefined, 100), modifications: [] };
+
+      expect(service.checkHasUpdatedEnergyData(existing, { baseline: option(undefined, 100), modifications: [option('m1', 80)] })).toBeFalse();
+      expect(service.checkHasUpdatedEnergyData(existing, { baseline: option(undefined, 90), modifications: [] })).toBeTrue();
+    });
+
+    it('leaves an unchanged linked modification unflagged', () => {
+      const existing = { baseline: option(undefined, 100), modifications: [option('m1', 80)] };
+
+      expect(service.checkHasUpdatedEnergyData(existing, { baseline: option(undefined, 100), modifications: [option('m1', 80)] })).toBeFalse();
+    });
+  });
 });
