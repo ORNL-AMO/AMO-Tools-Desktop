@@ -4,7 +4,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingResultsService } from '../../../services/process-heating-results.service';
-import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { AssessmentScenario } from '../../../services/scenario-settings.util';
 import { reinitOnScenarioChange } from '../reinit-on-scenario-change';
 import { ProcessHeatingUiService } from '../../../services/process-heating-ui.service';
 

@@ -1,5 +1,5 @@
 import { effect, untracked } from '@angular/core';
-import { AssessmentScenario } from '../../services/process-heating-assessment.service';
+import { AssessmentScenario } from '../../services/scenario-settings.util';
 
 /**
  * Reruns `initFn` on scenario change, not just first render (e.g. Expert View switching

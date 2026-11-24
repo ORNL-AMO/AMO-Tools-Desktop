@@ -7,7 +7,8 @@ import { resolveSelectedModificationId } from '../models/modification';
 import { Notes } from '../models/phast';
 import { AssessmentView, AUXILIARY_EQUIPMENT_VIEW, AUXILIARY_EQUIPMENT_VIEW_LINK, BaselineView, EnergyValidationView, EXPERT_VIEW_LOSS_VIEWS, FUEL_SWITCHING_VIEW_LINK, HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, isViewVisibleForConfiguration, LOSS_VIEW_KEYS, LossView, MainView, ProcessHeatingView, ReportView, ViewLink } from '../models/views';
 import { ProcessHeatingRouteData, STEPPED_ROUTES } from '../routing/stepped-routes';
-import { AssessmentScenario, ProcessHeatingAssessmentService } from './process-heating-assessment.service';
+import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
+import { AssessmentScenario } from './scenario-settings.util';
 import { ProcessHeatingValidityService } from './process-heating-validity.service';
 export { MainView, BaselineView, EnergyValidationView, AssessmentView, ReportView, LossView, HeatingEquipmentConfiguration, ProcessHeatingView, ViewLink, MAIN_VIEW_LINKS, BASELINE_VIEW_LINKS, HEAT_BALANCE_VIEW_LINKS, REPORT_VIEW_LINKS } from '../models/views';
 

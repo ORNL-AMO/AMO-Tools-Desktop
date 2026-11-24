@@ -4,7 +4,7 @@ import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { ModificationService } from '../services/modification.service';
 import { ProcessHeatingUiService } from '../services/process-heating-ui.service';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
-import { AssessmentScenario } from '../services/process-heating-assessment.service';
+import { AssessmentScenario } from '../services/scenario-settings.util';
 import { getModificationName, ProcessHeatingModification } from '../models/modification';
 import { ModificationListData, openModificationListModal } from '../../shared/modification-list/modification-list.component';
 

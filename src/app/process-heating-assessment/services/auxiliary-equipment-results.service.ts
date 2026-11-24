@@ -6,7 +6,8 @@ import { AuxiliaryEquipmentItem } from '../../shared/models/phast/auxEquipment';
 import { ElectricityReductionData } from '../../shared/models/standalone';
 import { Settings } from '../../shared/models/settings';
 import { AuxiliaryEquipmentItemResult, AuxiliaryEquipmentResults } from '../models/auxiliary-equipment';
-import { AssessmentScenario, ProcessHeatingAssessmentService } from './process-heating-assessment.service';
+import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
+import { AssessmentScenario } from './scenario-settings.util';
 import { AuxiliaryEquipmentFormService } from '../auxiliary-equipment/auxiliary-equipment-form.service';
 
 /** Calculates auxiliary equipment electricity separately from the heat balance. */

@@ -5,7 +5,8 @@ import { FormGroup } from '@angular/forms';
 import { getNewIdString } from '../../../shared/helperFunctions';
 import { Settings } from '../../../shared/models/settings';
 import { Losses } from '../../models/phast';
-import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
+import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
+import { AssessmentScenario } from '../../services/scenario-settings.util';
 import { EntityWithId, LossItemsStore } from './loss-items-store';
 import { createLossDifferences, LossFieldDifferences } from './loss-compare.util';
 

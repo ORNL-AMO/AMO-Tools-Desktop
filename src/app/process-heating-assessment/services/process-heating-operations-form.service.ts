@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PHAST } from '../models/phast';
 import { HeatingEquipmentConfiguration } from '../models/views';
-import { deriveHeatingSystemEnergyType } from './process-heating-assessment.service';
+import { deriveHeatingSystemEnergyType } from './scenario-settings.util';
 import { HOURS_PER_YEAR } from '../../shared/app-constants';
 
 export interface OperationsForm {

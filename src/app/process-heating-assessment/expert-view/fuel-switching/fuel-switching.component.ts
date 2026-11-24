@@ -13,7 +13,8 @@ import { getModificationName } from '../../models/modification';
 import { EXPERT_VIEW_LOSS_VIEWS, getEnergySourceTabChanges, LossView } from '../../models/views';
 import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingUiService } from '../../services/process-heating-ui.service';
-import { AssessmentScenario, deriveHeatingEquipmentConfiguration, ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
+import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
+import { AssessmentScenario, deriveHeatingEquipmentConfiguration } from '../../services/scenario-settings.util';
 
 interface FuelSwitchingForm {
   energySourceType: FormControl<string>;

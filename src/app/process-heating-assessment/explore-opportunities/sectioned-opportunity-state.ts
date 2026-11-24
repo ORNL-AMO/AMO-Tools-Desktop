@@ -1,5 +1,6 @@
 import { assertInInjectionContext, computed, inject, linkedSignal, Signal, untracked } from '@angular/core';
-import { AssessmentScenario, ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { AssessmentScenario } from '../services/scenario-settings.util';
 import { ExploreOpportunityCategory, Losses } from '../models/phast';
 import { ModificationService } from '../services/modification.service';
 

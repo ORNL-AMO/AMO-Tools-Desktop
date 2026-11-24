@@ -1,6 +1,6 @@
 import { computed, Signal } from '@angular/core';
 import { isEqual, isPlainObject } from 'lodash';
-import { AssessmentScenario } from '../../services/process-heating-assessment.service';
+import { AssessmentScenario } from '../../services/scenario-settings.util';
 import { LossEntity } from './loss-form-list.service';
 
 /** Fields of a loss item whose modification value differs from baseline; nested fields are dot-joined (e.g. `solidChargeMaterial.specificHeat`). */

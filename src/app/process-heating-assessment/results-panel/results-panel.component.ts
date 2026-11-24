@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, Signal, signal } from '@angular/core';
 import { Notes } from '../models/phast';
 import { AssessmentView, BaselineView, LOSS_VIEW_NOTES_KEY, MainView } from '../models/views';
-import { AssessmentScenario } from '../services/process-heating-assessment.service';
+import { AssessmentScenario } from '../services/scenario-settings.util';
 import { ProcessHeatingUiService } from '../services/process-heating-ui.service';
 
 type PanelTab = 'results' | 'help' | 'notes';

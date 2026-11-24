@@ -17,9 +17,6 @@ import { AssessmentScenario, deriveHeatingEquipmentConfiguration, deriveHeatingS
 
 export type ProcessHeatingDataProperty = keyof PHAST;
 
-export type { AssessmentScenario };
-export { deriveHeatingEquipmentConfiguration, deriveHeatingSystemEnergyType, scenarioSettingsFor };
-
 @Injectable()
 export class ProcessHeatingAssessmentService {
   private readonly assessmentDbService = inject(AssessmentDbService);

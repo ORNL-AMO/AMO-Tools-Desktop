@@ -7,7 +7,8 @@ import { Settings } from '../../shared/models/settings';
 import { PhastResultsService } from '../../phast/phast-results.service';
 import { MeteredEnergyService } from '../../phast/metered-energy/metered-energy.service';
 import { DesignedEnergyService } from '../../phast/designed-energy/designed-energy.service';
-import { AssessmentScenario, deriveHeatingEquipmentConfiguration, ProcessHeatingAssessmentService } from './process-heating-assessment.service';
+import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
+import { AssessmentScenario, deriveHeatingEquipmentConfiguration } from './scenario-settings.util';
 import { toLegacyPhast, withoutHiddenLosses } from './legacy-phast.util';
 import { ResultCategories } from '../models/result-rows';
 

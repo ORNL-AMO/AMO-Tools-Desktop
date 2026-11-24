@@ -2,7 +2,7 @@ import { inject, Injectable, Signal } from '@angular/core';
 import { AuxiliaryEquipmentItem } from '../../shared/models/phast/auxEquipment';
 import { Settings } from '../../shared/models/settings';
 import { ItemFormListService, LossFormItem } from '../heat-balance/losses/loss-form-list.service';
-import { AssessmentScenario } from '../services/process-heating-assessment.service';
+import { AssessmentScenario } from '../services/scenario-settings.util';
 import { AuxiliaryEquipmentResultsService } from '../services/auxiliary-equipment-results.service';
 import { AuxiliaryEquipmentForm, AuxiliaryEquipmentFormService, newAuxiliaryEquipmentItem } from './auxiliary-equipment-form.service';
 import { HOURS_PER_YEAR } from '../../shared/app-constants';

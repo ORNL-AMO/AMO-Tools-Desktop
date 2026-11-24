@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, Signal } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { ChargeMaterialType } from '../../../../shared/models/phast/losses/chargeMaterial';
-import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { AssessmentScenario } from '../../../services/scenario-settings.util';
 import { reinitOnScenarioChange } from '../reinit-on-scenario-change';
 import { ChargeMaterialItem, ChargeMaterialService } from './charge-material.service';
 import { ChargeMaterialResultsService } from './charge-material-results.service';

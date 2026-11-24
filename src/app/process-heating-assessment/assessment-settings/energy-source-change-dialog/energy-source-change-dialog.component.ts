@@ -3,7 +3,7 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Settings } from '../../../shared/models/settings';
 import { getEnergySourceLabel } from '../../models/energy-source';
 import { getEnergySourceTabChanges, ViewLink } from '../../models/views';
-import { deriveHeatingEquipmentConfiguration } from '../../services/process-heating-assessment.service';
+import { deriveHeatingEquipmentConfiguration } from '../../services/scenario-settings.util';
 
 /** A modification with its own energy source selection, which a baseline change leaves as is. */
 export interface KeptEnergySource {

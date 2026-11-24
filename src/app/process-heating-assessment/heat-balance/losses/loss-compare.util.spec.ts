@@ -1,5 +1,5 @@
 import { signal } from '@angular/core';
-import { AssessmentScenario } from '../../services/process-heating-assessment.service';
+import { AssessmentScenario } from '../../services/scenario-settings.util';
 import { createLossDifferences, getLossDifferences, nestedDifferences } from './loss-compare.util';
 import { LossEntity } from './loss-form-list.service';
 

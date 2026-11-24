@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, Signal } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { AuxiliaryEquipmentItemResult } from '../models/auxiliary-equipment';
-import { AssessmentScenario, ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { AssessmentScenario } from '../services/scenario-settings.util';
 import { AuxiliaryEquipmentResultsService } from '../services/auxiliary-equipment-results.service';
 import { reinitOnScenarioChange } from '../heat-balance/losses/reinit-on-scenario-change';
 import { AuxiliaryEquipmentService } from './auxiliary-equipment.service';

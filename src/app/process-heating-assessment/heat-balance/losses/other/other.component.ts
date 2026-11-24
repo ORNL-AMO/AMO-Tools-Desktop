@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, input, Signal } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { AssessmentScenario } from '../../../services/scenario-settings.util';
 import { reinitOnScenarioChange } from '../reinit-on-scenario-change';
 import { OtherService } from './other.service';
 import { OtherFormService } from './other-form.service';
