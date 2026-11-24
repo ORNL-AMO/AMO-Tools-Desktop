@@ -39,7 +39,10 @@ export class IncreaseChilledTemperatureComponent implements OnInit {
     ).subscribe((modification: Modification) => {
       if (modification) {
         this.useOpportunity = modification.increaseChilledWaterTemp.useOpportunity;
-        this.form.patchValue({ chilledWaterTemperature: modification.increaseChilledWaterTemp.chilledWaterSupplyTemp }, { emitEvent: false });
+        const chilledWaterTemperature = modification.increaseChilledWaterTemp.chilledWaterSupplyTemp;
+        if (this.chilledWaterTemperature.value !== chilledWaterTemperature) {
+          this.form.patchValue({ chilledWaterTemperature }, { emitEvent: false });
+        }
         this.chilledWaterTemperature.updateValueAndValidity({ emitEvent: false });
       }
     });
