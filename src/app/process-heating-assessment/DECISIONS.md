@@ -139,6 +139,6 @@ gross heat input = 4.50 / 0.80          = 5.63 MMBtu/hr  (5.00 when leakage was 
 
 **Where it applies:**
 - Every Process Heating assessment, including ones never opened in the rebuild, so Auxiliary Power and losses from tabs the energy source hides no longer count on the dashboard, rollup, JUSTIFI export or Treasure Hunt.
-- A modification on a different energy source than the baseline is calculated with the baseline's settings in these features, as legacy does.
+- A modification on a different energy source than the baseline is left out of these features, except the export from the rebuild's own banner, which lists it without results. They calculate every scenario with the baseline's settings, which cannot read its energy entry: it would show no energy and the whole baseline cost as savings, and the legacy report fails on its missing losses.
 - Rebuilt assessments saved before this change have no setup done mark and stay off the dashboard and rollup until they are opened once.
 - The dashboard, rollup and Treasure Hunt open an assessment in the rebuild once the rebuild has saved it, since their numbers come from the rebuild's edits and the legacy module would show its stale copy. The dashboard card's Assessment and Assessment Report links open the matching rebuild view. The sidebar's module choice can still open such an assessment in the legacy module, unless it has a modification created in the rebuild, which the legacy module cannot open. Assessments the rebuild has never saved still open in the legacy module.

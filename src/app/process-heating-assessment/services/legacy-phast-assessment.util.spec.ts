@@ -71,7 +71,7 @@ describe('toLegacyPhastAssessment', () => {
     expect(toLegacyPhastAssessment(buildAssessment({}, []), FUEL_FIRED).phast.setupDone).toBeFalse();
   });
 
-  it('marks a modification on another energy source, which the legacy calculations price with the baseline\'s', () => {
+  it('leaves out a modification on another energy source, which the legacy calculations cannot price with the baseline\'s settings', () => {
     const assessment = buildAssessment({}, [
       { id: 'same', scenarioOverrides: {} },
       { id: 'electric', scenarioOverrides: {}, energySource: { energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' } },
@@ -79,7 +79,7 @@ describe('toLegacyPhastAssessment', () => {
 
     const modifications = toLegacyPhastAssessment(assessment, FUEL_FIRED).phast.modifications;
 
-    expect(modifications.map(modification => modification.exportWithoutResults)).toEqual([false, true]);
+    expect(modifications.map(modification => modification.id)).toEqual(['same']);
   });
 
   it('does not mutate the saved assessment', () => {
