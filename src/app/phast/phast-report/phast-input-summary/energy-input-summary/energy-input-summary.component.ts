@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
+import { findModificationLoss } from '../../scenario-loss-pairing.util';
 @Component({
     selector: 'app-energy-input-summary',
     templateUrl: './energy-input-summary.component.html',
@@ -38,7 +39,7 @@ export class EnergyInputSummaryComponent implements OnInit {
           let modificationData = new Array();
           if (this.phast.modifications) {
             this.phast.modifications.forEach(mod => {
-              let modData = mod.phast.losses.energyInputEAF[index];
+              let modData = findModificationLoss(loss, index, mod.phast.losses.energyInputEAF) ?? {};
               modificationData.push(modData);
             });
           }

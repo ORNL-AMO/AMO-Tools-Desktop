@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
+import { findModificationLoss } from '../../scenario-loss-pairing.util';
 
 @Component({
     selector: 'app-auxiliary-power-summary',
@@ -44,7 +45,7 @@ export class AuxiliaryPowerSummaryComponent implements OnInit {
           let modificationData = new Array();
           if (this.phast.modifications) {
             this.phast.modifications.forEach(mod => {
-              let modData = mod.phast.losses.auxiliaryPowerLosses[index];
+              let modData = findModificationLoss(loss, index, mod.phast.losses.auxiliaryPowerLosses) ?? {};
               modificationData.push(modData);
             });
           }

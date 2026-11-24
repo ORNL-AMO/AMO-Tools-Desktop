@@ -5,6 +5,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
 import { SolidLiquidMaterialDbService } from '../../../../indexedDb/solid-liquid-material-db.service';
+import { findModificationLoss } from '../../scenario-loss-pairing.util';
 @Component({
   selector: 'app-flue-gas-summary',
   templateUrl: './flue-gas-summary.component.html',
@@ -96,7 +97,8 @@ export class FlueGasSummaryComponent implements OnInit {
           let modificationData = new Array();
           if (this.phast.modifications) {
             this.phast.modifications.forEach(mod => {
-              let modData = this.getData(mod.phast.losses.flueGasLosses[index]);
+              const modLoss = findModificationLoss(loss, index, mod.phast.losses.flueGasLosses);
+              let modData = modLoss ? this.getData(modLoss) : { material: {} };
               modificationData.push(modData);
             });
           }

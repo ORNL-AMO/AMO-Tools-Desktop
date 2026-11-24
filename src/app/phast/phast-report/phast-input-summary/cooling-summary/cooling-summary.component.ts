@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } fr
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { CoolingLoss } from '../../../../shared/models/phast/losses/coolingLoss';
 import { Settings } from '../../../../shared/models/settings';
+import { findModificationLoss } from '../../scenario-loss-pairing.util';
 
 @Component({
     selector: 'app-cooling-summary',
@@ -57,7 +58,8 @@ export class CoolingSummaryComponent implements OnInit {
           let modificationData = new Array();
           if (this.phast.modifications) {
             this.phast.modifications.forEach(mod => {
-              let modData = this.getLossData(mod.phast.losses.coolingLosses[index]);
+              const modLoss = findModificationLoss(loss, index, mod.phast.losses.coolingLosses);
+              let modData = modLoss ? this.getLossData(modLoss) : {};
               modificationData.push(modData);
             });
           }

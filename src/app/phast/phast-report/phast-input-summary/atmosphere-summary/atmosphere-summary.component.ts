@@ -7,6 +7,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { AtmosphereDbService } from '../../../../indexedDb/atmosphere-db.service';
 import { firstValueFrom } from 'rxjs';
 import { roundVal } from '../../../../shared/helperFunctions';
+import { findModificationLoss } from '../../scenario-loss-pairing.util';
 
 @Component({
     selector: 'app-atmosphere-summary',
@@ -64,7 +65,7 @@ export class AtmosphereSummaryComponent implements OnInit {
           let modificationData = new Array();
           if (this.phast.modifications) {
             this.phast.modifications.forEach(mod => {
-              let modData = mod.phast.losses.atmosphereLosses[index];
+              let modData = findModificationLoss(loss, index, mod.phast.losses.atmosphereLosses) ?? {};
               modificationData.push(modData);
             });
           }

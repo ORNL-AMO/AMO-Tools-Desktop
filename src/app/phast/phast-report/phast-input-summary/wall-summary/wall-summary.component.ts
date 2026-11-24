@@ -4,6 +4,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { WallLossesSurface } from '../../../../shared/models/materials';
 import { WallLossesSurfaceDbService } from '../../../../indexedDb/wall-losses-surface-db.service';
 import { take } from 'rxjs';
+import { findModificationLoss } from '../../scenario-loss-pairing.util';
 
 @Component({
     selector: 'app-wall-summary',
@@ -74,7 +75,7 @@ export class WallSummaryComponent implements OnInit {
           let modificationData = new Array();
           if (this.phast.modifications) {
             this.phast.modifications.forEach(mod => {
-              let modData = mod.phast.losses.wallLosses[index];
+              let modData = findModificationLoss(loss, index, mod.phast.losses.wallLosses) ?? {};
               modificationData.push(modData);
             });
           }

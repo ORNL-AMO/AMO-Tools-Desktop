@@ -9,6 +9,7 @@ import { SolidLoadMaterialDbService } from '../../../../indexedDb/solid-load-mat
 import { firstValueFrom } from 'rxjs';
 import { GasLoadMaterialDbService } from '../../../../indexedDb/gas-load-material-db.service';
 import { LiquidLoadMaterialDbService } from '../../../../indexedDb/liquid-load-material-db.service';
+import { findModificationLoss } from '../../scenario-loss-pairing.util';
 @Component({
   selector: 'app-charge-material-summary',
   templateUrl: './charge-material-summary.component.html',
@@ -97,7 +98,8 @@ export class ChargeMaterialSummaryComponent implements OnInit {
           let modificationData = new Array();
           if (this.phast.modifications) {
             this.phast.modifications.forEach(mod => {
-              let modData = this.getData(mod.phast.losses.chargeMaterials[index]);
+              const modLoss = findModificationLoss(loss, index, mod.phast.losses.chargeMaterials);
+              let modData = modLoss ? this.getData(modLoss) : {};
               modificationData.push(modData);
             });
           }

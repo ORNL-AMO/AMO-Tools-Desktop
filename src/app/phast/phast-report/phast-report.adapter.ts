@@ -33,6 +33,7 @@ import { WallLossesSurfaceDbService } from '../../indexedDb/wall-losses-surface-
 import { AtmosphereDbService } from '../../indexedDb/atmosphere-db.service';
 import { PhastChartsService } from './phast-charts.service';
 import { ReportChartRenderService } from '../../shared/report-builder/services/report-chart-render.service';
+import { findModificationLoss } from './scenario-loss-pairing.util';
 
 interface ScenarioBundle {
   name: string;
@@ -565,7 +566,7 @@ export class PhastReportAdapter implements ReportDataAdapter {
   }
 
   /** Generic per-entry loss-array table builder used by the simpler (flat-field) loss categories. */
-  private buildLossEntrySections<T>(
+  private buildLossEntrySections<T extends { id?: string }>(
     title: string, baseline: ScenarioBundle, modBundles: ScenarioBundle[],
     lossesSelector: (phast: PHAST) => T[] | undefined,
     fields: Array<{ label: string; selector: (entry: T) => string | number | boolean | undefined; dec?: number; isPercent?: boolean }>,
@@ -584,7 +585,7 @@ export class PhastReportAdapter implements ReportDataAdapter {
     };
 
     return baseLosses.map((entry, i) => {
-      const modEntries = modBundles.map(m => (lossesSelector(m.phast) ?? [])[i]);
+      const modEntries = modBundles.map(m => findModificationLoss(entry, i, lossesSelector(m.phast)));
       const rows: string[][] = fields.map(f => [f.label, fmtVal(entry, f), ...modEntries.map(e => fmtVal(e, f))]);
       return { type: 'summary-table', title: baseLosses.length > 1 ? `${title} ${i + 1}` : title, group: 'inputData', headers, rows };
     });
@@ -643,7 +644,7 @@ export class PhastReportAdapter implements ReportDataAdapter {
 
     return baseLosses.map((loss, i) => {
       const baseData = this.chargeMaterialFields(loss, lookups);
-      const modData = modBundles.map(m => this.chargeMaterialFields(m.phast.losses?.chargeMaterials?.[i], lookups));
+      const modData = modBundles.map(m => this.chargeMaterialFields(findModificationLoss(loss, i, m.phast.losses?.chargeMaterials), lookups));
       const cell = (selector: (d: NonNullable<typeof baseData>) => string | number | undefined, dec?: number): string[] => {
         const val = (d: typeof baseData): string => {
           if (!d) return '—';
@@ -717,7 +718,7 @@ export class PhastReportAdapter implements ReportDataAdapter {
 
     return baseLosses.map((loss, i) => {
       const baseData = this.coolingFields(loss);
-      const modData = modBundles.map(m => this.coolingFields(m.phast.losses?.coolingLosses?.[i]));
+      const modData = modBundles.map(m => this.coolingFields(findModificationLoss(loss, i, m.phast.losses?.coolingLosses)));
       const cell = (selector: (d: NonNullable<typeof baseData>) => string | number | undefined, dec?: number): string[] => {
         const val = (d: typeof baseData): string => {
           if (!d) return '—';
@@ -770,7 +771,7 @@ export class PhastReportAdapter implements ReportDataAdapter {
 
     return baseLosses.map((loss, i) => {
       const baseData = this.flueGasFields(loss);
-      const modData = modBundles.map(m => this.flueGasFields(m.phast.losses?.flueGasLosses?.[i]));
+      const modData = modBundles.map(m => this.flueGasFields(findModificationLoss(loss, i, m.phast.losses?.flueGasLosses)));
       const cell = (selector: (d: NonNullable<typeof baseData>) => string | number | undefined, dec?: number): string[] => {
         const val = (d: typeof baseData): string => {
           if (!d) return '—';
