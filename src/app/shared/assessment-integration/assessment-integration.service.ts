@@ -53,10 +53,10 @@ export class AssessmentIntegrationService {
       let assessmentSettings: Settings = this.settingsDbService.getByAssessmentId(assessment);
       integratedAssessment.assessment = assessmentType === 'PHAST' ? toLegacyPhastAssessment(assessment, assessmentSettings) : assessment;
       if (assessmentType === 'PHAST') {
-        await this.phastIntegrationService.setIntegratedAssessmentData(integratedAssessment, assessmentSettings, treasureHuntSettings);
-        if (phastModuleFor(assessment.phast) === 'process-heating') {
-          integratedAssessment.navigation.url = '/process-heating/' + assessment.id;
+        if (integratedAssessment.assessment.phast.setupDone) {
+          await this.phastIntegrationService.setIntegratedAssessmentData(integratedAssessment, assessmentSettings, treasureHuntSettings);
         }
+        integratedAssessment.navigation = { queryParams: undefined, url: `/${phastModuleFor(assessment.phast)}/${assessment.id}` };
       } else if (assessmentType === 'PSAT') {
         this.psatService.setIntegratedAssessmentData(integratedAssessment, assessmentSettings);
       } else if (assessmentType === 'FSAT') {
@@ -95,9 +95,21 @@ export class AssessmentIntegrationService {
     let allAssessments: Array<Assessment> = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(allAssessments);
     this.assessmentsByType = allAssessments.filter(assessment => { return assessment.type == assessmentType });
+    if (assessmentType === 'PHAST') {
+      this.assessmentsByType = this.assessmentsByType.filter(assessment => this.isPhastSetUp(assessment));
+    }
     this.assessmentsByType = _.orderBy(this.assessmentsByType, 'modifiedDate');
     let assessmentOptions = this.assessmentsByType.map(assessment => { return { display: assessment.name, id: assessment.id } });
     return assessmentOptions;
+  }
+
+  /**
+   * Treasure Hunt calculates from the legacy shape, which reads the heat balance unguarded.
+   * @param assessment Process Heating assessment as saved by either module
+   * @returns whether the assessment can be calculated for Treasure Hunt
+   */
+  private isPhastSetUp(assessment: Assessment): boolean {
+    return toLegacyPhastAssessment(assessment, this.settingsDbService.getByAssessmentId(assessment)).phast.setupDone;
   }
   
 

@@ -14,14 +14,16 @@ function buildOption(modificationId: string, annualCost: number): AssessmentEner
 
 describe('AssessmentIntegrationComponent', () => {
   let component: AssessmentIntegrationComponent;
+  let integrationService: jasmine.SpyObj<AssessmentIntegrationService>;
 
   beforeEach(() => {
+    integrationService = jasmine.createSpyObj<AssessmentIntegrationService>('AssessmentIntegrationService', ['setIntegratedAssessment', 'checkHasUpdatedEnergyData']);
     TestBed.configureTestingModule({
       imports: [ModalModule.forRoot()],
       declarations: [AssessmentIntegrationComponent],
       providers: [
         { provide: FeatureFlagService, useValue: { showOperationalImpacts: signal(false) } },
-        { provide: AssessmentIntegrationService, useValue: {} },
+        { provide: AssessmentIntegrationService, useValue: integrationService },
         { provide: TreasureHuntService, useValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
@@ -30,6 +32,22 @@ describe('AssessmentIntegrationComponent', () => {
     // ngOnInit loads assessments and needs the report modal, so give the update its form and ngOnDestroy its subscription directly.
     component.assessmentIntegrationForm = new FormGroup({ selectedModificationId: new FormControl<string>('m1') });
     component.reportSub = new Subscription();
+  });
+
+  describe('setExistingIntegratedAssessment', () => {
+    it('skips the stale-data check for a linked assessment with no energy options', async () => {
+      component.assessmentIntegrationForm.addControl('assessmentType', new FormControl<string>(undefined));
+      component.existingIntegrationData = {
+        assessmentId: 1, assessmentType: 'PHAST', assessmentName: 'Furnace', selectedModificationId: 'm1',
+        energyOptions: { baseline: buildOption(undefined, 100), modifications: [buildOption('m1', 80)] },
+      };
+      integrationService.setIntegratedAssessment.and.resolveTo({ assessment: {}, assessmentType: 'PHAST' } as IntegratedAssessment);
+
+      await component.setExistingIntegratedAssessment();
+
+      expect(integrationService.checkHasUpdatedEnergyData).not.toHaveBeenCalled();
+      expect(component.hasUpdatedEnergyData).toBeFalsy();
+    });
   });
 
   describe('updateExistingIntegrationData', () => {

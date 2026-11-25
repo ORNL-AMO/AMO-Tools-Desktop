@@ -87,6 +87,30 @@ describe('AssessmentIntegrationService', () => {
     expect(integratedAssessment.navigation.url).toBe('/phast/1');
   });
 
+  describe('an assessment with no heat balance', () => {
+    let withoutHeatBalance: Assessment;
+
+    beforeEach(() => {
+      withoutHeatBalance = buildRebuiltAssessment();
+      delete withoutHeatBalance.phast.losses;
+      assessmentDbService.getAllAssessments.and.returnValue(of([assessment, { ...withoutHeatBalance, id: 2 }]));
+    });
+
+    it('is left out of the Process Heating assessments offered for linking', async () => {
+      const options = await service.getAssessmentOptionsByType('PHAST');
+
+      expect(options.map(option => option.id)).toEqual([1]);
+    });
+
+    it('integrates without energy options and still links back', async () => {
+      const integratedAssessment = await service.setIntegratedAssessment(2, 'PHAST', {} as Settings);
+
+      expect(phastIntegrationService.setIntegratedAssessmentData).not.toHaveBeenCalled();
+      expect(integratedAssessment.energyOptions).toBeUndefined();
+      expect(integratedAssessment.navigation.url).toBe('/process-heating/2');
+    });
+  });
+
   describe('checkHasUpdatedEnergyData', () => {
     const option = (modificationId: string | undefined, annualCost: number) => ({ name: 'Option', modificationId, annualEnergy: 10, co2EmissionsOutput: 1, annualCost });
 

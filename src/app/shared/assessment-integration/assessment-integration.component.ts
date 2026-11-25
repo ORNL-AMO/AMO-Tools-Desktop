@@ -72,7 +72,7 @@ export class AssessmentIntegrationComponent implements OnInit {
 
     if (!this.integratedAssessment.assessment) {
       this.integratedAssessment.name = this.existingIntegrationData.assessmentName
-    } else {
+    } else if (this.integratedAssessment.energyOptions) {
       this.hasUpdatedEnergyData = this.assessmentIntegrationService.checkHasUpdatedEnergyData(this.existingIntegrationData.energyOptions, this.integratedAssessment.energyOptions);
     }
   }
