@@ -142,3 +142,18 @@ gross heat input = 4.50 / 0.80          = 5.63 MMBtu/hr  (5.00 when leakage was 
 - A modification on a different energy source than the baseline is left out of these features, except the export from the rebuild's own banner, which lists it without results. They calculate every scenario with the baseline's settings, which cannot read its energy entry: it would show no energy and the whole baseline cost as savings, and the legacy report fails on its missing losses.
 - Rebuilt assessments saved before this change have no setup done mark and stay off the dashboard and rollup until they are opened once.
 - The dashboard, rollup and Treasure Hunt open an assessment in the rebuild once the rebuild has saved it, since their numbers come from the rebuild's edits and the legacy module would show its stale copy. The dashboard card's Assessment and Assessment Report links open the matching rebuild view. The sidebar's module choice can still open such an assessment in the legacy module, unless it has a modification created in the rebuild, which the legacy module cannot open. Assessments the rebuild has never saved still open in the legacy module.
+
+## A modification's snapshot never reads from the baseline
+
+**Issue:** [#8940](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8940)
+
+**Decision:** Once a modification has its snapshot of the baseline (saved losses), its losses, operating hours, operating costs, system efficiency and CO2 data come only from the modification. A loss type or field the modification doesn't have counts as none, even when the baseline has it.
+
+**Why:** A new modification copies these fields from the baseline. A field the baseline didn't have yet was saved as "none", so that adding it to the baseline later doesn't change the modification. JSON export and import, backups and the dashboard Copy action drop those "none" entries, so a copied or imported modification picked up the baseline's later values and its results changed. For example, with a cooling loss added to the baseline after the modification was created:
+
+```
+before export: modification has no cooling loss   (savings include the 500,000 Btu/hr cooling loss)
+after import:  modification has the cooling loss  (savings drop by 500,000 Btu/hr)
+```
+
+**Where it applies:** Every rebuilt or migrated modification. Files already exported and copies already made calculate correctly again, since a dropped entry now reads as the "none" it stood for. Auxiliary equipment keeps its own rule: a modification without its own list uses the baseline's.

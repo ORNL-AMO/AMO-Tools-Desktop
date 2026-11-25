@@ -31,14 +31,20 @@ describe('getEffectivePhast', () => {
     expect(effectivePhast.name).toBe('Baseline');
   });
 
-  it('overrides only the loss type present in the diff, leaving other loss types as baseline', () => {
+  it('falls back to baseline losses for a diff without a snapshot', () => {
+    const effectivePhast = getEffectivePhast(baseline, buildModification({ name: 'Mod 1' }));
+
+    expect(effectivePhast.losses).toBe(baseline.losses);
+  });
+
+  it('reads every loss type from a snapshotted diff, never from baseline', () => {
     const modifiedChargeMaterials = [{ id: 'material-1', name: 'Steel (preheated)', chargeMaterialType: 'Solid' } as never];
     const modification = buildModification({ losses: { chargeMaterials: modifiedChargeMaterials } });
 
     const effectivePhast = getEffectivePhast(baseline, modification);
 
     expect(effectivePhast.losses.chargeMaterials).toBe(modifiedChargeMaterials);
-    expect(effectivePhast.losses.wallLosses).toBe(baseline.losses.wallLosses);
+    expect(effectivePhast.losses.wallLosses).toBeUndefined();
   });
 
   it('applies the loss-type diff even when the modification has no Explore Opportunities flags set', () => {
@@ -86,6 +92,19 @@ describe('getEffectivePhast', () => {
     const effectivePhast = getEffectivePhast(mutableBaseline, modification);
 
     expect(effectivePhast.losses.wallLosses).toBeUndefined();
+  });
+
+  it('stays frozen through a JSON round trip, which drops the snapshot\'s undefined keys', () => {
+    const snapshotBaseline: PHAST = { name: 'Baseline', losses: { chargeMaterials: baseline.losses.chargeMaterials } };
+    const roundTripped: ScenarioOverrides = JSON.parse(JSON.stringify(getBaselineSnapshot(snapshotBaseline)));
+    const grownBaseline: PHAST = { ...snapshotBaseline, systemEfficiency: 80, losses: { ...snapshotBaseline.losses, wallLosses: baseline.losses.wallLosses } };
+
+    const effectivePhast = getEffectivePhast(grownBaseline, buildModification(roundTripped));
+
+    expect('wallLosses' in roundTripped.losses).toBeFalse();
+    expect(effectivePhast.losses.wallLosses).toBeUndefined();
+    expect(effectivePhast.systemEfficiency).toBeUndefined();
+    expect(effectivePhast.losses.chargeMaterials).toEqual(baseline.losses.chargeMaterials);
   });
 });
 
