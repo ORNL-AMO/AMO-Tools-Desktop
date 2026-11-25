@@ -3,6 +3,7 @@ import { Assessment } from '../../../shared/models/assessment';
 import { AssessmentService } from '../../assessment.service';
 import { ModalDialogService } from '../../../shared/modal-dialog.service';
 import { OpenProcessHeatingModuleModalComponent } from '../../../shared/open-process-heating-module-modal/open-process-heating-module-modal.component';
+import { canOpenInLegacyPhast } from '../../../process-heating-assessment/services/legacy-phast-assessment.util';
 @Component({
     selector: 'app-assessment-item',
     templateUrl: './assessment-item.component.html',
@@ -19,7 +20,7 @@ export class AssessmentItemComponent implements OnInit {
 
 
   goToAssessment(assessment: Assessment) {
-    if (assessment.type === 'PHAST') {
+    if (assessment.type === 'PHAST' && canOpenInLegacyPhast(assessment.phast)) {
       this.modalDialogService.openModal(OpenProcessHeatingModuleModalComponent, {
         data: {
           onSelect: (phastModuleOverride: 'phast' | 'process-heating') =>
