@@ -7,5 +7,9 @@ import { PDF_TEXT_REPLACEMENTS } from '../constants/display-text';
  * @returns text the PDF's built-in font can render
  */
 export function toPdfText(text: string): string {
-  return PDF_TEXT_REPLACEMENTS.reduce((result, [symbol, replacement]) => result.replaceAll(symbol, replacement), text);
+  let result = text;
+  for (const [symbol, replacement] of PDF_TEXT_REPLACEMENTS) {
+    result = result.replaceAll(symbol, replacement);
+  }
+  return result;
 }
