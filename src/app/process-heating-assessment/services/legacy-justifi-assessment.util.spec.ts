@@ -5,7 +5,7 @@ import { ProcessHeatingModification } from '../models/modification';
 import { toLegacyJustifiAssessment } from './legacy-justifi-assessment.util';
 
 function buildAssessment(modifications: ProcessHeatingModification[]): Assessment {
-  const phast = { name: 'Baseline', implementationCost: 0, modifications } as unknown as PHAST;
+  const phast = { name: 'Baseline', implementationCost: 0, losses: {}, modifications } as unknown as PHAST;
   return { id: 1, name: 'Furnace', type: 'PHAST', phast } as unknown as Assessment;
 }
 
@@ -38,6 +38,13 @@ describe('toLegacyJustifiAssessment', () => {
   it('sets setupDone on the exported baseline from the given readiness, even when the saved assessment has none', () => {
     expect(toLegacyJustifiAssessment(buildAssessment([]), true, fuelFired).phast.setupDone).toBeTrue();
     expect(toLegacyJustifiAssessment(buildAssessment([]), false, fuelFired).phast.setupDone).toBeFalse();
+  });
+
+  it('leaves a baseline without a heat balance not set up, since legacy calculations need its losses', () => {
+    const assessment = buildAssessment([]);
+    delete assessment.phast.losses;
+
+    expect(toLegacyJustifiAssessment(assessment, true, fuelFired).phast.setupDone).toBeFalse();
   });
 
   it('leaves saved auxiliary power losses out of the exported baseline and modifications', () => {
@@ -75,13 +82,13 @@ describe('toLegacyJustifiAssessment', () => {
 
   it('leaves out the losses of tabs each scenario\'s energy source hides', () => {
     const assessment = buildAssessment([{ id: 'm1' }]);
-    (assessment.phast as unknown as PHAST).losses = { leakageLosses: [{ id: 'l1' } as never], wallLosses: [] };
+    (assessment.phast as unknown as PHAST).losses = { flueGasLosses: [{ id: 'f1' } as never], wallLosses: [] };
 
     const result = toLegacyJustifiAssessment(assessment, true, scenario => scenario === 'baseline' ? EAF : FUEL_FIRED);
 
-    expect(result.phast?.losses?.leakageLosses).toBeUndefined();
+    expect(result.phast?.losses?.flueGasLosses).toBeUndefined();
     expect(result.phast?.losses?.wallLosses).toEqual([]);
-    expect(result.phast?.modifications?.[0].phast?.losses?.leakageLosses?.length).toBe(1);
+    expect(result.phast?.modifications?.[0].phast?.losses?.flueGasLosses?.length).toBe(1);
   });
 
   it('exports a modification on a different heating equipment configuration without results', () => {

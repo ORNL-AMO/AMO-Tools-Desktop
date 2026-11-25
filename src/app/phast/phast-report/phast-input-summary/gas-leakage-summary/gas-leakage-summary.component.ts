@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
+import { findModificationLoss } from '../../scenario-loss-pairing.util';
 @Component({
     selector: 'app-gas-leakage-summary',
     templateUrl: './gas-leakage-summary.component.html',
@@ -50,7 +51,7 @@ export class GasLeakageSummaryComponent implements OnInit {
           const modificationData = new Array();
           if (this.phast.modifications) {
             this.phast.modifications.forEach(mod => {
-              const modData = mod.phast.losses.leakageLosses[index];
+              const modData = findModificationLoss(loss, index, mod.phast.losses.leakageLosses) ?? {};
               modificationData.push(modData);
             });
           }

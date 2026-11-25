@@ -9,6 +9,7 @@ import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
+import { toLegacyPhastAssessment } from '../../process-heating-assessment/services/legacy-phast-assessment.util';
 
 @Component({
   selector: 'app-export-to-justifi-modal',
@@ -76,6 +77,9 @@ export class ExportToJustifiModalComponent {
   }
 
   addAssessment(assessment: Assessment) {
+    if (assessment.type == 'PHAST') {
+      assessment = toLegacyPhastAssessment(assessment, this.settingsDbService.getByAssessmentId(assessment));
+    }
     if (assessment.type == 'PSAT') {
       if (assessment.psat.modifications && assessment.psat.modifications.length > 0) {
         assessment.psat.selectedModificationId = assessment.psat.modifications[0].id;

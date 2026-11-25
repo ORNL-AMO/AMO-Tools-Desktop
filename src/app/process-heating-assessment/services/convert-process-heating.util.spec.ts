@@ -111,6 +111,15 @@ describe('convertProcessHeatingUnits', () => {
     expect(fixture.specificHeatLiquid).toBeUndefined();
   });
 
+  it('converts a gas leakage opening area exactly, so a small opening keeps its leakage', () => {
+    const phast = { ...buildPhast(), losses: { leakageLosses: [{ id: 'leak-1', openingArea: 0.06, draftPressure: 0.1 }] } } as PHAST;
+
+    const leakage = convertProcessHeatingUnits(phast, imperial, metric).losses.leakageLosses[0];
+
+    expect(leakage.openingArea).toBe(new ConvertValue(0.06, 'ft2', 'm2').convertedValue);
+    expect(leakage.draftPressure).toBe(Number(new ConvertValue(0.1, 'inH2o', 'Pa').convertedValue.toFixed(4)));
+  });
+
   it('converts Other Gas and Other Liquid cooling losses, including the mirrored gas outlet temperature', () => {
     const [gasLoss, liquidLoss] = convertProcessHeatingUnits(buildPhast(), imperial, metric).losses.coolingLosses;
 

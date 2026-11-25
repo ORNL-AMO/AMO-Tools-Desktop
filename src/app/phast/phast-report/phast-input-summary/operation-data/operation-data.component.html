@@ -33,7 +33,7 @@
               {{settings.energySourceType}}
             </td>
             <td *ngFor="let mod of phast.modifications">
-              {{settings.energySourceType}}
+              {{scenarioEnergySource(mod).energySourceType}}
             </td>
           </tr>
           <tr>
@@ -44,10 +44,10 @@
               {{settings.furnaceType}}
             </td>
             <td *ngFor="let mod of phast.modifications">
-              {{settings.furnaceType}}
+              {{scenarioEnergySource(mod).furnaceType}}
             </td>
           </tr>
-          <tr *ngIf="settings.customFurnaceName">
+          <tr *ngIf="hasCustomFurnaceName">
             <td>
               Furnace Name
             </td>
@@ -55,7 +55,7 @@
               {{settings.customFurnaceName}}
             </td>
             <td *ngFor="let mod of phast.modifications">
-              {{settings.customFurnaceName}}
+              {{scenarioEnergySource(mod).customFurnaceName}}
             </td>
           </tr>
           <tr>

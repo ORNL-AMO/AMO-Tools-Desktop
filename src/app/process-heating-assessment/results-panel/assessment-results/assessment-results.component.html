@@ -4,7 +4,7 @@
   <table #copyTable class="table table-hover table-striped panel-table">
     <thead>
       <tr>
-        <th>Hourly Energy Loss/Use</th>
+        <th>Hourly Energy Loss/Use ({{lossUnit()}})</th>
         <th>Baseline</th>
         @if (modification()) {
           <th>
@@ -20,13 +20,6 @@
               {{modificationName()}}
             </div>
           </th>
-        }
-      </tr>
-      <tr>
-        <th></th>
-        <th>{{lossUnit()}}</th>
-        @if (modification()) {
-          <th>{{lossUnit()}}</th>
         }
       </tr>
     </thead>
@@ -51,9 +44,9 @@
           <td>
             CO<sub>2</sub> Emissions
             @if (settings().emissionsUnit === 'Imperial') {
-              <span>(ton CO<sub>2</sub>)</span>
+              <span>(ton CO<sub>2</sub>/hr)</span>
             } @else if (settings().emissionsUnit === 'Metric') {
-              <span>(tonne CO<sub>2</sub>)</span>
+              <span>(tonne CO<sub>2</sub>/hr)</span>
             }
           </td>
           <td>@if (base?.co2EmissionsOutput?.hourlyTotalEmissionOutput) { {{base.co2EmissionsOutput.hourlyTotalEmissionOutput | number: '1.0-2'}} } @else {&mdash; &mdash;}</td>
@@ -66,9 +59,9 @@
             <td>
               CO<sub>2</sub> Emissions Savings
               @if (settings().emissionsUnit === 'Imperial') {
-                <span>(ton CO<sub>2</sub>)</span>
+                <span>(ton CO<sub>2</sub>/hr)</span>
               } @else if (settings().emissionsUnit === 'Metric') {
-                <span>(tonne CO<sub>2</sub>)</span>
+                <span>(tonne CO<sub>2</sub>/hr)</span>
               }
             </td>
             <td>&mdash; &mdash;</td>

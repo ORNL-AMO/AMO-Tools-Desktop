@@ -7,6 +7,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { SolidLoadMaterialDbService } from '../../../../indexedDb/solid-load-material-db.service';
 import { take } from 'rxjs';
 import { roundVal } from '../../../../shared/helperFunctions';
+import { findModificationLoss } from '../../scenario-loss-pairing.util';
 @Component({
   selector: 'app-fixture-summary',
   templateUrl: './fixture-summary.component.html',
@@ -69,7 +70,7 @@ export class FixtureSummaryComponent implements OnInit {
           let modificationData = new Array();
           if (this.phast.modifications) {
             this.phast.modifications.forEach(mod => {
-              let modData = mod.phast.losses.fixtureLosses[index];
+              let modData = findModificationLoss(loss, index, mod.phast.losses.fixtureLosses) ?? {};
               modificationData.push(modData);
             });
           }

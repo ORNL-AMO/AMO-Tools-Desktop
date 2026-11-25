@@ -52,7 +52,7 @@ export const OPPORTUNITY_REGISTRY: readonly OpportunityRegistryEntry[] = [
   { lossKey: 'fixtureLosses', notesKey: 'fixtureNotes', opportunityComponents: [{ component: FixtureMaterialsHandlingOpportunityComponent }, { component: FixtureCoolingOpportunityComponent }] },
   { lossKey: 'coolingLosses', notesKey: 'coolingNotes', opportunityComponents: [{ component: CoolingOpportunityComponent }] },
   { lossKey: 'openingLosses', notesKey: 'openingNotes', opportunityComponents: [{ component: OpeningSizeOpportunityComponent }, { component: OpeningEmissivityOpportunityComponent }, { component: OpeningTimeOpenOpportunityComponent }] },
-  { lossKey: 'leakageLosses', notesKey: 'leakageNotes', opportunityComponents: [{ component: GasLeakageOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }] },
+  { lossKey: 'leakageLosses', notesKey: 'leakageNotes', opportunityComponents: [{ component: GasLeakageOpportunityComponent }] },
   { lossKey: 'flueGasLosses', notesKey: 'flueGasNotes', opportunityComponents: [{ component: AirFuelRatioOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }, { component: PreheatCombustionAirOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }] },
   { lossKey: 'slagLosses', notesKey: 'slagNotes', opportunityComponents: [{ component: SlagOpportunityComponent, heatingEquipmentConfigurations: ELECTROTECHNOLOGY_EAF_ONLY }] },
   { notesKey: 'operationsNotes', opportunityComponents: [{ component: OperationsOpportunityComponent }] },

@@ -11,7 +11,8 @@ import { SettingsService } from '../../settings/settings.service';
 import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { SnackbarService } from '../../shared/snackbar-notification/snackbar.service';
 import { UnitsChangeAction, UnitsChangeDialogComponent, UnitsChangeDialogData } from '../../shared/units-change-dialog/units-change-dialog.component';
-import { deriveHeatingEquipmentConfiguration, ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { deriveHeatingEquipmentConfiguration } from '../services/scenario-settings.util';
 import { buildEnergySourceChangeDialogData, EnergySourceChangeDialogComponent, EnergySourceChangeDialogData } from './energy-source-change-dialog/energy-source-change-dialog.component';
 
 interface AssessmentSettingsMetaForm {

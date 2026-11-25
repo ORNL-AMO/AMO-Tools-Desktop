@@ -39,7 +39,7 @@ const COMPONENTS_BY_LOSS_KEY: Partial<Record<keyof Losses, Type<unknown>[]>> = {
 };
 
 const ALLOWED_CONFIGURATIONS_BY_GATED_COMPONENT = new Map<Type<unknown>, HeatingEquipmentConfiguration[]>([
-  ...[...COMPONENTS_BY_LOSS_KEY.leakageLosses!, ...COMPONENTS_BY_LOSS_KEY.flueGasLosses!]
+  ...COMPONENTS_BY_LOSS_KEY.flueGasLosses!
     .map((component): [Type<unknown>, HeatingEquipmentConfiguration[]] => [component, [HeatingEquipmentConfiguration.FUEL_FIRED]]),
   [SlagOpportunityComponent, [HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_EAF]],
   [HeatSystemEfficiencyOpportunityComponent, [HeatingEquipmentConfiguration.STEAM, HeatingEquipmentConfiguration.CUSTOM_ELECTROTECHNOLOGY]],

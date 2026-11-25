@@ -90,7 +90,7 @@ Induction melters - Energy Exhaust   gross heat input 1813.37 → 1812.34 / 6471
 
 **Why:** It is a fallback in case users run into problems with the rebuild that need to be rolled back.
 
-**Where it applies:** The whole legacy module. Gaps between the two, such as dashboard and rollup support for rebuilt assessments, are tracked as open questions on [#8900](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8900).
+**Where it applies:** The whole legacy module. Code outside both modules reads rebuilt assessments as described in [Code outside the module reads a converted copy](#code-outside-the-module-reads-a-converted-copy).
 
 ## Material lists are shared and reloaded when an assessment opens
 
@@ -111,3 +111,49 @@ Induction melters - Energy Exhaust   gross heat input 1813.37 → 1812.34 / 6471
 **Why:** The PDF uses a built-in font that cannot draw ℉, ℃ or subscript digits. A subscript digit also makes the PDF library encode the whole line differently, so every character in it prints wrong, not just the symbol. °F, °C and plain digits print correctly.
 
 **Where it applies:** The rebuilt module's PDF report only. Other modules' reports are tracked on #9114, which should replace this module-level fix with one shared fix.
+
+## Gas Leakage applies to every energy source
+
+**Issue:** [#8940](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8940)
+
+**Decision:** The Gas Leakage tab, its Explore Opportunities measure and its Input Summary section show for every heating equipment configuration, and leakage losses count in the results for every configuration.
+
+**Why:** The rebuild had grouped Gas Leakage with Flue Gas as fuel-fired only, so steam and electrotechnology scenarios hid the tab and dropped any saved leakage entries from their results. Legacy shows the tab for every energy source and always adds leakage to the total heat input, which then raises gross heat input. For example, a steam furnace at 80% system efficiency:
+
+```
+losses and charge heat, without leakage = 4.00 MMBtu/hr
+gas leakage                             = 0.50 MMBtu/hr
+total heat input = 4.00 + 0.50          = 4.50 MMBtu/hr
+gross heat input = 4.50 / 0.80          = 5.63 MMBtu/hr  (5.00 when leakage was dropped)
+```
+
+**Where it applies:** Heat Balance and Expert View tabs, validation, results, Sankey, JUSTIFI export, Explore Opportunities and the Input Summary. Results for legacy steam and electrotechnology assessments with leakage entries now match the legacy module. No real non-fuel assessment with leakage was available, so the snapshot tests use synthetic fixtures (existing fixtures with a leakage entry added).
+
+## Code outside the module reads a converted copy
+
+**Issue:** [#8940](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8940)
+
+**Decision:** The dashboard summary card and its Quick Report, the folder summary, the report rollup, the JUSTIFI export (from the dashboard and from the legacy share modal) and the Treasure Hunt import each convert a Process Heating assessment into the legacy shape when they load it. The converted copy is never saved. The rebuild saves a setup done mark whenever the assessment or its settings are saved, using the same rule as Report access.
+
+**Why:** Those features calculate from each modification's full copy of the baseline. The rebuild saves only what a modification changes, so they dropped rebuilt assessments or failed on them, and legacy modifications edited in the rebuild kept a stale copy. They also counted Auxiliary Power, which the rebuild does not use, and the rebuild never saved the setup done mark they check.
+
+**Where it applies:**
+- Every Process Heating assessment, including ones never opened in the rebuild, so Auxiliary Power and losses from tabs the energy source hides no longer count on the dashboard, rollup, JUSTIFI export or Treasure Hunt.
+- A modification on a different energy source than the baseline is left out of these features, except the export from the rebuild's own banner, which lists it without results. They calculate every scenario with the baseline's settings, which cannot read its energy entry: it would show no energy and the whole baseline cost as savings, and the legacy report fails on its missing losses.
+- Rebuilt assessments saved before this change have no setup done mark and stay off the dashboard and rollup until they are opened once.
+- The dashboard, rollup and Treasure Hunt open an assessment in the rebuild once the rebuild has saved it, since their numbers come from the rebuild's edits and the legacy module would show its stale copy. The dashboard card's Assessment and Assessment Report links open the matching rebuild view. The sidebar's module choice can still open such an assessment in the legacy module, unless it has a modification created in the rebuild, which the legacy module cannot open. Assessments the rebuild has never saved still open in the legacy module.
+
+## A modification's snapshot never reads from the baseline
+
+**Issue:** [#8940](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8940)
+
+**Decision:** Once a modification has its snapshot of the baseline (saved losses), its losses, operating hours, operating costs, system efficiency and CO2 data come only from the modification. A loss type or field the modification doesn't have counts as none, even when the baseline has it.
+
+**Why:** A new modification copies these fields from the baseline. A field the baseline didn't have yet was saved as "none", so that adding it to the baseline later doesn't change the modification. JSON export and import, backups and the dashboard Copy action drop those "none" entries, so a copied or imported modification picked up the baseline's later values and its results changed. For example, with a cooling loss added to the baseline after the modification was created:
+
+```
+before export: modification has no cooling loss   (savings include the 500,000 Btu/hr cooling loss)
+after import:  modification has the cooling loss  (savings drop by 500,000 Btu/hr)
+```
+
+**Where it applies:** Every rebuilt or migrated modification. Files already exported and copies already made calculate correctly again, since a dropped entry now reads as the "none" it stood for. Auxiliary equipment keeps its own rule: a modification without its own list uses the baseline's.

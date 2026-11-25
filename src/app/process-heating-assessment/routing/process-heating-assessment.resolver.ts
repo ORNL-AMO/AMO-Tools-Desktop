@@ -3,7 +3,6 @@ import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
 import { catchError, forkJoin, from, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { PHAST } from '../models/phast';
-import { computeMigratedExploreOpportunityFlags, LegacyModification } from '../models/modification';
 import { Settings } from '../../shared/models/settings';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
@@ -15,8 +14,8 @@ import { WallLossesSurfaceDbService } from '../../indexedDb/wall-losses-surface-
 import { AppErrorService } from '../../shared/errors/app-error.service';
 import { MeasurAppError } from '../../shared/errors/errors';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
-import { deriveScenarioOverridesFromLegacyModification, ensureLossIdsForPhast } from '../services/scenario-merge.util';
-import { migrateLegacyAuxEquipment } from '../services/auxiliary-equipment-migration.util';
+import { ensureLossIdsForPhast } from '../services/scenario-merge.util';
+import { migrateLegacyPhast } from '../services/legacy-phast-migration.util';
 
 export interface ProcessHeatingResolverData {
   assessment: Assessment;
@@ -85,29 +84,11 @@ export class ProcessHeatingAssessmentResolver implements Resolve<ProcessHeatingR
         // Module load-time entry point: `assessment.phast` is still typed against the shared,
         // legacy-owned PHAST shape at this boundary. Everything past this point uses the module's
         // own local PHAST type.
-        const processHeating = migrateLegacyAuxEquipment(assessment.phast as unknown as PHAST);
-        // Migrate `scenarioOverrides` and `exploreOpportunityFlags` for modifications last written
-        // by legacy (a full `phast` clone and legacy's flat `exploreOppsShowX` fields, neither of
-        // which this module reads directly). Idempotent: a modification that already has
-        // `scenarioOverrides` (new-module-created, or already migrated) is left untouched, never
-        // re-diffed. This flows through setProcessHeating() below, which feeds the 300ms debounced
-        // auto-save like any edit would: opening a legacy assessment here rewrites its modifications
-        // to the new shape on disk within ~300ms, even without an explicit edit. Accepted as-is
-        // rather than suppressed, since `modification.phast` and the legacy `exploreOppsShowX`
-        // fields are never touched (only read) - a migrated record stays fully readable by legacy
-        // afterward.
-        const migratedModifications = processHeating.modifications?.map(modification => {
-          const legacyModification = modification as LegacyModification;
-          return legacyModification.scenarioOverrides
-            ? modification
-            : {
-              ...modification,
-              scenarioOverrides: deriveScenarioOverridesFromLegacyModification(
-                migrateLegacyAuxEquipment(legacyModification.phast, processHeating.auxiliaryEquipment), processHeating),
-              exploreOpportunityFlags: computeMigratedExploreOpportunityFlags(legacyModification),
-            };
-        });
-        const migratedPhast = migratedModifications ? { ...processHeating, modifications: migratedModifications } : processHeating;
+        // Migrating flows through setProcessHeating() below, which feeds the 300ms debounced auto-save like any
+        // edit would: opening a legacy assessment here rewrites its modifications to the new shape on disk within
+        // ~300ms, even without an explicit edit. Accepted as-is rather than suppressed, since a migrated record
+        // stays fully readable by legacy afterward.
+        const migratedPhast = migrateLegacyPhast(assessment.phast as unknown as PHAST);
         this.processHeatingAssessmentService.setProcessHeating(ensureLossIdsForPhast(migratedPhast));
 
         return from(this.processHeatingAssessmentService.initAssessmentSettings(assessment)).pipe(

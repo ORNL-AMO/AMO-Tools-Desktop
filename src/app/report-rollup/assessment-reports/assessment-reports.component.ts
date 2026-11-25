@@ -18,6 +18,8 @@ import { Assessment } from '../../shared/models/assessment';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { Directory } from '../../shared/models/directory';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
+import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
+import { phastModuleFor } from '../../process-heating-assessment/services/legacy-phast-assessment.util';
 
 @Component({
     selector: 'app-assessment-reports',
@@ -54,7 +56,8 @@ export class AssessmentReportsComponent implements OnInit {
 
   constructor(private reportRollupService: ReportRollupService, private printOptionsMenuService: PrintOptionsMenuService, private psatReportRollupService: PsatReportRollupService, private phastReportRollupService: PhastReportRollupService,
     private fsatReportRollupService: FsatReportRollupService, private ssmtReportRollupService: SsmtReportRollupService, private treasureHuntReportRollupService: TreasureHuntReportRollupService,
-    private wasteWaterReportRollupService: WasteWaterReportRollupService, private compressedAirReportRollupService: CompressedAirReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService, private dashboardService: DashboardService) { }
+    private wasteWaterReportRollupService: WasteWaterReportRollupService, private compressedAirReportRollupService: CompressedAirReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService, private dashboardService: DashboardService,
+    private assessmentDbService: AssessmentDbService) { }
 
   ngOnInit(): void {
     this.settings = this.reportRollupService.settings.getValue();
@@ -136,7 +139,9 @@ export class AssessmentReportsComponent implements OnInit {
     if (assessment.type === 'PSAT') {
       itemSegment = '/psat/';
     } else if (assessment.type === 'PHAST') {
-      itemSegment = '/phast/';
+      // The rollup holds converted copies, so check the saved assessment.
+      const savedAssessment = this.assessmentDbService.findById(assessment.id);
+      itemSegment = `/${phastModuleFor(savedAssessment.phast)}/`;
     } else if (assessment.type === 'FSAT') {
       itemSegment = '/fsat/';
     } else if (assessment.type === 'SSMT') {

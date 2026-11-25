@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, Signal, viewChild } from '@angular/core';
 import { getModificationName, ProcessHeatingModification } from '../../models/modification';
 import { AuxiliaryEquipmentResults } from '../../models/auxiliary-equipment';
-import { AssessmentScenario } from '../../services/process-heating-assessment.service';
+import { AssessmentScenario } from '../../services/scenario-settings.util';
 import { AuxiliaryEquipmentResultsService } from '../../services/auxiliary-equipment-results.service';
 import { ModificationService } from '../../services/modification.service';
 

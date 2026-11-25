@@ -6,6 +6,7 @@ import { Settings } from '../../../../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
 import { AssessmentService } from '../../../../assessment.service';
+import { toLegacyPhastAssessment } from '../../../../../process-heating-assessment/services/legacy-phast-assessment.util';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class PhastSummaryCardComponent implements OnInit {
 
     @ViewChild('reportModal', { static: false }) public reportModal: ModalDirective;
 
+    legacyAssessment: Assessment;
     phastResults: ExecutiveSummary;
     modResults: ExecutiveSummary;
     settings: Settings;
@@ -29,15 +31,16 @@ export class PhastSummaryCardComponent implements OnInit {
     constructor(private executiveSummaryService: ExecutiveSummaryService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService) { }
 
     ngOnInit() {
-        this.setupDone = this.assessment.phast.setupDone;
         this.settings = this.settingsDbService.getByAssessmentId(this.assessment);
+        this.legacyAssessment = toLegacyPhastAssessment(this.assessment, this.settings);
+        this.setupDone = this.legacyAssessment.phast.setupDone;
         if (this.setupDone) {
-            this.phastResults = this.executiveSummaryService.getSummary(this.assessment.phast, false, this.settings, this.assessment.phast);
+            this.phastResults = this.executiveSummaryService.getSummary(this.legacyAssessment.phast, false, this.settings, this.legacyAssessment.phast);
             let tmpSavings = 0;
-            if (this.assessment.phast.modifications) {
-                this.numMods = this.assessment.phast.modifications.length;
-                this.assessment.phast.modifications.forEach(mod => {
-                    let tempVal = this.executiveSummaryService.getSummary(mod.phast, true, this.settings, this.assessment.phast, this.phastResults);
+            if (this.legacyAssessment.phast.modifications) {
+                this.numMods = this.legacyAssessment.phast.modifications.length;
+                this.legacyAssessment.phast.modifications.forEach(mod => {
+                    let tempVal = this.executiveSummaryService.getSummary(mod.phast, true, this.settings, this.legacyAssessment.phast, this.phastResults);
                     if (tempVal.annualCostSavings > tmpSavings) {
                         tmpSavings = tempVal.annualCostSavings;
                         this.modResults = tempVal;

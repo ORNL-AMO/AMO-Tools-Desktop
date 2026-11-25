@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
+import { findModificationLoss } from '../../scenario-loss-pairing.util';
 
 @Component({
     selector: 'app-slag-summary',
@@ -45,7 +46,7 @@ export class SlagSummaryComponent implements OnInit {
           let modificationData = new Array();
           if (this.phast.modifications) {
             this.phast.modifications.forEach(mod => {
-              let modData = mod.phast.losses.slagLosses[index];
+              let modData = findModificationLoss(loss, index, mod.phast.losses.slagLosses) ?? {};
               modificationData.push(modData);
             });
           }

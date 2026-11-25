@@ -4,7 +4,8 @@ import { PHAST as SharedPHAST, PhastValid as SharedPhastValid } from '../../shar
 import { Settings } from '../../shared/models/settings';
 import { getModificationName } from '../models/modification';
 import { ModificationService } from '../services/modification.service';
-import { deriveHeatingEquipmentConfiguration, ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { deriveHeatingEquipmentConfiguration } from '../services/scenario-settings.util';
 import { toLegacyPhast, withoutHiddenLosses } from '../services/legacy-phast.util';
 import { ProcessHeatingValidityService } from '../services/process-heating-validity.service';
 

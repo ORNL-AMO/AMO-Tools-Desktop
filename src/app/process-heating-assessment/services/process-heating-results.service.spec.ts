@@ -113,16 +113,22 @@ describe('ProcessHeatingResultsService', () => {
   });
 
   describe('hidden losses', () => {
-    const losses = { leakageLosses: [{ name: 'Leak' }], slagLosses: [{ name: 'Slag' }], wallLosses: [] } as Losses;
+    const losses = { flueGasLosses: [{ name: 'Flue Gas' }], leakageLosses: [{ name: 'Leak' }], slagLosses: [{ name: 'Slag' }], wallLosses: [] } as Losses;
 
     it('leaves out losses of tabs the energy source hides', () => {
       service.getResults({ name: 'mod1', losses }, { energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' } as Settings);
 
       const legacyLosses = legacyGetResults.calls.mostRecent().args[0].losses;
-      expect(legacyLosses.leakageLosses).toBeUndefined();
+      expect(legacyLosses.flueGasLosses).toBeUndefined();
       expect(legacyLosses.slagLosses).toBeUndefined();
       expect(legacyLosses.wallLosses).toEqual([]);
-      expect(losses.leakageLosses.length).toBe(1);
+      expect(losses.flueGasLosses.length).toBe(1);
+    });
+
+    it('keeps Gas Leakage for electrotechnology', () => {
+      service.getResults({ name: 'mod1', losses }, { energySourceType: 'Electricity', furnaceType: 'Electrical Infrared' } as Settings);
+
+      expect(legacyGetResults.calls.mostRecent().args[0].losses.leakageLosses).toEqual(losses.leakageLosses);
     });
 
     it('keeps losses the energy source uses', () => {

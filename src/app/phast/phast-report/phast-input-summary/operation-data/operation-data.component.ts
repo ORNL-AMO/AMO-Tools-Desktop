@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, inject, Signal } from '@angular/core';
 import { FeatureFlagService } from '../../../../shared/feature-flag.service';
-import { PHAST } from "../../../../shared/models/phast/phast";
+import { Modification, PHAST } from "../../../../shared/models/phast/phast";
 import { Settings } from '../../../../shared/models/settings';
+import { EnergySourceFields } from '../../../../process-heating-assessment/models/modification';
 
 @Component({
     selector: 'app-operation-data',
@@ -29,6 +30,18 @@ export class OperationDataComponent implements OnInit {
   ngOnInit() {
 
   }
+  /**
+   * @param modification the modification column
+   * @returns its own energy source, set when a Process Heating modification switched it, else the assessment's
+   */
+  scenarioEnergySource(modification: Modification): EnergySourceFields {
+    return modification.energySource ?? this.settings;
+  }
+
+  get hasCustomFurnaceName(): boolean {
+    return !!this.settings.customFurnaceName || (this.phast.modifications ?? []).some(modification => modification.energySource?.customFurnaceName);
+  }
+
   toggleCollapse() {
     this.collapse = !this.collapse;
   }

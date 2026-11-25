@@ -13,6 +13,7 @@ import { FsatService } from '../../fsat/fsat.service';
 import { PhastIntegrationService } from '../../phast/phast-integration.service';
 import { AssessmentService } from '../../dashboard/assessment.service';
 import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment/compressed-air-assessment-results.service';
+import { phastModuleFor, toLegacyPhastAssessment } from '../../process-heating-assessment/services/legacy-phast-assessment.util';
 
 @Injectable({
   providedIn: 'root'
@@ -49,10 +50,13 @@ export class AssessmentIntegrationService {
     }
 
     if (assessment) {
-      integratedAssessment.assessment = assessment;
       let assessmentSettings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+      integratedAssessment.assessment = assessmentType === 'PHAST' ? toLegacyPhastAssessment(assessment, assessmentSettings) : assessment;
       if (assessmentType === 'PHAST') {
-        await this.phastIntegrationService.setIntegratedAssessmentData(integratedAssessment, assessmentSettings, treasureHuntSettings);
+        if (integratedAssessment.assessment.phast.setupDone) {
+          await this.phastIntegrationService.setIntegratedAssessmentData(integratedAssessment, assessmentSettings, treasureHuntSettings);
+        }
+        integratedAssessment.navigation = { queryParams: undefined, url: `/${phastModuleFor(assessment.phast)}/${assessment.id}` };
       } else if (assessmentType === 'PSAT') {
         this.psatService.setIntegratedAssessmentData(integratedAssessment, assessmentSettings);
       } else if (assessmentType === 'FSAT') {
@@ -69,12 +73,13 @@ export class AssessmentIntegrationService {
 
   checkHasUpdatedEnergyData(existingOptions: IntegratedEnergyOptions, updatedOptions: IntegratedEnergyOptions) {
     let hasUpdatedBaseline = this.checkisOptionDifferent(existingOptions.baseline, updatedOptions.baseline);
-    let hasUpdatedModification: boolean = false;
     let existingMod = existingOptions.modifications[0];
+    if (!existingMod) {
+      return hasUpdatedBaseline;
+    }
+    // The linked modification can be deleted, or left out for using another energy source, after it was linked.
     let updatedMod = updatedOptions.modifications.find(mod => mod.modificationId === existingMod.modificationId);
-    if (updatedMod) {
-     hasUpdatedModification = this.checkisOptionDifferent(existingMod, updatedMod);
-    } 
+    let hasUpdatedModification: boolean = !updatedMod || this.checkisOptionDifferent(existingMod, updatedMod);
     return hasUpdatedBaseline || hasUpdatedModification;
   }
 
@@ -90,9 +95,21 @@ export class AssessmentIntegrationService {
     let allAssessments: Array<Assessment> = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(allAssessments);
     this.assessmentsByType = allAssessments.filter(assessment => { return assessment.type == assessmentType });
+    if (assessmentType === 'PHAST') {
+      this.assessmentsByType = this.assessmentsByType.filter(assessment => this.isPhastSetUp(assessment));
+    }
     this.assessmentsByType = _.orderBy(this.assessmentsByType, 'modifiedDate');
     let assessmentOptions = this.assessmentsByType.map(assessment => { return { display: assessment.name, id: assessment.id } });
     return assessmentOptions;
+  }
+
+  /**
+   * Treasure Hunt calculates from the legacy shape, which reads the heat balance unguarded.
+   * @param assessment Process Heating assessment as saved by either module
+   * @returns whether the assessment can be calculated for Treasure Hunt
+   */
+  private isPhastSetUp(assessment: Assessment): boolean {
+    return toLegacyPhastAssessment(assessment, this.settingsDbService.getByAssessmentId(assessment)).phast.setupDone;
   }
   
 

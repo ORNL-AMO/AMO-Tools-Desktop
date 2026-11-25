@@ -1,6 +1,7 @@
 import { ExploreOpportunityCategory, Modification, PHAST } from './phast';
 import { SavingsOpportunity } from '../../shared/models/explore-opps';
 import { Settings } from '../../shared/models/settings';
+import { ScenarioEnergySource } from '../../shared/models/phast/phast';
 
 // The set of fields a modification is allowed to override on baseline. Excludes `modifications`
 // and `selectedModificationId`: a modification's own overrides never carry a nested modification list
@@ -10,15 +11,8 @@ export type ScenarioOverrides = Partial<Omit<PHAST, 'modifications' | 'selectedM
 // `Modification` (id, notes, the exploreOpportunityFlags curation state) has no full-clone field of
 // its own to extend around: `scenarioOverrides` is the only place a modification's data lives,
 // storing just the fields it overrides, not a clone of the assessment.
-/** A modification's own energy source. Units and the energy result unit always come from the assessment settings. */
-export interface ScenarioEnergySource {
-  energySourceType: string;
-  furnaceType: string;
-  customFurnaceName?: string;
-}
-
 // Picked from Settings so both assessment settings and a ScenarioEnergySource fit; Settings marks these fields optional.
-type EnergySourceFields = Pick<Settings, 'energySourceType' | 'furnaceType' | 'customFurnaceName'>;
+export type EnergySourceFields = Pick<Settings, 'energySourceType' | 'furnaceType' | 'customFurnaceName'>;
 
 /**
  * An empty furnace type or custom name matches whether saved as `null` or `undefined`, since saved data mixes both.

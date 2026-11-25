@@ -266,8 +266,6 @@ export const SECTION_DEFINITIONS: SectionDefinition[] = [
     kind: 'items',
     label: 'Gas Leakage Loss',
     items: losses => losses.leakageLosses,
-    // Gas Leakage is a fuel-fired step, the same scenarios Flue Gas is shown for
-    isVisible: categories => categories.showFlueGas,
     fields: [
       prop('Furnace Draft Pressure', 'draftPressure', [`in. ${CHEMICAL_FORMULA.H2O}`, 'Pa']),
       prop('Opening Area', 'openingArea', AREA),

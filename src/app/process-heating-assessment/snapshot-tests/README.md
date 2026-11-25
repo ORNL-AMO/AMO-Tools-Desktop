@@ -17,6 +17,7 @@ snapshot-tests/
 ├── scenario-roundtrip.snapshot.spec.ts   Every FIXTURES entry through scenarioOverrides
 ├── new-calc-services.snapshot.spec.ts    New per-loss calculators vs. snapshot totals
 ├── charge-material-results.snapshot.spec.ts  New charge material results vs. snapshot totals
+├── gas-leakage-results.snapshot.spec.ts  Gas Leakage fixtures through ProcessHeatingResultsService
 └── flue-gas-by-mass.snapshot.spec.ts     Live legacy vs. new, for By Mass cases no fixture covers
 ```
 
@@ -24,6 +25,13 @@ The `EAF Dummy Values`, `Steam Synthetic` and `Custom Electrotechnology Syntheti
 assessments, and are to be replaced with real ones later. `EAF Dummy Values` was captured in the legacy folder and
 ported; the Steam and Custom Electrotechnology fixtures (and their `steam` and `custom-electrotechnology` specs) exist only
 in this module, with snapshots captured here from the legacy `PhastResultsService`.
+
+The four `* Gas Leakage Synthetic` fixtures (Steam, Electrotechnology, EAF, Custom Electrotechnology) are also synthetic and
+exist only in this module. No real non-fuel assessment with Gas Leakage was available, so each is an existing fixture
+(`Steam Synthetic`, `Induction melters_6-11-2026`, `EAF Dummy Values`, `Custom Electrotechnology Synthetic`) with one
+Gas Leakage entry added to the baseline and the modification. They are registered as `GAS_LEAKAGE_FIXTURES`, and
+`gas-leakage-results.snapshot.spec.ts` runs them through `ProcessHeatingResultsService`, because the per-fixture specs
+call the legacy service directly and would not catch this module dropping a loss for the scenario's energy source.
 
 Snapshots are never written here first for a shared fixture. Capture them in the legacy folder, then copy.
 

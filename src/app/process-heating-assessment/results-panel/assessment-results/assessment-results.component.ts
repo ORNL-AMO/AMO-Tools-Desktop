@@ -4,7 +4,8 @@ import { getModificationName, ProcessHeatingModification } from '../../models/mo
 import { getEnergySourceIcon, getEnergySourceLabel } from '../../models/energy-source';
 import { Settings } from '../../../shared/models/settings';
 import { FeatureFlagService } from '../../../shared/feature-flag.service';
-import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
+import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
+import { AssessmentScenario } from '../../services/scenario-settings.util';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
 import { combineResultCategories, ResultCategories, resultCategoryKeys, ResultColumn, ResultRowDefinition, resultRowValue, visibleResultRows } from '../../models/result-rows';
 import { ModificationService } from '../../services/modification.service';

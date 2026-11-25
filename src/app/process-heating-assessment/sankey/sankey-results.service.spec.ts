@@ -55,12 +55,12 @@ describe('SankeyResultsService', () => {
   });
 
   it("leaves out losses the scenario's energy source hides", () => {
-    const losses = { leakageLosses: [{ name: 'Leak' }], wallLosses: [] } as Losses;
+    const losses = { flueGasLosses: [{ name: 'Flue Gas' }], wallLosses: [] } as Losses;
     scenarioPhasts = { baseline: { name: 'baseline', losses } as PHAST, mod1: { name: 'mod1', losses } as PHAST };
 
     const [baseline, modification] = service.scenarios();
-    expect(baseline.phast.losses.leakageLosses?.length).toBe(1);
-    expect(modification.phast.losses.leakageLosses).toBeUndefined();
+    expect(baseline.phast.losses.flueGasLosses?.length).toBe(1);
+    expect(modification.phast.losses.flueGasLosses).toBeUndefined();
     expect(modification.phast.losses.wallLosses).toEqual([]);
   });
 });

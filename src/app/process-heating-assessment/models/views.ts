@@ -225,7 +225,7 @@ export const CALCULATORS_VIEW_LINKS: ViewLink[] = [
   { view: CalculatorsView.UNIT_CONVERTER, label: 'Unit Converter' },
 ];
 
-const FUEL_FIRED_ONLY_VIEWS: ReadonlySet<string> = new Set<string>([LossView.FLUE_GAS, LossView.GAS_LEAKAGE]);
+const FUEL_FIRED_ONLY_VIEWS: ReadonlySet<string> = new Set<string>([LossView.FLUE_GAS]);
 const ELECTRO_STANDARD_ONLY_VIEWS: ReadonlySet<string> = new Set<string>([LossView.ENERGY_INPUT_EXHAUST_GAS]);
 const EAF_ONLY_VIEWS: ReadonlySet<string> = new Set<string>([LossView.ENERGY_INPUT, LossView.EXHAUST_GAS, LossView.SLAG]);
 const STEAM_CUSTOM_ONLY_VIEWS: ReadonlySet<string> = new Set<string>([LossView.HEAT_SYSTEM_EFFICIENCY]);

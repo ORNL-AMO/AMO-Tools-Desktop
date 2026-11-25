@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
+import { findModificationLoss } from '../../scenario-loss-pairing.util';
 
 @Component({
     selector: 'app-opening-summary',
@@ -67,7 +68,7 @@ export class OpeningSummaryComponent implements OnInit {
           let modificationData = new Array();
           if (this.phast.modifications) {
             this.phast.modifications.forEach(mod => {
-              let modData = mod.phast.losses.openingLosses[index];
+              let modData = findModificationLoss(loss, index, mod.phast.losses.openingLosses) ?? {};
               modificationData.push(modData);
             });
           }

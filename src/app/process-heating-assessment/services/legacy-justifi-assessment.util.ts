@@ -5,7 +5,7 @@ import { ExploreOpportunityCategory, PHAST } from '../models/phast';
 import { ProcessHeatingModification } from '../models/modification';
 import { getEffectivePhast } from './scenario-merge.util';
 import { toLegacyPhast, withoutHiddenLosses } from './legacy-phast.util';
-import { AssessmentScenario, deriveHeatingEquipmentConfiguration } from './process-heating-assessment.service';
+import { AssessmentScenario, deriveHeatingEquipmentConfiguration } from './scenario-settings.util';
 
 const LEGACY_FLAG_KEYS: Record<ExploreOpportunityCategory, keyof LegacyModification> = {
   [ExploreOpportunityCategory.FlueGas]: 'exploreOppsShowFlueGas',
@@ -57,11 +57,14 @@ export function toLegacyJustifiAssessment(
       exploreOpportunities: Object.keys(flags).length > 0,
       ...legacyFlags,
       exportWithoutResults: configuration !== baselineConfiguration,
+      energySource: modification.energySource,
       phast: toLegacyPhast(withoutHiddenLosses(withoutAuxiliaryEquipment(getEffectivePhast(baseline, modification)), configuration)),
     } as LegacyModification;
   });
   const legacyBaseline = toLegacyPhast(withoutHiddenLosses(withoutAuxiliaryEquipment(baseline), baselineConfiguration));
-  return { ...assessment, phast: { ...legacyBaseline, setupDone, modifications: legacyModifications } };
+  // This module's validity passes a baseline with no heat balance yet, but legacy calculations read `losses` unguarded.
+  const exportSetupDone = setupDone && !!baseline.losses;
+  return { ...assessment, phast: { ...legacyBaseline, setupDone: exportSetupDone, modifications: legacyModifications } };
 }
 
 /**

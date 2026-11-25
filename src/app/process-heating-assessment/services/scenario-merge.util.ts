@@ -7,17 +7,18 @@ import { ProcessHeatingModification, ScenarioOverrides } from '../models/modific
 // should actually be evaluated against. Two levels only, both plain object spreads:
 //   1. Any top-level PHAST field present in the diff (e.g. name, systemEfficiency) replaces
 //      baseline's value entirely.
-//   2. Inside `losses`, each loss-type array (chargeMaterials, wallLosses, ...) that's present in
-//      the diff replaces baseline's array for that loss type entirely; any loss type the diff
-//      doesn't mention falls through to baseline untouched.
+//   2. Inside `losses`, each loss-type array (chargeMaterials, wallLosses, ...) comes from the diff
+//      alone, replacing baseline's array for that loss type entirely.
 // This is intentionally NOT a deep/recursive merge: every loss form service already rebuilds and
 // writes its entire array whenever anything in it changes, so array-level replacement is the only
 // granularity this needs. A loss-type diff applies whenever it's present, regardless of any
 // Explore Opportunities flag on the modification: that flag is presentation state for one screen,
 // not a precondition for whether a saved edit (from that screen or from Expert View) takes effect.
-// The live-baseline fallback below never fires for the calc-relevant fields in practice, since
-// every modification (fresh or migrated) always carries them via getBaselineSnapshot(); it
-// stays as a safety net for non-calc fields and any future PHAST field.
+// Every modification (fresh or migrated) carries the calc-relevant fields via getBaselineSnapshot(),
+// and once it has that snapshot (`losses` is present) those fields never fall back to baseline. The
+// snapshot stores "none" as `undefined`, which JSON export, import and dashboard Copy drop; reading the
+// snapshot alone keeps a dropped key meaning "none" instead of picking up baseline's live value.
+// The live-baseline fallback stays for non-calc fields and any future PHAST field.
 export function getEffectivePhast(baseline: PHAST, modification: ProcessHeatingModification | undefined): PHAST {
   const diff = modification?.scenarioOverrides;
   if (!diff) {
@@ -25,25 +26,31 @@ export function getEffectivePhast(baseline: PHAST, modification: ProcessHeatingM
     return baseline;
   }
 
-  const effectiveLosses: Losses = diff.losses
-    ? { ...baseline.losses, ...diff.losses }
-    : baseline.losses;
+  if (!diff.losses) {
+    return { ...baseline, ...diff, auxiliaryEquipment: diff.auxiliaryEquipment ?? baseline.auxiliaryEquipment };
+  }
+
+  const effectiveLosses = {} as Losses;
+  for (const key of LOSS_KEYS) {
+    effectiveLosses[key] = diff.losses[key] as never;
+  }
 
   return {
     ...baseline,
     ...diff,
     losses: effectiveLosses,
+    operatingCosts: diff.operatingCosts,
+    operatingHours: diff.operatingHours,
+    systemEfficiency: diff.systemEfficiency,
+    co2SavingsData: diff.co2SavingsData,
     // A modification created or migrated before baseline had equipment holds none of its own, so it starts
     // from baseline's items until it edits them; an emptied list ([]) stays empty.
     auxiliaryEquipment: diff.auxiliaryEquipment ?? baseline.auxiliaryEquipment,
   };
 }
 
-// Materializes every loss key as an explicit own-property (even `undefined`) rather than only the
-// keys `losses` happens to have. A key that's absent from `losses` (never saved yet) would otherwise
-// stay absent from the snapshot too, and getEffectivePhast()'s spread only overrides keys diff.losses
-// actually owns - so an absent key silently falls through to baseline's live value the first time
-// that loss type is saved there, unfreezing a snapshot that was supposed to be frozen for good.
+// Always returns an object, even when baseline has no losses yet: a present `losses` is what marks a
+// modification as snapshotted in getEffectivePhast().
 function fullLossSnapshot(losses: Losses | undefined): Losses {
   const snapshot = {} as Losses;
   for (const key of LOSS_KEYS) {
@@ -54,9 +61,8 @@ function fullLossSnapshot(losses: Losses | undefined): Losses {
 
 /**
  * Deep-clones the calc-relevant fields off `source` so a modification stops
- * live-tracking baseline for them once created. Every key is always included, even
- * as `undefined`, so {@link getEffectivePhast}'s live-baseline fallback never fires
- * for them.
+ * live-tracking baseline for them once created. A field `source` lacks stays "none"
+ * for good, even after baseline adds it; see {@link getEffectivePhast}.
  */
 export function getBaselineSnapshot(source: PHAST | undefined): Pick<ScenarioOverrides,
   'losses' | 'operatingCosts' | 'operatingHours' | 'systemEfficiency' | 'co2SavingsData' | 'auxiliaryEquipment'> {

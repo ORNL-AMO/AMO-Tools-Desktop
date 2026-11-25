@@ -4,8 +4,7 @@
     <h3>{{ assessment.name }} Settings</h3>
   </div>
 
-  <app-application-settings [(settingsForm)]="settingsForm" (startSavePolling)="saveSettings()" [inPhast]="true"
-    [inTreasureHunt]="true">
+  <app-application-settings [(settingsForm)]="settingsForm" (startSavePolling)="saveSettings()" [inPhast]="true">
   </app-application-settings>
   <app-phast-settings [(settingsForm)]="settingsForm" [inPhast]="true" (startSavePolling)="saveSettings()">
   </app-phast-settings>

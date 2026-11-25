@@ -72,16 +72,17 @@ export class AssessmentIntegrationComponent implements OnInit {
 
     if (!this.integratedAssessment.assessment) {
       this.integratedAssessment.name = this.existingIntegrationData.assessmentName
-    } else {
+    } else if (this.integratedAssessment.energyOptions) {
       this.hasUpdatedEnergyData = this.assessmentIntegrationService.checkHasUpdatedEnergyData(this.existingIntegrationData.energyOptions, this.integratedAssessment.energyOptions);
     }
   }
 
   async updateExistingIntegrationData() {
     this.existingIntegrationData.energyOptions.baseline = this.integratedAssessment.energyOptions.baseline;
+    this.reselectMissingModification();
     if (this.integratedAssessment.hasModifications) {
       this.integratedAssessment.energyOptions.modifications.forEach((modification) => {
-        if (modification.modificationId === this.existingIntegrationData.energyOptions.modifications[0].modificationId) {
+        if (modification.modificationId === this.existingIntegrationData.energyOptions.modifications[0]?.modificationId) {
           this.existingIntegrationData.energyOptions.modifications[0].annualEnergy = modification.annualEnergy;
           this.existingIntegrationData.energyOptions.modifications[0].co2EmissionsOutput = modification.co2EmissionsOutput;
           this.existingIntegrationData.energyOptions.modifications[0].annualCost = modification.annualCost;
@@ -91,6 +92,23 @@ export class AssessmentIntegrationComponent implements OnInit {
     }
     this.hasUpdatedEnergyData = false;
     this.integratedAssessmentSelected.emit(this.integratedAssessment);
+  }
+
+  /**
+   * The linked modification can be deleted, or left out for using another energy source, after it was linked.
+   * Selects the first remaining modification in its place, the same default as a new integration.
+   */
+  private reselectMissingModification(): void {
+    const linkedModificationId = this.existingIntegrationData.selectedModificationId;
+    const modificationOptions = this.integratedAssessment.energyOptions.modifications;
+    if (!linkedModificationId || modificationOptions.some(option => option.modificationId === linkedModificationId)) {
+      return;
+    }
+    const firstOption = modificationOptions[0];
+    this.integratedAssessment.selectedModificationId = firstOption?.modificationId;
+    this.assessmentIntegrationForm.controls.selectedModificationId.patchValue(firstOption?.modificationId);
+    this.existingIntegrationData.selectedModificationId = firstOption?.modificationId;
+    this.existingIntegrationData.energyOptions.modifications = firstOption ? [{ ...firstOption }] : [];
   }
 
   async setNewIntegratedAssessment() {

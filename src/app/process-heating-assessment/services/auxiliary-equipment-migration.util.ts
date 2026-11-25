@@ -3,7 +3,7 @@ import { AuxEquipment, AuxiliaryEquipmentItem } from '../../shared/models/phast/
 import { PHAST } from '../models/phast';
 import { AuxiliaryEquipmentMeasurementMethod } from '../models/auxiliary-equipment';
 import { HOURS_PER_YEAR } from '../../shared/app-constants';
-import { DEFAULT_LINE_FREQUENCY_HZ, DEFAULT_MOTOR_AND_DRIVE_EFFICIENCY_PERCENT } from '../auxiliary-equipment/auxiliary-equipment-form.service';
+import { DEFAULT_LINE_FREQUENCY_HZ, DEFAULT_MOTOR_AND_DRIVE_EFFICIENCY_PERCENT } from '../constants/auxiliary-equipment';
 
 /**
  * Legacy "Calculated" equipment is a multimeter reading and "Rated" is nameplate data in hp at a percent of

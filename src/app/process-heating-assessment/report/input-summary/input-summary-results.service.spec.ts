@@ -224,14 +224,14 @@ describe('InputSummaryResultsService', () => {
       expect(efficiency.modifications[0].value).toBe(75);
     });
 
-    it('shows Gas Leakage only for the fuel-fired scenario', () => {
+    it('shows Gas Leakage for every scenario, whatever its energy source', () => {
       const leakageLosses = [{ id: 'leak-1', draftPressure: 0.1 }] as LeakageLoss[];
       scenarios['baseline'] = buildPhast({ ...scenarios['baseline'], losses: { ...scenarios['baseline'].losses, leakageLosses } });
       scenarios['mod1'] = buildPhast({ ...scenarios['mod1'], losses: { ...scenarios['mod1'].losses, leakageLosses } });
 
       const draftPressure = row('Gas Leakage Loss 1', 'Furnace Draft Pressure');
       expect(draftPressure?.baseline.value).toBe(0.1);
-      expect(draftPressure?.modifications[0].value).toBeNull();
+      expect(draftPressure?.modifications[0].value).toBe(0.1);
     });
   });
 

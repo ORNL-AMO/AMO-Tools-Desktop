@@ -117,7 +117,9 @@ export class AssessmentOpportunityComponent {
     this.assessmentOpportunity.baselineEnergyUseItems = integratedAssessment.baselineEnergyUseItems;
     if (this.integratedAssessment.hasModifications) {
       let selectedModification: ModificationEnergyOption = integratedAssessment.modificationEnergyUseItems.find(item => item.modificationId === integratedAssessment.selectedModificationId);
-      this.assessmentOpportunity.modificationEnergyUseItems = selectedModification.energies;
+      if (selectedModification) {
+        this.assessmentOpportunity.modificationEnergyUseItems = selectedModification.energies;
+      }
     }
     this.assessmentOpportunity.equipment = integratedAssessment.thEquipmentType;
     this.assessmentOpportunity.name = integratedAssessment.assessment.name;

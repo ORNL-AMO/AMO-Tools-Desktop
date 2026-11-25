@@ -60,12 +60,21 @@ export interface Losses {
   energyInputExhaustGasLoss?: EnergyInputExhaustGasLoss[];
 }
 
+/** A modification's own energy source. Units and the energy result unit always come from the assessment settings. */
+export interface ScenarioEnergySource {
+  energySourceType: string;
+  furnaceType: string;
+  customFurnaceName?: string;
+}
+
 export interface Modification {
   phast?: PHAST;
   id: string,
   notes?: Notes;
   /** Set on an export copy whose energy source the JUSTIFI export can't calculate; never saved. */
   exportWithoutResults?: boolean;
+  /** Set on a converted copy of a modification with its own energy source; never saved. */
+  energySource?: ScenarioEnergySource;
   exploreOpportunities?: boolean;
   exploreOppsShowFlueGas?: SavingsOpportunity;
   exploreOppsShowAirTemp?: SavingsOpportunity;

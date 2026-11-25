@@ -38,11 +38,41 @@ interface CacheCase {
 }
 
 const CASES: { name: string; build: (db: NgxIndexedDBService) => CacheCase }[] = [
-  { name: 'SolidLoadMaterialDbService', build: db => { const service = new SolidLoadMaterialDbService(db); return { service, cache: service.dbSolidLoadChargeMaterials }; } },
-  { name: 'LiquidLoadMaterialDbService', build: db => { const service = new LiquidLoadMaterialDbService(db); return { service, cache: service.dbLiquidLoadChargeMaterials }; } },
-  { name: 'GasLoadMaterialDbService', build: db => { const service = new GasLoadMaterialDbService(db); return { service, cache: service.dbGasLoadChargeMaterials }; } },
-  { name: 'AtmosphereDbService', build: db => { const service = new AtmosphereDbService(db); return { service, cache: service.dbAtmospherSpecificHeatMaterials }; } },
-  { name: 'WallLossesSurfaceDbService', build: db => { const service = new WallLossesSurfaceDbService(db); return { service, cache: service.dbWallLossesSurfaceMaterials }; } },
+  {
+    name: 'SolidLoadMaterialDbService',
+    build: db => {
+      const service = new SolidLoadMaterialDbService(db);
+      return { service, cache: service.dbSolidLoadChargeMaterials };
+    },
+  },
+  {
+    name: 'LiquidLoadMaterialDbService',
+    build: db => {
+      const service = new LiquidLoadMaterialDbService(db);
+      return { service, cache: service.dbLiquidLoadChargeMaterials };
+    },
+  },
+  {
+    name: 'GasLoadMaterialDbService',
+    build: db => {
+      const service = new GasLoadMaterialDbService(db);
+      return { service, cache: service.dbGasLoadChargeMaterials };
+    },
+  },
+  {
+    name: 'AtmosphereDbService',
+    build: db => {
+      const service = new AtmosphereDbService(db);
+      return { service, cache: service.dbAtmospherSpecificHeatMaterials };
+    },
+  },
+  {
+    name: 'WallLossesSurfaceDbService',
+    build: db => {
+      const service = new WallLossesSurfaceDbService(db);
+      return { service, cache: service.dbWallLossesSurfaceMaterials };
+    },
+  },
 ];
 
 CASES.forEach(({ name, build }) => {
