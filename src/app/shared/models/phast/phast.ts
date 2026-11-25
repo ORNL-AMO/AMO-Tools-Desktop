@@ -18,7 +18,6 @@ import { DesignedEnergy } from './designedEnergy';
 import { EnergyInputExhaustGasLoss } from './losses/energyInputExhaustGasLosses';
 import { OperatingHours, OperatingCosts } from '../operations';
 import { SavingsOpportunity } from '../explore-opps';
-import type { ScenarioEnergySource } from '../../../process-heating-assessment/models/modification';
 
 export interface PHAST {
   name?: string;
@@ -59,6 +58,13 @@ export interface Losses {
   energyInputEAF?: EnergyInputEAF[];
   exhaustGasEAF?: ExhaustGasEAF[];
   energyInputExhaustGasLoss?: EnergyInputExhaustGasLoss[];
+}
+
+/** A modification's own energy source. Units and the energy result unit always come from the assessment settings. */
+export interface ScenarioEnergySource {
+  energySourceType: string;
+  furnaceType: string;
+  customFurnaceName?: string;
 }
 
 export interface Modification {

@@ -32,7 +32,8 @@ export function phastModuleFor(phast: SharedPHAST, override?: PhastModuleChoice)
   if (override) {
     return override;
   }
-  const savedByProcessHeating = (phast?.modifications ?? []).some(modification => (modification as unknown as ProcessHeatingModification).scenarioOverrides);
+  const modifications = (phast?.modifications ?? []) as unknown as ProcessHeatingModification[];
+  const savedByProcessHeating = modifications.some(modification => modification.scenarioOverrides);
   return savedByProcessHeating ? 'process-heating' : 'phast';
 }
 
